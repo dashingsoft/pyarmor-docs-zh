@@ -39,7 +39,7 @@ PyArmor 使用 `PyInstaller` 完成打包的大部分工作，如果没有安装
     a.scripts[0] = 'hello', 'dist/obf/hello.py', 'PYSOURCE'
     for i in range(len(a.pure)):
         if a.pure[i][1].startswith(a.pathex[0]):
-            a.pure[i] = a.pure[i][0], a.pure[i][1].replace(a.pathex[0], os.path.abspath('dist/obf'), a.pure[i][2]
+            a.pure[i] = a.pure[i][0], a.pure[i][1].replace(a.pathex[0], os.path.abspath('dist/obf')), a.pure[i][2]
 
 最后运行这个修改过的文件，生成最终的安装包::
 
