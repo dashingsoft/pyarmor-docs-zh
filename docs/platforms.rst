@@ -62,10 +62,10 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
    :widths: 10 10 20 60
    :header-rows: 1
 
-   * - OS
-     - Arch
-     - Download
-     - Description
+   * - 操作系统
+     - CPU架构
+     - 下载
+     - 说明
    * - Windows
      - x86
      - `_pytransform.dll <http://pyarmor.dashingsoft.com/downloads/platforms/vs2015/x86/_pytransform.dll>`_
