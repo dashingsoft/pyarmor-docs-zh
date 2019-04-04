@@ -19,13 +19,9 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
 
 创建日期: 2019-02-19
 
-
-.. _预安装的动态库清单:
-
-预安装的动态库清单
-------------------
-
 .. list-table:: 表-1. 预安装的动态库清单
+   :name: 预安装的动态库清单
+   :width: 100%
    :widths: 10 10 20 60
    :header-rows: 1
 
@@ -64,12 +60,9 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
      - 在 Ubuntu 16.04 (x86_64) 使用 GCC 交叉编译
        64-bit Armv8 Cortex-A, little-endian
 
-.. _其他平台的动态库清单:
-
-其他平台的动态库清单
---------------------
-
 .. list-table:: 表-2. 其他平台的动态库清单
+   :name: 其他平台的动态库清单
+   :width: 100%
    :widths: 10 10 20 60
    :header-rows: 1
 
@@ -112,4 +105,4 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
    * - Alpine Linux
      - x86_64
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/alpine/_pytransform.so>`_
-     - 在 Ubuntu 16.04 (x86_64) 使用 `musl-cross-make <https://github.com/richfelker/musl-cross-make>` 交叉编译（musl-1.1.21）
+     - 在 Ubuntu 16.04 (x86_64) 使用 `musl-cross-make <https://github.com/richfelker/musl-cross-make>`_ 交叉编译（musl-1.1.21）
