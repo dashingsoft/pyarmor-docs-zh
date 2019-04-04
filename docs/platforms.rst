@@ -62,7 +62,6 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
 .. list-table:: 表-2. 其他平台的动态库清单
    :name: 其他平台的动态库清单
    :width: 100%
-   :widths: 10 10 20 60
    :header-rows: 1
 
    * - OS
