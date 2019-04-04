@@ -52,16 +52,18 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
      - armv7
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/armv7/_pytransform.so>`_
      - 在 Ubuntu 16.04 (x86_64) 使用 GCC 交叉编译
+       
        32-bit Armv7 Cortex-A, hard-float, little-endian
    * - Linux
      - aarch64
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/armv8.64-bit/_pytransform.so>`_
      - 在 Ubuntu 16.04 (x86_64) 使用 GCC 交叉编译
+       
        64-bit Armv8 Cortex-A, little-endian
 
 .. list-table:: 表-2. 其他平台的动态库清单
    :name: 其他平台的动态库清单
-   :width: 100%
+   :widths: 10 10 20 60
    :header-rows: 1
 
    * - OS
@@ -80,16 +82,19 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
      - armv5
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/armv5/_pytransform.so>`_
      - 在 Ubuntu 16.04 (x86_64) 使用 GCC 交叉编译
+       
        32-bit Armv5 (arm926ej-s)
    * - Linux
      - aarch32
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/armv8.32-bit/_pytransform.so>`_
      - 在 Ubuntu 16.04 (x86_64) 使用 GCC 交叉编译
+       
        32-bit Armv8 Cortex-A, hard-float, little-endian
    * - Linux
      - ppc64le
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/ppc64le/_pytransform.so>`_
      - 在 Ubuntu 16.04 (x86_64) `gcc-powerpc64le-linux-gnu` 交叉编译
+       
        适用于 POWER8
    * - iOS
      - arm64
@@ -99,6 +104,7 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
      - x86_64
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/freebsd/_pytransform.so>`_
      - 在 Ubuntu 16.04 (x86_64) 使用 GCC 交叉编译
+       
        不支持获取硬盘序列号
    * - Alpine Linux
      - x86_64
