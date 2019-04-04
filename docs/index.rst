@@ -42,5 +42,6 @@ Pi``, ``Banana Pi``, ``Orange Pi``, ``TS-4600 / TS-7600`` 等，但是这些
    man
    questions
    license
+   platforms
 
 .. include:: _common_definitions.txt
