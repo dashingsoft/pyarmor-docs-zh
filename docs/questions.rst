@@ -83,6 +83,17 @@ _pytransform can not be loaded twice
 Check restrict mode failed
 --------------------------
 
-违反了加密脚本的使用约束，参考 :ref:`约束模式`
+违反了加密脚本的使用约束，默认情况下，加密脚本是不能被进行任何修改的。
+更多信息参考 :ref:`约束模式`
+
+Protection Fault: unexpected xxx
+--------------------------------
+
+违反了加密脚本的使用约束，默认情况下，下列文件不能进行任何修改：
+
+* pytransform.py
+* _pytransform.so/.dll/.dylib
+
+更多信息参考 :ref:`对主脚本的特殊处理`
 
 .. include:: _common_definitions.txt
