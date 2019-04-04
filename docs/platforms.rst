@@ -15,10 +15,6 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
 
 如果需要在上面没有列出的平台使用 PyArmor，请发送邮件到 jondy.zhao@gmail.com
 
-最新版本: **5.1.5**
-
-创建日期: 2019-02-19
-
 .. list-table:: 表-1. 预安装的动态库清单
    :name: 预安装的动态库清单
    :widths: 10 10 20 60
