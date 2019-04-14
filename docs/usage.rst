@@ -122,6 +122,30 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
         sys.exit(1)
 
 
+加密单个模块
+------------
+
+如果只需要单独加密一个模块，使用选项 `--exact`::
+
+    pyarmor obfuscate --exact foo.py
+
+这样，就只有 :file:`foo.py` 被加密，导入这个加密模块::
+
+    cd dist
+    python -c "import foo"
+
+加密整个 Python 包
+------------------
+
+加密整个 Python 包使用下面的命令::
+
+    pyarmor obfuscate --recursive --output dist/mypkg mykpg/__init__.py
+
+使用这个加密的包::
+
+    cd dist
+    python -c "import mypkg"
+        
 打包加密脚本
 ------------
 
