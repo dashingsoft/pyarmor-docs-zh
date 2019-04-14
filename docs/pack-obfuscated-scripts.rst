@@ -36,7 +36,7 @@ PyArmor 使用 `PyInstaller` 完成打包的大部分工作，如果没有安装
 第三步是修改 `hello.spec`, 在 `Analysis` 之后插入下面的语句，主要作用是
 打包的时候使用加密后的脚本，而不是原来的脚本::
 
-    a.scripts[0] = 'hello', 'dist/obf/hello.py', 'PYSOURCE'
+    a.scripts[-1] = 'hello', 'dist/obf/hello.py', 'PYSOURCE'
     for i in range(len(a.pure)):
         if a.pure[i][1].startswith(a.pathex[0]):
             a.pure[i] = a.pure[i][0], a.pure[i][1].replace(a.pathex[0], os.path.abspath('dist/obf')), a.pure[i][2]

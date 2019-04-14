@@ -273,9 +273,9 @@ PyArmor 就不会在主脚本中插入保护代码。
 在加密脚本的时候， PyArmor 会使用真实的值来替换其中的字符串模板 `{xxx}`
 
 如果不想让 PyArmor 添加保护代码，除了在脚本中添加上面所示的标志行之外，
-也可以使用命令行选项 `--cross-protection=0` ，例如::
+也可以使用命令行选项 `--no-cross-protection` ，例如::
 
-    pyarmor obfuscate --cross-protection=0 foo.py
+    pyarmor obfuscate --no-cross-protection foo.py
 
 主脚本被加密之后， PyArmor 会在最前面插入 :ref:`引导代码` 。
 

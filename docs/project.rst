@@ -19,35 +19,30 @@
 
     pyarmor init --src=examples/pybench --entry=pybench.py projects/pybench
 
-新创建的工程存放在 `projects/pybench` ，这个目录下面会有两个文件::
+新创建的工程存放在 `projects/pybench` ，同时还会在这个目录下面创建项目
+配置文件 :file:`.pyarmor_config` ，这是一个 JSON 格式的配置文件。
 
-    .pyarmor_config
-    pyarmor.bat or pyarmor
-
-:file:`.pyarmor_config` 是 JSON 格式的配置文件。
-
-另外一个文件是脚本文件，用来快捷调用 ``pyarmor`` 。使用工程的方式一般
-是切换当前路径到工程目录，然后运行脚本文件::
+使用工程的方式一般是切换当前路径到工程目录，然后运行工程相关命令::
 
     cd projects/pybench
-    ./pyarmor info
+    pyarmor info
 
 使用下面的命令加密工程中包含的所有脚本::
 
-    ./pyarmor build
+    pyarmor build
 
 当某些脚本修改之后，再次运行 `build` ，加密这些修改过的脚本::
 
-    ./pyarmor build
+    pyarmor build
 
 选择设定工程脚本使用 `--manifest` 选项。下面示例是把 :file:`dist`,
 :file:`test` 目录下面的所有 `.py` 排除在工程之外::
 
-    ./pyarmor config --manifest "include *.py, prune dist, prune test"
+    pyarmor config --manifest "include *.py, prune dist, prune test"
 
 默认情况下 `build` 仅仅加密修改过的文件，强制加密所有脚本::
 
-    ./pyarmor build --force
+    pyarmor build --force
 
 运行加密后的脚本::
 
@@ -61,11 +56,11 @@
 
 配置不同的加密模式::
 
-    ./pyarmor config --obf-mod=1 --obf-code=0
+    pyarmor config --obf-mod=1 --obf-code=0
 
 使用新的加密模式重新加密脚本::
 
-    ./pyarmor build -B
+    pyarmor build -B
 
 
 工程配置文件
