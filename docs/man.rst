@@ -17,87 +17,194 @@ PyArmor 是一个命令行工具，用来加密脚本，绑定加密脚本到固
     pack         打包加密脚本
     hdinfo       获取硬件信息
 
-..
-    The commands with project::
+和工程相关的命令::
 
-    init         Create a project to manage obfuscated scripts
-    config       Update project settings
-    build        Obfuscate all the scripts in the project
+    init         创建一个工程，用于管理需要加密的脚本
+    config       修改工程配置信息
+    build        加密工程里面的脚本
 
-    info         Show project information
-    check        Check consistency of project
+    info         显示工程信息
+    check        检查工程配置信息是否正确
 
 可以运行 `pyarmor <command> -h` 查看各个命令的详细使用方法。
+
+.. _obfuscate:
 
 obfuscate
 ---------
 
 加密 Python 脚本。
 
-语法::
+**语法**::
 
     pyarmor obfuscate <options> SCRIPT...
 
-描述
+.. _obfuscate 命令选项:
+
+**选项**
+
+-O, --output PATH       输出路径，默认是 `dist`
+-r, --recursive         递归模式加密所有的脚本
+--exclude PATH          在递归模式下排除某些目录，多个目录使用逗号分开
+--exact                 只加密命令行中列出的脚本
+--no-bootstrap          在主脚本中不要插入引导代码
+--no-cross-protection   在主脚本中不要插入交叉保护代码
+--no-restrict           允许加密脚本被没有加密的其他脚本导入
+
+**描述**
 
 PyArmor 首先检查用户根目录下面是否存在 :file:`.pyarmor_capsule.zip` ，
 如果不存在，那么创建一个新的。
 
-接着搜索主脚本所在目录下面的所有 `.py` 文件，加密所有的 `.py` 文件并保
-存在输出目录 `dist`
+接着搜索需要加密的脚本，共有三种搜索模式：
 
-然后为加密脚本生成默认的许可文件 :file:`license.lic` 和所有其他的
-:ref:`运行辅助文件` ，也到保存到输出目录 `dist`
+* 默认模式： 搜索和主脚本相同目录下面的所有 `.py` 文件
+* 递归模式： 递归搜索和主脚本相同目录下面的所有 `.py` 文件
+* 精准模式： 仅仅加密命令行中列出的脚本
+
+如果存在主脚本，并且没有禁用交叉保护。PyArmor 会修改主脚本，插入交叉保
+护代码。
+
+然后把搜索到脚本全部加密，保存到输出目录 `dist`
+
+在为加密脚本生成默认的许可文件 :file:`license.lic` 以及所有其他的:ref:`运
+行辅助文件` ，也到保存到输出目录 `dist`
 
 最后插入 :ref:`引导代码` 到主脚本。
 
-.. _obfuscate 命令选项:
+如果命令行有多个脚本的话，主脚本仅仅是指命令行的第一个脚本，不包括其他
+脚本。也就是说，不会在其他脚本中插入引导代码和交叉保护代码。
 
-选项
+在默认情况下，加密的脚本是只允许被加密的脚本导入的。如果需要从其他正常
+（没有加密）的脚本导入加密后的脚本，那么必须指定选项 `--no-restrict`
+。
 
--O PATH, --output PATH  输出路径
--r, --recursive         递归加密所有子目录
+**示例**
+
+* 加密当前目录下的所有 `.py` 脚本，保存到 `dist` 目录::
+
+     pyarmor obfuscate foo.py
+
+* 递归加密当前目录下面的所有 `.py` 脚本，保存到 `dist` 目录::
+
+     pyarmor obfuscate --recursive foo.py
+
+* 除了 `build` 和 `dist` 之外，递归加密当前目录下面的所有 `.py` 脚本，
+  保存到 `dist` 目录::
+
+     pyarmor obfuscate --recursive --exclude build,dist foo.py
+
+* 仅仅加密两个脚本 `foo.py`, `moda.py`::
+
+     pyarmor obfuscate --exact foo.py moda.py
+
+* 加密包 `mypkg` 所在目录下面的所有 `.py` 文件::
+
+     pyarmor obfuscate --output dist/mypkg mypkg/__init__.py
+
+* 使用非约束模式加密一个模块 `moda.py`::
+
+     pyarmor obfuscate --exact --no-restrict moda.py
+
+* 加密当前目录下面所有的 `.py` 文件，但是不要插入交叉保护代码到主脚本
+  :file:`dist/foo.py`::
+
+     pyarmor obfuscate --no-cross-protection foo.py
+
+* 加密当前目录下面所有的 `.py` 文件，但是不要插入引导代码到主脚本
+  :file:`dist/foo.py`::
+
+     pyarmor obfuscate --no-bootstrap foo.py
+
+.. _licenses:
 
 licenses
 --------
 
 为加密脚本生成新的许可文件
 
-语法::
+**语法**::
 
     pyarmor licenses <options> CODE
 
 .. _licenses 命令选项:
 
-选项:
+**选项**
 
--O OUTPUT, --output OUTPUT
-                      输出路径
--e YYYY-MM-DD, --expired YYYY-MM-DD
-                      加密脚本的有效期
--d SN, --bind-disk SN
-                      绑定加密脚本到硬盘序列号
--4 IPV4, --bind-ipv4 IPV4
-                      绑定加密脚本到指定IP地址
--m MACADDR, --bind-mac MACADDR
-                      绑定加密脚本到网卡的Mac地址
+-O OUTPUT, --output OUTPUT            输出路径
+-e YYYY-MM-DD, --expired YYYY-MM-DD   加密脚本的有效期
+-d SN, --bind-disk SN                 绑定加密脚本到硬盘序列号
+-4 IPV4, --bind-ipv4 IPV4             绑定加密脚本到指定IP地址
+-m MACADDR, --bind-mac MACADDR        绑定加密脚本到网卡的Mac地址
+--no-restrict                         允许加密脚本被正常脚本导入
+
+**描述**
+
+运行加密脚本必须有一个认证文件 :flile:`license.lic` 。一般在加密脚本的
+同时，会自动生成一个缺省的认证文件。但是这个缺省的认证文件允许加密脚本
+运行在任何机器并且永不过期。如果你需要对加密脚本进行限制，那么需要使用
+该命令生成新的许可文件，并覆盖原来的许可文件。
+
+例如，下面的命令生成一个有使用期限的认证文件::
+
+    pyarmor licenses --expired 2019-10-10 mycode
+
+生成的新的认证文件保存在默认输出路径和注册码组合路径 `licenses/mycode`
+下面，使用这个新的许可文件覆盖默认的许可文件::
+  
+    cp licenses/mycode/license.lic dist/
+
+另外一个例子，限制加密脚本在固定 Mac 地址，同时设置使用期限::
+
+    pyarmor licenses --expired 2019-10-10 --bind-mac 2a:33:50:46:8f tom
+    cp licenses/tom/license.lic dist/
+
+在这之前，一般需要运行命令 :ref:`hdinfo` 得到硬件的相关信息::
+
+    pyarmor hdinfo
+
+需要注意的是硬盘序列号中可能有空格，这种情况要使用括号把序列号括起来::
+
+    pyarmor licenses --bind-disk "100304PBN2081SF3NJ5T " jondy
+
+如果加密脚本需要被正常（非加密）的脚本使用，那么要使用选项
+`--no-restrict` ，否则的话，加密脚本只能从加密脚本中导入::
+
+    pyarmor licenses --no-restrict mycode2
+
+.. _pack:
 
 pack
 ----
 
-打包加密脚本
+加密并打包脚本
 
-语法::
+**语法**::
 
     pyarmor pack <options> SCRIPT
 
 .. _pack 命令选项:
 
-选项:
+**选项**
 
--t TYPE, --type TYPE  cx_Freeze, py2exe, py2app, PyInstaller(default).
--O OUTPUT, --output OUTPUT
-                      输出路径
+-t TYPE, --type TYPE        cx_Freeze, py2exe, py2app, PyInstaller(default).
+-O OUTPUT, --output OUTPUT  输出路径
+
+**描述**
+
+PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，得到相关的
+依赖文件。
+
+接着加密主脚本所在路径下面所有 `.py` 文件，注意依赖的库中的 `.py` 文件不会被加密的。
+
+然后使用加密脚本替换原来的脚本。
+
+最后在把所有的文件打包到一起。
+
+这个命令目前仅仅适用于简单脚本，也就是使用第三方工具的默认选项就可以成
+功打包的情况。对于其他复杂的应用，请参考 :ref:`如何打包加密脚本`.
+
+.. _hdinfo:
 
 hdinfo
 ------
@@ -106,8 +213,221 @@ hdinfo
 
 这些信息主要用来为加密脚本生成许可文件的时候使用。
 
-语法::
+**语法**::
 
     pyarmor hdinfo
 
+.. _init:
+
+init
+----
+
+创建管理加密脚本的工程文件。
+
+**语法**::
+
+    pyarmor init <options> PATH
+
+**选项**:
+
+-t, --type <auto,app,pkg>  工程类型，默认是 `auto`
+-s, --src SRC              脚本所在路径，默认是当前路径
+-e, --entry ENTRY          主脚本名称
+
+**描述**
+
+这个命令会在 `PATH` 指定的路径创建一个工程配置文件
+:file:`.pyarmor_config` ，这个一个 JSON 格式的文件。
+
+如果选项 `--type` 是 `auto` （也是默认情况），那么工程类型根据主脚本命
+令来判断。如果主脚本是 `__init__.py` , 那么工程类型就是 `pkg` , 否则就
+是 `app` 。
+
+如果新的工程类型为 `pkg` ，不管是自动判断还是选项指定， `init` 命令都
+会设置工程属性 `disable_restrict_mode` 和 `is_package` 为 `1` ，这两个
+属性的默认值都是 `0` 。
+
+工程创建之后，可以使用命令 config_ 进行修改和配置。
+
+**示例**
+
+* 在当前路径创建一个工程::
+
+    pyarmor init --entry foo.py
+
+* 创建一个工程在构建路径 `obf`::
+
+    pyarmor init --entry foo.py obf
+
+* 创建一个 `pkg` 类型的工程::
+
+    pyarmor init --entry __init__.py
+
+* 在构建路径 `obf` 创建一个工程，管理在 `/path/to/src` 处的脚本::
+
+    pyarmor init --src /path/to/src --entry foo.py obf
+
+.. _config:
+
+config
+------
+
+修改工程配置。
+
+**语法**::
+
+    pyarmor config <options> [PATH]
+
+**选项**
+
+--name NAME                     内部名称
+--title TITLE                   显示标题
+--src SRC                       脚本所在路径
+--output OUTPUT                 保存加密脚本的输出路径
+--manifest TEMPLATE             过滤脚本的模板语句
+--entry SCRIPT                  工程主脚本，可以多个，使用逗号分开
+--is-package <0,1>              管理的脚本是一个 Python 包类型
+--disable-restrict-mode <0,1>   禁用或者启用约束模式
+--obf-mod <0,1>                 是否加密整个模块对象
+--obf-code <0,1>                是否加密每一个函数
+--wrap-mode <0,1>               是否启用包裹模式加密函数
+--cross-protection <0,1>        是否插入交叉保护代码到主脚本
+--runtime-path RPATH            设置运行文件所在路径
+
+**描述**
+
+在工程所在路径运行该命令，修改一个或者多个工程属性::
+
+    pyarmor config --option new-value
+
+或者在命令的最后面指定工程所在的路径::
+
+    pyarmor config --option new-value /path/to/project
+
+选项 `--entry` 用来指定工程主脚本，可以是多个，以逗号分开::
+
+    main.py, another/main.py, /usr/local/myapp/main.py
+
+主脚本可以是绝对路径，也可以是相对路径，相对于工程路径。
+
+选项 `--manifest` 用来选择和设置工程包含的脚本，其支持的格式和 Python
+Distutils 中的MANIFEST.in 是一样的。默认值为 `src` 下面的所有 `.py` 文
+件::
+
+    global-include *.py
+
+多个模式使用逗号分开，例如::
+
+    global-include *.py, exclude __mainfest__.py, prune test
+
+关于所有支持的模式，参考 https://docs.python.org/2/distutils/sourcedist.html#commands
+
+
+**示例**
+
+* 修改工程名称和标题::
+
+    pyarmor config --name "project-1"  --title "My PyArmor Project"
+
+* 修改工程主脚本::
+
+    pyarmor config --entry foo.py,hello.py
+
+* 排除路径 `build` 和 `dist` ，下面的的所有 `.py` 文件会被忽略::
+
+    pyarmor config --manifest "global-include *.py, prune build, prune dist"
+
+* 使用非包裹模式加密脚本，这样可以提高加密脚本运行速度，但是会降低安全性::
+
+    pyarmor config --wrap-mode 0
+
+.. _build:
+
+build
+-----
+
+加密工程中的所有脚本。
+
+**选项**
+
+-B, --force           强制加密所有脚本，默认情况只加密上次构建之后修改过的脚本
+-r, --only-runtime    只生成运行依赖文件
+-n, --no-runtime      只加密脚本，不要生成运行依赖文件
+-O, --output OUTPUT   输出路径，如果设置，那么工程属性里面的输出路径就无效
+
+**描述**
+
+可以直接在工程所在路径运行该命令::
+
+    pyarmor build
+
+或者在命令行指定工程所在路径::
+
+    pyarmor build /path/to/project
+
+**示例**
+
+* 加密工程中的脚本，但是上次运行该命令之后，那么没有修改过的脚本不会在
+  被加密::
+
+    pyarmor build
+
+* 强制加密工程中的所有脚本，即便是没有修改::
+
+    pyarmor build -B
+
+* 仅仅生成运行加密脚本需要的依赖文件，不要加密脚本::
+
+    pyarmor build -r
+
+* 只加密脚本，不要生成其他的依赖文件::
+
+    pyarmor build -n
+
+* 忽略工程中设置的输出路径，保存加密脚本到新路径::
+
+    pyarmor build -B -O /path/to/other
+
+.. _info:
+
+info
+----
+
+显示工程配置信息。
+
+**语法**::
+
+    pyarmor info [PATH]
+
+**描述**
+
+可以直接在工程所在路径运行该命令::
+
+    pyarmor info
+
+或者在命令行指定工程所在路径::
+
+    pyarmor info /path/to/project
+
+.. _check:
+
+check
+-----
+
+检查工程文件的配置是否正确。
+
+**语法**::
+
+    pyarmor check [PATH]
+
+**描述**
+
+可以直接在工程所在路径运行该命令::
+
+    pyarmor check
+
+或者在命令行指定工程所在路径::
+
+    pyarmor check /path/to/project
+    
 .. include:: _common_definitions.txt
