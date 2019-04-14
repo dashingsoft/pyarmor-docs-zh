@@ -130,12 +130,10 @@
     pyarmor_runtime('...')
     __pyarmor__(__name__, __file__, b'...')
 
-并且加密脚本只能从被加密的脚本中导入，不能从任何其他非加密的脚本导入。
-
 例如，下面的加密脚本能够运行::
 
     $ cat a.py
-    
+
     from pytransform import pyarmor_runtime
     pyarmor_runtime()
     __pyarmor__(__name__, __file__, b'...')
@@ -152,42 +150,10 @@
 
     $ python b.py
 
-下面的导入方式正确，从加密脚本 `d.py` 导入 `c.py`::
-
-    $ cat d.py
-    import c
-    c.hello()
-
-    # Then obfuscate d.py
-    $ cat d.py
-    from pytransform import pyarmor_runtime
-    pyarmor_runtime()
-    __pyarmor__(__name__, __file__, b'...')
-
-
-    $ python d.py
-
-而下面的导入方式不工作，因为加密模块 `c.py` 不能从非加密的模块中导入::
-
-    $ cat c.py
-    __pyarmor__(__name__, __file__, b'...')
-
-    $ cat main.py
-    from pytransform import pyarmor_runtime
-    pyarmor_runtime()
-    import c
-
-    $ python main.py
-
-从 PyArmor 5.2 开始, 约束模式是默认设置。如果需要禁用约束模式，例如，
-在一个普通脚本中导入加密的模块。那么使用下面的命令加密脚本::
+从 PyArmor 5.2 开始, 约束模式是默认设置。如果需要禁用约束模式, 那么使
+用下面的命令加密脚本::
 
     pyarmor obfuscate --restrict=0 foo.py
-
-需要注意的是，如果加密脚本禁用了约束模式，那么为加密脚本生成新的许可的
-时候，也要禁用约束模式::
-
-    pyarmor licenses --restrict=0 --expired 2019-01-01 mycode
 
 .. 定制保护代码:
 

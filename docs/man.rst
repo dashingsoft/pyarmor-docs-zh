@@ -49,7 +49,6 @@ obfuscate
 --exact                 只加密命令行中列出的脚本
 --no-bootstrap          在主脚本中不要插入引导代码
 --no-cross-protection   在主脚本中不要插入交叉保护代码
---no-restrict           允许加密脚本被没有加密的其他脚本导入
 
 **描述**
 
@@ -73,9 +72,6 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 如果命令行有多个脚本的话，除了第一个脚本，不会在其他脚本中插入引导代码
 和交叉保护代码。
 
-在默认情况下，加密的脚本是只允许被加密的脚本导入的。如果需要从其他的脚
-本导入加密后的脚本，那么必须指定选项 `--no-restrict` 。
-
 **示例**
 
 * 加密当前目录下的所有 `.py` 脚本，保存到 `dist` 目录::
@@ -98,10 +94,6 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 * 加密包 `mypkg` 所在目录下面的所有 `.py` 文件::
 
      pyarmor obfuscate --output dist/mypkg mypkg/__init__.py
-
-* 使用非约束模式加密一个模块 `moda.py`::
-
-     pyarmor obfuscate --exact --no-restrict moda.py
 
 * 加密当前目录下面所有的 `.py` 文件，但是不要插入交叉保护代码到主脚本
   :file:`dist/foo.py`::
@@ -133,7 +125,6 @@ licenses
 -d SN, --bind-disk SN                 绑定加密脚本到硬盘序列号
 -4 IPV4, --bind-ipv4 IPV4             绑定加密脚本到指定IP地址
 -m MACADDR, --bind-mac MACADDR        绑定加密脚本到网卡的Mac地址
---no-restrict                         允许加密脚本被正常脚本导入
 
 **描述**
 
@@ -163,11 +154,6 @@ licenses
 需要注意的是硬盘序列号中可能有空格，这种情况要使用括号把序列号括起来::
 
     pyarmor licenses --bind-disk "100304PBN2081SF3NJ5T " jondy
-
-如果加密脚本需要被正常（非加密）的脚本使用，那么要使用选项
-`--no-restrict` ，否则的话，加密脚本只能从加密脚本中导入::
-
-    pyarmor licenses --no-restrict mycode2
 
 .. _pack:
 
