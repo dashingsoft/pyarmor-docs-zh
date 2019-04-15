@@ -17,14 +17,23 @@
 
 首先使用命令 ``init`` 创建一个工程::
 
+    cd examples/pybench
+    pyarmor init --entry=pybench.py
+
+这会在当前目录下面创建一个工程配置文件 :file:`.pyarmor_config` 。 也可
+以在其他目录创建一个工程::
+
     pyarmor init --src=examples/pybench --entry=pybench.py projects/pybench
 
-新创建的工程存放在 `projects/pybench` ，同时还会在这个目录下面创建项目
-配置文件 :file:`.pyarmor_config` ，这是一个 JSON 格式的配置文件。
+新创建的工程配置文件存放在 `projects/pybench` 。
 
 使用工程的方式一般是切换当前路径到工程目录，然后运行工程相关命令::
 
     cd projects/pybench
+    pyarmor info
+
+也可以直接在代码所在路径创建一个工程::
+
     pyarmor info
 
 使用下面的命令加密工程中包含的所有脚本::
