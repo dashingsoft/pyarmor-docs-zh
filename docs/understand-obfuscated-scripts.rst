@@ -110,9 +110,7 @@
 
 * 运行辅助文件 `pytransform.py` 必须位于能够被 Python 导入的路径，模块
   `pytransform` 会使用 `ctyps` 装载动态库。动态库是平台相关的，所有预编
-  译的动态库列表在这里
-
-  http://pyarmor.dashingsoft.com/downloads/platforms/
+  译的动态库列表在这里 :ref:`支持的平台列表`
 
 * `pytransform.py` 会在同目录下面搜索动态库 `_pytransform` ，具体装载过
   程可以查看函数 `pytransform._load_library` 的源代码

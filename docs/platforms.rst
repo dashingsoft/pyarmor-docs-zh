@@ -27,11 +27,11 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
    * - Windows
      - i686
      - `_pytransform.dll <http://pyarmor.dashingsoft.com/downloads/platforms/win32/_pytransform.dll>`_
-     - 在 Cygwin 环境使用 i686-pc-mingw32-gcc 交叉编译
+     - 使用 i686-pc-mingw32-gcc 交叉编译
    * - Windows
      - AMD64
      - `_pytransform.dll <http://pyarmor.dashingsoft.com/downloads/platforms/win_amd64/_pytransform.dll>`_
-     - 在 Cygwin 环境使用 x86_64-w64-mingw32-gcc 交叉编译
+     - 使用 x86_64-w64-mingw32-gcc 交叉编译
    * - Linux
      - i686
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/linux_i386/_pytransform.so>`_
@@ -94,3 +94,7 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
      - x86_64
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/alpine/_pytransform.so>`_
      - 可用于 Docker（musl-1.1.21）
+   * - Inel Quark
+     - i586
+     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/intel-quark/_pytransform.so>`_
+     - 使用 i586-poky-linux 交叉编译
