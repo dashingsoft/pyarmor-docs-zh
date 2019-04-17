@@ -98,7 +98,7 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
 
 然后在生成绑定到固定机器的许可文件::
 
-    pyarmor licenses --bind-disk '100304PBN2081SF3NJ5T' --bind-mac '20:c1:d2:2f:a0:96' code-002
+    pyarmor licenses --bind-disk "100304PBN2081SF3NJ5T" --bind-mac "20:c1:d2:2f:a0:96" code-002
 
 同样，覆盖默认许可文件，这样加密脚本就只能在指定机器上运行::
 
