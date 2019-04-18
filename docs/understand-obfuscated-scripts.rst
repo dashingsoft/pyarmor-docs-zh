@@ -73,36 +73,12 @@
 ``pyarmor licenses`` 生成新的相应的许可文件，然后用新生成的
 `license.lic` 覆盖原来的许可文件。
 
-加密脚本的运行
---------------
-
-加密脚本也是一个正常的 Python 脚本，它可以像运行普通脚本一样被运行::
-
-    cd dist
-    python myscript.py
-
-前两行的 :ref:`引导代码` 会首先被执行:
-
-* 从文件 `pytransform.py` 中导入 `pyarmor_runtime` 
-* 执行 `pyarmor_runtime` ，进行如下操作
-    * 使用 `ctypes` 装载动态链接库 `_pytransform`
-    * 检查许可文件 `license.lic` 的有效性
-    * 添加三个内置函数 `__pyarmor__`, `__enter_armor__`, `__exit_armor__`
-
-然后执行第三条语句:
-
-* 调用 `__pyarmor__` 导入加密的模块
-* 当每一个函数被执行的时候，调用内置函数 `__enter_armor__` 恢复被加密的函数
-* 单每一个函数执行完成之后，调用 `__exit_armor__` 重新加密函数
-
-详细的执行过程，请参考 :ref:`如何加密脚本` and :ref:`如何运行加密脚本`
-
 使用加密脚本的基本原则
 ----------------------
 
 * 加密后的脚本也是一个正常的 Python 脚本，它可以无缝替换原来的脚本
 
-* 唯一的改变时，在使用加密脚本之前，下面这两行 :ref:`引导代码` 必须被首
+* 唯一的改变是，在使用加密脚本之前，下面这两行 :ref:`引导代码` 必须被首
   先执行::
 
     from pytransform import pyarmor_runtime
@@ -121,6 +97,30 @@
 
     from pytransform import pyarmor_runtime
     pyarmor_runtime('/path/to/runtime-files')
+
+加密脚本的运行
+--------------
+
+加密脚本也是一个正常的 Python 脚本，它可以像运行普通脚本一样被运行::
+
+    cd dist
+    python myscript.py
+
+前两行的 :ref:`引导代码` 会首先被执行:
+
+* 从文件 `pytransform.py` 中导入 `pyarmor_runtime`
+* 执行 `pyarmor_runtime` ，进行如下操作
+    * 使用 `ctypes` 装载动态链接库 `_pytransform`
+    * 检查许可文件 `license.lic` 的有效性
+    * 添加三个内置函数 `__pyarmor__`, `__enter_armor__`, `__exit_armor__`
+
+然后执行第三条语句:
+
+* 调用 `__pyarmor__` 导入加密的模块
+* 当每一个函数被执行的时候，调用内置函数 `__enter_armor__` 恢复被加密的函数
+* 单每一个函数执行完成之后，调用 `__exit_armor__` 重新加密函数
+
+详细的执行过程，请参考 :ref:`如何加密脚本` and :ref:`如何运行加密脚本`
 
 两个不同类型的 `license.lic`
 ----------------------------
