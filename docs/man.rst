@@ -139,7 +139,7 @@ licenses
 
 生成的新的认证文件保存在默认输出路径和注册码组合路径 `licenses/mycode`
 下面，使用这个新的许可文件覆盖默认的许可文件::
-  
+
     cp licenses/mycode/license.lic dist/
 
 另外一个例子，限制加密脚本在固定 Mac 地址，同时设置使用期限::
@@ -170,8 +170,9 @@ pack
 
 **选项**
 
--t TYPE, --type TYPE        cx_Freeze, py2exe, py2app, PyInstaller(default).
--O OUTPUT, --output OUTPUT  输出路径
+-t TYPE, --type TYPE           cx_Freeze, py2exe, py2app, PyInstaller(default).
+-O OUTPUT, --output OUTPUT     输出路径
+-e OPTIONS, --options OPTIONS  运行打包命令的额外参数
 
 **描述**
 
@@ -186,6 +187,16 @@ PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，�
 
 这个命令目前仅仅适用于简单脚本，也就是使用第三方工具的默认选项就可以成
 功打包的情况。对于其他复杂的应用，请参考 :ref:`如何打包加密脚本`.
+
+**示例**
+
+* 加密脚本 foo.py 并打包到 `dist/foo` 下面::
+
+    pyarmor pack foo.py
+
+* 传递额外的参数运行 `PyInstaller`::
+
+    pyarmor pack --options '-w --icon app.ico' foo.py
 
 .. _hdinfo:
 
@@ -410,5 +421,5 @@ check
 或者在命令行指定工程所在路径::
 
     pyarmor check /path/to/project
-    
+
 .. include:: _common_definitions.txt
