@@ -198,7 +198,7 @@ PyArmor 就会把这一行替换成为保护代码。
 
 如果发现了下面这一行::
 
-    # No PyArmor Protection Code
+    # {No PyArmor Protection Code}
 
 PyArmor 就不会在主脚本中插入保护代码。
 
