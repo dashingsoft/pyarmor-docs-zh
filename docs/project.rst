@@ -112,8 +112,8 @@
 
 * disable_restrict_mode
 
-    可用值: 0, 1, None    
-    
+    可用值: 0, 1, None
+
     默认值为 0，即启用约束模式，禁止从非加密的脚本导入加密模块。
 
     参考 :ref:`约束模式`
@@ -203,5 +203,14 @@
     主要用于使用打包工具（例如 py2exe）把加密脚本压缩到一个 `.zip` 文
     件的时候，无法正确定位动态库，这时候把 `runtime_path` 设置为空字符
     串可以解决这个问题。
+
+* plugins
+
+    None 或者列表
+
+    用来配置在加密的时候插入到主脚本中代码文件，一般是和主脚本在相同目
+    录下的代码文件（扩展名可以省略）。例如::
+
+        plugins: ["check_ntp_time.py", "show_license_info"]
 
 .. include:: _common_definitions.txt

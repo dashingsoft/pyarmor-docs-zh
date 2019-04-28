@@ -49,6 +49,7 @@ obfuscate
 --exact                 只加密命令行中列出的脚本
 --no-bootstrap          在主脚本中不要插入引导代码
 --no-cross-protection   在主脚本中不要插入交叉保护代码
+--plugin NAME           在加密之前，向主脚本中插入代码
 
 **描述**
 
@@ -71,6 +72,12 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 
 如果命令行有多个脚本的话，除了第一个脚本，不会在其他脚本中插入引导代码
 和交叉保护代码。
+
+选项 `--plugin` 主要用于插入加密之后相关的代码到主脚本，例如显示授权文
+件信息，检查网络时间等。这些功能如果直接写在主脚本里面，调试的时候还需
+要把这些代码注释掉，因为它们可能在加密之后的脚本中才可以使用。在这种情
+况下，可以把它们单独写在一个文件里面，使用插件的方式在加密的时候插入到
+主脚本中，方便开发和调试，一般是和主脚本在相同目录下面的一个代码文件。
 
 **示例**
 
@@ -104,6 +111,11 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
   :file:`dist/foo.py`::
 
      pyarmor obfuscate --no-bootstrap foo.py
+
+* 在加密 `foo.py` 之前，把在相同目录下面的 `check_ntp_time.py` 的内容
+  插入到 `foo.py` 中，然后在加密::
+
+     pyarmor obfuscate --plugin check_ntp_time foo.py
 
 .. _licenses:
 
@@ -287,6 +299,7 @@ config
 --wrap-mode <0,1>               是否启用包裹模式加密函数
 --cross-protection <0,1>        是否插入交叉保护代码到主脚本
 --runtime-path RPATH            设置运行文件所在路径
+--plugin NAME                   设置需要插入到主脚本的代码文件
 
 **描述**
 
@@ -332,6 +345,15 @@ config
 * 使用非包裹模式加密脚本，这样可以提高加密脚本运行速度，但是会降低安全性::
 
     pyarmor config --wrap-mode 0
+
+* 配置主脚本的插件，下面的例子中会把 `check_ntp_time.py` 的内容插入到
+  主脚本，这个脚本会检查网络时间，超过有效期会自动退出::
+
+    pyarmor config --plugin check_ntp_time.py
+
+* 清除所有插件::
+
+    pyarmor config --plugin clear
 
 .. _build:
 
