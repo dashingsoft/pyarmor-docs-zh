@@ -28,10 +28,10 @@ PyArmor 使用 `PyInstaller` 完成打包的大部分工作，如果没有安装
 第二步是生成 `.spec` 文件，这是 `PyInstaller` 需要的，把加密脚本需要的
 运行辅助文件也添加到里面::
 
-    pyinstaller --add-data dist/obf/*.lic
-                --add-data dist/obf/*.key
+    pyinstaller --add-data dist/obf/license.lic    
+                --add-data dist/obf/pytransform.key
                 --add-data dist/obf/_pytransform.*
-                hello.py
+                hello.py dist/obf/hello.py
 
 第三步是修改 `hello.spec`, 在 `Analysis` 之后插入下面的语句，主要作用是
 打包的时候使用加密后的脚本，而不是原来的脚本::
