@@ -182,9 +182,11 @@ pack
 
 **选项**
 
--t TYPE, --type TYPE           cx_Freeze, py2exe, py2app, PyInstaller(default).
--O OUTPUT, --output OUTPUT     输出路径
--e OPTIONS, --options OPTIONS  运行打包命令的额外参数
+-t TYPE, --type TYPE            cx_Freeze, py2exe, py2app, PyInstaller(default).
+-O OUTPUT, --output OUTPUT      输出路径
+-e OPTIONS, --options OPTIONS   运行外部打包工具的额外参数
+-x OPTIONS, --xoptions OPTIONS  加密脚本的额外参数
+--clean                         打包之前删除上一次生成的中间文件
 
 **描述**
 
@@ -197,8 +199,19 @@ PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，�
 
 最后在把所有的文件打包到一起。
 
-这个命令目前仅仅适用于简单脚本，也就是使用第三方工具的默认选项就可以成
-功打包的情况。对于其他复杂的应用，请参考 :ref:`如何打包加密脚本`.
+选项 `--options` 用来传递额外的参数给外部打包工具。例如，`PyInstaller` 是通过下面的方式调用的::
+
+    pyinstaller --distpath DIST -y EXTRA_OPTIONS SCRIPT
+
+其中 `EXTRA_OPTIONS` 会被该选项所替换。
+
+选项 `--xoptions` 用来传递额外的参数来加密脚本。 `pack` 使用下面的命令来加密脚本::
+
+    pyarmor obfuscate -r --output DIST EXTRA_OPTIONS SCRIPT
+
+其中 `EXTRA_OPTIONS` 会被该选项所替换。
+
+更多详细说明，请参考 :ref:`如何打包加密脚本`.
 
 **示例**
 
@@ -209,6 +222,10 @@ PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，�
 * 传递额外的参数运行 `PyInstaller`::
 
     pyarmor pack --options '-w --icon app.ico' foo.py
+
+* 打包的时候不要加密目录 `venv` 和 `test` 下面的所有文件::
+
+    pyarmor pack -x " --exclude venv,test" foo.py
 
 .. _hdinfo:
 
