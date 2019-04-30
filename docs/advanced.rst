@@ -155,6 +155,83 @@
 
     pyarmor obfuscate --restrict=0 foo.py
 
+.. _使用插件扩展认证方式:
+
+使用插件扩展认证方式
+--------------------
+
+PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网络时间而不是本
+地时间来校验有效期。
+
+首先定义插件文件 :file:`check_ntp_time.py`:
+
+.. code-block:: python
+
+    # 调试语句，在开发环境调试的时候使用，否则在开发环境无法使用
+    # pytransform 模块的功能
+
+    # from pytransform import pyarmor_init
+    # pyarmor_init()
+
+    from pytransform import get_license_info
+    from ntplib import NTPClient
+    from time import mktime, strptime
+    import sys
+
+    NTP_SERVER = 'europe.pool.ntp.org'
+    EXPIRED_DATE = '20190202'
+
+    def check_expired():
+        licinfo = get_license_info()
+        if licinfo['CODE'] == 'Trial':
+            c = NTPClient()
+            response = c.request(NTP_SERVER, version=3)
+            if response.tx_time > mktime(strptime(EXPIRED_DATE, '%Y%m%d')):
+                sys.exit(1)
+
+然后在主脚本 :file:`foo.py` 插入下列两行注释::
+
+    ...
+
+    # {PyArmor Plugins}
+
+    ...
+
+    def main():
+        # PyArmor Plugin: check_expired()
+
+    if __name__ == '__main__':
+        logging.basicConfig(level=logging.INFO)
+        main()
+
+执行下面的命令进行加密::
+
+    pyarmor obfuscate --plugin check_ntp_time foo.py
+
+这样，在加密之前，文件 :file:`check_ntp_time.py` 会插入到第一个注释标
+志行之后::
+
+    # {PyArmor Plugins}
+
+    ... check_ntp_time.py 的文件内容
+
+同时，第二个注释标志行的注释标志会被删除，替换后的内容为::
+
+    def main():
+        check_expired()
+
+这样插件输出的函数就可以被脚本调用。
+
+插件对应的文件一般存放在当前目录，如果存放在其他目录的话，可以指定绝对
+路径，例如::
+
+    pyarmor obfuscate --plugin /usr/share/pyarmor/check_ntp_time foo.py
+
+也可以设置环境变量 `PYARMOR_PLUGIN` ，例如::
+
+    export PYARMOR_PLUGIN=/usr/share/pyarmor/plugins
+    pyarmor obfuscate --plugin check_ntp_time foo.py
+
 .. 定制保护代码:
 
 .. include:: _common_definitions.txt

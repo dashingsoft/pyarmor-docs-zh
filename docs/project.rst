@@ -208,9 +208,10 @@
 
     None 或者列表
 
-    用来配置在加密的时候插入到主脚本中代码文件，一般是和主脚本在相同目
-    录下的代码文件（扩展名可以省略）。例如::
+    用来扩展加密脚本的认证方式，支持多个插件，例如::
 
-        plugins: ["check_ntp_time.py", "show_license_info"]
+        plugins: ["check_ntp_time", "show_license_info"]
+
+    关于插件的使用实例，请参考 :ref:`使用插件扩展认证方式`
 
 .. include:: _common_definitions.txt
