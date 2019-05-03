@@ -33,6 +33,7 @@ Pi``, ``Banana Pi``, ``Orange Pi``, ``TS-4600 / TS-7600`` 等，但是这些
    usage
    pytransform
    security
+   performance
    understand-obfuscated-scripts
    how-to-do
    pack-obfuscated-scripts
