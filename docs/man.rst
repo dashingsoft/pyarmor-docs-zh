@@ -504,7 +504,7 @@ banchmark
 
 * 查看测试过程中使用的脚本，保存在 `.benchtest` 目录下面::
 
-    pyarmor benchmakr --debug
+    pyarmor benchmark --debug
 
 .. _register:
 
