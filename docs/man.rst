@@ -26,6 +26,12 @@ PyArmor 是一个命令行工具，用来加密脚本，绑定加密脚本到固
     info         显示工程信息
     check        检查工程配置信息是否正确
 
+其他不常使用的命令::
+
+    benchmark    测试加密脚本的性能
+    register     生效注册码
+    download     查看和下载预编译的动态库
+
 可以运行 `pyarmor <command> -h` 查看各个命令的详细使用方法。
 
 .. _obfuscate:
@@ -461,5 +467,118 @@ check
 或者在命令行指定工程所在路径::
 
     pyarmor check /path/to/project
+
+.. _benchmark:
+
+banchmark
+---------
+
+测试加密脚本的性能。
+
+**语法**::
+
+    pyarmor benchmark <options>
+
+**选项**:
+
+-m, --obf-mode <0,1>   是否加密模块
+-c, --obf-code <0,1>   是否单独加密每一个函数
+-w, --wrap-mode <0,1>  是否使用包裹模式加密函数
+--debug                不要清理生成的测试脚本
+
+**描述**
+
+主要用来检查加密脚本的性能，命令输出包括初始化加密脚本运行环境需要的额
+外时间，以及不同加密模式下面导入模块、运行不同大小的代码块需要消耗的额
+外时间。
+
+**示例**
+
+* 测试默认加密模式的性能::
+
+    pyarmor benchmark
+
+* 测试不使用包裹模式的性能::
+
+    pyarmor benchmark --wrap-mode 0
+
+* 查看测试过程中使用的脚本，保存在 `.benchtest` 目录下面::
+
+    pyarmor benchmakr --debug
+
+.. _register:
+
+register
+--------
+
+生效注册码，备份和恢复注册码。
+
+**语法**::
+
+    pyarmor register <options> CODE
+
+**选项**:
+
+-b, --backup     备份当前使用的注册码
+-r, --restore    恢复已经备份的注册码
+
+**描述**
+
+购买注册码之后可以使用该命令生效注册码::
+
+    pyarmor register CODE
+
+检查是否生效::
+
+    pyarmor -v
+
+注册码生效之后，可以运行下面的命令进行备份::
+
+    pyarmor register --backup
+
+备份的注册码会存放在用户目录的配置文件 `.pyarmor_config` 中。
+
+.. note::
+
+   如果注册失败，PyArmor 可能无法正常运行。这时候可以尝试删除 PyArmor
+   安装目录下面的 `license.lic` ，然后再次运行就可以自动创建试用版认证
+   文件。
+
+
+.. _download:
+
+download
+--------
+
+查看和下载不同平台下面的预编译的动态库。
+
+**语法**::
+
+    pyarmor download <options> PLAT-ID
+
+**选项**:
+
+--list PATTERN        查看所有可用的预编译动态库
+-O, --output NAME     下载之后保存的名称
+
+**描述**
+
+常用平台的预编译动态库已经和 PyArmor 的安装包一起发布，大部分的嵌入式
+设备可以自动下载相应的预编译动态库。但是对于部分无法识别平台的嵌入式设
+备，就需要人工下载。例如，启动过程提示::
+
+    ERROR: Unsupport platform linux32/armv7l
+
+那么首先查看所有的预编译动态库::
+
+    pyarmor download --list
+
+在列表中发现平台 `armv7` 可以使用，那么就可以使用下面的命令进行下载::
+
+    pyarmor download --output linux32/armv7l armv7
+
+也可以对平台进行过滤，例如查看 `linux32` 下所有可用的预编译动态库::
+
+    pyarmor download --list linux32
 
 .. include:: _common_definitions.txt
