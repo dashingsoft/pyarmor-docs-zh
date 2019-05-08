@@ -3,6 +3,41 @@
 高级用法
 ========
 
+加密和使用多个包
+----------------
+
+假定有三个包 `pkg1`, `pkg2`, `pkg2` 需要加密，使用公共的运行辅助文件，
+然后可以从其他脚本导入这些加密的包。
+
+首先切换到工作路径，创建三个工程::
+
+    mkdir build
+    cd build
+
+    pyarmor init --src /path/to/pkg1 --entry __init__.py pkg1
+    pyarmor init --src /path/to/pkg2 --entry __init__.py pkg2
+    pyarmor init --src /path/to/pkg3 --entry __init__.py pkg3
+
+生成公共的运行辅助文件，保存在 `dist` 目录下面::
+
+    pyarmor build --output dist --only-runtime pkg1
+
+分别加密三个包，也保存到 `dist` 下面::
+
+    pyarmor build --output dist --no-runtime pkg1
+    pyarmor build --output dist --no-runtime pkg2
+    pyarmor build --output dist --no-runtime pkg3
+
+查看并使用加密的包::
+
+    ls dist/
+
+    cd dist
+    python -c 'import pkg1
+    import pkg2
+    import pkg3'
+
+
 使用不同的模式来加密脚本
 ------------------------
 
