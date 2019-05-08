@@ -43,9 +43,10 @@
 引导代码
 --------
 
-主脚本的前两行就是 `引导代码` ，它只能出现在主脚本中，其他模块中不能包
-含 `引导代码` ，并且在同一个 Python 进程中，函数 `pyarmor_runtime` 只能
-被调用一次。否则会报错: `_pytransform can not be loaded twice`
+主脚本的前两行就是 `引导代码` ，它一般出现在主脚本中::
+
+    from pytransform import pyarmor_runtime
+    pyarmor_runtime()
 
 .. _运行辅助文件:
 

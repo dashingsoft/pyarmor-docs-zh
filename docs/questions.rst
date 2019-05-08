@@ -80,6 +80,11 @@ _pytransform can not be loaded twice
 在加密模块中插入了 :ref:`引导代码` 。 因为引导代码在主脚本已经执行过，
 所以导入这样的加密模块就出现了问题。
 
+.. note::
+
+   这个限制是从 PyArmor 5.1 引入的，并且在 PyArmor 5.3.5 中已经移除，
+   之后的版本都没有这个限制。
+
 Check restrict mode failed
 --------------------------
 
