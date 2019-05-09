@@ -56,6 +56,7 @@ obfuscate
 --no-bootstrap          在主脚本中不要插入引导代码
 --no-cross-protection   在主脚本中不要插入交叉保护代码
 --plugin NAME           在加密之前，向主脚本中插入代码
+--platform NAME         指定运行加密脚本的平台
 
 **描述**
 
@@ -85,6 +86,9 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 径指定插件名称，也可以设置环境变量 `PYARMOR_PLUGIN` 为相应路径名称。
 
 关于插件的使用实例，请参考 :ref:`使用插件扩展认证方式`
+
+选项 `--platform` 用于指定加密脚本的运行平台，仅用于跨平台发布。因为加
+密脚本的运行文件中包括平台相关的动态库，所以跨平台发布需要指定该选项。
 
 **示例**
 
@@ -123,6 +127,14 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
   插入到 `foo.py` 中::
 
      pyarmor obfuscate --plugin check_ntp_time foo.py
+
+* 在 MacOS 平台下加密脚本，这些加密脚本将在 Ubuntu 下面运行，使用下面
+  的命令进行加密::
+
+    pyarmor download --list
+    pyarmor download linux_x86_64
+
+    pyarmor obfuscate --platform linux_x86_64 foo.py
 
 .. _licenses:
 
@@ -392,6 +404,7 @@ build
 -r, --only-runtime    只生成运行依赖文件
 -n, --no-runtime      只加密脚本，不要生成运行依赖文件
 -O, --output OUTPUT   输出路径，如果设置，那么工程属性里面的输出路径就无效
+--platform NAME       指定加密脚本的运行平台，仅用于跨平台发布
 
 **描述**
 
@@ -425,6 +438,14 @@ build
 * 忽略工程中设置的输出路径，保存加密脚本到新路径::
 
     pyarmor build -B -O /path/to/other
+
+* 在 MacOS 平台下加密脚本，这些加密脚本将在 Ubuntu 下面运行，使用下面
+  的命令进行加密::
+
+    pyarmor download --list
+    pyarmor download linux_x86_64
+
+    pyarmor build -B --platform linux_x86_64
 
 .. _info:
 

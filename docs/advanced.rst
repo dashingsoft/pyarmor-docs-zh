@@ -37,6 +37,24 @@
     import pkg2
     import pkg3'
 
+跨平台发布加密脚本
+------------------
+
+因为加密脚本的运行文件中有平台相关的动态库，所以跨平台发布需要指定目标
+平台。
+
+首先使用命令 :ref:`download` 查看和下载目标平台的动态库文件::
+
+    pyarmor download --list
+    pyarmor download linux_x86_64
+
+然后在加密脚本的时候指定目标平台名称::
+
+    pyarmor obfuscate --platform linux_x86_64 foo.py
+
+如果使用工程，那么::
+
+    pyarmor build --platform linux_x86_64
 
 使用不同的模式来加密脚本
 ------------------------
