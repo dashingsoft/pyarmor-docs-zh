@@ -56,6 +56,24 @@
 
     pyarmor build --platform linux_x86_64
 
+使用不同版本 Python 加密脚本
+----------------------------
+
+如果装了多个版本的 Python ，那么使用 `pip` 安装的 `pyarmor` 使用的是默
+认的 Python 版本。如果需要使用其他版本的 Python 来加密脚本，需要显示指
+定 Python 解释器。
+
+例如，首先找到 :file:`pyarmor.py` 的位置::
+
+      find /usr/local/lib -name pyarmor.py
+
+通常在大多数 linux 系统，它会在 `/usr/local/lib/python2.7/dist-packages/pyarmor`
+
+然后使用下面的方式运行::
+
+    /usr/bin/python3.6 /usr/local/lib/python2.7/dist-packages/pyarmor/pyarmor.py
+
+
 使用不同的模式来加密脚本
 ------------------------
 
