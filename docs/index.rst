@@ -41,6 +41,7 @@ Pi``, ``Banana Pi``, ``Orange Pi``, ``TS-4600 / TS-7600`` 等，但是这些
    differences
    advanced
    man
+   examples
    questions
    license
    platforms
