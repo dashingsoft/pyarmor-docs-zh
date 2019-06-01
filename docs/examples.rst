@@ -31,8 +31,8 @@
     cd dist/easy-han
     ./easy-han
 
-使用 `-e` 传入额外的参数去运行 `PyInstaller` ，首先要确认
-`PyInstaller` 使用这些选项可以正常打包::
+使用 `-e` 传入额外的参数去运行 `PyInstaller` ，要确认 `PyInstaller` 使
+用这些选项可以正常打包::
 
     cd /path/to/src
     pyinstaller --name easy-han --hidden-import comtypes --data-file 'config.json;.' main.py
@@ -41,8 +41,8 @@
     ./easy-han
 
 使用 `-x` 传入额外的参数去加密脚本，因为 `tests` 和 `vnev` 下面也有很
-多脚本，但是这些不需要加密，所以使用 `--exclude` 选项把它们排除。首先
-要确认可以使用这些选项可以正常加密脚本::
+多脚本，但是这些不需要加密，所以使用 `--exclude` 选项把它们排除。要确
+认可以使用这些选项可以正常加密脚本::
 
     cd /path/to/src
     pyarmor obfuscate --exclude vnev;tests main.py
