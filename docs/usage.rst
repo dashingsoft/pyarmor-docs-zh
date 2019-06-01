@@ -145,7 +145,7 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
 
     cd dist
     python -c "import mypkg"
-        
+
 打包加密脚本
 ------------
 
@@ -184,7 +184,7 @@ PyArmor 通过以下的步骤将所有需要的文件打包成为一个独立可
 
     dist/myscript/myscript
 
-需要注意的是如果 ``.spec`` 文件需要定制， ``pack`` 命令也许无法正常使用，
-这时候要对 ``.spec`` 进行相应修改，具体操作参考 :ref:`如果打包加密脚本`
+对于复杂的应用，例如传入额外的参数到 `Pyinstaller` 等，请参考命令
+:ref:`pack` 和 :ref:`如果打包加密脚本`
 
 .. include:: _common_definitions.txt
