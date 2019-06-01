@@ -185,6 +185,6 @@ PyArmor 通过以下的步骤将所有需要的文件打包成为一个独立可
     dist/myscript/myscript
 
 对于复杂的应用，例如传入额外的参数到 `Pyinstaller` 等，请参考命令
-:ref:`pack` 和 :ref:`如果打包加密脚本`
+:ref:`pack` 和 :ref:`如何打包加密脚本`
 
 .. include:: _common_definitions.txt
