@@ -238,8 +238,8 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
 .. code-block:: python
 
-    # 调试语句，在开发环境调试的时候使用，否则在开发环境无法使用
-    # pytransform 模块的功能
+    # 下面两行代码是调试语句，仅在开发环境调试的时候使用，否则在无法在
+    # 开发环境中使用 pytransform 模块的功能
 
     # from pytransform import pyarmor_init
     # pyarmor_init()
