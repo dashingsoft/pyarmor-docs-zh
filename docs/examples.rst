@@ -25,7 +25,7 @@
 加密打包脚本如下::
 
     cd /path/to/src
-    pyarmor pack -e " --name easy-han --hidden-import comtypes --data-file 'config.json;.'" \
+    pyarmor pack -e " --name easy-han --hidden-import comtypes --add-data 'config.json;.'" \
                  -x " --exclude vnev;tests" -s "easy-han.spec" main.py
 
     cd dist/easy-han
@@ -35,7 +35,7 @@
 用这些选项可以正常打包::
 
     cd /path/to/src
-    pyinstaller --name easy-han --hidden-import comtypes --data-file 'config.json;.' main.py
+    pyinstaller --name easy-han --hidden-import comtypes --add-data 'config.json;.' main.py
 
     cd dist/easy-han
     ./easy-han
