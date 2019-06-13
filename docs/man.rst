@@ -51,7 +51,7 @@ obfuscate
 
 -O, --output PATH       输出路径，默认是 `dist`
 -r, --recursive         递归模式加密所有的脚本
---exclude PATH          在递归模式下排除某些目录，多个目录使用逗号分开
+--exclude PATH          在递归模式下排除某些目录，多个目录使用逗号分开，或者使用该选项多次
 --exact                 只加密命令行中列出的脚本
 --no-bootstrap          在主脚本中不要插入引导代码
 --no-cross-protection   在主脚本中不要插入交叉保护代码
@@ -104,6 +104,7 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
   保存到 `dist` 目录::
 
      pyarmor obfuscate --recursive --exclude build,dist foo.py
+     pyarmor obfuscate --recursive --exclude build --exclude tests foo.py
 
 * 仅仅加密两个脚本 `foo.py`, `moda.py`::
 
@@ -244,7 +245,7 @@ PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，�
 
 * 打包的时候不要加密目录 `venv` 和 `test` 下面的所有文件::
 
-    pyarmor pack -x " --exclude venv,test" foo.py
+    pyarmor pack -x " --exclude venv --exclude test" foo.py
 
 .. _hdinfo:
 
