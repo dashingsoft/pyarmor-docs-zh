@@ -112,15 +112,7 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
 
 除了上述认证方式之外，还可以在 Python 脚本中增加其他任何认证代码，因为
 加密的脚本对于客户来说就是黑盒子。例如，使用网络时间来设置加密脚本的使
-用期限::
-
-    import ntplib
-    from time import mktime, strptime
-    c = ntplib.NTPClient()
-    response = c.request('europe.pool.ntp.org', version=3)
-    if response.tx_time > mktime(strptime('20190202', '%Y%m%d')):
-        sys.exit(1)
-
+用期限等，具体示例可参考 :ref:`模块 pytransform`
 
 加密单个模块
 ------------

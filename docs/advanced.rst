@@ -238,27 +238,24 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
 .. code-block:: python
 
-    # 下面两行代码是调试语句，仅在开发环境调试的时候使用，否则在无法在
-    # 开发环境中使用 pytransform 模块的功能
-
+    # 当调试这个脚本的时候（还没有加密），需要把下面的两行代码前面的注释
+    # 去掉，否则在无法使用 pytransform 模块的功能    
     # from pytransform import pyarmor_init
     # pyarmor_init()
 
-    from pytransform import get_license_info
+    from pytransform import get_license_code
     from ntplib import NTPClient
     from time import mktime, strptime
     import sys
 
     NTP_SERVER = 'europe.pool.ntp.org'
-    EXPIRED_DATE = '20190202'
+    EXPIRED_DATE = get_license_code()[4:]
 
     def check_expired():
-        licinfo = get_license_info()
-        if licinfo['CODE'] == 'Trial':
-            c = NTPClient()
-            response = c.request(NTP_SERVER, version=3)
-            if response.tx_time > mktime(strptime(EXPIRED_DATE, '%Y%m%d')):
-                sys.exit(1)
+        c = NTPClient()
+        response = c.request(NTP_SERVER, version=3)
+        if response.tx_time > mktime(strptime(EXPIRED_DATE, '%Y%m%d')):
+            sys.exit(1)
 
 然后在主脚本 :file:`foo.py` 插入下列两行注释::
 
@@ -302,6 +299,10 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
     export PYARMOR_PLUGIN=/usr/share/pyarmor/plugins
     pyarmor obfuscate --plugin check_ntp_time foo.py
+
+最后为加密脚本生成许可文件，使用 `CODE` 来指定有效期::
+
+    pyarmor licenses NTP:20190501
 
 .. 定制保护代码:
 

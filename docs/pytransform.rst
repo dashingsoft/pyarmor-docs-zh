@@ -40,6 +40,12 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
    如果已经过期，会抛出异常 :exc:`PytransformError`
 
+.. function:: get_license_code()
+
+   返回字符串，该字符串是生成许可文件时指定的参数。
+
+   如果认证文件非法或者无效，抛出异常 :exc:`PytransformError`
+
 .. function:: get_hd_info(hdtype, size=256)
 
    得到当前机器的硬件信息，通过 *hdtype* 传入需要获取的硬件类型，可用的
@@ -79,10 +85,17 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
 .. code-block:: python
 
-   from pytransform import get_hd_info, HT_IFMAC
-   expected_mac_address = 'xx:xx:xx:xx:xx'
+   from pytransform import get_hd_info, get_license_code, HT_IFMAC
+   expected_mac_address = get_license_code().split('-')[1]
    if get_hd_info(HT_IFMAC) != expected_mac_address:
        sys.exit(1)
+
+然后需要为加密脚本生成许可文件，其中 `CODE` 是目标机器的网卡Mac地址，
+同时设置使用期限
+
+.. code-block:: shell
+
+   pyarmor licenses -e 2020-01-01 MAC-70:f1:a1:23:f0:94
 
 使用网络时间来校验加密脚本的有效期
 
@@ -90,11 +103,18 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
     from ntplib import NTPClient
     from time import mktime, strptime
+    from pytransform import get_license_code
 
     NTP_SERVER = 'europe.pool.ntp.org'
-    EXPIRED_DATE = '20190202'
+    EXPIRED_DATE = get_license_code()[4:]
 
     c = NTPClient()
     response = c.request(NTP_SERVER, version=3)
-    if response.tx_time > mktime(strptime(EXPIRED_DATE, '%Y%m%d')):
+    if response.tx_time > mktime(strptime(EXPIRED_DATE, '%Y-%m-%d')):
         sys.exit(1)
+
+有效期同样也存放在加密脚本的许可文件中，使用下面的命令生成
+
+.. code-block:: shell
+
+   pyarmor licenses NTP-2020-01-01
