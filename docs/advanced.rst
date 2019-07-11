@@ -239,7 +239,7 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 .. code-block:: python
 
     # 当调试这个脚本的时候（还没有加密），需要把下面的两行代码前面的注释
-    # 去掉，否则在无法使用 pytransform 模块的功能    
+    # 去掉，否则在无法使用 pytransform 模块的功能
     # from pytransform import pyarmor_init
     # pyarmor_init()
 
@@ -303,6 +303,49 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 最后为加密脚本生成许可文件，使用 `CODE` 来指定有效期::
 
     pyarmor licenses NTP:20190501
+
+.. _打包加密脚本成为一个单独的可执行文件:
+
+打包加密脚本成为一个单独的可执行文件
+------------------------------------
+
+使用下面的命令可以把脚本 `foo.py` 加密之后并打包成为一个单独的可执行文
+件::
+
+    pyarmor pack -e " --onefile" foo.py
+
+其中 `--onefile` 是 `PyInstaller` 的选项，使用 `-e` 可以传递任何
+`Pyinstaller` 支持的选项，例如，指定可执行文件的图标::
+
+    pyarmor pack -e " --onefile --icon logo.ico" foo.py
+
+如果不想把加密脚本的许可文件 `license.lic` 打包到可执行文件，而是和可
+执行文件放在一起，这样方便为不同的用户生成不同的许可文件。那么需要使用
+`PyInstaller` 提供的 `--runtime-hook` 功能在加密脚本运行之前把许可文件
+拷贝到指定目录，下面是操作步骤：
+
+1. 新建一个文件 `copy_licese.py`::
+
+    import sys
+    from os.path import join, dirname
+    with open(join(dirname(sys.executable), 'license.lic'), 'rb') as fs:
+        with open(join(sys._MEIPASS, 'license.lic'), 'wb') as fd:
+            fd.write(fs.read())
+
+2. 运行下面的命令打包加密脚本::
+
+    pyarmor pack --clean --without-license \
+            -e " --onefile --icon logo.ico --runtime-hook copy_license.py" foo.py
+
+选项 `--without-license` 告诉 `pyamor` 不要把脚本脚本的许可文件打包进
+去。同时使用 `PyInstaller` 的选项 `--runtime-hook` 告诉 `PyInstaller`
+在运行可执行文件之前调用 `copy_licesen.py` ，把许可文件拷贝到相应的目录。
+
+命令执行成功之后，会生成一个打包好的文件 `dist/foo.exe`
+
+3. 使用 `licenses` 生成新的许可文件，并拷贝到 `dist/` 下面
+
+4. 双击运行 `dist/foo.exe`
 
 .. 定制保护代码:
 
