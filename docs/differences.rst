@@ -31,5 +31,8 @@
       # The output will be '<frozen foo>'
       print(hello.__file__)
 
-
+* 加密脚本需要部分 Python C API 的支持，所以第三方的解释器（例如
+  Jython 等），如果不能通过运行时刻的动态库 `sys.dllhandle` 提供这些
+  API，可能无法运行加密后的脚本。
+  
 .. include:: _common_definitions.txt

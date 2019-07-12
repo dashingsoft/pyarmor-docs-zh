@@ -148,4 +148,19 @@ Error: Try to run unauthorized function
 目前支持的硬盘接口包括 IDE，SCSI 以及 NVME 固态硬盘，对于其他接口的尚
 不支持。
 
+运行脚本时候提示 Check license failed: Invalid input package.
+-------------------------------------------------------------
+
+检查当前目录下面是否有存在文件 `license.lic` 或者 `pytransform.key` ，
+如果存在的话，确保它们是加密脚本对应的运行时刻文件。
+
+加密脚本会首先在当前目录查看是否存在 `license.lic` 和运行时刻文件
+`pytransform.key`, 如果存在，那么使用当前目录下面的这些文件。
+
+其次加密脚本会查看运行时刻模块 `pytransform.py` 所在的目录，看看有没有
+`license.lic` 和 `pytransform.key`
+
+如果当前目录下面存在任何一个文件，但是和加密脚本对应的运行时刻文件不匹
+配，就会报这个错误。
+
 .. include:: _common_definitions.txt

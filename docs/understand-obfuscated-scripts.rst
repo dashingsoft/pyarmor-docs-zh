@@ -125,6 +125,21 @@
 
 详细的执行过程，请参考 :ref:`如何加密脚本` and :ref:`如何运行加密脚本`
 
+运行时刻文件 `license.lic` 和 `pytransform.key` 的查找路径
+----------------------------------------------------------
+
+加密脚本会首先在当前目录查看是否存在 `license.lic` 和运行时刻文件
+`pytransform.key`, 如果存在，那么使用当前目录下面的这些文件。
+
+其次加密脚本会查看运行时刻模块 `pytransform.py` 所在的目录，看看有没有
+`license.lic` 和 `pytransform.key`
+
+如果当前目录下面存在任何一个文件，但是和加密脚本对应的运行时刻文件不匹
+配，就会报下列错误::
+
+    Invalid input packet.
+    Check license failed.
+
 两个不同类型的 `license.lic`
 ----------------------------
 
