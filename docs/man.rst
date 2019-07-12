@@ -208,6 +208,7 @@ pack
 -x OPTIONS, --xoptions OPTIONS  加密脚本的额外参数
 --clean                         打包之前删除上一次生成的中间文件
 --without-license               不要将加密脚本的许可文件打包进去
+--debug                         不要删除打包过程生成的中间文件
 
 **描述**
 
