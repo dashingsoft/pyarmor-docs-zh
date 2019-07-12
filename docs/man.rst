@@ -207,6 +207,7 @@ pack
 -e OPTIONS, --options OPTIONS   运行外部打包工具的额外参数
 -x OPTIONS, --xoptions OPTIONS  加密脚本的额外参数
 --clean                         打包之前删除上一次生成的中间文件
+--without-license               不要将加密脚本的许可文件打包进去
 
 **描述**
 
