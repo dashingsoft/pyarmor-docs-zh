@@ -324,7 +324,7 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 `PyInstaller` 提供的 `--runtime-hook` 功能在加密脚本运行之前把许可文件
 拷贝到指定目录，下面是操作步骤：
 
-1. 新建一个文件 `copy_licese.py`::
+1. 新建一个文件 `copy_license.py`::
 
     import sys
     from os.path import join, dirname
