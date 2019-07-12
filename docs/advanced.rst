@@ -328,9 +328,9 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
     import sys
     from os.path import join, dirname
-    with open(join(dirname(sys.executable), 'license.lic'), 'rb') as fs:
-        with open(join(sys._MEIPASS, 'license.lic'), 'wb') as fd:
-            fd.write(fs.read())
+    with open(join(dirname(sys.executable), 'license.lic'), 'rb') as src:
+        with open(join(sys._MEIPASS, 'license.lic'), 'wb') as dst:
+            dst.write(src.read())
 
 2. 运行下面的命令打包加密脚本::
 
