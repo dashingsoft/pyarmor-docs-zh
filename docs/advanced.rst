@@ -73,6 +73,40 @@
 
     /usr/bin/python3.6 /usr/local/lib/python2.7/dist-packages/pyarmor/pyarmor.py
 
+让 Python 自动识别加密脚本
+--------------------------
+
+有时候很多加密脚本都需要能作为主脚本来直接运行，这样就需要为每一个加密
+脚本添加引导代码，不是很方便。那么可以采用下面的方法，让 Python 能够自
+动识别加密脚本，这样任何一个加密脚本不需要引导代码就可以正常运行。
+
+1. 首先加密脚本，在 `dist` 目录下面有四个运行时刻需要的文件:
+
+* pytransform.py
+* pytransform.key
+* _pytransform.so (.dll or .dylib)  
+* license.lic
+
+2. 在 `lib/site-packages` (Windows) 或者 `lib/pythonX.Y/site-packages`
+   (Linux) 下面创建一个子目录 `pytransform`
+
+3. 拷贝四个文件到新创建的子目录，并且把 `pytransform.py` 重命名为
+   `__init__.py`
+
+4. 编辑文件 `lib/site.py` (Windows) 或者 `lib/pythonX.Y/site.py` , 在
+   行 `if __name__ == '__main__':` 的前面增加两行代码::
+   
+    from pytransform import pyarmor_runtime
+    pyarmor_runtime()
+
+这样就可以使用 `python` 直接运行加密脚本了。 这主要使用到了 Python 在
+启动过程中默认会自动导入模块 `site` 的特性来实现，参考
+
+https://docs.python.org/3/library/site.html
+
+对于需要在子进程中使用加密脚本，也可以参考上面的方法来进行配置，否则就
+需要找到每一个子进程的启动文件，在启动之前分别运行引导代码。如果子进程
+在启动的时候不运行引导代码，就无法正常导入加密脚本。
 
 使用不同的模式来加密脚本
 ------------------------
