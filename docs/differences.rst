@@ -31,8 +31,18 @@
       # The output will be '<frozen foo>'
       print(hello.__file__)
 
-* 加密脚本需要部分 Python C API 的支持，所以第三方的解释器（例如
-  Jython 等），如果不能通过运行时刻的动态库 `sys.dllhandle` 提供这些
-  API，可能无法运行加密后的脚本。
+第三方解释器的支持
+------------------
+
+对于第三方的解释器（例如 Jython 等）以及通过嵌入 Python C/C++ 代码调用
+加密脚本，需要满足下列条件:
+
+* 第三方解释器或者嵌入的 Python 代码必须装载 Python 官方的动态库，动态
+  库的源代码在 https://github.com/python/cpython ，并且核心代码不能被
+  修改，修改后的代码可能会导致加密脚本无法执行。
+  
+* 模块 `ctypes` 必须存在并且 `ctypes.pythonapi._handle` 必须被设置为
+  Python 动态库的句柄，PyArmor 会通过该句柄获取 Python C API 的地址。
+
   
 .. include:: _common_definitions.txt
