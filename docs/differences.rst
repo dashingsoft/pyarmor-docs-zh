@@ -47,9 +47,9 @@
 .. note::
 
    Boost::python，默认装载 Python 动态库是没有设置 `RTLD_GLOAL` 的，运
-   行加密脚本的时候会报错 "No PyCode_Type found" 。解决方案之一就是修
-   改 Boost::python 的源代码，装载 `libpythonXY.so` 显示设置 `dlopen`
-   的装载标志为 `RTLD_GLOBAL` 。
+   行加密脚本的时候会报错 "No PyCode_Type found" 。解决方法就是在初始
+   化的调用方法 `sys.setdlopenflags(os.RTLD_GLOBAL)` ，这样就可以共享
+   动态库输出的函数和变量。
 
 * 模块 `ctypes` 必须存在并且 `ctypes.pythonapi._handle` 必须被设置为
   Python 动态库的句柄，PyArmor 会通过该句柄获取 Python C API 的地址。
