@@ -44,14 +44,6 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
      - x86_64, intel
      - `_pytransform.dylib <http://pyarmor.dashingsoft.com/downloads/platforms/macosx_x86_64/_pytransform.dylib>`_
      - 使用 CLang 编译（MacOSX10.11）
-   * - Linux
-     - armv7
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/armv7/_pytransform.so>`_
-     - 32-bit Armv7 Cortex-A, hard-float, little-endian
-   * - Linux
-     - aarch64
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/armv8.64-bit/_pytransform.so>`_
-     - 64-bit Armv8 Cortex-A, little-endian
 
 .. list-table:: 表-2. 其他平台的动态库清单
    :name: 其他平台的动态库清单
@@ -75,9 +67,17 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/armv5/_pytransform.so>`_
      - 32-bit Armv5 (arm926ej-s)
    * - Linux
+     - armv7
+     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/armv7/_pytransform.so>`_
+     - 32-bit Armv7 Cortex-A, hard-float, little-endian
+   * - Linux
      - aarch32
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/armv8.32-bit/_pytransform.so>`_
      - 32-bit Armv8 Cortex-A, hard-float, little-endian
+   * - Linux
+     - aarch64
+     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/armv8.64-bit/_pytransform.so>`_
+     - 64-bit Armv8 Cortex-A, little-endian
    * - Linux
      - ppc64le
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/ppc64le/_pytransform.so>`_
