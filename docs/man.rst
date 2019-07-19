@@ -183,10 +183,6 @@ licenses
 
     pyarmor hdinfo
 
-需要注意的是硬盘序列号中可能有空格，这种情况要使用括号把序列号括起来::
-
-    pyarmor licenses --bind-disk "100304PBN2081SF3NJ5T " jondy
-
 .. _pack:
 
 pack
@@ -261,6 +257,16 @@ hdinfo
 **语法**::
 
     pyarmor hdinfo
+
+如果没有装 `pyarmor`, 也可以在这里下载获取硬件信息的小工具 `hdinfo`
+
+    https://github.com/dashingsoft/pyarmor-core/tree/master/#hdinfo
+
+然后直接运行::
+
+    hdinfo
+
+获取得到的硬件信息和这里显示的是一样的。
 
 .. _init:
 
