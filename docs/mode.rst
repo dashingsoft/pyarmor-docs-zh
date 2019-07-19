@@ -20,9 +20,6 @@ Python 动态库中注入一个钩子函数，来处理这种非正常的代码�
 密脚本就不会在继续执行。这个特性需要分析汇编指令，目前只在 X86/X64 系
 列的 CPU 上实现，并且还依赖于编译器。一些使用低版本 GCC 编译的 Python
 解释器可能无法被 PyArmor 正确识别，所以目前高级模式默认是没有启用的。
-如果在使用过程中出现正常的 Python 解释器无法在高级模式下运行，欢迎报告
-问题到 https://github.com/dashingsoft/pyarmor/issues 或者发送邮件到
-jondy.zhao@gmail.com
 
 使用下面的命令可以启用高级模式加密脚本::
 
@@ -42,6 +39,12 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
    高级模式在试用版本中的限制是每一个模块中的函数（方法）等代码块总数
    不能超过大约 30 个左右，超过这个限制将无法被加密（但是依旧可以使用
    普通模式进行加密）。
+
+.. note::
+
+   如果在使用过程中出现正常的 Python 解释器无法在高级模式下运行，欢迎
+   报告问题到 https://github.com/dashingsoft/pyarmor/issues 或者发送邮
+   件到 jondy.zhao@gmail.com
 
 .. _代码加密模式:
 
