@@ -258,6 +258,12 @@ PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，�
 
     pyarmor pack -e " --onefile" -x " --advanced" foo.py
 
+* 如果使用了 `PyInstaller` 的选项 `-n` 改变了打包文件的名称，必须同时
+  使用选项 `-s`, 例如::
+
+    pyarmor pack -e " -n my_app" -s "my_app.spec" foo.py
+
+
 .. _hdinfo:
 
 hdinfo
