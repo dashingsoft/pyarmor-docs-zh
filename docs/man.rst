@@ -57,6 +57,7 @@ obfuscate
 --no-cross-protection   在主脚本中不要插入交叉保护代码
 --plugin NAME           在加密之前，向主脚本中插入代码
 --platform NAME         指定运行加密脚本的平台
+--advanced              使用高级模式加密脚本
 
 **描述**
 
@@ -136,6 +137,10 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
     pyarmor download linux_x86_64
 
     pyarmor obfuscate --platform linux_x86_64 foo.py
+
+* 使用高级模式加密脚本::
+
+    pyarmor obfuscate --advanced foo.py
 
 .. _licenses:
 
@@ -231,6 +236,10 @@ PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，�
 
 更多详细说明，请参考 :ref:`如何打包加密脚本`.
 
+.. important::
+
+   不要使用 `pack` 打包加密过的脚本，直接打包原来的脚本就可以
+
 **示例**
 
 * 加密脚本 foo.py 并打包到 `dist/foo` 下面::
@@ -244,6 +253,10 @@ PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，�
 * 打包的时候不要加密目录 `venv` 和 `test` 下面的所有文件::
 
     pyarmor pack -x " --exclude venv --exclude test" foo.py
+
+* 使用高级模式加密脚本，然后打包成为一个可执行文件::
+
+    pyarmor pack -e " --onefile" -x " --advanced" foo.py
 
 .. _hdinfo:
 
@@ -342,6 +355,7 @@ config
 --obf-mod <0,1>                 是否加密整个模块对象
 --obf-code <0,1>                是否加密每一个函数
 --wrap-mode <0,1>               是否启用包裹模式加密函数
+--advanced-mode <0,1>           是否使用高级模式加密脚本
 --cross-protection <0,1>        是否插入交叉保护代码到主脚本
 --runtime-path RPATH            设置运行文件所在路径
 --plugin NAME                   设置需要插入到主脚本的代码文件
