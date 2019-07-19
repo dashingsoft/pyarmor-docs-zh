@@ -26,7 +26,7 @@
 
     cd /path/to/src
     pyarmor pack -e " --name easy-han --hidden-import comtypes --add-data 'config.json;.'" \
-                 -x " --exclude vnev;tests" -s "easy-han.spec" main.py
+                 -x " --exclude vnev --exclude tests" -s "easy-han.spec" main.py
 
     cd dist/easy-han
     ./easy-han
@@ -45,10 +45,23 @@
 认可以使用这些选项可以正常加密脚本::
 
     cd /path/to/src
-    pyarmor obfuscate --exclude vnev;tests main.py
+    pyarmor obfuscate --exclude vnev --exclude tests main.py
 
 使用 `-s` 参数主要是因为 PyInstaller 使用 `--name` 修改了安装包的名称，
 默认生成的 `.spec` 文件不再是主脚本名称，所以要告诉 `pack` 命令修改后
 的 `.spec` 文件名称。
+
+.. note::
+
+   从 PyArmor 5.5.0 开始，开始传入选项 `--advanced` 启用高级模式来更进
+   一步的提高加密脚本的安全性。例如::
+
+       pyarmor pack -x " --advanced --exclude tests" foo.py
+
+.. important::
+
+   命令 `pack` 会自动加密脚本，所以不要使用该命令去打包加密后的脚本，
+   打包加密脚本会导致错误，因为脚本加密之后是无法自动找到的其他被引用
+   的模块的。
 
 .. include:: _common_definitions.txt
