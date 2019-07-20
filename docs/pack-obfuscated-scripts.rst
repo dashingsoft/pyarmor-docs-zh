@@ -28,7 +28,7 @@ PyArmor 使用 `PyInstaller` 完成打包的大部分工作，如果没有安装
 第二步是生成 `.spec` 文件，这是 `PyInstaller` 需要的，把加密脚本需要的
 运行辅助文件也添加到里面::
 
-    pyinstaller --add-data dist/obf/license.lic    
+    pyinstaller --add-data dist/obf/license.lic
                 --add-data dist/obf/pytransform.key
                 --add-data dist/obf/_pytransform.*
                 hello.py dist/obf/hello.py
@@ -41,6 +41,9 @@ PyArmor 使用 `PyInstaller` 完成打包的大部分工作，如果没有安装
         if a.pure[i][1].startswith(a.pathex[0]):
             x = a.pure[i][1].replace(a.pathex[0], os.path.abspath('dist/obf'))
             if os.path.exists(x):
+                if hasattr(a.pure, '_code_cache'):
+                    with open(x) as f:
+                        a.pure._code_cache[a.pure[i][0]] = compile(f.read(), a.pure[i][1], 'exec')
                 a.pure[i] = a.pure[i][0], x, a.pure[i][2]
 
 最后运行这个修改过的文件，生成最终的安装包::
