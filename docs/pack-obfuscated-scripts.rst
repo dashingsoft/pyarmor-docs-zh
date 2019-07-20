@@ -19,9 +19,13 @@ PyArmor 使用 `PyInstaller` 完成打包的大部分工作，如果没有安装
 
     pip install pyinstaller
 
-当运行 `pyarmor pack` 命令进行打包的时候， PyArmor 会进行如下的工作
+PyArmor 提供了一个命令 :ref:`pack` 可以用来直接打包脚本，它会首先加密脚本，然后
+调用 PyInstaller 打包，但是在某些情况下，可以打包会失败。这里详细描述了命令
+:ref:`pack` 的内部工作原理，可以帮助定位问题所在，同时也可以作为直接打包加密脚本
+的指导手册。
 
-第一步是加密所有的脚本，保存到 ``dist/obf``::
+当运行 `pyarmor pack` 命令进行打包的时候， PyArmor 第一步是加密所有的脚本，保存
+到 ``dist/obf``::
 
     pyarmor obfuscate --output dist/obf hello.py
 
