@@ -14,31 +14,30 @@
 3. 添加加密脚本需要的运行辅助文件到安装包
 4. 替换主脚本，因为主脚本会被编译成为可执行文件
 
-PyArmor 使用 `PyInstaller` 完成打包的大部分工作，如果没有安装的话，首先执
-行下面的命令进行安装::
+PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有安装的话，首先执行
+下面的命令进行安装::
 
     pip install pyinstaller
 
 PyArmor 提供了一个命令 :ref:`pack` 可以用来直接打包脚本，它会首先加密脚本，然后
 调用 PyInstaller 打包，但是在某些情况下，可以打包会失败。这里详细描述了命令
-:ref:`pack` 的内部工作原理，可以帮助定位问题所在，同时也可以作为直接打包加密脚本
-的指导手册。
+:ref:`pack` 的内部工作原理，可以帮助定位问题所在，同时也可以作为自己直接使用
+PyInstaller 打包加密脚本的使用方法。
 
-当运行 `pyarmor pack` 命令进行打包的时候， PyArmor 第一步是加密所有的脚本，保存
-到 ``dist/obf``::
+`pyarmor pack` 命令的第一步是加密所有的脚本，保存到 ``dist/obf``::
 
     pyarmor obfuscate --output dist/obf hello.py
 
-第二步是生成 `.spec` 文件，这是 `PyInstaller` 需要的，把加密脚本需要的
-运行辅助文件也添加到里面::
+第二步是生成 `.spec` 文件，这是 `PyInstaller` 需要的，把加密脚本需要的运行辅助文
+件也添加到里面::
 
     pyinstaller --add-data dist/obf/license.lic
                 --add-data dist/obf/pytransform.key
                 --add-data dist/obf/_pytransform.*
                 hello.py dist/obf/hello.py
 
-第三步是修改 `hello.spec`, 在 `Analysis` 之后插入下面的语句，主要作用是
-打包的时候使用加密后的脚本，而不是原来的脚本::
+第三步是修改 `hello.spec`, 在 `Analysis` 之后插入下面的语句，主要作用是打包的时
+候使用加密后的脚本，而不是原来的脚本::
 
     a.scripts[-1] = 'hello', 'dist/obf/hello.py', 'PYSOURCE'
     for i in range(len(a.pure)):
