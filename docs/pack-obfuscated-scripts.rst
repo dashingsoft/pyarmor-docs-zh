@@ -51,7 +51,7 @@ PyInstaller 打包加密脚本的使用方法。
 
 最后运行这个修改过的文件，生成最终的安装包::
 
-    pyinstaller hello.spec
+    pyinstaller --clean -y hello.spec
 
 检查一下安装包中的脚本是否已经加密::
 
