@@ -215,6 +215,29 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
     pyarmor licenses NTP:20190501
 
+.. note::
+
+   为了提高安全性，可以将函数 `get_licese_code` 移到加密脚本中，下面是
+   一个示例::
+
+       def get_license_code():
+           from ctypes import py_object, PYFUNCTYPE
+           from pytransform import _pytransform
+           prototype = PYFUNCTYPE(py_object)
+           dlfunc = prototype(('get_registration_code', _pytransform))
+           rcode = dlfunc().decode()
+           index = rcode.find('*CODE:')
+           return rcode[index+6:]
+
+.. note::
+
+   为了提高安全性，在生成许可文件的时候，也可以将有效期进行编码。例如::
+
+       pyarmor licenses xxxx
+
+   这里 "xxx" 是编码后的有效期，在加密脚本验证有效期的时候先解码，然后
+   在校验有效期。
+
 .. _打包加密脚本成为一个单独的可执行文件:
 
 打包加密脚本成为一个单独的可执行文件
