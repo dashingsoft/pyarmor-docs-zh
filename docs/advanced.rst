@@ -229,6 +229,9 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
            index = rcode.find('*CODE:')
            return rcode[index+6:]
 
+   另外，也要把 `ntplib.py` 内容全部拷贝过来，这样就不需要从外部导入
+   `NTPClient` 了。
+                      
 .. note::
 
    为了提高安全性，在生成许可文件的时候，也可以将有效期进行编码。例如::

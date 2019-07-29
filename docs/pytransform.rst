@@ -118,3 +118,10 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 .. code-block:: shell
 
    pyarmor licenses NTP-2020-01-01
+
+.. note::
+
+   为了提高安全性，最好把 `get_license_code` 和 `NTPClient` 的源码拷贝
+   到加密脚本里面。
+
+   参考 :ref:`使用插件扩展认证方式`
