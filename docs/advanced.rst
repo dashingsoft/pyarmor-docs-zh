@@ -73,6 +73,20 @@
 
     /usr/bin/python3.6 /usr/local/lib/python2.7/dist-packages/pyarmor/pyarmor.py
 
+也可以创建一个便捷脚本 `/usr/local/bin/pyarmor3` ，内容如下::
+
+    /usr/bin/python3.6 /usr/local/lib/python2.7/dist-packages/pyarmor/pyarmor.py "$*"
+
+赋予其执行权限::
+
+    chmod +x /usr/local/bin/pyarmor3
+
+然后就可以直接使用 `pyarmor3`
+
+在 Windows 下面就需要创建一个批处理 `pyarmor3.bat` ，内容如下::
+
+    C:\Python36\python C:\Python27\Lib\site-packages\pyarmor\pyarmor.py %*
+    
 让 Python 自动识别加密脚本
 --------------------------
 
