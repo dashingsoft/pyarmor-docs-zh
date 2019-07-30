@@ -231,7 +231,7 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
    另外，也要把 `ntplib.py` 内容全部拷贝过来，这样就不需要从外部导入
    `NTPClient` 了。
-                      
+
 .. note::
 
    为了提高安全性，在生成许可文件的时候，也可以将有效期进行编码。例如::
@@ -286,6 +286,48 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 3. 使用命令 `pyarmor licenses` 生成新的许可文件，并拷贝到 `dist/` 下面
 
 4. 这时候在双击运行 `dist/foo.exe`
+
+检查被调用的函数是否经过加密
+----------------------------
+
+假设主脚本为 `main.py`, 需要调用模块 `foo.py` 里面的方法 `connect`, 并
+且需要传递敏感数据作为参数。两个脚本都已经被加密，但是用户可以自己写一
+个 `foo.py` 来代替加密的 `foo.py` ，例如::
+
+    def connect(username, password):
+        print('password is %s', password)
+
+然后调用加密的主脚本 `main.py` ，虽然功能不能正常完成，但是敏感数据却
+被泄露。
+
+为了避免这种情况发生，需要在主脚本里面检查 `foo.py` 必须也是被加密的脚
+本。目前的解决方案是在脚本 `main.py` 里面增加修饰函数 `assert_armored`
+，例如::
+
+    import foo
+
+    # 新增的修饰函数
+    def assert_armored(*names):
+        def wrapper(func):
+            def _execute(*args, **kwargs):
+                for s in names:
+                    # For Python2
+                    # if not (s.func_code.co_flags & 0x20000000):
+                    # For Python3
+                    if not (s.__code__.co_flags & 0x20000000):
+                        raise RuntimeError('Access violate')
+                return func(*args, **kwargs)
+            return _execute
+        return wrapper
+
+    # 使用修饰函数，把需要检查的函数名称都作为参数传递进去
+    @assert_armored(foo.connect, foo.connect2)
+    def start_server():
+        foo.connect('root', 'root password')
+        foo.connect2('user', 'user password')
+
+这样在每次运行 `start_server` 之前，都会检查被调用的函数是否被加密，如
+果没有被加密，直接抛出异常。
 
 .. 定制保护代码:
 
