@@ -40,7 +40,7 @@ b. 企业用户许可。企业用户购买一个软件许可证可以在同一�
 
 使用微信或者支付宝通过下面的链接购买许可
 
-http://pyarmor.dashingsoft.com/demo/order-zh.html
+https://pyarmor.dashingsoft.com/cart/order.html
 
 如果需要发票，请通过下面的连接购买许可
 
