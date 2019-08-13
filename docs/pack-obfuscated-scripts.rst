@@ -39,10 +39,10 @@ PyInstaller 打包加密脚本的使用方法。
 第三步是修改 `hello.spec`, 在 `Analysis` 之后插入下面的语句，主要作用是打包的时
 候使用加密后的脚本，而不是原来的脚本::
 
-    a.scripts[-1] = 'hello', 'dist/obf/hello.py', 'PYSOURCE'
+    a.scripts[-1] = 'hello', r'dist/obf/hello.py', 'PYSOURCE'
     for i in range(len(a.pure)):
         if a.pure[i][1].startswith(a.pathex[0]):
-            x = a.pure[i][1].replace(a.pathex[0], os.path.abspath('dist/obf'))
+            x = a.pure[i][1].replace(a.pathex[0], os.path.normpath(os.path.abspath('dist/obf')))
             if os.path.exists(x):
                 if hasattr(a.pure, '_code_cache'):
                     with open(x) as f:
@@ -52,6 +52,10 @@ PyInstaller 打包加密脚本的使用方法。
 最后运行这个修改过的文件，生成最终的安装包::
 
     pyinstaller --clean -y hello.spec
+
+.. note::
+
+   必须要指定选项 `--clean` ，否则不会把原来的脚本替换成为加密脚本。
 
 检查一下安装包中的脚本是否已经加密::
 
