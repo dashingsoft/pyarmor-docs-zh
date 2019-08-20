@@ -158,7 +158,11 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 约束模式
 --------
 
-在约束模式下，加密脚本必须是下面的形式之一::
+从 PyArmor 5.5.6 开始，约束模式有四种形式 。
+
+* 模式 1
+
+在此约束模式下，加密脚本必须是下面的形式之一::
 
     __pyarmor__(__name__, __file__, b'...')
 
@@ -194,9 +198,48 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 
     $ python b.py
 
-从 PyArmor 5.2 开始, 约束模式是默认设置。如果需要禁用约束模式, 那么使
+* 模式 2
+
+在此约束模式下，除了加密脚本不能被修改约束外，主脚本必须是加密脚本，并
+且加密脚本不能被非加密脚本导入和使用，一般用于提高 Python 开发的独立的
+应用程序的安全性。
+
+例如，使用下面的方式导入使用约束模式 2 加密后的主脚本 `foo` 会出错::
+
+    $ python -c'import foo'
+
+* 模式 3
+
+在此约束模式下，除了满足约束模式 2 之外，加密脚本里面的函数只能被加密
+后的模块（函数）调用。
+
+* 模式 4
+
+此约束模式和模式 3 基本相似，只是主脚本不需要是加密脚本。一般用于加密
+Python 包的部分脚本，以提高加密脚本安全性。
+
+典型的应用是使用约束模式 1 加密 Python 包中 `__init__.py` 和其他需要被
+外部使用的脚本，而使用约束模式 4 来加密那些只是在包内部使用的脚本。
+
+.. note::
+
+   约束模式 2 和 3 不能用于加密 Python 包，否则加密后的包是无法被非加
+   密的脚本导入的。
+
+.. note::
+
+   约束模式是针对单个脚本的，不同的脚本可以有不同的约束模式。
+
+从 PyArmor 5.2 开始, 约束模式 1 是默认设置。如果需要禁用约束模式, 那么使
 用下面的命令加密脚本::
 
     pyarmor obfuscate --restrict=0 foo.py
+
+如果需要使用其他约束模式，使用下面的命令::
+
+    pyarmor obfuscate --restrict=2 foo.py
+    pyarmor obfuscate --restrict=4 foo.py
+
+详细示例请参考 :ref:`使用约束模式增加加密脚本安全性`
 
 .. include:: _common_definitions.txt
