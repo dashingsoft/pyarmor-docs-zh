@@ -42,7 +42,7 @@ PyInstaller 打包加密脚本的使用方法。
     a.scripts[-1] = 'hello', r'dist/obf/hello.py', 'PYSOURCE'
     for i in range(len(a.pure)):
         if a.pure[i][1].startswith(a.pathex[0]):
-            x = a.pure[i][1].replace(a.pathex[0], os.path.normpath(os.path.abspath('dist/obf')))
+            x = a.pure[i][1].replace(a.pathex[0], os.path.abspath('dist/obf'))
             if os.path.exists(x):
                 if hasattr(a.pure, '_code_cache'):
                     with open(x) as f:
