@@ -98,3 +98,7 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
      - i586
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/intel-quark/_pytransform.so>`_
      - 使用 i586-poky-linux 交叉编译
+   * - Android
+     - aarch64
+     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/android.aarch64/_pytransform.so>`_
+     - Build by android-ndk-r20/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang
