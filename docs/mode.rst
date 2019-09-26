@@ -178,17 +178,7 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
     pyarmor_runtime('...')
     __pyarmor__(__name__, __file__, b'...')
 
-例如，下面的加密脚本能够运行::
-
-    $ cat a.py
-
-    from pytransform import pyarmor_runtime
-    pyarmor_runtime()
-    __pyarmor__(__name__, __file__, b'...')
-
-    $ python a.py
-
-而下面的这个就无法运行，因为加密脚本中有一条额外的语句 `print`::
+例如，下面的这个加密脚本就无法运行，因为有一条额外的语句 `print`::
 
     $ cat b.py
     from pytransform import pyarmor_runtime
