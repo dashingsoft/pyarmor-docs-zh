@@ -97,7 +97,7 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
    * - Alpine Linux
      - arm
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/alpine.arm/_pytransform.so>`_
-     - 可用于 Docker（musl-1.1.21）
+     - 可用于 Docker（musl-1.1.21）, 32 bit Armv5T, hard-float, little-endian
    * - Inel Quark
      - i586
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/platforms/intel-quark/_pytransform.so>`_
