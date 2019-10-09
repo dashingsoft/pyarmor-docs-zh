@@ -29,7 +29,7 @@ PyArmor 是一个命令行工具，用来加密脚本，绑定加密脚本到固
 其他不常使用的命令::
 
     benchmark    测试加密脚本的性能
-    register     生效注册码
+    register     生效注册文件
     download     查看和下载预编译的动态库
 
 可以运行 `pyarmor <command> -h` 查看各个命令的详细使用方法。
@@ -572,39 +572,21 @@ banchmark
 register
 --------
 
-生效注册码，备份和恢复注册码。
+生效注册文件，显示注册信息。
 
 **语法**::
 
-    pyarmor register <options> CODE
-
-**选项**:
-
--b, --backup     备份当前使用的注册码
--r, --restore    恢复已经备份的注册码
+    pyarmor register [KEYFILE]
 
 **描述**
 
-购买注册码之后可以使用该命令生效注册码::
+购买 PyArmor 之后会通过邮件发送注册文件给你，然后使用这个命令使之生效::
 
-    pyarmor register CODE
+    pyarmor register /path/to/pyarmor-regfile-1.zip
 
-检查是否生效::
+查看注册信息::
 
-    pyarmor -v
-
-注册码生效之后，可以运行下面的命令进行备份::
-
-    pyarmor register --backup
-
-备份的注册码会存放在用户目录的配置文件 `.pyarmor_config` 中。
-
-.. note::
-
-   如果注册失败，PyArmor 可能无法正常运行。这时候可以尝试删除 PyArmor
-   安装目录下面的 `license.lic` ，然后再次运行就可以自动创建试用版认证
-   文件。
-
+    pyarmor register
 
 .. _download:
 
