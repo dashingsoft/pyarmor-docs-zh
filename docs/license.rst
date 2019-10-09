@@ -46,22 +46,26 @@ https://pyarmor.dashingsoft.com/cart/order.html
 
 https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 
-支付成功之后注册码会自动通过电子邮件发送过去。当收到包含注册码的邮件之
-后，使用下面的命令生效注册码::
+支付成功之后注册文件会自动通过电子邮件发送过去。注册文件是一个压缩文件，
+里面包含说明文件，注册码文件和私有密钥文件。
 
-    pyarmor register CODE
+当收到包含注册文件的邮件之后，保存附件中的注册文件到本地，然后使用下面
+的命令生效注册文件::
 
-如果使用的是 PyArmor 5.3.3 之前的版本，还不支持 `register` 命令，需要
-升级到最新版本，或者也可以直接将注册码（没有换行符号）替换 PyArmor 安
-装路径下的 :file:`license.lic` 的内容即可。
+    pyarmor register pyarmor-regfile-1.zip
 
-执行下面的命令检查注册码是否生效::
+然后可以运行下面的命令查看注册信息
 
-    pyarmor --version
+    pyarmor register
 
-生效后应该显示 `PyArmor Version X.Y.Z` 和注册码。
+注册码生效之后，使用试用版本加密的脚本需要全部重新加密。
 
-需要注意的是注册码生效后，原来在试用版下面加密的脚本需要重新加密。
+如果你使用的是 PyArmor 5.6 之前的版本，使用下面的方式注册：
+
+1. 解压注册文件
+2. 拷贝注册文件中 license.lic 到 PyArmor 的安装目录下面
+
+需要注意的是注册文件中私有密钥是无法在 PyArmor 5.6 之前的版本使用的。
 
 **软件许可码永久有效，可以一直使用，但是不能转接或者租用.**
 
