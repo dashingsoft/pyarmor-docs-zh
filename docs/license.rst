@@ -53,8 +53,8 @@ https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 * license.lic (注册码)
 * .pyarmor_capsule.zip (私有密钥箱)
 
-当收到包含注册文件的邮件之后，保存附件中的注册文件到本地，然后使用下面
-的命令生效注册文件::
+当收到包含注册文件的邮件之后，保存附件为 `profile-regfile-1.zip` ，然
+后使用下面的命令生效注册文件::
 
     pyarmor register pyarmor-regfile-1.zip
 
@@ -70,6 +70,6 @@ https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 2. 拷贝解压后的 "license.lic" 到 PyArmor 的安装目录下面
 3. 拷贝解压后的 ".pyarmor_capsule.zip" 到用户的 HOME 目录
 
-**软件许可码永久有效，可以一直使用，但是不能转接或者租用.**
+**软件注册码永久有效，可以一直使用，但是不能转接或者租用.**
 
 .. include:: _common_definitions.txt
