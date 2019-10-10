@@ -47,14 +47,18 @@ https://pyarmor.dashingsoft.com/cart/order.html
 https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 
 支付成功之后注册文件会自动通过电子邮件发送过去。注册文件是一个压缩文件，
-里面包含说明文件，注册码文件和私有密钥文件。
+里面包含 3 个文件:
+
+* README.txt
+* license.lic (注册码)
+* .pyarmor_capsule.zip (私有密钥箱)
 
 当收到包含注册文件的邮件之后，保存附件中的注册文件到本地，然后使用下面
 的命令生效注册文件::
 
     pyarmor register pyarmor-regfile-1.zip
 
-然后可以运行下面的命令查看注册信息
+运行下面的命令查看注册信息
 
     pyarmor register
 
@@ -63,9 +67,8 @@ https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 如果你使用的是 PyArmor 5.6 之前的版本，使用下面的方式注册：
 
 1. 解压注册文件
-2. 拷贝注册文件中 license.lic 到 PyArmor 的安装目录下面
-
-需要注意的是注册文件中私有密钥是无法在 PyArmor 5.6 之前的版本使用的。
+2. 拷贝解压后的 "license.lic" 到 PyArmor 的安装目录下面
+3. 拷贝解压后的 ".pyarmor_capsule.zip" 到用户的 HOME 目录
 
 **软件许可码永久有效，可以一直使用，但是不能转接或者租用.**
 
