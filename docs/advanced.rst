@@ -168,15 +168,22 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
     # from pytransform import pyarmor_init
     # pyarmor_init()
 
-    from pytransform import get_license_code
     from ntplib import NTPClient
     from time import mktime, strptime
     import sys
 
-    NTP_SERVER = 'europe.pool.ntp.org'
-    EXPIRED_DATE = get_license_code()[4:]
+    def get_license_data():
+        from ctypes import py_object, PYFUNCTYPE
+        from pytransform import _pytransform
+        prototype = PYFUNCTYPE(py_object)
+        dlfunc = prototype(('get_registration_code', _pytransform))
+        rcode = dlfunc().decode()
+        index = rcode.find(';', rcode.find('*CODE:'))
+        return rcode[index+1:]
 
     def check_expired():
+        NTP_SERVER = 'europe.pool.ntp.org'
+        EXPIRED_DATE = get_license_data()
         c = NTPClient()
         response = c.request(NTP_SERVER, version=3)
         if response.tx_time > mktime(strptime(EXPIRED_DATE, '%Y%m%d')):
@@ -225,35 +232,15 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
     export PYARMOR_PLUGIN=/usr/share/pyarmor/plugins
     pyarmor obfuscate --plugin check_ntp_time foo.py
 
-最后为加密脚本生成许可文件，使用 `CODE` 来指定有效期::
+最后为加密脚本生成许可文件，使用 `-x` 把自定义的有效期存储到认证文件::
 
-    pyarmor licenses NTP:20190501
-
-.. note::
-
-   为了提高安全性，可以将函数 `get_licese_code` 移到加密脚本中，下面是
-   一个示例::
-
-       def get_license_code():
-           from ctypes import py_object, PYFUNCTYPE
-           from pytransform import _pytransform
-           prototype = PYFUNCTYPE(py_object)
-           dlfunc = prototype(('get_registration_code', _pytransform))
-           rcode = dlfunc().decode()
-           index = rcode.find('*CODE:')
-           return rcode[index+6:]
-
-   另外，也要把 `ntplib.py` 内容全部拷贝过来，这样就不需要从外部导入
-   `NTPClient` 了。
+    pyarmor licenses -x 20190501 MYPRODUCT-0001
+    cp licenses/MYPRODUCT-0001/license.lic dist/
 
 .. note::
 
-   为了提高安全性，在生成许可文件的时候，也可以将有效期进行编码。例如::
-
-       pyarmor licenses xxxx
-
-   这里 "xxx" 是编码后的有效期，在加密脚本验证有效期的时候先解码，然后
-   在校验有效期。
+   为了提高安全性，可以要把 `ntplib.py` 内容全部拷贝过来，这样就不需要
+   从外部导入 `NTPClient`
 
 .. _打包加密脚本成为一个单独的可执行文件:
 

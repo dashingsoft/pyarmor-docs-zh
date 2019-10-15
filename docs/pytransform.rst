@@ -81,47 +81,5 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
    except PytransformError as e:
        print(e)
 
-绑定加密脚本到指定网卡
 
-.. code-block:: python
-
-   from pytransform import get_hd_info, get_license_code, HT_IFMAC
-   expected_mac_address = get_license_code().split('-')[1]
-   if get_hd_info(HT_IFMAC) != expected_mac_address:
-       sys.exit(1)
-
-然后需要为加密脚本生成许可文件，其中 `CODE` 是目标机器的网卡Mac地址，
-同时设置使用期限
-
-.. code-block:: shell
-
-   pyarmor licenses -e 2020-01-01 MAC-70:f1:a1:23:f0:94
-
-使用网络时间来校验加密脚本的有效期
-
-.. code-block:: python
-
-    from ntplib import NTPClient
-    from time import mktime, strptime
-    from pytransform import get_license_code
-
-    NTP_SERVER = 'europe.pool.ntp.org'
-    EXPIRED_DATE = get_license_code()[4:]
-
-    c = NTPClient()
-    response = c.request(NTP_SERVER, version=3)
-    if response.tx_time > mktime(strptime(EXPIRED_DATE, '%Y-%m-%d')):
-        sys.exit(1)
-
-有效期同样也存放在加密脚本的许可文件中，使用下面的命令生成
-
-.. code-block:: shell
-
-   pyarmor licenses NTP-2020-01-01
-
-.. note::
-
-   为了提高安全性，最好把 `get_license_code` 和 `NTPClient` 的源码拷贝
-   到加密脚本里面。
-
-   参考 :ref:`使用插件扩展认证方式`
+更多内容，请参考 :ref:`使用插件扩展认证方式`

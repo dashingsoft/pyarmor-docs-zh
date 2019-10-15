@@ -174,6 +174,7 @@ licenses
 -d SN, --bind-disk SN                 绑定加密脚本到硬盘序列号
 -4 IPV4, --bind-ipv4 IPV4             绑定加密脚本到指定IP地址
 -m MACADDR, --bind-mac MACADDR        绑定加密脚本到网卡的Mac地址
+-x, --bind-data DATA                  用于扩展认证类型的时候传递认证数据信息
 
 **描述**
 
@@ -199,6 +200,21 @@ licenses
 在这之前，一般需要运行命令 :ref:`hdinfo` 得到硬件的相关信息::
 
     pyarmor hdinfo
+
+选项 `-x` 可以把任意字符串数据存放到许可文件里面，主要用于自定义认证类
+型的时候，传递参数给自定义认证函数。例如::
+
+    pyarmor licenses -x "2019-02-15" tom
+
+然后在加密脚本中，可以从认证文件的信息中查询到传入的数据。例如::
+
+    from pytransfrom import get_license_info
+    info = get_license_info()
+    print(info['DATA'])
+
+.. note::
+
+   这里有一个实际使用的例子 :ref:`使用插件扩展认证方式`
 
 .. _pack:
 
