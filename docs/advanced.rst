@@ -218,6 +218,7 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 同时，第二个注释标志行的注释标志会被删除，替换后的内容为::
 
     def main():
+        # PyArmor Plugin: check_expired()
         check_expired()
 
 这样插件输出的函数就可以被脚本调用。
