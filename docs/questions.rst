@@ -16,6 +16,15 @@ Segment fault
 * 使用调试版本的 Python 来运行加密脚本
 * 使用 Python 2.6 加密脚本，但是却使用 Python 2.7 来运行加密脚本
 
+如果使用的是 PyArmor v5.5.0 之后的版本，有的机器可能因为不支持高级模式
+而崩溃。一个快速的解决方案是禁用高级模式，直接修改 pyarmor 安装包路径
+下面的 `pytransform.py` , 找到函数 `_load_library` ，把禁用高级模式的
+注释去掉，修改成为下面的样子::
+
+    # Disable advanced mode if required
+    m.set_option(5, c_char_p(1))
+
+
 Could not find `_pytransform`
 -----------------------------
 
@@ -162,5 +171,14 @@ Error: Try to run unauthorized function
 
 如果当前目录下面存在任何一个文件，但是和加密脚本对应的运行时刻文件不匹
 配，就会报这个错误。
+
+'GBK' codec can't decode byte 0xXX
+----------------------------------
+
+在源代码的第一行指定字符编码，例如::
+
+    # -*- coding: utf-8 -*-
+
+关于源文件字符编码，请参考 https://docs.python.org/2.7/tutorial/interpreter.html#source-code-encoding
 
 .. include:: _common_definitions.txt
