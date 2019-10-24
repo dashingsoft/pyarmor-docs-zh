@@ -181,4 +181,38 @@ Error: Try to run unauthorized function
 
 关于源文件字符编码，请参考 https://docs.python.org/2.7/tutorial/interpreter.html#source-code-encoding
 
+/lib64/libc.so.6: version 'GLIBC_2.14' not found
+------------------------------------------------
+
+在一些没用 `GLIBC_2.14` 的机器上，会报这个错误。
+
+解决方案是对动态库 `_pytransform.so` 打补丁。
+
+首先查看依赖的版本信息::
+
+    readelf -V /path/to/_pytransform.so
+    ...
+
+    Version needs section '.gnu.version_r' contains 2 entries:
+     Addr: 0x00000000000056e8  Offset: 0x0056e8  Link: 4 (.dynstr)
+      000000: Version: 1  File: libdl.so.2  Cnt: 1
+      0x0010:   Name: GLIBC_2.2.5  Flags: none  Version: 7
+      0x0020: Version: 1  File: libc.so.6  Cnt: 6
+      0x0030:   Name: GLIBC_2.7  Flags: none  Version: 8
+      0x0040:   Name: GLIBC_2.14  Flags: none Version: 6
+      0x0050:   Name: GLIBC_2.4  Flags: none  Version: 5
+      0x0060:   Name: GLIBC_2.3.4  Flags: none  Version: 4
+      0x0070:   Name: GLIBC_2.2.5  Flags: none  Version: 3
+      0x0080:   Name: GLIBC_2.3  Flags: none  Version: 2
+
+然后把版本依赖项 `GLIBC_2.14` 替换为 `GLIBC_2.2.5`:
+
+* 从 0x56e8+0x10=0x56f8 拷贝四个字节到 0x56e8+0x40=0x5728
+* 从 0x56e8+0x18=0x56f8 拷贝四个字节到 0x56e8+0x48=0x5728
+
+下面是使用 `xxd` 进行打补丁的脚本命令::
+
+    xxd -s 0x56f8 -l 4 _pytransform.so | sed "s/56f8/5728/" | xxd -r - _pytransform.so
+    xxd -s 0x5700 -l 4 _pytransform.so | sed "s/5700/5730/" | xxd -r - _pytransform.so
+
 .. include:: _common_definitions.txt
