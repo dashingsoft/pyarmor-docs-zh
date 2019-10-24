@@ -17,7 +17,7 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
 
 .. list-table:: 表-1. 预安装的动态库清单
    :name: 预安装的动态库清单
-   :widths: 10 10 20 60
+   :widths: 10 10 20 10 50
    :header-rows: 1
 
    * - 操作系统
@@ -53,7 +53,7 @@ PyArmor 安装的路径之下（通常情况下和 pyarmor.py 在相同目录）
 
 .. list-table:: 表-2. 其他平台的动态库清单
    :name: 其他平台的动态库清单
-   :widths: 10 10 20 60
+   :widths: 10 10 20 10 50
    :header-rows: 1
 
    * - 操作系统
