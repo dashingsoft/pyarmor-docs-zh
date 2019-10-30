@@ -62,6 +62,11 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 在这种情况下，会加密每一个函数对应的代码块，根据 :ref:`代码包裹模式`
 的设置，使用不同的加密方式
 
+* obf_code == 2
+
+和 obf_mode 1 类似，但是使用更为复杂的算法来加密代码块（bytecode)，所
+以比前者要慢一些。
+
 .. _代码包裹模式:
 
 代码包裹模式
