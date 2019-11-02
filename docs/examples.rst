@@ -62,6 +62,62 @@
    从 PyArmor 5.5.0 开始，开始传入选项 `--advanced` 启用高级模式来更进
    一步的提高加密脚本的安全性。例如::
 
-       pyarmor pack -x " --advanced --exclude tests" foo.py
+       pyarmor pack -x " --advanced 1 --exclude tests" foo.py
+
+使用 Apache 的 mod_wsgi 发布加密的 Django 应用
+----------------------------------------------
+
+下面是一个 Django 应用的目录结构::
+
+    /path/to/mysite/
+        db.sqlite3
+        manage.py
+        mysite/
+            __init__.py
+            settings.py
+            urls.py
+            wsgi.py
+        polls/
+            __init__.py
+            admin.py
+            apps.py
+            migrations/
+                __init__.py
+            models.py
+            tests.py
+            urls.py
+            views.py
+
+首先加密所有脚本::
+
+    # 创建加密后脚本的存放路径
+    mkdir -p /var/www/obf_site
+
+    # 先把原来的文件都拷贝过去，因为 pyarmor 不会处理数据文件
+    cp -a /path/to/mysite/* /var/www/obf_site/
+
+    cd /path/to/mysite
+
+    # 递归加密当前目录下面的所有 .py 文件，并指定主文件为 wsgi.py
+    # 加密后的脚本保存到 /var/www/obf_site 下面，覆盖原来的 .py 文件
+    pyarmor obfuscate --src="." -r --output=/var/www/obf_site mysite/wsgi.py
+
+然后修改 Apache 的配置文件::
+
+    WSGIScriptAlias / /var/www/obf_site/mysite/wsgi.py
+    WSGIPythonHome /path/to/venv
+
+    # pyarmor 的运行文件在这个目录下面，所以需要增加到 Python 路径里面
+    WSGIPythonPath /var/www/obf_site
+
+    <Directory /path/to/mysite.com/mysite>
+        <Files wsgi.py>
+            Require all granted
+        </Files>
+    </Directory>
+
+最后重新启动 Apache::
+
+    apachectl restart
 
 .. include:: _common_definitions.txt
