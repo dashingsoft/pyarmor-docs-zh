@@ -59,7 +59,7 @@ obfuscate
 --platform NAME             指定运行加密脚本的平台
 --advanced                  使用高级模式加密脚本
 --restrict <0,1,2,3,4>      设置约束模式
---package-runtime <0,1>     是否保存运行文件到一个单独的目录
+--package-runtime <0,1,2>   是否保存运行文件到一个单独的目录
 
 **描述**
 
@@ -78,7 +78,11 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 在为加密脚本生成默认的许可文件 :file:`license.lic` 以及所有其他的
 :ref:`运行辅助文件` ，也到保存到输出目录 `dist`
 
-最后插入 :ref:`引导代码` 到主脚本。
+最后插入 :ref:`引导代码` 到主脚本。特别的，如果主脚本的名称为 `__init__.py` 并且
+选项 `package-runtime` 不等于 `2`，那么会使用包含“.”的相对导入方式::
+
+    from .pytransform import pyarmor_runtime
+    pyarmor_runtime()
 
 如果命令行有多个脚本的话，除了第一个脚本，不会在其他脚本中插入引导代码和交叉保护
 代码。
@@ -96,8 +100,15 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 选项 `--restrict` 用于指定加密脚本的约束模式，关于约束模式的详细说明，参考
 :ref:`约束模式`
 
-如果选项 `--package-runtime` 设置为 `1` ，那么所有运行时刻文件会作为包
-保存在一个单独的目录 `pytransform` 下面::
+如果选项 `--package-runtime` 设置为 `0` ，那么生成的运行辅助文件和加密脚本存放在
+相同的目录下面::
+  
+    pytransform.py
+    _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
+    pytransform.key
+    license.lic
+
+如果是非 `0` 值，所有运行时刻文件会作为包保存在一个单独的目录 `pytransform` 下面::
 
     pytransform/
         __init__.py
@@ -105,12 +116,8 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
         pytransform.key
         license.lic
 
-其他任何情况都是和加密脚本在相同的目录下面::
-
-    pytransform.py
-    _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
-    pytransform.key
-    license.lic
+`1` 表示运行时刻这个包会和加密脚本在相同目录， `2` 则表示运行时刻这个包会在其他
+路径。
 
 **示例**
 
@@ -170,6 +177,11 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 * 使用约束模式 4 加密当前目录下面除了 `__init__.py` 之外的所有 `.py` 文件::
 
     pyarmor obfuscate --restrict 4 --exclude __init__.py --recursive .
+
+* 加密一个模块，并且把运行时刻文件保存为一个单独的包::
+
+    cd /path/to/mypkg
+    pyarmor obfuscate -r --package-runtime 2 --output dist/mypkg __init__.py
 
 .. _licenses:
 
@@ -403,12 +415,13 @@ config
 --is-package <0,1>              管理的脚本是一个 Python 包类型
 --restrict-mode <0,1,2,3,4>     设置约束模式
 --obf-mod <0,1>                 是否加密整个模块对象
---obf-code <0,1>                是否加密每一个函数
+--obf-code <0,1,2>              是否加密每一个函数
 --wrap-mode <0,1>               是否启用包裹模式加密函数
 --advanced-mode <0,1>           是否使用高级模式加密脚本
 --cross-protection <0,1>        是否插入交叉保护代码到主脚本
 --runtime-path RPATH            设置运行文件所在路径
 --plugin NAME                   设置需要插入到主脚本的代码文件
+--package-runtime <0,1,2>       是否保存运行文件到一个单独的目录
 
 **描述**
 
@@ -478,7 +491,6 @@ build
 -n, --no-runtime          只加密脚本，不要生成运行依赖文件
 -O, --output OUTPUT       输出路径，如果设置，那么工程属性里面的输出路径就无效
 --platform NAME           指定加密脚本的运行平台，仅用于跨平台发布
---package-runtime <0,1>   是否保存运行文件到一个单独的目录
 
 **描述**
 
@@ -520,10 +532,6 @@ build
     pyarmor download linux_x86_64
 
     pyarmor build -B --platform linux_x86_64
-
-* 把运行时刻文件打包生成到输出目录下面的子目录 `pytransform` 中::
-
-    pyarmor build --only-runtime --package-runtime
 
 .. _info:
 
