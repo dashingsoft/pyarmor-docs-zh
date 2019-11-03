@@ -26,6 +26,18 @@
     pytransform.key
     license.lic
 
+从 v5.7.0 开始，运行时刻的四个文件使用包的形式保存在一个单独的目录
+`pytransform` 而不是和存放加密脚本放在一起，这样使得加密后的脚本目录结
+构更清晰。下面是使用包之后 `dist` 下的文件清单::
+  
+    myscript.py
+    mymodule.py
+    pytransform/
+        __init__.py
+        _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
+        pytransform.key
+        license.lic
+
 被加密的脚本也是一个普通的 Python 脚本，模块 `dist/mymodule.py` 加密后
 会是这样::
 
