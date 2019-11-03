@@ -49,16 +49,17 @@ obfuscate
 
 **选项**
 
--O, --output PATH       输出路径，默认是 `dist`
--r, --recursive         递归模式加密所有的脚本
---exclude PATH          在递归模式下排除某些目录，多个目录使用逗号分开，或者使用该选项多次
---exact                 只加密命令行中列出的脚本
---no-bootstrap          在主脚本中不要插入引导代码
---no-cross-protection   在主脚本中不要插入交叉保护代码
---plugin NAME           在加密之前，向主脚本中插入代码
---platform NAME         指定运行加密脚本的平台
---advanced              使用高级模式加密脚本
---restrict <0,1,2,3,4>  设置约束模式
+-O, --output PATH           输出路径，默认是 `dist`
+-r, --recursive             递归模式加密所有的脚本
+--exclude PATH              在递归模式下排除某些目录，多个目录使用逗号分开，或者使用该选项多次
+--exact                     只加密命令行中列出的脚本
+--no-bootstrap              在主脚本中不要插入引导代码
+--no-cross-protection       在主脚本中不要插入交叉保护代码
+--plugin NAME               在加密之前，向主脚本中插入代码
+--platform NAME             指定运行加密脚本的平台
+--advanced                  使用高级模式加密脚本
+--restrict <0,1,2,3,4>      设置约束模式
+--package-runtime <0,1>     是否保存运行文件到一个单独的目录
 
 **描述**
 
@@ -94,6 +95,22 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 
 选项 `--restrict` 用于指定加密脚本的约束模式，关于约束模式的详细说明，参考
 :ref:`约束模式`
+
+如果选项 `--package-runtime` 设置为 `1` ，那么所有运行时刻文件会作为包
+保存在一个单独的目录 `pytransform` 下面::
+
+    pytransform/
+        __init__.py
+        _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
+        pytransform.key
+        license.lic
+
+其他任何情况都是和加密脚本在相同的目录下面::
+
+    pytransform.py
+    _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
+    pytransform.key
+    license.lic
 
 **示例**
 
@@ -456,11 +473,12 @@ build
 
 **选项**
 
--B, --force           强制加密所有脚本，默认情况只加密上次构建之后修改过的脚本
--r, --only-runtime    只生成运行依赖文件
--n, --no-runtime      只加密脚本，不要生成运行依赖文件
--O, --output OUTPUT   输出路径，如果设置，那么工程属性里面的输出路径就无效
---platform NAME       指定加密脚本的运行平台，仅用于跨平台发布
+-B, --force               强制加密所有脚本，默认情况只加密上次构建之后修改过的脚本
+-r, --only-runtime        只生成运行依赖文件
+-n, --no-runtime          只加密脚本，不要生成运行依赖文件
+-O, --output OUTPUT       输出路径，如果设置，那么工程属性里面的输出路径就无效
+--platform NAME           指定加密脚本的运行平台，仅用于跨平台发布
+--package-runtime <0,1>   是否保存运行文件到一个单独的目录
 
 **描述**
 
@@ -502,6 +520,10 @@ build
     pyarmor download linux_x86_64
 
     pyarmor build -B --platform linux_x86_64
+
+* 把运行时刻文件打包生成到输出目录下面的子目录 `pytransform` 中::
+
+    pyarmor build --only-runtime --package-runtime
 
 .. _info:
 
