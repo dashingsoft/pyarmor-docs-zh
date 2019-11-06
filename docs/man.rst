@@ -220,7 +220,7 @@ licenses
 下面，使用这个新的许可文件覆盖默认的许可文件::
 
     cp licenses/mycode/license.lic dist/
-
+    
 另外一个例子，限制加密脚本在固定 Mac 地址，同时设置使用期限::
 
     pyarmor licenses --expired 2019-10-10 --bind-mac 2a:33:50:46:8f tom

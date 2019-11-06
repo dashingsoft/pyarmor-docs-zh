@@ -1,11 +1,11 @@
-.. _模块 pytransform:
+.. _运行时刻模块 pytransform:
 
 运行时刻模块 `pytransform`
 ==========================
 
 如果你意识到加密后的脚本对用户来说就是黑盒子，那么有很多事情都可以在
-Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供很多有用的
-函数和功能。
+Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供很多有用
+的函数和功能。
 
 模块 :mod:`pytransform` 是和加密脚本一起发布，在运行加密脚本之前必须被
 导入进来，所以，你可以在你的脚本中直接导入这个模块，使用里面的函数。
@@ -32,17 +32,22 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
 .. function:: get_license_info()
 
-   返回一个字典，包含加密脚本的认证文件信息。
+   获取加密脚本许可证的相关信息。
 
-   常用的键值有： *expired*, *CODE*, *IFMAC*.
+   返回一个字典，包含的键值有：
 
-   其中 *expired* is == -1 表示认证文件永不过期。
+   * expired: 许可剩余的天数，-1 表示认证文件永不过期
+   * IFMAC：绑定的网卡 MAC 地址
+   * HARDDISK： 绑定的硬盘序列号
+   * IPV4：绑定的 IPv4 地址
+   * DATA：自定义的数据，用于扩展认证方式
+   * CODE：许可注册码
 
-   如果已经过期，会抛出异常 :exc:`PytransformError`
+   如果许可文件非法，例如已经过期，会抛出异常 :exc:`PytransformError`
 
 .. function:: get_license_code()
 
-   返回字符串，该字符串是生成许可文件时指定的参数。
+   返回字符串，该字符串是生成许可文件时指定的注册码参数。
 
    如果认证文件非法或者无效，抛出异常 :exc:`PytransformError`
 
@@ -51,9 +56,8 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
    得到当前机器的硬件信息，通过 *hdtype* 传入需要获取的硬件类型，可用的
    值如下：
 
-   *HT_HARDDISK* 返回硬盘序列号
-
-   *HT_IFMAC* 返回网卡Mac地址
+   * HT_HARDDISK 返回硬盘序列号
+   * HT_IFMAC 返回网卡Mac地址
 
    无法获取硬件信息会抛出异常 :exc:`PytransformError`
 
@@ -83,3 +87,10 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
 
 更多内容，请参考 :ref:`使用插件扩展认证方式`
+
+.. note::
+
+   虽然 :mod:`pytransform.py` 是唯一的没有加密的脚本，但是它同样被 `PyArmor` 所
+   保护。如果它被进行了修改，运行加密脚本同样会抛出保护异常。
+
+   参考 :ref:`对主脚本的特殊处理`
