@@ -163,6 +163,26 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 约束模式
 --------
 
+从 PyArmor 5.7.0 开始， :ref:`引导代码` 必须在加密脚本中，并且加密脚本
+还必须是主脚本。例如，同一个目录下有两个文件 `foo.py` 和 `test.py` ，
+使用下面的命令加密::
+
+    pyarmor obfuscate foo.py
+
+如果直接往加密后的脚本 `dist/test.py` 中插入 `引导代码` ，这个加密脚本
+就无法使用，因为这个脚本加密的时候没有被指定为主脚本。只能使用下面的命
+令来插入 `引导代码`::
+
+    pyarmor --no-runtime --exact test.py
+
+如果需要在没有加密的脚本中运行 :ref:`引导代码` ，可以使用一种变通方式。
+首先加密一个空脚本::
+
+    echo "" > pytransform_bootstrap.py
+    pyarmor --no-runtime --exact pytransform_bootstrap.py
+
+然后在导入这个加密后的空脚本 `import pytransform_bootstrap` 。
+
 从 PyArmor 5.5.6 开始，约束模式有四种形式 。
 
 * 模式 1
@@ -216,6 +236,27 @@ Python 包的部分脚本，以提高加密脚本安全性。
 典型的应用是使用约束模式 1 加密 Python 包中 `__init__.py` 和其他需要被
 外部使用的脚本，而使用约束模式 4 来加密那些只是在包内部使用的脚本。
 
+例如，加密后 `mypkg/__init__.py` 的可访问性如下
+
+.. code-block:: python
+
+    # mypkg/
+    #     __init__.py 使用约束模式 1 加密
+    #     foo.py 使用约束模式 4 加密
+
+    # "foo.hello" 不能被没有加密的脚本直接调用
+    from .foo import hello
+
+    # "open_hello" 可以被其他脚本直接调用
+    def open_hello(msg):
+        print('This is public hello: %s' % msg)
+
+    # "proxy_hello" 可以被其他脚本直接调用
+    def proxy_hello(msg):
+        print('This is proxy hello: %s' % msg)
+        # "foo.hello" 可以被加密脚本 "__init__.py" 调用
+        hello(msg)
+
 .. note::
 
    约束模式 2 和 3 不能用于加密 Python 包，否则加密后的包是无法被非加
@@ -225,15 +266,24 @@ Python 包的部分脚本，以提高加密脚本安全性。
 
    约束模式是针对单个脚本的，不同的脚本可以有不同的约束模式。
 
-从 PyArmor 5.2 开始, 约束模式 1 是默认设置。如果需要禁用约束模式, 那么使
-用下面的命令加密脚本::
+从 PyArmor 5.2 开始, 约束模式 1 是默认设置。
 
-    pyarmor obfuscate --restrict=0 foo.py
-
-如果需要使用其他约束模式，使用下面的命令::
+如果需要使用其他约束模式加密脚本，通过选项 `--restrict` 指定。例如::
 
     pyarmor obfuscate --restrict=2 foo.py
     pyarmor obfuscate --restrict=4 foo.py
+
+    # For project
+    pyarmor config --restrict=2
+    pyarmor build -B
+
+如果需要禁用上面全部的约束, 那么使用下面的命令加密脚本::
+
+    pyarmor obfuscate --restrict=0 foo.py
+
+    # For project
+    pyarmor config --restrict=0
+    pyarmor build -B
 
 详细示例请参考 :ref:`使用约束模式增加加密脚本安全性`
 

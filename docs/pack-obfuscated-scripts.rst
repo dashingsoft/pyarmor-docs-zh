@@ -14,15 +14,15 @@
 3. 添加加密脚本需要的运行辅助文件到安装包
 4. 替换主脚本，因为主脚本会被编译成为可执行文件
 
-PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有安装的话，首先执行
-下面的命令进行安装::
-
-    pip install pyinstaller
-
 PyArmor 提供了一个命令 :ref:`pack` 可以用来直接打包脚本，它会首先加密脚本，然后
 调用 PyInstaller 打包，但是在某些情况下，可以打包会失败。这里详细描述了命令
 :ref:`pack` 的内部工作原理，可以帮助定位问题所在，同时也可以作为自己直接使用
 PyInstaller 打包加密脚本的使用方法。
+
+PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有安装的话，首先执行
+下面的命令进行安装::
+
+    pip install pyinstaller
 
 `pyarmor pack` 命令的第一步是加密所有的脚本，保存到 ``dist/obf``::
 

@@ -15,7 +15,7 @@
 使用工程管理加密脚本
 --------------------
 
-首先使用命令 ``init`` 创建一个工程::
+首先使用命令 :ref:`init` 创建一个工程::
 
     cd examples/pybench
     pyarmor init --entry=pybench.py
@@ -40,16 +40,18 @@
 
     pyarmor build
 
-当某些脚本修改之后，再次运行 `build` ，加密这些修改过的脚本::
+当某些脚本修改之后，再次运行 :ref:`build` ，加密这些修改过的脚本::
 
     pyarmor build
 
-选择设定工程脚本使用 `--manifest` 选项。下面示例是把 :file:`dist`,
-:file:`test` 目录下面的所有 `.py` 排除在工程之外::
+使用命令 :ref:`config` 来修改工程的配置。
+
+例如，设置工程的 `--manifest` 选项，把 :file:`dist`, :file:`test` 目录
+下面的所有 `.py` 排除在工程之外::
 
     pyarmor config --manifest "include *.py, prune dist, prune test"
 
-默认情况下 `build` 仅仅加密修改过的文件，强制加密所有脚本::
+默认情况下 :ref:`build` 仅仅加密修改过的文件，强制加密所有脚本::
 
     pyarmor build --force
 
@@ -208,7 +210,7 @@
 
     用来告诉加密脚本去哪里装载动态库 `_pytransform` 。
 
-    默认值为 None ， 是指和模块 :file:`pytransform.py` 在相同的路径。
+    默认值为 None ， 是指在 :ref:`运行辅助包` 里面。
 
     主要用于使用打包工具（例如 py2exe）把加密脚本压缩到一个 `.zip` 文
     件的时候，无法正确定位动态库，这时候把 `runtime_path` 设置为空字符
@@ -218,11 +220,11 @@
 
   保存运行辅助文件的方式:
 
-        - 0 （默认值）
+        - 0
 
         和加密脚本存放在相同目录，这也是 v5.7.0 之前的存放方式
 
-        - 1
+        - 1 （默认值）
 
         把运行辅助文件作为包存放在子目录 `pytransform` ，这样目录结构更清晰
 
