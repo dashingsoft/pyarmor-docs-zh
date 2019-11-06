@@ -60,11 +60,12 @@ obfuscate
 --advanced                  使用高级模式加密脚本
 --restrict <0,1,2,3,4>      设置约束模式
 --package-runtime <0,1,2>   是否保存运行文件到一个单独的目录
+--no-runtime                不生成任何运行辅助文件，只加密脚本
 
 **描述**
 
-PyArmor 首先检查用户根目录下面是否存在 :file:`.pyarmor_capsule.zip` ，
-如果不存在，那么创建一个新的。
+PyArmor 首先检查用户根目录下面是否存在 :file:`.pyarmor_capsule.zip` ，如果不存在，
+那么创建一个新的。
 
 接着搜索需要加密的脚本，共有三种搜索模式：
 
@@ -72,17 +73,13 @@ PyArmor 首先检查用户根目录下面是否存在 :file:`.pyarmor_capsule.zi
 * 递归模式： 递归搜索和主脚本相同目录下面的所有 `.py` 文件
 * 精准模式： 仅仅加密命令行中列出的脚本
 
-PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本全部加密，保存
-到输出目录 `dist`
+PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本全部加密，保存到输出目录
+`dist`
 
-在为加密脚本生成默认的许可文件 :file:`license.lic` 以及所有其他的
-:ref:`运行辅助文件` ，也到保存到输出目录 `dist`
+然后创建 :ref:`运行辅助包` ，包括默认的许可文件 :file:`license.lic` ，也保存到输
+出目录 `dist`
 
-最后插入 :ref:`引导代码` 到主脚本。特别的，如果主脚本的名称为 `__init__.py` 并且
-选项 `package-runtime` 不等于 `2`，那么会使用包含“.”的相对导入方式::
-
-    from .pytransform import pyarmor_runtime
-    pyarmor_runtime()
+最后插入 :ref:`引导代码` 到主脚本。
 
 如果命令行有多个脚本的话，除了第一个脚本，不会在其他脚本中插入引导代码和交叉保护
 代码。
@@ -102,13 +99,13 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 
 如果选项 `--package-runtime` 设置为 `0` ，那么生成的运行辅助文件和加密脚本存放在
 相同的目录下面::
-  
+
     pytransform.py
     _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
     pytransform.key
     license.lic
 
-如果是非 `0` 值，所有运行时刻文件会作为包保存在一个单独的目录 `pytransform` 下面::
+其他任何情况，所有运行时刻文件会作为包保存在一个单独的目录 `pytransform` 下面::
 
     pytransform/
         __init__.py
@@ -116,8 +113,20 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
         pytransform.key
         license.lic
 
-`1` 表示运行时刻这个包会和加密脚本在相同目录， `2` 则表示运行时刻这个包会在其他
-路径。
+这个选项的默认值为 `1`, 仅当在一些特殊的情况下设置为 `2` 。
+
+通常情况下，如果主脚本是 `__init__.py` ，那么 :ref:`引导代码` 会使用包含一个 "."
+的相对导入的方式::
+
+    from .pytransform import pyarmor_runtime
+    pyarmor_runtime()
+
+如果 `--package-runtime` 设置为 `2` ，那么就是指 :ref:`运行辅助包` 在运行时刻并
+不会和加密脚本存放在一起，而是在其他路径，所以这时候主脚本中的 :ref:`引导代码`
+就不会使用相对导入的方式，而是使用绝对导入方式::
+
+    from pytransform import pyarmor_runtime
+    pyarmor_runtime()
 
 **示例**
 
@@ -183,6 +192,10 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
     cd /path/to/mypkg
     pyarmor obfuscate -r --package-runtime 2 --output dist/mypkg __init__.py
 
+* 只加密主脚本 `foo.py` ，不要生成其他任何运行文件::
+
+    pyarmor --no-runtime --exact foo.py
+
 .. _licenses:
 
 licenses
@@ -207,20 +220,20 @@ licenses
 
 **描述**
 
-运行加密脚本必须有一个认证文件 :file:`license.lic` 。一般在加密脚本的
-同时，会自动生成一个缺省的认证文件。但是这个缺省的认证文件允许加密脚本
-运行在任何机器并且永不过期。如果你需要对加密脚本进行限制，那么需要使用
-该命令生成新的许可文件，并覆盖原来的许可文件。
+运行加密脚本必须有一个认证文件 :file:`license.lic` 。一般在加密脚本的同时，会自
+动生成一个缺省的认证文件。但是这个缺省的认证文件允许加密脚本运行在任何机器并且永
+不过期。如果你需要对加密脚本进行限制，那么需要使用该命令生成新的许可文件，并覆盖
+原来的许可文件。
 
 例如，下面的命令生成一个有使用期限的认证文件::
 
     pyarmor licenses --expired 2019-10-10 mycode
 
-生成的新的认证文件保存在默认输出路径和注册码组合路径 `licenses/mycode`
-下面，使用这个新的许可文件覆盖默认的许可文件::
+生成的新的认证文件保存在默认输出路径和注册码组合路径 `licenses/mycode` 下面，使
+用这个新的许可文件覆盖默认的许可文件::
 
-    cp licenses/mycode/license.lic dist/
-    
+    cp licenses/mycode/license.lic dist/pytransorm/
+
 另外一个例子，限制加密脚本在固定 Mac 地址，同时设置使用期限::
 
     pyarmor licenses --expired 2019-10-10 --bind-mac 2a:33:50:46:8f tom
@@ -230,8 +243,8 @@ licenses
 
     pyarmor hdinfo
 
-选项 `-x` 可以把任意字符串数据存放到许可文件里面，主要用于自定义认证类
-型的时候，传递参数给自定义认证函数。例如::
+选项 `-x` 可以把任意字符串数据存放到许可文件里面，主要用于自定义认证类型的时候，
+传递参数给自定义认证函数。例如::
 
     pyarmor licenses -x "2019-02-15" tom
 
@@ -270,8 +283,7 @@ pack
 
 **描述**
 
-PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，得到相关的
-依赖文件。
+PyArmor 首先调用第三方工具 PyInstaller 对脚本打包，得到相关的依赖文件。
 
 接着加密主脚本所在路径下面所有 `.py` 文件，注意依赖的库中的 `.py` 文件不会被加密的。
 
@@ -279,17 +291,15 @@ PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，�
 
 最后在把所有的文件打包到一起。
 
-选项 `--options` 用来传递额外的参数给外部打包工具。例如，`PyInstaller` 是通过下面的方式调用的::
+选项 `--options EXTRA_OPTIONS` 用来传递额外的参数给外部打包工具， `pack` 会使用
+下面的方式调用 `PyInstaller`::
 
     pyinstaller --distpath DIST -y EXTRA_OPTIONS SCRIPT
 
-其中 `EXTRA_OPTIONS` 会被该选项所替换。
-
-选项 `--xoptions` 用来传递额外的参数来加密脚本。 `pack` 使用下面的命令来加密脚本::
+选项 `--xoptions EXTRA_OPTIONS` 用来传递额外的参数来加密脚本。 `pack` 会使用下面
+的命令来加密脚本::
 
     pyarmor obfuscate -r --output DIST EXTRA_OPTIONS SCRIPT
-
-其中 `EXTRA_OPTIONS` 会被该选项所替换。
 
 更多详细说明，请参考 :ref:`如何打包加密脚本`.
 
@@ -313,13 +323,12 @@ PyArmor 首先调用第三方工具（例如，PyInstaller）对脚本打包，�
 
 * 使用高级模式加密脚本，然后打包成为一个可执行文件::
 
-    pyarmor pack -e " --onefile" -x " --advanced" foo.py
+    pyarmor pack -e " --onefile" -x " --advanced 1" foo.py
 
-* 如果使用了 `PyInstaller` 的选项 `-n` 改变了打包文件的名称，必须同时
-  使用选项 `-s`, 例如::
+* 如果使用了 `PyInstaller` 的选项 `-n` 改变了打包文件的名称，必须同时使用选项
+  `-s`, 例如::
 
     pyarmor pack -e " -n my_app" -s "my_app.spec" foo.py
-
 
 .. _hdinfo:
 
@@ -363,15 +372,14 @@ init
 
 **描述**
 
-这个命令会在 `PATH` 指定的路径创建一个工程配置文件
-:file:`.pyarmor_config` ，这个一个 JSON 格式的文件。
+这个命令会在 `PATH` 指定的路径创建一个工程配置文件 :file:`.pyarmor_config` ，这
+个一个 JSON 格式的文件。
 
-如果选项 `--type` 是 `auto` （也是默认情况），那么工程类型根据主脚本命
-令来判断。如果主脚本是 `__init__.py` , 那么工程类型就是 `pkg` , 否则就
-是 `app` 。
+如果选项 `--type` 是 `auto` （也是默认情况），那么工程类型根据主脚本命令来判断。
+如果主脚本是 `__init__.py` , 那么工程类型就是 `pkg` , 否则就是 `app` 。
 
-如果新的工程类型为 `pkg` ，不管是自动判断还是选项指定， `init` 命令都
-会设置工程属性 `is_package` 为 `1` ，这个属性的默认值是 `0` 。
+如果新的工程类型为 `pkg` ，不管是自动判断还是选项指定， `init` 命令都会设置工程
+属性 `is_package` 为 `1` ，这个属性的默认值是 `0` 。
 
 工程创建之后，可以使用命令 config_ 进行修改和配置。
 
@@ -439,8 +447,8 @@ config
 
 主脚本可以是绝对路径，也可以是相对路径，相对于 `src` 指定的路径。
 
-选项 `--manifest` 用来选择和设置工程包含的脚本。默认值为 `src` 下面的
-所有 `.py` 文件::
+选项 `--manifest` 用来选择和设置工程包含的脚本。默认值为 `src` 下面的所有 `.py`
+文件::
 
     global-include *.py
 
@@ -468,8 +476,8 @@ config
 
     pyarmor config --wrap-mode 0
 
-* 配置主脚本的插件，下面的例子中会把 `check_ntp_time.py` 的内容插入到
-  主脚本，这个脚本会检查网络时间，超过有效期会自动退出::
+* 配置主脚本的插件，下面的例子中会把 `check_ntp_time.py` 的内容插入到主脚本，这
+  个脚本会检查网络时间，超过有效期会自动退出::
 
     pyarmor config --plugin check_ntp_time.py
 
@@ -595,9 +603,8 @@ banchmark
 
 **描述**
 
-主要用来检查加密脚本的性能，命令输出包括初始化加密脚本运行环境需要的额
-外时间，以及不同加密模式下面导入模块、运行不同大小的代码块需要消耗的额
-外时间。
+主要用来检查加密脚本的性能，命令输出包括初始化加密脚本运行环境需要的额外时间，以
+及不同加密模式下面导入模块、运行不同大小的代码块需要消耗的额外时间。
 
 **示例**
 
@@ -652,9 +659,9 @@ download
 
 **描述**
 
-常用平台的预编译动态库已经和 PyArmor 的安装包一起发布，大部分的嵌入式
-设备可以自动下载相应的预编译动态库。但是对于部分无法识别平台的嵌入式设
-备，就需要人工下载。例如，启动过程提示::
+常用平台的预编译动态库已经和 PyArmor 的安装包一起发布，大部分的嵌入式设备可以自
+动下载相应的预编译动态库。但是对于部分无法识别平台的嵌入式设备，就需要人工下载。
+例如，启动过程提示::
 
     ERROR: Unsupport platform linux32/armv7l
 

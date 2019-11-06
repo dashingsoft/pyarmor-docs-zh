@@ -28,13 +28,14 @@ Segment fault
 Could not find `_pytransform`
 -----------------------------
 
-通常情况下动态库 `_pytransform` 和加密脚本在相同的目录下:
+通常情况下动态库 `_pytransform` 在 :ref:`运行辅助包` 里面。在 v5.7.0
+之前，是和加密脚本在相同的目录下:
 
 * `_pytransform.so` in Linux
 * `_pytransform.dll` in Windows
 * `_pytransform.dylib` in MacOS
 
-首先检查文件是否存在。如果文件存在:
+首先检查这个文件是否存在。如果文件存在:
 
 * 检查文件权限是否正确。如果没有执行权限，在 Windows 系统会报错::
 
@@ -137,6 +138,10 @@ byte code 之后如果有类似这样的一条指令 `JMP 255`
 相对跳转、绝对跳转指令都需要调整，情况比较复杂，所以遇到这种情况，暂时
 忽略了。
 
+.. note::
+
+   这个警告在 v5.5.0 已经修正，对于这种情况，会使用非包裹方式加密。
+
 Error: Try to run unauthorized function
 ---------------------------------------
 
@@ -163,8 +168,9 @@ Error: Try to run unauthorized function
 检查当前目录下面是否有存在文件 `license.lic` 或者 `pytransform.key` ，
 如果存在的话，确保它们是加密脚本对应的运行时刻文件。
 
-加密脚本会首先在当前目录查看是否存在 `license.lic` 和运行时刻文件
-`pytransform.key`, 如果存在，那么使用当前目录下面的这些文件。
+在 v5.7.0 之前，加密脚本会首先在当前目录查看是否存在 `license.lic` 和
+运行时刻文件 `pytransform.key`, 如果存在，那么使用当前目录下面的这些文
+件。
 
 其次加密脚本会查看运行时刻模块 `pytransform.py` 所在的目录，看看有没有
 `license.lic` 和 `pytransform.key`
