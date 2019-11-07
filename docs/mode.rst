@@ -173,13 +173,13 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 就无法使用，因为这个脚本加密的时候没有被指定为主脚本。只能使用下面的命
 令来插入 `引导代码`::
 
-    pyarmor --no-runtime --exact test.py
+    pyarmor obfuscate --no-runtime --exact test.py
 
 如果需要在没有加密的脚本中运行 :ref:`引导代码` ，可以使用一种变通方式。
 首先加密一个空脚本::
 
     echo "" > pytransform_bootstrap.py
-    pyarmor --no-runtime --exact pytransform_bootstrap.py
+    pyarmor obfuscate --no-runtime --exact pytransform_bootstrap.py
 
 然后在导入这个加密后的空脚本 `import pytransform_bootstrap` 。
 

@@ -59,7 +59,7 @@
 
 .. note::
 
-   从 PyArmor 5.5.0 开始，开始传入选项 `--advanced` 启用高级模式来更进
+   从 PyArmor 5.5.0 开始，可以传入选项 `--advanced` 启用高级模式来更进
    一步的提高加密脚本的安全性。例如::
 
        pyarmor pack -x " --advanced 1 --exclude tests" foo.py

@@ -190,7 +190,7 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 
 * 只加密主脚本 `foo.py` ，不要生成其他任何运行文件::
 
-    pyarmor --no-runtime --exact foo.py
+    pyarmor obfuscate --no-runtime --exact foo.py
 
 .. _licenses:
 
@@ -301,7 +301,8 @@ PyArmor 首先调用第三方工具 PyInstaller 对脚本打包，得到相关�
 
 .. important::
 
-   不要使用 `pack` 打包加密过的脚本，直接打包原来的脚本就可以
+   命令 `pack` 会自动加密脚本，所以不要使用该命令去打包加密后的脚本，打包加密脚
+   本会导致错误，因为脚本加密之后是无法自动找到的其他被引用的模块的。
 
 **示例**
 
