@@ -23,7 +23,7 @@ Python 动态库中注入一个钩子函数，来处理这种非正常的代码�
 
 使用下面的命令可以启用高级模式加密脚本::
 
-    pyarmor obfuscate --advanced foo.py
+    pyarmor obfuscate --advanced 1 foo.py
 
 在下一个主版本中高级模式有可能会默认启用。
 

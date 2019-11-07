@@ -59,6 +59,12 @@
     pyarmor_runtime()
     __pyarmor__(__name__, __file__, b'\x0a\x02...')
 
+.. note::
+
+   在 PyArmor 中，主脚本并不一定是启动脚本，而是在运行 Python 解释器之后，第一个
+   被执行（导入）的加密脚本。例如，如果只有一个 Python 包的被加密，那么这个包的
+   `__init__.py` 就是主脚本。
+
 .. _引导代码:
 
 引导代码
@@ -69,7 +75,8 @@
     from pytransform import pyarmor_runtime
     pyarmor_runtime()
 
-对于被加密的包，其主脚本是 `__init__.py` ，那么引导代码会使用相对导入的方式::
+对于被加密的 Python 包，其主脚本是 `__init__.py` ，那么引导代码会使用相对导入的
+方式::
 
     from .pytransform import pyarmor_runtime
     pyarmor_runtime()
@@ -89,7 +96,7 @@
 通脚本一样被正常执行。
 
 通常情况下面运行辅助包和加密脚本在相同目录下，但是也可以在其他任何路径，只要可以
-使用 `import pytransform` 进行导入就可以。
+使用 `import pytransform` 能够正常导入就可以。
 
 运行辅助包里面有四个文件::
 
@@ -160,6 +167,6 @@
   `subprocess.Popen` 等, 要确保 `引导代码`_ 在新的执行环境被首先执行，否则加密脚
   本会报错。
 
-更多详细的信息，可以参考 :ref:`如何加密脚本` and :ref:`如何运行加密脚本`
+更多详细的信息，可以参考 :ref:`如何加密脚本` 和 :ref:`如何运行加密脚本`
 
 .. include:: _common_definitions.txt

@@ -6,23 +6,23 @@ PyArmor 的工作原理
 
     foo.py
 
-    pytransform.py
-    _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
-    pytransform.key
-    license.lic
+    pytransform/
+        __init__.py
+        _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
+        pytransform.key
+        license.lic
 
 `dist/foo.py` 是加密后的脚本，它的内容如下::
 
     from pytransform import pyarmor_runtime
     pyarmor_runtime()
-
     __pyarmor__(__name__, __file__, b'\x06\x0f...')
 
-所有其他文件叫做 :ref:`运行辅助文件` ，它们是运行加密脚本所必须的。并
-且只要这里面的模块 `pytransform.py` 能被正常导入进来，加密脚本
-`dist/foo.py` 就可以像正常脚本一样被运行。
+和加密脚本在一起的目录 `pytransform` 叫做 :ref:`运行辅助包` ，它是运行
+加密脚本所必须的。只要这个包能被正常导入进来，加密脚本 `dist/foo.py`
+就可以像正常脚本一样被运行。
 
-这是 PyArmor 的一个重要特征： **加密脚本无缝替换 Python 源代码**
+这是 PyArmor 的一个重要特征： **加密脚本无缝替换原来的脚本**
 
 .. _如何加密脚本:
 

@@ -153,7 +153,7 @@ https://docs.python.org/3/library/site.html
 :ref:`高级模式` 是从 PyArmor 5.5.0 引入的新特性，默认情况下是没有启用的。如果需
 要使用高级模式来加密脚本，额外指定选项 `--advanced`::
 
-    pyarmor obfuscate --advanced foo.py
+    pyarmor obfuscate --advanced 1 foo.py
 
 从 PyArmor 5.2 开始, :ref:`约束模式` 是默认设置。
 
@@ -307,13 +307,13 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
     pyarmor pack --clean --without-license \
             -e " --onefile --icon logo.ico --runtime-hook copy_license.py" foo.py
 
-选项 `--without-license` 告诉 `pyamor` 不要把加密脚本的许可文件打包进去，使用
-`PyInstaller` 的选项 `--runtime-hook` 可以让打包好的可执行文件，在启动的时候首先
-去调用 `copy_licesen.py` ，把许可文件拷贝到相应的目录。
+   选项 `--without-license` 告诉 `pyamor` 不要把加密脚本的许可文件打包进去，使用
+   `PyInstaller` 的选项 `--runtime-hook` 可以让打包好的可执行文件，在启动的时候
+   首先去调用 `copy_licesen.py` ，把许可文件拷贝到相应的目录。
 
-命令执行成功之后，会生成一个打包好的文件 `dist/foo.exe`
+   命令执行成功之后，会生成一个打包好的文件 `dist/foo.exe`
 
-尝试运行这个可执行文件，应该会报错。
+   尝试运行这个可执行文件，应该会报错。
 
 3. 使用命令 `pyarmor licenses` 生成新的许可文件，并拷贝到 `dist/` 下面
 
