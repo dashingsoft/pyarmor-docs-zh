@@ -110,7 +110,7 @@
     # pyarmor 的运行文件在这个目录下面，所以需要增加到 Python 路径里面
     WSGIPythonPath /var/www/obf_site
 
-    <Directory /path/to/mysite.com/mysite>
+    <Directory /var/www/obf_site/mysite>
         <Files wsgi.py>
             Require all granted
         </Files>
