@@ -38,17 +38,6 @@
         pytransform.key
         license.lic
 
-在 v5.7.0 之前，运行时刻的四个文件和加密脚本存放在相同目录。下面是使用包之前
-`dist` 下的文件清单::
-
-    myscript.py
-    mymodule.py
-
-    pytransform.py
-    _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
-    pytransform.key
-    license.lic
-
 被加密的脚本也是一个普通的 Python 脚本，模块 `dist/mymodule.py` 加密后会是这样::
 
     __pyarmor__(__name__, __file__, b'\x06\x0f...')
@@ -96,7 +85,9 @@
 通脚本一样被正常执行。
 
 通常情况下面运行辅助包和加密脚本在相同目录下，但是也可以在其他任何路径，只要可以
-使用 `import pytransform` 能够正常导入就可以。
+使用 `import pytransform` 能够正常导入就可以。并且使用相同 :ref:`全局密钥箱` 加
+密的脚本都可以共用这个包。 你完全可以把这个包放到 Python 的系统库路径下面，这样
+加密后的脚本目录结构就和原来完全一样。
 
 运行辅助包里面有四个文件::
 
