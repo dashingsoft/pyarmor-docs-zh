@@ -62,6 +62,18 @@
 
     pyarmor build --platform linux_x86_64
 
+.. note::
+
+   从 v5.6.0 到 v5.7.0 这几个版本，交叉发布功能有一个问题。在 Windows
+   / Ubuntu / MacOS 等上面使用跨平台加密方式加密的脚本，拷贝到下面的任
+   一平台都不能正常运行::
+
+       armv5, android.aarch64, ppc64le, ios.arm64, freebsd, alpine, alpine.arm,
+       poky-i586
+
+   但是之前和之后的版本都没有这个问题。
+
+
 使用不同版本 Python 加密脚本
 ----------------------------
 
