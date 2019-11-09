@@ -456,9 +456,9 @@ config
 
 **选项**
 
---name NAME                     内部名称
+--name NAME                     工程名称
 --title TITLE                   显示标题
---src SRC                       脚本所在路径
+--src SRC                       工程脚本所在的路径，用于匹配模板命令
 --output OUTPUT                 保存加密脚本的输出路径
 --manifest TEMPLATE             过滤脚本的模板语句
 --entry SCRIPT                  工程主脚本，可以多个，使用逗号分开
