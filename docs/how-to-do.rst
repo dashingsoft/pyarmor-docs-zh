@@ -87,6 +87,93 @@ PyArmor 是怎么加密 Python 源代码呢？
     __pyarmor__(__name__, __file__, b'\x01\x0a...')
 
 
+.. _对主脚本的特殊处理:
+
+对主脚本的特殊处理
+------------------
+
+和其他模块不一样，PyArmor 对主脚本有额外的处理:
+
+* 在加密之前，修改主脚本，插入保护代码
+* 在加密之后，修改加密脚本，插入引导代码
+
+在加密主脚本之前，PyArmor 会逐行扫描源代码。如果发现下面的一行::
+
+    # {PyArmor Protection Code}
+
+PyArmor 就会把这一行替换成为保护代码。
+
+如果发现了下面这一行::
+
+    # {No PyArmor Protection Code}
+
+PyArmor 就不会在主脚本中插入保护代码。
+
+如果上面两个特征行都没有，那么在看看有没有这样的行::
+
+    if __name__ == '__main__'
+
+如果有，插入保护代码到这条语句的前面。如果没有，那么不添加保护代码。
+
+默认的保护代码的模板如下::
+
+    def protect_pytransform():
+
+        import pytransform
+
+        def check_obfuscated_script():
+            CO_SIZES = 49, 46, 38, 36
+            CO_NAMES = set(['pytransform', 'pyarmor_runtime', '__pyarmor__',
+                            '__name__', '__file__'])
+            co = pytransform.sys._getframe(3).f_code
+            if not ((set(co.co_names) <= CO_NAMES)
+                    and (len(co.co_code) in CO_SIZES)):
+                raise RuntimeError('Unexpected obfuscated script')
+
+        def check_mod_pytransform():
+            def _check_co_key(co, v):
+                return (len(co.co_names), len(co.co_consts), len(co.co_code)) == v
+            for k, (v1, v2, v3) in {keylist}:
+                co = getattr(pytransform, k).{code}
+                if not _check_co_key(co, v1):
+                    raise RuntimeError('unexpected pytransform.py')
+                if v2:
+                    if not _check_co_key(co.co_consts[1], v2):
+                        raise RuntimeError('unexpected pytransform.py')
+                if v3:
+                    if not _check_co_key(co.{closure}[0].cell_contents.{code}, v3):
+                        raise RuntimeError('unexpected pytransform.py')
+
+        def check_lib_pytransform():
+            filename = pytransform.os.path.join({rpath}, {filename})
+            size = {size}
+            n = size >> 2
+            with open(filename, 'rb') as f:
+                buf = f.read(size)
+            fmt = 'I' * n
+            checksum = sum(pytransform.struct.unpack(fmt, buf)) & 0xFFFFFFFF
+            if not checksum == {checksum}:
+                raise RuntimeError("Unexpected %s" % filename)
+        try:
+            check_obfuscated_script()
+            check_mod_pytransform()
+            check_lib_pytransform()
+        except Exception as e:
+            print("Protection Fault: %s" % e)
+            pytransform.sys.exit(1)
+
+    protect_pytransform()
+
+在加密脚本的时候， PyArmor 会使用真实的值来替换其中的字符串模板 `{xxx}`
+
+如果不想让 PyArmor 添加保护代码，除了在脚本中添加上面所示的标志行之外，
+也可以使用命令行选项 `--no-cross-protection` ，例如::
+
+    pyarmor obfuscate --no-cross-protection foo.py
+
+主脚本被加密之后， PyArmor 会在最前面插入 :ref:`引导代码` 。
+
+
 .. _如何运行加密脚本:
 
 如何运行加密脚本
@@ -180,90 +267,75 @@ PyArmor 是怎么加密 Python 源代码呢？
         Py_RETURN_NONE;
     }
 
-.. _对主脚本的特殊处理:
 
-对主脚本的特殊处理
-------------------
+.. _如何打包加密脚本:
 
-和其他模块不一样，PyArmor 对主脚本有额外的处理:
+如何打包加密脚本
+----------------
 
-* 在加密之前，修改主脚本，插入保护代码
-* 在加密之后，修改加密脚本，插入引导代码
+虽然加密脚本可以无缝替换原来的脚本，但是打包的时候还是存在一个问题:
 
-在加密主脚本之前，PyArmor 会逐行扫描源代码。如果发现下面的一行::
+**加密之后所有的依赖包无法自动获取**
 
-    # {PyArmor Protection Code}
+解决这个问题的基本思路是
 
-PyArmor 就会把这一行替换成为保护代码。
+1. 使用没有加密的脚本找到所有的依赖文件
+2. 使用加密脚本替换原来的脚本
+3. 添加加密脚本需要的运行辅助文件到安装包
+4. 替换主脚本，因为主脚本会被编译成为可执行文件
 
-如果发现了下面这一行::
+PyArmor 提供了一个命令 :ref:`pack` 可以用来直接打包脚本，它会首先加密脚本，然后
+调用 PyInstaller 打包，但是在某些情况下，打包可能会失败。这里详细描述了命令
+:ref:`pack` 的内部工作原理，可以帮助定位问题所在，同时也可以作为自己直接使用
+PyInstaller 打包加密脚本的使用手册。
 
-    # {No PyArmor Protection Code}
+PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有安装的话，首先执行
+下面的命令进行安装::
 
-PyArmor 就不会在主脚本中插入保护代码。
+    pip install pyinstaller
 
-如果上面两个特征行都没有，那么在看看有没有这样的行::
+`pyarmor pack` 命令的第一步是加密所有的脚本，保存到 ``dist/obf``::
 
-    if __name__ == '__main__'
+    pyarmor obfuscate --output dist/obf hello.py
 
-如果有，插入保护代码到这条语句的前面。如果没有，那么不添加保护代码。
+第二步是生成 `.spec` 文件，这是 `PyInstaller` 需要的，把加密脚本需要的运行辅助文
+件也添加到里面::
 
-默认的保护代码的模板如下::
+    pyinstaller --add-data dist/obf/license.lic
+                --add-data dist/obf/pytransform.key
+                --add-data dist/obf/_pytransform.*
+                hello.py dist/obf/hello.py
 
-    def protect_pytransform():
+第三步是修改 `hello.spec`, 在 `Analysis` 之后插入下面的语句，主要作用是打包的时
+候使用加密后的脚本，而不是原来的脚本::
 
-        import pytransform
+    a.scripts[-1] = 'hello', r'dist/obf/hello.py', 'PYSOURCE'
+    for i in range(len(a.pure)):
+        if a.pure[i][1].startswith(a.pathex[0]):
+            x = a.pure[i][1].replace(a.pathex[0], os.path.abspath('dist/obf'))
+            if os.path.exists(x):
+                if hasattr(a.pure, '_code_cache'):
+                    with open(x) as f:
+                        a.pure._code_cache[a.pure[i][0]] = compile(f.read(), a.pure[i][1], 'exec')
+                a.pure[i] = a.pure[i][0], x, a.pure[i][2]
 
-        def check_obfuscated_script():
-            CO_SIZES = 49, 46, 38, 36
-            CO_NAMES = set(['pytransform', 'pyarmor_runtime', '__pyarmor__',
-                            '__name__', '__file__'])
-            co = pytransform.sys._getframe(3).f_code
-            if not ((set(co.co_names) <= CO_NAMES)
-                    and (len(co.co_code) in CO_SIZES)):
-                raise RuntimeError('Unexpected obfuscated script')
+最后运行这个修改过的文件，生成最终的安装包::
 
-        def check_mod_pytransform():
-            def _check_co_key(co, v):
-                return (len(co.co_names), len(co.co_consts), len(co.co_code)) == v
-            for k, (v1, v2, v3) in {keylist}:
-                co = getattr(pytransform, k).{code}
-                if not _check_co_key(co, v1):
-                    raise RuntimeError('unexpected pytransform.py')
-                if v2:
-                    if not _check_co_key(co.co_consts[1], v2):
-                        raise RuntimeError('unexpected pytransform.py')
-                if v3:
-                    if not _check_co_key(co.{closure}[0].cell_contents.{code}, v3):
-                        raise RuntimeError('unexpected pytransform.py')
+    pyinstaller --clean -y hello.spec
 
-        def check_lib_pytransform():
-            filename = pytransform.os.path.join({rpath}, {filename})
-            size = {size}
-            n = size >> 2
-            with open(filename, 'rb') as f:
-                buf = f.read(size)
-            fmt = 'I' * n
-            checksum = sum(pytransform.struct.unpack(fmt, buf)) & 0xFFFFFFFF
-            if not checksum == {checksum}:
-                raise RuntimeError("Unexpected %s" % filename)
-        try:
-            check_obfuscated_script()
-            check_mod_pytransform()
-            check_lib_pytransform()
-        except Exception as e:
-            print("Protection Fault: %s" % e)
-            pytransform.sys.exit(1)
+.. note::
 
-    protect_pytransform()
+   必须要指定选项 `--clean` ，否则不会把原来的脚本替换成为加密脚本。
 
-在加密脚本的时候， PyArmor 会使用真实的值来替换其中的字符串模板 `{xxx}`
+检查一下安装包中的脚本是否已经加密::
 
-如果不想让 PyArmor 添加保护代码，除了在脚本中添加上面所示的标志行之外，
-也可以使用命令行选项 `--no-cross-protection` ，例如::
+   # It works
+   dist/hello/hello.exe
 
-    pyarmor obfuscate --no-cross-protection foo.py
+   rm dist/hello/license.lic
 
-主脚本被加密之后， PyArmor 会在最前面插入 :ref:`引导代码` 。
+   # It should not work
+   dist/hello/hello.exe
+
 
 .. include:: _common_definitions.txt
