@@ -268,7 +268,7 @@ Python 包的部分脚本，以提高加密脚本安全性。
 
 从 PyArmor 5.2 开始, 约束模式 1 是默认设置。
 
-如果需要使用其他约束模式加密脚本，通过选项 `--restrict` 指定。例如::
+如果需要使用其他约束模式加密脚本，通过选项 ``--restrict`` 指定。例如::
 
     pyarmor obfuscate --restrict=2 foo.py
     pyarmor obfuscate --restrict=4 foo.py

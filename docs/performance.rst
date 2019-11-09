@@ -63,7 +63,7 @@
 
     pyarmor benchmark --wrap-mode 0
 
-查看测试命令使用的脚本，使用选项 `--debug` 保留生成的中间文件，所有的
+查看测试命令使用的脚本，使用选项 ``--debug`` 保留生成的中间文件，所有的
 中间文件保存在目录 `.benchtest` 下面::
 
     pyarmor benchmark --debug

@@ -31,8 +31,8 @@
     cd dist/easy-han
     ./easy-han
 
-使用 `-e` 传入额外的参数去运行 `PyInstaller` ，要确认 `PyInstaller` 使
-用这些选项可以正常打包::
+使用 ``-e`` 传入额外的参数去运行 `PyInstaller`_ ，要确认 `PyInstaller`_ 使用这些
+选项可以正常打包::
 
     cd /path/to/src
     pyinstaller --name easy-han --hidden-import comtypes --add-data 'config.json;.' main.py
@@ -40,16 +40,16 @@
     cd dist/easy-han
     ./easy-han
 
-使用 `-x` 传入额外的参数去加密脚本，因为 `tests` 和 `vnev` 下面也有很
-多脚本，但是这些不需要加密，所以使用 `--exclude` 选项把它们排除。要确
-认可以使用这些选项可以正常加密脚本::
+使用 ``-x`` 传入额外的参数去加密脚本，因为 `tests` 和 `vnev` 下面也有很多脚本，
+但是这些不需要加密，所以使用 ``--exclude`` 选项把它们排除。要确认可以使用这些选
+项可以正常加密脚本::
 
     cd /path/to/src
     pyarmor obfuscate --exclude vnev --exclude tests main.py
 
-使用 `-s` 参数主要是因为 PyInstaller 使用 `--name` 修改了安装包的名称，
-默认生成的 `.spec` 文件不再是主脚本名称，所以要告诉 `pack` 命令修改后
-的 `.spec` 文件名称。
+使用 ``-s`` 参数主要是因为 PyInstaller 使用 ``--name`` 修改了安装包的名称，默认
+生成的 `.spec` 文件不再是主脚本名称，所以要告诉 :ref:`pack` 命令修改后的 `.spec`
+文件名称。
 
 .. important::
 
@@ -59,7 +59,7 @@
 
 .. note::
 
-   从 PyArmor 5.5.0 开始，可以传入选项 `--advanced` 启用高级模式来更进
+   从 PyArmor 5.5.0 开始，可以传入选项 ``--advanced`` 启用高级模式来更进
    一步的提高加密脚本的安全性。例如::
 
        pyarmor pack -x " --advanced 1 --exclude tests" foo.py

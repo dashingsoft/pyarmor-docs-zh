@@ -174,7 +174,7 @@ https://docs.python.org/3/library/site.html
 ------------------------
 
 :ref:`高级模式` 是从 PyArmor 5.5.0 引入的新特性，默认情况下是没有启用的。如果需
-要使用高级模式来加密脚本，额外指定选项 `--advanced`::
+要使用高级模式来加密脚本，额外指定选项 ``--advanced``::
 
     pyarmor obfuscate --advanced 1 foo.py
 
@@ -307,15 +307,15 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
     pyarmor pack -e " --onefile" foo.py
 
-其中 `--onefile` 是 `PyInstaller` 的选项，使用 `-e` 可以传递任何 `Pyinstaller`
-支持的选项，例如，指定可执行文件的图标::
+其中 ``--onefile`` 是 `PyInstaller`_ 的选项，使用 ``-e`` 可以传递任何
+`Pyinstaller`_ 支持的选项，例如，指定可执行文件的图标::
 
     pyarmor pack -e " --onefile --icon logo.ico" foo.py
 
-如果不想把加密脚本的许可文件 `license.lic` 打包到可执行文件，而是和可执行文件放
-在一起，这样方便为不同的用户生成不同的许可文件。那么需要使用 `PyInstaller` 提供
-的 `--runtime-hook` 功能在加密脚本运行之前把许可文件拷贝到指定目录，下面是具体的
-操作步骤：
+如果不想把加密脚本的许可文件 ``license.lic`` 打包到可执行文件，而是和可执行文件
+放在一起，这样方便为不同的用户生成不同的许可文件。那么需要使用 `PyInstaller`_ 提
+供的 ``--runtime-hook`` 功能在加密脚本运行之前把许可文件拷贝到指定目录，下面是具
+体的操作步骤：
 
 1. 新建一个文件 `copy_license.py`::
 
@@ -330,8 +330,8 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
     pyarmor pack --clean --without-license \
             -e " --onefile --icon logo.ico --runtime-hook copy_license.py" foo.py
 
-   选项 `--without-license` 告诉 `pyamor` 不要把加密脚本的许可文件打包进去，使用
-   `PyInstaller` 的选项 `--runtime-hook` 可以让打包好的可执行文件，在启动的时候
+   选项 ``--without-license`` 告诉 `pyamor` 不要把加密脚本的许可文件打包进去，使用
+   `PyInstaller`_ 的选项 ``--runtime-hook`` 可以让打包好的可执行文件，在启动的时候
    首先去调用 `copy_licesen.py` ，把许可文件拷贝到相应的目录。
 
    命令执行成功之后，会生成一个打包好的文件 `dist/foo.exe`

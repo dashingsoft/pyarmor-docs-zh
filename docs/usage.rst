@@ -139,7 +139,7 @@ https://github.com/dashingsoft/pyarmor/tree/master/plugins
 加密单个模块
 ------------
 
-如果只需要单独加密一个模块，使用选项 `--exact`::
+如果只需要单独加密一个模块，使用选项 ``--exact``::
 
     pyarmor obfuscate --exact foo.py
 

@@ -46,8 +46,8 @@
 
 使用命令 :ref:`config` 来修改工程的配置。
 
-例如，设置工程的 `--manifest` 选项，把 :file:`dist`, :file:`test` 目录
-下面的所有 `.py` 排除在工程之外::
+例如，设置工程的 ``--manifest`` 选项，把 :file:`dist`, :file:`test` 目
+录下面的所有 `.py` 排除在工程之外::
 
     pyarmor config --manifest "include *.py, prune dist, prune test"
 

@@ -237,7 +237,7 @@ No module name pytransform
 在使用 `pyarmor pack` 打包的时候报这个错误:
 
 * 确认命令行指定的脚本是没有加密的
-* 使用选项 `--clean` 清除缓存的 `myscript.spec`::
+* 使用选项 ``--clean`` 清除缓存的 `myscript.spec`::
 
     pyarmor pack --clean foo.py
 

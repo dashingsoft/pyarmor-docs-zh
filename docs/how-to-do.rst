@@ -164,10 +164,10 @@ PyArmor 就不会在主脚本中插入保护代码。
 
     protect_pytransform()
 
-在加密脚本的时候， PyArmor 会使用真实的值来替换其中的字符串模板 `{xxx}`
+在加密脚本的时候， PyArmor 会使用真实的值来替换其中的字符串模板 ``{xxx}``
 
 如果不想让 PyArmor 添加保护代码，除了在脚本中添加上面所示的标志行之外，
-也可以使用命令行选项 `--no-cross-protection` ，例如::
+也可以使用命令行选项 ``--no-cross-protection`` ，例如::
 
     pyarmor obfuscate --no-cross-protection foo.py
 
@@ -325,7 +325,7 @@ PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有
 
 .. note::
 
-   必须要指定选项 `--clean` ，否则不会把原来的脚本替换成为加密脚本。
+   必须要指定选项 ``--clean`` ，否则不会把原来的脚本替换成为加密脚本。
 
 检查一下安装包中的脚本是否已经加密::
 
