@@ -3,15 +3,15 @@
 常见问题
 ========
 
-当出现问题的时候，首先使用下面的方式运行以得到更多的错误信息::
+当出现问题的时候，打开 Python 调试选项运行以得到更多的错误信息::
 
-    python -d pyarmor.py ...
     PYTHONDEBUG=y pyarmor ...
+    python -d obfuscated_scripts.py ...
 
 Segment fault
 -------------
 
-下面的情况都会导致导致程序崩溃
+下面的情况都可能会导致导致程序崩溃
 
 * 使用调试版本的 Python 来运行加密脚本
 * 使用 Python 2.6 加密脚本，但是却使用 Python 2.7 来运行加密脚本
@@ -77,8 +77,7 @@ Marshal loads failed when running xxx.py
 
 1. 检查运行加密脚本的 Python 的版本和加密脚本的 Python 版本是否一致
 
-2. 尝试移动全局密钥箱 `~/.pyarmor_capsule.zip` 到其他任何目录，然后重
-   新加密脚本
+2. 使用 `python -d` 运行加密脚本，查看更多的错误信息
 
 3. 确保生成许可使用的密钥箱和加密脚本使用的密钥箱是相同的（当运行
    PyArmor 的命令时，该命令使用的密钥箱的文件名称会显示在控制台）
@@ -162,15 +161,17 @@ Error: Try to run unauthorized function
 目前支持的硬盘接口包括 IDE，SCSI 以及 NVME 固态硬盘，对于其他接口的尚
 不支持。
 
-运行脚本时候提示 Check license failed: Invalid input package.
--------------------------------------------------------------
+运行脚本时候提示: Invalid input package.
+----------------------------------------
 
-检查当前目录下面是否有存在文件 `license.lic` 或者 `pytransform.key` ，
-如果存在的话，确保它们是加密脚本对应的运行时刻文件。
+如果加密脚本是在不同的平台下进行加密，参考 :ref:`跨平台发布加密脚本`
+里面的备注。
 
-在 v5.7.0 之前，加密脚本会首先在当前目录查看是否存在 `license.lic` 和
-运行时刻文件 `pytransform.key`, 如果存在，那么使用当前目录下面的这些文
-件。
+在 v5.7.0 之前，检查当前目录下面是否有存在文件 `license.lic` 或者
+`pytransform.key` ，如果存在的话，确保它们是加密脚本对应的运行时刻文件。
+
+因为加密脚本会首先在当前目录查看是否存在 `license.lic` 和运行时刻文件
+`pytransform.key`, 如果存在，那么使用当前目录下面的这些文件。
 
 其次加密脚本会查看运行时刻模块 `pytransform.py` 所在的目录，看看有没有
 `license.lic` 和 `pytransform.key`
@@ -220,5 +221,24 @@ Error: Try to run unauthorized function
 
     xxd -s 0x56f8 -l 4 _pytransform.so | sed "s/56f8/5728/" | xxd -r - _pytransform.so
     xxd -s 0x5700 -l 4 _pytransform.so | sed "s/5700/5730/" | xxd -r - _pytransform.so
+
+购买的私有密钥箱没有起作用
+--------------------------
+
+使用私有密钥箱加密的脚本，依然可以在试用版本生成的许可证下运行::
+
+* 确认命令 `pyarmor register` 能显示正确的注册信息
+* 确认 :ref:`全局密钥箱` 文件 `~/.pyarmor_capsule.zip` 和注册文件 `pyarmor-regfile-1.zip` 中的 `.pyarmor_capsule.zip` 是同一个文件
+* 重新启动系统
+
+No module name pytransform
+--------------------------
+
+在使用 `pyarmor pack` 打包的时候报这个错误::
+
+* 确认命令行指定的脚本是没有加密的
+* 使用选项 `--clean` 清除缓存的 `myscript.spec`::
+
+    payrmor pack --clean foo.py
 
 .. include:: _common_definitions.txt
