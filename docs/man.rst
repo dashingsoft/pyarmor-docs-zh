@@ -155,12 +155,12 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 * 递归加密当前目录下面的所有脚本，主脚本在子目录 `mysite/` 下面::
 
      pyarmor obfuscate --src "." --recursive mysite/wsgi.py
-    
+
 * 仅仅递归加密指定目录下面的所有 `.py` 脚本，没有主脚本，也不生成运行辅助文件::
 
      pyarmor obfuscate --recursive --no-runtime .
      pyarmor obfuscate --recursive --no-runtime src/
-     
+
 * 除了 `build` 和 `dist` 之外，递归加密当前目录下面的所有 `.py` 脚本，
   保存到 `dist` 目录::
 
@@ -296,33 +296,43 @@ pack
 
 **选项**
 
--t TYPE, --type TYPE            cx_Freeze, py2exe, py2app, PyInstaller(default).
--O OUTPUT, --output OUTPUT      输出路径
--e OPTIONS, --options OPTIONS   运行外部打包工具的额外参数
--x OPTIONS, --xoptions OPTIONS  加密脚本的额外参数
---clean                         打包之前删除上一次生成的中间文件
---without-license               不要将加密脚本的许可文件打包进去
---debug                         不要删除打包过程生成的中间文件
+-O, --output PATH       输出路径
+-e, --options OPTIONS   传递额外的参数到 `PyInstaller`_
+-x, --xoptions OPTIONS  传递额外的参数到 `obfuscate`_ 去加密脚本
+-s FILE                 指定 `pyinstaller` 使用的 .spec 文件
+--clean                 删除缓存的 .spec 文件，重新开始打包
+--without-license       不要将加密脚本的许可文件打包进去
+--debug                 不要删除打包过程生成的中间文件
 
 **描述**
 
-PyArmor 首先调用第三方工具 PyInstaller 对脚本打包，得到相关的依赖文件。
+命令 `pack`_ 首先调用 `PyInstaller`_ 生成一个和主脚本同名的 `.spec` 文件，选项
+``--options`` 的值会原封不动的被传递给 `PyInstaller`_ ，但是不能传递选项
+``--distpath`` 。
 
-接着加密主脚本所在路径下面所有 `.py` 文件，注意依赖的库中的 `.py` 文件不会被加密的。
+.. note::
 
-然后使用加密脚本替换原来的脚本。
+   如果当前目录下有一个 `.spec` 已经存在，PyArmor 会直接使用这个文件，而不是重新
+   创建一个新的。但是如果命令行使用了选项 ``--clean`` ，那么 PyArmor 总是会调用
+   `PyInstaller`_ 去创建一个新的，同时覆盖老的。
 
-最后在把所有的文件打包到一起。
+当 `pack`_ 命令失败的时候，首先要确认这个 `.spec` 文件可以直接用 `PyInstaller`_
+打包成功。例如::
 
-选项 ``--options EXTRA_OPTIONS`` 用来传递额外的参数给外部打包工具， `pack` 会使
-用下面的方式调用 `PyInstaller`::
+    pyinstaller myscript.spec
 
-    pyinstaller --distpath DIST -y EXTRA_OPTIONS SCRIPT
+如果已经有一个写好的 `.spec` 文件，也可以通过 ``-s`` 指定到这个文件，这样
+`pack`_ 就会直接使用这个文件，而不是重新创建一个新的::
 
-选项 ``--xoptions EXTRA_OPTIONS`` 用来传递额外的参数来加密脚本。 `pack` 会使用下面
-的命令来加密脚本::
+    pyarmor pack -s /path/to/myself.spec foo.py
 
-    pyarmor obfuscate -r --output DIST EXTRA_OPTIONS SCRIPT
+接下来 `pack`_ 会递归加密主脚本所在目录下面的所有 `.py` 文件。它使用选项 ``-r``,
+``--output`` 以及 ``--xoptions`` 中指定的额外选项来调用 `pyarmor obfuscate`
+
+然后 `pack`_ 会基于原来的 `.spec` 文件，创建一个新的 `.spec` 文件，增加一些语句
+用于把原来的脚本替换为加密后的脚本。
+
+最后 `pack`_ 再次调用 `PyInstaller`_ 使用这个打过补丁的 `.spec` 文件来创建最终的输出。
 
 更多详细说明，请参考 :ref:`如何打包加密脚本`.
 
@@ -336,6 +346,14 @@ PyArmor 首先调用第三方工具 PyInstaller 对脚本打包，得到相关�
 * 加密脚本 foo.py 并打包到 `dist/foo` 下面::
 
     pyarmor pack foo.py
+
+* 删除缓存的 `foo.spec` 和其他中间文件，开始一个全新的打包::
+
+    pyarmor pack --clean foo.py
+
+* 使用已经写好的 `myfoo.spec` 来打包加密脚本::
+
+    pyarmor pack -s myfoo.spec foo.py
 
 * 传递额外的参数运行 `PyInstaller`::
 
