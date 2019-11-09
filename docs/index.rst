@@ -39,7 +39,6 @@ Pi``, ``Banana Pi``, ``Orange Pi``, ``TS-4600 / TS-7600`` 等，但是这些
    how-to-do
    pack-obfuscated-scripts
    project
-   differences
    advanced
    man
    examples
