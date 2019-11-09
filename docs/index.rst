@@ -32,10 +32,10 @@ Pi``, ``Banana Pi``, ``Orange Pi``, ``TS-4600 / TS-7600`` 等，但是这些
    installation
    usage
    pytransform
-   security
-   performance
    understand-obfuscated-scripts
    mode
+   performance
+   security
    how-to-do
    project
    advanced
