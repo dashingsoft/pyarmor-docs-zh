@@ -49,18 +49,21 @@
 因为加密脚本的运行文件中有平台相关的动态库，所以跨平台发布需要指定目标
 平台。
 
-首先使用命令 :ref:`download` 查看和下载目标平台的动态库文件::
+首先使用命令 :ref:`download` 查看所有支持的目标平台::
 
     pyarmor download --list
-    pyarmor download linux_x86_64
 
-然后在加密脚本的时候指定目标平台名称::
+从其中找到目标平台，指定平台 ID, 下载相应的动态库文件::
 
-    pyarmor obfuscate --platform linux_x86_64 foo.py
+    pyarmor download armv5
+
+然后在加密脚本的时候指定目标平台 ID::
+
+    pyarmor obfuscate --platform armv5 foo.py
 
 如果使用工程，那么::
 
-    pyarmor build --platform linux_x86_64
+    pyarmor build --platform armv5 -B
 
 .. note::
 
@@ -68,10 +71,16 @@
    / Ubuntu / MacOS 等上面使用跨平台加密方式加密的脚本，拷贝到下面的任
    一平台都不能正常运行::
 
-       armv5, android.aarch64, ppc64le, ios.arm64, freebsd, alpine, alpine.arm,
-       poky-i586
+       armv5, android.aarch64, ppc64le, ios.arm64, freebsd, alpine, alpine.arm, poky-i586
 
-   但是之前和之后的版本都没有这个问题。
+   在 v5.7.0 之后，如果交叉加密后的脚本依然无法在这些平台运行。尝试设
+   置环境变量 `PYARMOR_PLATFORM` 为 `simple` ，然后重新加密脚本::
+
+       PYARMOR_PLATFORM=simple pyarmor obfuscate --platform armv5 foo.py
+
+       # For windows
+       SET PYARMOR_PLATFORM=simple
+       pyarmor obfuscate --platform armv5 foo.py
 
 
 使用不同版本 Python 加密脚本
