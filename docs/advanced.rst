@@ -39,8 +39,8 @@
 
 .. note::
 
-   输出目录 `dist` 下面的运行辅助包 `pytransform` 可以被拷贝到任何的
-   Python 可以导入的目录下面。
+   输出目录 `dist` 下面的运行辅助包 :mod:`pytransform` 可以被拷贝到任何的 Python
+   可以导入的目录下面。
 
 
 .. _跨平台发布加密脚本:
