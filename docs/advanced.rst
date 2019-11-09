@@ -412,7 +412,7 @@ Python 应用程序，例如::
         return wrapper
 
     # 使用修饰函数，把需要检查的函数名称都作为参数传递进去
-    @assert_armored(foo.connect, foo.connect2)
+    @ assert_armored(foo.connect, foo.connect2)
     def start_server():
         foo.connect('root', 'root password')
         foo.connect2('user', 'user password')
