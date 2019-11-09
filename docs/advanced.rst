@@ -330,17 +330,20 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
     pyarmor pack --clean --without-license \
             -e " --onefile --icon logo.ico --runtime-hook copy_license.py" foo.py
 
-   选项 ``--without-license`` 告诉 `pyamor` 不要把加密脚本的许可文件打包进去，使用
-   `PyInstaller`_ 的选项 ``--runtime-hook`` 可以让打包好的可执行文件，在启动的时候
-   首先去调用 `copy_licesen.py` ，把许可文件拷贝到相应的目录。
+   选项 ``--without-license`` 告诉 :ref:`pack` 不要把加密脚本的许可文件打包进去，
+   使用`PyInstaller`_ 的选项 ``--runtime-hook`` 可以让打包好的可执行文件，在启动
+   的时候首先去调用 `copy_licesen.py` ，把许可文件拷贝到相应的目录。
 
    命令执行成功之后，会生成一个打包好的文件 `dist/foo.exe`
 
    尝试运行这个可执行文件，应该会报错。
 
-3. 使用命令 `pyarmor licenses` 生成新的许可文件，并拷贝到 `dist/` 下面
+3. 使用命令 :ref:`licenses` 生成新的许可文件，并拷贝到 `dist/` 下面::
 
-4. 这时候在双击运行 `dist/foo.exe`
+    pyarmor licenses -e 2020-01-01 tom
+    cp license/tom/license.lic dist/
+
+4. 这时候在双击运行 `dist/foo.exe` ，在 2020-01-01 之前应该就可以正常运行
 
 .. _使用约束模式增加加密脚本安全性:
 
