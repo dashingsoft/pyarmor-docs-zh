@@ -676,7 +676,7 @@ register
 
 **描述**
 
-购买 PyArmor 之后会通过邮件发送注册文件给你，然后使用这个命令使之生效::
+生效购买的 PyArmor 注册文件::
 
     pyarmor register /path/to/pyarmor-regfile-1.zip
 
@@ -698,13 +698,13 @@ download
 **选项**:
 
 --list PATTERN        查看所有可用的预编译动态库
--O, --output NAME     下载之后保存的名称
+-O, --output PATH     下载之后保存的路径，默认是 `PLAT-ID`
 
 **描述**
 
 常用平台的预编译动态库已经和 PyArmor 的安装包一起发布，大部分的嵌入式设备可以自
-动下载相应的预编译动态库。但是对于部分无法识别平台的嵌入式设备，就需要人工下载。
-例如，启动过程提示::
+动下载相应的预编译动态库。但是对于部分无法识别平台的嵌入式设备，或者加密跨平台脚
+本，就需要人工下载。例如，启动过程提示::
 
     ERROR: Unsupport platform linux32/armv7l
 
@@ -720,6 +720,11 @@ download
 
     pyarmor download --list linux32
 
+加密其他平台下面使用的脚本，需要首先下载目标平台的动态库，例如::
+
+    pyarmor download armv5
+    pyarmor obfuscate --platform armv5 foo.py
+    
 .. _runtime:
 
 runtime
