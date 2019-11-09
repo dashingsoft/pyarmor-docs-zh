@@ -239,6 +239,6 @@ No module name pytransform
 * 确认命令行指定的脚本是没有加密的
 * 使用选项 `--clean` 清除缓存的 `myscript.spec`::
 
-    payrmor pack --clean foo.py
+    pyarmor pack --clean foo.py
 
 .. include:: _common_definitions.txt
