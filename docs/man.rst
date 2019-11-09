@@ -17,7 +17,7 @@ PyArmor 是一个命令行工具，用来加密脚本，绑定加密脚本到固
     pack         打包加密脚本
     hdinfo       获取硬件信息
     runtime      创建运行辅助包
-    
+
 和工程相关的命令::
 
     init         创建一个工程，用于管理需要加密的脚本
@@ -62,6 +62,7 @@ obfuscate
 
 -O, --output PATH           输出路径，默认是 `dist`
 -r, --recursive             递归模式加密所有的脚本
+-s, --src PATH              当主脚本不在顶层目录的时候指定搜索脚本的路径
 --exclude PATH              在递归模式下排除某些目录，多个目录使用逗号分开，或者使用该选项多次
 --exact                     只加密命令行中列出的脚本
 --no-bootstrap              在主脚本中不要插入引导代码
@@ -94,20 +95,26 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 如果命令行有多个脚本的话，只有第一个脚本是主脚本。除了第一个脚本，不会在其他脚本
 中插入引导代码和交叉保护代码。
 
-选项 `--plugin` 主要用于扩展加密脚本的授权方式，例如检查网络时间来校验有效期等，
+当主脚本没有在顶层目录的时候，需要使用选项 ``--src`` 用来指定搜索 .py 文件的路径。
+例如::
+
+    # 没有 --src 的话，"./mysite" 是搜索脚本的路径
+    pyarmor obfuscate --src "." --recursive mysite/wsgi.py
+
+选项 ``--plugin`` 主要用于扩展加密脚本的授权方式，例如检查网络时间来校验有效期等，
 这个选项指定的插件名称会在加密之前插入到主脚本中。插件对应的文件为当前目录下面
 `名称.py` ，如果插件存放在其他路径，可以使用绝对路径指定插件名称，也可以设置环境
 变量 `PYARMOR_PLUGIN` 为相应路径名称。关于插件的使用实例，请参考 :ref:`使用插件
 扩展认证方式`
 
-选项 `--platform` 用于指定加密脚本的运行平台，仅用于跨平台发布。因为加密脚本的运
-行文件中包括平台相关的动态库，所以跨平台发布需要指定该选项。
+选项 ``--platform`` 用于指定加密脚本的运行平台，仅用于跨平台发布。因为加密脚本的
+运行文件中包括平台相关的动态库，所以跨平台发布需要指定该选项。
 
-选项 `--restrict` 用于指定加密脚本的约束模式，关于约束模式的详细说明，参考
+选项 ``--restrict`` 用于指定加密脚本的约束模式，关于约束模式的详细说明，参考
 :ref:`约束模式`
 
-如果选项 `--package-runtime` 设置为 `0` ，那么生成的运行辅助文件和加密脚本存放在
-相同的目录下面::
+如果选项 ``--package-runtime`` 设置为 `0` ，那么生成的运行辅助文件和加密脚本存放
+在相同的目录下面::
 
     pytransform.py
     _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
@@ -128,8 +135,8 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
     from .pytransform import pyarmor_runtime
     pyarmor_runtime()
 
-如果 `--package-runtime` 设置为 `2` ，那么就是指 :ref:`运行辅助包` 在运行时刻并
-不会和加密脚本存放在一起，而是在其他路径，所以这时候主脚本中的 :ref:`引导代码`
+如果 ``--package-runtime`` 设置为 `2` ，那么就是指 :ref:`运行辅助包` 在运行时刻
+并不会和加密脚本存放在一起，而是在其他路径，所以这时候主脚本中的 :ref:`引导代码`
 就不会使用相对导入的方式，而是使用绝对导入方式::
 
     from pytransform import pyarmor_runtime
@@ -145,6 +152,15 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 
      pyarmor obfuscate --recursive foo.py
 
+* 递归加密当前目录下面的所有脚本，主脚本在子目录 `mysite/` 下面::
+
+     pyarmor obfuscate --src "." --recursive mysite/wsgi.py
+    
+* 仅仅递归加密指定目录下面的所有 `.py` 脚本，没有主脚本，也不生成运行辅助文件::
+
+     pyarmor obfuscate --recursive --no-runtime .
+     pyarmor obfuscate --recursive --no-runtime src/
+     
 * 除了 `build` 和 `dist` 之外，递归加密当前目录下面的所有 `.py` 脚本，
   保存到 `dist` 目录::
 
@@ -154,6 +170,10 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 * 仅仅加密两个脚本 `foo.py`, `moda.py`::
 
      pyarmor obfuscate --exact foo.py moda.py
+
+* 只加密主脚本 `foo.py` ，不要生成其他任何运行文件::
+
+    pyarmor obfuscate --no-runtime --exact foo.py
 
 * 加密包 `mypkg` 所在目录下面的所有 `.py` 文件::
 
@@ -198,10 +218,6 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 
     cd /path/to/mypkg
     pyarmor obfuscate -r --package-runtime 2 --output dist/mypkg __init__.py
-
-* 只加密主脚本 `foo.py` ，不要生成其他任何运行文件::
-
-    pyarmor obfuscate --no-runtime --exact foo.py
 
 .. _licenses:
 
@@ -298,12 +314,12 @@ PyArmor 首先调用第三方工具 PyInstaller 对脚本打包，得到相关�
 
 最后在把所有的文件打包到一起。
 
-选项 `--options EXTRA_OPTIONS` 用来传递额外的参数给外部打包工具， `pack` 会使用
-下面的方式调用 `PyInstaller`::
+选项 ``--options EXTRA_OPTIONS`` 用来传递额外的参数给外部打包工具， `pack` 会使
+用下面的方式调用 `PyInstaller`::
 
     pyinstaller --distpath DIST -y EXTRA_OPTIONS SCRIPT
 
-选项 `--xoptions EXTRA_OPTIONS` 用来传递额外的参数来加密脚本。 `pack` 会使用下面
+选项 ``--xoptions EXTRA_OPTIONS`` 用来传递额外的参数来加密脚本。 `pack` 会使用下面
 的命令来加密脚本::
 
     pyarmor obfuscate -r --output DIST EXTRA_OPTIONS SCRIPT
@@ -383,7 +399,7 @@ init
 这个命令会在 `PATH` 指定的路径创建一个工程配置文件 :file:`.pyarmor_config` ，这
 个一个 JSON 格式的文件。
 
-如果选项 `--type` 是 `auto` （也是默认情况），那么工程类型根据主脚本命令来判断。
+如果选项 ``--type`` 是 `auto` （也是默认情况），那么工程类型根据主脚本命令来判断。
 如果主脚本是 `__init__.py` , 那么工程类型就是 `pkg` , 否则就是 `app` 。
 
 如果新的工程类型为 `pkg` ，不管是自动判断还是选项指定， `init` 命令都会设置工程
@@ -449,13 +465,13 @@ config
 
     pyarmor config --option new-value /path/to/project
 
-选项 `--entry` 用来指定工程主脚本，可以是多个，以逗号分开::
+选项 ``--entry`` 用来指定工程主脚本，可以是多个，以逗号分开::
 
     main.py, another/main.py, /usr/local/myapp/main.py
 
 主脚本可以是绝对路径，也可以是相对路径，相对于 `src` 指定的路径。
 
-选项 `--manifest` 用来选择和设置工程包含的脚本。默认值为 `src` 下面的所有 `.py`
+选项 ``--manifest`` 用来选择和设置工程包含的脚本。默认值为 `src` 下面的所有 `.py`
 文件::
 
     global-include *.py
