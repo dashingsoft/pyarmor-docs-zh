@@ -69,7 +69,7 @@ obfuscate
 --no-cross-protection       在主脚本中不要插入交叉保护代码
 --plugin NAME               在加密之前，向主脚本中插入代码
 --platform NAME             指定运行加密脚本的平台
---advanced                  使用高级模式加密脚本
+--advanced <0,1>            使用高级模式加密脚本
 --restrict <0,1,2,3,4>      设置约束模式
 --package-runtime <0,1,2>   是否保存运行文件到一个单独的目录
 --no-runtime                不生成任何运行辅助文件，只加密脚本
@@ -113,14 +113,6 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 选项 ``--restrict`` 用于指定加密脚本的约束模式，关于约束模式的详细说明，参考
 :ref:`约束模式`
 
-如果选项 ``--package-runtime`` 设置为 `0` ，那么生成的运行辅助文件和加密脚本存放
-在相同的目录下面::
-
-    pytransform.py
-    _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
-    pytransform.key
-    license.lic
-
 默认情况下，所有运行时刻文件会作为包保存在一个单独的目录 `pytransform` 下面::
 
     pytransform/
@@ -129,18 +121,26 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
         pytransform.key
         license.lic
 
-通常情况下，如果主脚本是 `__init__.py` ，那么 :ref:`引导代码` 会使用包含一个 "."
-的相对导入的方式::
+如果选项 ``--package-runtime`` 设置为 `0` ，那么生成的运行辅助文件和加密脚本存放
+在相同的目录下面::
+
+    pytransform.py
+    _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
+    pytransform.key
+    license.lic
+
+如果 ``--package-runtime`` 设置为 `2` ，就是指 :ref:`运行辅助包` 在运行时刻并不
+会和加密脚本存放在一起，而是在其他路径，所以这时候主脚本中的 :ref:`引导代码` 在
+任何情况下面，都是使用绝对导入方式::
+
+    from pytransform import pyarmor_runtime
+    pyarmor_runtime()
+
+否则当主脚本是 ``__init__.py`` 的时候， 会使用包含一个 ``.`` 的相对导入的方式::
 
     from .pytransform import pyarmor_runtime
     pyarmor_runtime()
 
-如果 ``--package-runtime`` 设置为 `2` ，那么就是指 :ref:`运行辅助包` 在运行时刻
-并不会和加密脚本存放在一起，而是在其他路径，所以这时候主脚本中的 :ref:`引导代码`
-就不会使用相对导入的方式，而是使用绝对导入方式::
-
-    from pytransform import pyarmor_runtime
-    pyarmor_runtime()
 
 **示例**
 
@@ -204,7 +204,7 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 
 * 使用高级模式加密脚本::
 
-    pyarmor obfuscate --advanced foo.py
+    pyarmor obfuscate --advanced 1 foo.py
 
 * 使用约束模式 2 加密脚本::
 
@@ -300,7 +300,7 @@ pack
 -e, --options OPTIONS   传递额外的参数到 `PyInstaller`_
 -x, --xoptions OPTIONS  传递额外的参数到 `obfuscate`_ 去加密脚本
 -s FILE                 指定 `pyinstaller` 使用的 .spec 文件
---clean                 删除缓存的 .spec 文件，重新开始打包
+--clean                 打包之前删除缓存的 .spec 文件
 --without-license       不要将加密脚本的许可文件打包进去
 --debug                 不要删除打包过程生成的中间文件
 
