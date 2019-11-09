@@ -34,6 +34,16 @@ PyArmor 是一个命令行工具，用来加密脚本，绑定加密脚本到固
 
 可以运行 `pyarmor <command> -h` 查看各个命令的详细使用方法。
 
+.. note::
+
+   从 v5.7.1 开始，下面这些命令的首字母可以作为别名直接使用::
+
+       obfuscate, licenses, pack, init, config, build
+
+   例如::
+
+       pyarmor o 等价于 pyarmor obfuscate
+
 .. _obfuscate:
 
 obfuscate
@@ -674,5 +684,45 @@ download
 也可以对平台进行过滤，例如查看 `linux32` 下所有可用的预编译动态库::
 
     pyarmor download --list linux32
+
+.. _runtime:
+
+runtime
+-------
+
+创建 :ref:`运行辅助包`
+
+**SYNOPSIS**::
+
+    pyarmor runtime <options>
+
+**OPTIONS**:
+
+-O, --output PATH             输出路径，默认是 `dist`
+-n, --no-package              不要使用包的形式来存放生成运行文件
+-L, --with-license FILE       使用这个文件替换默认的加密脚本许可文件
+--platform NAME               生成其他平台下的运行辅助包
+
+**DESCRIPTION**
+
+这个命令主要用来创建 :ref:`运行辅助包`
+
+因为使用相同的 :ref:`全局密钥箱` 加密的脚本可以共享 :ref:`运行辅助包` ，所以单独
+创建运行辅助包之后，在加密脚本的时候就不需要每一次都重新生成运行辅助文件。
+
+**EXAMPLES**
+
+* 在默认输出路径 `dist` 下面创建 :ref:`运行辅助包` ``pytransform``::
+
+    pyarmor runtime
+
+* 创建独立的 :ref:`运行辅助文件` ，但是不使用包的形式存放::
+
+    pyarmor runtime -n
+
+* 为 `armv7` 平台创建 :ref:`运行辅助包` ，并且设置加密脚本的使用期限::
+
+    pyarmor licenses --expired 2020-01-01 code-001
+    pyarmor runtime --with-licenses licenses/code-001/license.lic --platform armv7
 
 .. include:: _common_definitions.txt
