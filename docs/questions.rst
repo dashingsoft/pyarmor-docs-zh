@@ -28,8 +28,8 @@ Segment fault
 Could not find `_pytransform`
 -----------------------------
 
-通常情况下动态库 `_pytransform` 在 :ref:`运行辅助包` 里面。在 v5.7.0
-之前，是和加密脚本在相同的目录下:
+通常情况下动态库 `_pytransform` 在 :ref:`运行辅助包` 里面（在 v5.7.0
+之前，是和加密脚本在相同的目录下）:
 
 * `_pytransform.so` in Linux
 * `_pytransform.dll` in Windows
@@ -225,7 +225,7 @@ Error: Try to run unauthorized function
 购买的私有密钥箱没有起作用
 --------------------------
 
-使用私有密钥箱加密的脚本，依然可以在试用版本生成的许可证下运行::
+使用私有密钥箱加密的脚本，依然可以在试用版本生成的许可证下运行:
 
 * 确认命令 `pyarmor register` 能显示正确的注册信息
 * 确认 :ref:`全局密钥箱` 文件 `~/.pyarmor_capsule.zip` 和注册文件 `pyarmor-regfile-1.zip` 中的 `.pyarmor_capsule.zip` 是同一个文件
@@ -234,7 +234,7 @@ Error: Try to run unauthorized function
 No module name pytransform
 --------------------------
 
-在使用 `pyarmor pack` 打包的时候报这个错误::
+在使用 `pyarmor pack` 打包的时候报这个错误:
 
 * 确认命令行指定的脚本是没有加密的
 * 使用选项 `--clean` 清除缓存的 `myscript.spec`::
