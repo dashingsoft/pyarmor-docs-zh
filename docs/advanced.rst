@@ -44,7 +44,7 @@
 
 
 .. _跨平台发布加密脚本:
-   
+
 跨平台发布加密脚本
 ------------------
 
@@ -407,6 +407,10 @@ Python 应用程序，例如::
                     # For Python3
                     if not (s.__code__.co_flags & 0x20000000):
                         raise RuntimeError('Access violate')
+                    # Also check a piece of byte code for special function
+                    if s.__name__ == 'connect':
+                        if s.__code__.co_code[10:12] != b'\x90\xA2':
+                            raise RuntimeError('Access violate')
                 return func(*args, **kwargs)
             return _execute
         return wrapper
@@ -420,6 +424,49 @@ Python 应用程序，例如::
 这样在每次运行 `start_server` 之前，都会检查被调用的函数是否被加密，如果没有被加
 密，直接抛出异常。
 
+使用插件的实现方式
+~~~~~~~~~~~~~~~~~~
+首先在当前目录下定义插件文件 `asser_armored.py`::
+
+    def assert_armored(*names):
+        def wrapper(func):
+            def _execute(*args, **kwargs):
+                for s in names:
+                    # For Python2
+                    # if not (s.func_code.co_flags & 0x20000000):
+                    # For Python3
+                    if not (s.__code__.co_flags & 0x20000000):
+                        raise RuntimeError('Access violate')
+                    # Also check a piece of byte code for special function
+                    if s.__name__ == 'connect':
+                        if s.__code__.co_code[10:12] != b'\x90\xA2':
+                            raise RuntimeError('Access violate')
+                return func(*args, **kwargs)
+            return _execute
+        return wrapper
+
+然后修改 `main.py`, 增加相应的插件注释桩，例如::
+
+    import foo
+
+    # {PyArmor Plugins}
+
+    # PyArmor Plugin:  @assert_armored(foo.connect, foo.connect2)
+    def start_server():
+        foo.connect('root', 'root password')
+        ...
+
+这样基本不影响原来的脚本调试，在加密脚本的时候只需要指定插件就可以::
+
+    pyarmor obfuscate --plugin assert_armored main.py
+
+.. note::
+
+   在 v5.7.2 之后，还支持这种格式的插件桩::
+
+       # @pyarmor_assert_armored(foo.connect, foo.connect2)
+     
+  
 第三方解释器的支持
 ------------------
 

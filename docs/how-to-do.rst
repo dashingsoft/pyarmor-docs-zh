@@ -87,6 +87,54 @@ PyArmor 是怎么加密 Python 源代码呢？
     __pyarmor__(__name__, __file__, b'\x01\x0a...')
 
 
+.. _如何处理插件:
+
+如何处理插件
+------------
+
+在 PyArmor 中插件主要用于在加密的过程中向脚本中注入代码。每一个插件对
+应一个 Python 的脚本文件，PyArmor 搜索插件的顺序:
+
+* 如果插件指定了绝对路径，那么直接在这个路径下面查找对应的 .py 文件
+* 如果是相对路径，在当前目录下面找对应的 .py 文件，当前目录下面找不到，就在环境
+  变量 ``PYARMOR_PLGUIN`` 指定的路径下查找
+* 没有找到就抛出异常
+
+如果在加密脚本的时候指定了插件，PyArmor 在加密脚本之前，会逐行扫描源代
+码，如果发现某一个注释行是插件桩，那么就会对其进行相应的处理。目前支持
+的插件桩有:
+
+* 插件定义桩 ``# {PyArmor Plugins}``
+* 插件调用桩 ``# PyArmor Plugin:  plugin_name(arguments...)`` 或者 ``# pyarmor_plugin_name(arguments...)``
+* 插件修饰桩 ``# @pyarmor_``
+
+插件定义桩必须在模块级别，也就是说，不能有缩进，插件对应的脚本文件会被
+原封不动的插入到下面。
+
+插件调用桩则可以在模块的任何地方，可以有缩进。PyArmor 只是把前半部分
+``# PyArmor Plugin:`` 或者 ``# pyarmor_`` 删除，后半部分的前后空格去掉，
+然后按照原来的缩进放好，所以后半部分可以是任何有效的 Python 语句。例如::
+
+    # PyArmor Plugin: check_ntp_time() => check_ntp_time()
+    # pyarmor_check_multi_mac() => check_multi_mac()
+
+插件修饰桩和插件调用桩类似，它会把 ``# @pyarmor_`` 替换成为 ``@`` ，是
+插件函数成为一个修饰函数。例如::
+
+    # @pyarmor_assert_obfuscated(foo.connect) => @assert_obfuscated(foo.connect)
+
+在命令行加密脚本的时候，如果没有前置字母 ``@`` ，插件总是会被注入到插件定义桩下
+面。例如， 即便没有任何插件调用语句，脚本 `check_multi_mac.py` 也会被插入到插件
+定义桩下面::
+
+    pyarmor obfuscate --plugin check_multi_mac --plugin assert_armored foo.py
+
+如果指定的插件有一个前置字母 ``@`` ，那么只有在插件调用桩或者插件修饰桩中出现的
+插件才会被导入进来。例如::
+
+    pyarmor obfuscate --plugin @assert_armored foo.py
+    pyarmor obfuscate --plugin @/path/to/check_ntp_time foo.py
+
 .. _对主脚本的特殊处理:
 
 对主脚本的特殊处理
