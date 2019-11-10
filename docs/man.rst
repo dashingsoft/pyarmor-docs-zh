@@ -67,7 +67,7 @@ obfuscate
 --exact                     只加密命令行中列出的脚本
 --no-bootstrap              在主脚本中不要插入引导代码
 --no-cross-protection       在主脚本中不要插入交叉保护代码
---plugin NAME               在加密之前，向主脚本中插入代码
+--plugin NAME               在加密之前，向主脚本中插入代码。这个选项可以使用多次。
 --platform NAME             指定运行加密脚本的平台
 --advanced <0,1>            使用高级模式加密脚本
 --restrict <0,1,2,3,4>      设置约束模式
@@ -474,7 +474,7 @@ config
 --advanced-mode <0,1>           是否使用高级模式加密脚本
 --cross-protection <0,1>        是否插入交叉保护代码到主脚本
 --runtime-path RPATH            设置运行文件所在路径
---plugin NAME                   设置需要插入到主脚本的代码文件
+--plugin NAME                   设置需要插入到主脚本的代码文件，这个选项可以使用多次
 --package-runtime <0,1,2>       是否保存运行文件到一个单独的目录
 
 **描述**
@@ -503,6 +503,8 @@ config
     global-include *.py, exclude __mainfest__.py, prune test
 
 关于所有支持的模式，参考 https://docs.python.org/2/distutils/sourcedist.html#commands
+
+选项 ``--plugin`` 有一个特殊的值 `clear` ，用来清除所有的插件。
 
 **示例**
 
