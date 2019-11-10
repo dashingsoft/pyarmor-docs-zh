@@ -105,7 +105,7 @@ PyArmor 是怎么加密 Python 源代码呢？
 的插件桩有:
 
 * 插件定义桩 ``# {PyArmor Plugins}``
-* 插件调用桩 ``# PyArmor Plugin:  plugin_name(arguments...)`` 或者 ``# pyarmor_plugin_name(arguments...)``
+* 插件调用桩 ``# PyArmor Plugin:`` 或者 ``# pyarmor_``
 * 插件修饰桩 ``# @pyarmor_``
 
 插件定义桩必须在模块级别，也就是说，不能有缩进，插件对应的脚本文件会被
@@ -113,11 +113,16 @@ PyArmor 是怎么加密 Python 源代码呢？
 
 插件调用桩则可以在模块的任何地方，可以有缩进。PyArmor 只是简单的把注释的前半部分
 ``# PyArmor Plugin:`` 或者 ``# pyarmor_`` ，以及其后的空格删除，只剩下后半部分的
-代码，后半部分可以是任何有效的 Python 语句。例如::
+代码。例如::
 
     # PyArmor Plugin: check_ntp_time() => check_ntp_time()
     # pyarmor_check_multi_mac() => check_multi_mac()
 
+后半部分可以是任何有效的 Python 语句，例如::
+
+    # PyArmor Plugin: print('This is plugin code') => print('This is plugin code')
+    # pyarmor_print('This is plugin code') => print('This is plugin code')
+    
 插件修饰桩和插件调用桩类似，它只是把 ``# @pyarmor_`` 替换成为 ``@`` ，使得插件函
 数成为一个修饰函数。例如::
 
@@ -129,12 +134,13 @@ PyArmor 是怎么加密 Python 源代码呢？
 
     pyarmor obfuscate --plugin check_multi_mac --plugin assert_armored foo.py
 
-如果插件有一个前置字母 ``@`` ，那么只有在插件调用桩或者插件修饰桩中出现的插件才
-会被导入进来。例如::
+如果插件有一个前置字母 ``@`` ，那么只有在插件调用桩或者插件修饰桩中出现的插件的
+名称才会被导入进来。例如，如果 `foo.py` 中没有任何插件调用桩或者修饰桩，下面的两
+个插件都会被忽略掉::
 
     pyarmor obfuscate --plugin @assert_armored foo.py
     pyarmor obfuscate --plugin @/path/to/check_ntp_time foo.py
-
+    
 .. _对主脚本的特殊处理:
 
 对主脚本的特殊处理
