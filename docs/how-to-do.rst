@@ -111,26 +111,26 @@ PyArmor 是怎么加密 Python 源代码呢？
 插件定义桩必须在模块级别，也就是说，不能有缩进，插件对应的脚本文件会被
 原封不动的插入到下面。
 
-插件调用桩则可以在模块的任何地方，可以有缩进。PyArmor 只是把前半部分
-``# PyArmor Plugin:`` 或者 ``# pyarmor_`` 删除，后半部分的前后空格去掉，
-然后按照原来的缩进放好，所以后半部分可以是任何有效的 Python 语句。例如::
+插件调用桩则可以在模块的任何地方，可以有缩进。PyArmor 只是简单的把注释的前半部分
+``# PyArmor Plugin:`` 或者 ``# pyarmor_`` ，以及其后的空格删除，只剩下后半部分的
+代码，后半部分可以是任何有效的 Python 语句。例如::
 
     # PyArmor Plugin: check_ntp_time() => check_ntp_time()
     # pyarmor_check_multi_mac() => check_multi_mac()
 
-插件修饰桩和插件调用桩类似，它会把 ``# @pyarmor_`` 替换成为 ``@`` ，是
-插件函数成为一个修饰函数。例如::
+插件修饰桩和插件调用桩类似，它只是把 ``# @pyarmor_`` 替换成为 ``@`` ，使得插件函
+数成为一个修饰函数。例如::
 
     # @pyarmor_assert_obfuscated(foo.connect) => @assert_obfuscated(foo.connect)
 
-在命令行加密脚本的时候，如果没有前置字母 ``@`` ，插件总是会被注入到插件定义桩下
-面。例如， 即便没有任何插件调用语句，脚本 `check_multi_mac.py` 也会被插入到插件
-定义桩下面::
+在命令行加密脚本的时候，如果插件前面没有前置字母 ``@`` ，插件总是会被注入到插件
+定义桩下面。例如， 即便没有任何插件调用语句，脚本 `check_multi_mac.py` 和
+`assert_armored.py` 总是会被注入到插件定义桩下面::
 
     pyarmor obfuscate --plugin check_multi_mac --plugin assert_armored foo.py
 
-如果指定的插件有一个前置字母 ``@`` ，那么只有在插件调用桩或者插件修饰桩中出现的
-插件才会被导入进来。例如::
+如果插件有一个前置字母 ``@`` ，那么只有在插件调用桩或者插件修饰桩中出现的插件才
+会被导入进来。例如::
 
     pyarmor obfuscate --plugin @assert_armored foo.py
     pyarmor obfuscate --plugin @/path/to/check_ntp_time foo.py
