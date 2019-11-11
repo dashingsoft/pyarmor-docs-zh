@@ -241,4 +241,15 @@ No module name pytransform
 
     pyarmor pack --clean foo.py
 
+.. 分类:
+
+   公共问题
+   加密问题
+   加密脚本的许可问题
+   打包加密脚本的问题
+   PyArmro 注册问题
+   运行加密脚本的问题
+   已知的问题
+   其他问题
+
 .. include:: _common_definitions.txt

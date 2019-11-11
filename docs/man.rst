@@ -197,7 +197,7 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 * 仅当插件中的函数 `assert_armored` 被调用的时候导入插件 `assert_armored`::
 
      pyarmor obfuscate --plugin @assert_armored foo.py
-     
+
 * 在 MacOS 平台下加密脚本，这些加密脚本将在 Ubuntu 下面运行，使用下面
   的命令进行加密::
 
@@ -540,6 +540,10 @@ build
 
 加密工程中的所有脚本。
 
+**语法**::
+
+    pyarmor build <options> [PATH]
+
 **选项**
 
 -B, --force                 强制加密所有脚本，默认情况只加密上次构建之后修改过的脚本
@@ -730,7 +734,7 @@ download
 
     pyarmor download armv5
     pyarmor obfuscate --platform armv5 foo.py
-    
+
 .. _runtime:
 
 runtime
