@@ -494,6 +494,32 @@ Python 应用程序，例如::
 * 模块 `ctypes` 必须存在并且 `ctypes.pythonapi._handle` 必须被设置为
   Python 动态库的句柄，PyArmor 会通过该句柄获取 Python C API 的地址。
 
+在 Python 脚本内部调用 `pyarmor`
+--------------------------------
+
+在 Python 脚本内部，也可以直接调用 `pyarmor` ，不需要使用 `os.exec` 或者
+`subprocess.Popen` 等命令行的方式。例如
+
+.. code-block:: python
+
+    from pyarmor.pyarmor import main as call_pyarmor
+    call_pyarmor(['obfuscate', '--recursive', '--output', 'dist', 'foo.py'])
+
+使用选项 ``--silent`` 可以不显示所有输出
+
+.. code-block:: python
+
+    from pyarmor.pyarmor import main as call_pyarmor
+    call_pyarmor(['--silent', 'obfuscate', '--recursive', '--output', 'dist', 'foo.py'])
+
+使用选项 ``--debug`` 可以让 `pyarmor` 出现错误的时候抛出异常，而不是调用
+`sys.exit` 退出，但是这样有一个缺点是在控制台会输出一些额外的调试信息。
+
+.. code-block:: python
+
+    from pyarmor.pyarmor import main as call_pyarmor
+    call_pyarmor(['--debug', 'obfuscate', '--recursive', '--output', 'dist', 'foo.py'])
+
 .. 定制保护代码:
 
 .. include:: _common_definitions.txt
