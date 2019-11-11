@@ -3,10 +3,23 @@
 常见问题
 ========
 
-当出现问题的时候，打开 Python 调试选项运行以得到更多的错误信息::
+当出现问题的时候，先尝试一些方法看如何解决它。
 
-    PYTHONDEBUG=y pyarmor ...
-    python -d obfuscated_scripts.py ...
+对于运行 `pyarmor` 出现的问题:
+
+* 查看控制台的输出，有没有什么路径错误，和一些有效的错误信息
+* 使用调试选项 ``-d`` 运行，显示堆栈异常和更多的调试信息。例如::
+
+      pyarmor -d obfuscate foo.py
+
+对于运行加密脚本出现的问题:
+
+* 尝试打开 Python 的调试选项查看更多的错误信息。例如::
+
+      python -d obfuscated_scripts.py
+
+* 打开调试开关之后，会在当前目录创建一个日志文件 `pytransform.log` 查
+  看里面是否有帮助定位问题的错误信息
 
 Segment fault
 -------------

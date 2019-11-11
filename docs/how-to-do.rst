@@ -139,15 +139,15 @@ PyArmor 是怎么加密 Python 源代码呢？
 
     # PyArmor Plugin: print('This is plugin code') ==> print('This is plugin code')
 
-第二种格式 ``# pyarmor_`` 则只用于调用插件函数，并且仅仅这个插件函数在命令行中被
-指定为插件的时候才进行替换。例如，使用插件 `check_multi_mac` 进行加密脚本的时候，
-第一个调用桩会被替换，第二个不会被替换::
+第二种格式 ``# pyarmor_`` 则只用于调用插件函数，并且仅仅当这个函数作为插件名称出
+现在命令行中时候才进行替换。例如，使用插件 `check_multi_mac` 加密脚本的时候，第
+一个调用桩会被替换，第二个不会被替换::
 
     # pyarmor_check_multi_mac() ==> check_multi_mac()
     # pyarmor_check_code() ==> # pyarmor_check_code()
 
-第三种格式和第二种类似，只是 ``# @pyarmor_`` 会被替换成为要给 ``@`` ，主要用于注
-入修饰函数。例如::
+第三种格式和第二种类似，只是 ``# @pyarmor_`` 会被替换成为 ``@`` ，主要用于注入修
+饰函数。例如::
 
     # @pyarmor_assert_obfuscated(foo.connect) ==> @assert_obfuscated(foo.connect)
 

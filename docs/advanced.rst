@@ -42,6 +42,10 @@
    输出目录 `dist` 下面的运行辅助包 :mod:`pytransform` 可以被拷贝到任何的 Python
    可以导入的目录下面。
 
+   从 v5.7.2 之后，运行辅助包也可以使用命令 :ref:`runtime` 单独生成::
+
+       pyarmor runtime
+
 
 .. _跨平台发布加密脚本:
 
@@ -465,8 +469,8 @@ Python 应用程序，例如::
    在 v5.7.2 之后，还支持这种格式的插件桩::
 
        # @pyarmor_assert_armored(foo.connect, foo.connect2)
-     
-  
+
+
 第三方解释器的支持
 ------------------
 
