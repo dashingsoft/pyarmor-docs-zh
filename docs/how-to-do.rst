@@ -92,55 +92,80 @@ PyArmor 是怎么加密 Python 源代码呢？
 如何处理插件
 ------------
 
-在 PyArmor 中插件主要用于在加密的过程中向脚本中注入代码。每一个插件对
-应一个 Python 的脚本文件，PyArmor 搜索插件的顺序:
+在 PyArmor 中插件主要用于在加密的过程中向脚本中注入代码，例如::
 
-* 如果插件指定了绝对路径，那么直接在这个路径下面查找对应的 .py 文件
-* 如果是相对路径，在当前目录下面找对应的 .py 文件，当前目录下面找不到，就在环境
-  变量 ``PYARMOR_PLGUIN`` 指定的路径下查找
+    pyarmor obfuscate --plugin check_multi_mac --plugin @assert_armored foo.py
+
+也可以指定插件所在路径，例如::
+
+    pyarmor obfuscate --plugin /path/to/check_ntp_time foo.py
+
+每一个插件对应一个 Python 的脚本文件， PyArmor 搜索插件的顺序:
+
+* 如果插件指定了绝对路径，那么直接在这个路径下面查找对应的 `.py` 文件
+* 如果是相对路径，在当前目录下面找对应的 `.py` 文件，当前目录下面找不到，就在环
+  境变量 ``PYARMOR_PLGUIN`` 指定的路径下查找
 * 没有找到就抛出异常
 
-如果在加密脚本的时候指定了插件，PyArmor 在加密脚本之前，会逐行扫描源代
-码，如果发现某一个注释行是插件桩，那么就会对其进行相应的处理。目前支持
-的插件桩有:
+如果在加密脚本的时候指定了插件，PyArmor 在加密脚本之前，会逐行扫描源代码的注释去
+查找插件桩。插件桩分为两种类型：
 
-* 插件定义桩 ``# {PyArmor Plugins}``
-* 插件调用桩 ``# PyArmor Plugin:`` 或者 ``# pyarmor_``
-* 插件修饰桩 ``# @pyarmor_``
+* 插件定义桩
+* 插件调用桩
 
-插件定义桩必须在模块级别，也就是说，不能有缩进，插件对应的脚本文件会被
-原封不动的插入到下面。
+插件定义桩的格式如下::
 
-插件调用桩则可以在模块的任何地方，可以有缩进。PyArmor 只是简单的把注释的前半部分
-``# PyArmor Plugin:`` 或者 ``# pyarmor_`` ，以及其后的空格删除，只剩下后半部分的
-代码。例如::
+    # {PyArmor Plugins}
 
-    # PyArmor Plugin: check_ntp_time() => check_ntp_time()
-    # pyarmor_check_multi_mac() => check_multi_mac()
+插件定义桩必须单独占一行，不能有缩进，必须在其他插件调用桩的前面。而且一个脚本中
+只能有一个插件定义桩，所有插件对应的脚本文件会被原封不动的插入到下面。
 
-后半部分可以是任何有效的 Python 语句，例如::
+插件调用桩有三种格式，只要注释行的前缀和下面的任意模式匹配，就是一个插件调用桩::
 
-    # PyArmor Plugin: print('This is plugin code') => print('This is plugin code')
-    # pyarmor_print('This is plugin code') => print('This is plugin code')
-    
-插件修饰桩和插件调用桩类似，它只是把 ``# @pyarmor_`` 替换成为 ``@`` ，使得插件函
-数成为一个修饰函数。例如::
+    # PyArmor Plugin:
+    # pyarmor_
+    # @pyarmor_
 
-    # @pyarmor_assert_obfuscated(foo.connect) => @assert_obfuscated(foo.connect)
+插件调用桩可以有缩进，可以在模块的任何地方，但是必须在插件调用桩之后，插件调用桩
+可以有任意多个。
 
-在命令行加密脚本的时候，如果插件前面没有前置字母 ``@`` ，插件总是会被注入到插件
-定义桩下面。例如， 即便没有任何插件调用语句，脚本 `check_multi_mac.py` 和
+对于第一种格式 ``# PyArmor Plugin:`` ，PyArmor 只是简单的把匹配的部分和其后的空
+格删除只剩下后半部分的代码。例如::
+
+    # PyArmor Plugin: check_ntp_time() ==> check_ntp_time()
+
+只要在命令行指定了插件，这种替换就会发生，它的后半部分可以是任何有效的 Python 语
+句，例如::
+
+    # PyArmor Plugin: print('This is plugin code') ==> print('This is plugin code')
+
+第二种格式 ``# pyarmor_`` 则只用于调用插件函数，并且仅仅这个插件函数在命令行中被
+指定为插件的时候才进行替换。例如，使用插件 `check_multi_mac` 进行加密脚本的时候，
+第一个调用桩会被替换，第二个不会被替换::
+
+    # pyarmor_check_multi_mac() ==> check_multi_mac()
+    # pyarmor_check_code() ==> # pyarmor_check_code()
+
+第三种格式和第二种类似，只是 ``# @pyarmor_`` 会被替换成为要给 ``@`` ，主要用于注
+入修饰函数。例如::
+
+    # @pyarmor_assert_obfuscated(foo.connect) ==> @assert_obfuscated(foo.connect)
+
+在命令行指定插件名称的时候，如果插件前面没有前置字母 ``@`` ，插件总是会被注入到
+插件定义桩下面。例如， 即便没有任何插件调用语句，脚本 `check_multi_mac.py` 和
 `assert_armored.py` 总是会被注入到插件定义桩下面::
 
-    pyarmor obfuscate --plugin check_multi_mac --plugin assert_armored foo.py
+    pyarmor obfuscate --plugin check_multi_mac foo.py
 
-如果插件有一个前置字母 ``@`` ，那么只有在插件调用桩或者插件修饰桩中出现的插件的
-名称才会被导入进来。例如，如果 `foo.py` 中没有任何插件调用桩或者修饰桩，下面的两
-个插件都会被忽略掉::
+如果插件有一个前置字母 ``@`` ，那么只有在插件调用桩中出现的插件才会被导入进来。
+例如，如果 `foo.py` 中没有任何插件调用桩，下面的两个插件都会被忽略掉::
 
     pyarmor obfuscate --plugin @assert_armored foo.py
     pyarmor obfuscate --plugin @/path/to/check_ntp_time foo.py
-    
+
+需要注意的是，不管是那一种导入形式，如果脚本中没有插件定义桩，任何插件代码都不会
+被注入到加密脚本中。
+
 .. _对主脚本的特殊处理:
 
 对主脚本的特殊处理
