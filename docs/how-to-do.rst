@@ -129,8 +129,8 @@ PyArmor 是怎么加密 Python 源代码呢？
 插件调用桩可以有缩进，可以在模块的任何地方，但是必须在插件调用桩之后，插件调用桩
 可以有任意多个。
 
-对于第一种格式 ``# PyArmor Plugin:`` ，PyArmor 只是简单的把匹配的部分和其后的空
-格删除只剩下后半部分的代码。例如::
+对于第一种格式 ``# PyArmor Plugin:`` ，PyArmor 只是简单的把匹配的部分和紧随其后
+的一个空格删除，只剩下后半部分的代码。例如::
 
     # PyArmor Plugin: check_ntp_time() ==> check_ntp_time()
 
@@ -138,7 +138,9 @@ PyArmor 是怎么加密 Python 源代码呢？
 句，例如::
 
     # PyArmor Plugin: print('This is plugin code') ==> print('This is plugin code')
-
+    # PyArmor Plugin: if sys.flags.debug:          ==> if sys.flags.debug:
+    # PyArmor Plugin:     check_something():       ==>     check_something()
+    
 第二种格式 ``# pyarmor_`` 则只用于调用插件函数，并且仅仅当这个函数作为插件名称出
 现在命令行中时候才进行替换。例如，使用插件 `check_multi_mac` 加密脚本的时候，第
 一个调用桩会被替换，第二个不会被替换::
