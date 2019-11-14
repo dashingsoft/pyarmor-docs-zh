@@ -512,13 +512,8 @@ Python 应用程序，例如::
     from pyarmor.pyarmor import main as call_pyarmor
     call_pyarmor(['--silent', 'obfuscate', '--recursive', '--output', 'dist', 'foo.py'])
 
-使用选项 ``--debug`` 可以让 `pyarmor` 出现错误的时候抛出异常，而不是调用
-`sys.exit` 退出，但是这样有一个缺点是在控制台会输出一些额外的调试信息。
-
-.. code-block:: python
-
-    from pyarmor.pyarmor import main as call_pyarmor
-    call_pyarmor(['--debug', 'obfuscate', '--recursive', '--output', 'dist', 'foo.py'])
+从 v5.7.3 开始，如果以这种方式调用 `pyarmor` 出现了错误，会抛出异常，而不是调用
+`sys.exit` 直接退出。
 
 .. 定制保护代码:
 
