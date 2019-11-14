@@ -34,15 +34,17 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
    获取加密脚本许可证的相关信息。
 
-   返回一个字典，包含的键值有：
+   返回一个字典，可能的键名有：
 
-   * expired: 许可剩余的天数，-1 表示认证文件永不过期
+   * expired: 许可过期的日期
    * IFMAC：绑定的网卡 MAC 地址
    * HARDDISK： 绑定的硬盘序列号
    * IPV4：绑定的 IPv4 地址
    * DATA：自定义的数据，用于扩展认证方式
    * CODE：许可注册码
 
+   如果许可证没有包含对应的键名，那么其值为 `None`
+   
    如果许可文件非法，例如已经过期，会抛出异常 :exc:`PytransformError`
 
 .. function:: get_license_code()
