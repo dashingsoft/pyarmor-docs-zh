@@ -31,17 +31,17 @@ Pi``, ``Banana Pi``, ``Orange Pi``, ``TS-4600 / TS-7600`` 等，但是这些
 
    installation
    usage
-   pytransform
    understand-obfuscated-scripts
+   how-to-do
+   advanced
+   examples
+   project
+   man
+   pytransform
+   platforms
    mode
    performance
    security
-   how-to-do
-   project
-   advanced
-   platforms
-   man
-   examples
    questions
    license
 
