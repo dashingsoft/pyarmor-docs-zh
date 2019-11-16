@@ -35,7 +35,7 @@
 完全卸载
 --------
 
-下列文件可能会在 `pyarmor` 运行是被创建::
+下列文件可能会在 `pyarmor` 运行时被创建::
 
     {pyarmor-folder}/license.lic
 
@@ -45,8 +45,8 @@
 执行下面的命令进行完全卸载::
 
     pip uninstall pyarmor
+    
     rm -rf {pyarmor-folder}
-
     rm ~/.pyarmor_capsule.zip
     rm -rf ~/.pyarmor/platforms
 
