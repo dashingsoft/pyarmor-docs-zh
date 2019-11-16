@@ -61,14 +61,14 @@
     pyarmor download --help-platform
 
 使用选项 ``list`` 会显示详细的动态库特征信息::
-  
+
     pyarmor download --list
     pyarmor download --list windows
     pyarmor download --list windows.x86_64
 
 如果目标平台是 :ref:`预安装的动态库清单` 中的任意一个，那么可以直接使
 用，否则需要使用 :ref:`download` 指定平台名称下载对应的动态库::
-   
+
     pyarmor download linux.armv7
 
 然后在加密脚本的时候指定目标平台名称::
@@ -78,14 +78,29 @@
     # For project
     pyarmor build --platform linux.armv7
 
-从 v5.7.5 版本开始，平台名称已经标准化，所有可以使用的名称在这里
-:ref:`标准平台名称` ，也支持运行加密脚本在多个平台。例如::
-       
+.. _让加密脚本可以在多个平台运行:
+
+让加密脚本可以在多个平台运行
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+从 v5.7.5 版本开始，平台名称已经标准化，所有可以使用的名称在这里 :ref:`标准平台
+名称` ，并且支持运行加密脚本在多个平台。
+
+为了支持加密脚本在多个平台运行，需要把把相关平台的动态库都添加到 :ref:`运行辅助
+包` 中，这样就可以在这些平台正常运行加密脚本。例如，使用下面的命令可以加密一个可
+运行于 Windows/Linux/MacOS 下面的脚本::
+
     pyarmor obfuscate --platform windows.x86_64 \
                       --platform linux.x86_64 \
                       --platform darwin.x86_64 \
                       foo.py
-       
+
+也可以使用命令 :ref:`runtime` 单独生成可以运行多个平台的 `运行辅助包` ，这样就不
+需要每次加密的时候都生成这些辅助文件。例如::
+
+    pyarmor runtime --platform windows.x86_64 --platform linux.x86_64 --platform darwin.x86_64
+    pyarmor obfuscate --no-runtime --recursive foo.py
+
 .. note::
 
    升级 `pyarmor` 之后，下载的动态库不会自动升级。如果加密后的脚本无法
