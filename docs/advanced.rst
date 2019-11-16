@@ -99,7 +99,16 @@
 需要每次加密的时候都生成这些辅助文件。例如::
 
     pyarmor runtime --platform windows.x86_64 --platform linux.x86_64 --platform darwin.x86_64
-    pyarmor obfuscate --no-runtime --recursive foo.py
+    pyarmor obfuscate --no-runtime --recursive \
+                      --platform windows.x86_64 --platform linux.x86_64 --platform darwin.x86_64 \
+                      foo.py
+
+即便使用了 ``--no-runtime`` ，在加密脚本的时候也需要指定运行的平台，因为加密脚本
+会在启动的时候检查动态库，只有指定的动态库才能通过检查。如果指定了选项
+``--no-cross-protection`` ，加密脚本就不会在检查动态库，那么加密的时候就不需要指
+定运行平台，例如::
+
+    pyarmor obfuscate --no-runtime --recursive --no-cross-protection foo.py
 
 .. note::
 
