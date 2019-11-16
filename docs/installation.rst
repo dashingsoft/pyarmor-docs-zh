@@ -32,4 +32,22 @@
 相应的脚本。 ``pyarmor`` 等价于执行 :file:`{pyarmor-folder}/pyarmor.py`,
 ``pyarmor-webui`` 等价于执行 :file:`{pyarmor-folder}/pyarmor-webui.py`
 
+完全卸载
+--------
+
+下列文件可能会在 `pyarmor` 运行是被创建::
+
+    {pyarmor-folder}/license.lic
+
+    ~/.pyarmor_capsule.zip
+    ~/.pyarmor/platforms/
+
+执行下面的命令进行完全卸载::
+
+    pip uninstall pyarmor
+    rm -rf {pyarmor-folder}
+
+    rm ~/.pyarmor_capsule.zip
+    rm -rf ~/.pyarmor/platforms
+
 .. include:: _common_definitions.txt
