@@ -60,7 +60,7 @@
     pyarmor download
     pyarmor download --help-platform
 
-使用选项 ``list`` 会显示详细的动态库特征信息::
+使用选项 ``--list`` 会显示详细的动态库特征信息::
 
     pyarmor download --list
     pyarmor download --list windows
@@ -114,14 +114,6 @@
 
    升级 `pyarmor` 之后，下载的动态库不会自动升级。如果加密后的脚本无法
    运行，使用命令 :ref:`download` 重新下载相应的动态库。
-
-.. note::
-
-   从 v5.6.0 到 v5.7.0 这几个版本，交叉发布功能有一个问题。在 Windows
-   / Ubuntu / MacOS 等上面使用跨平台加密方式加密的脚本，拷贝到下面的任
-   一平台都不能正常运行::
-
-       armv5, android.aarch64, ppc64le, ios.arm64, freebsd, alpine, alpine.arm, poky-i586
 
 
 使用不同版本 Python 加密脚本

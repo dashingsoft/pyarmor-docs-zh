@@ -274,6 +274,14 @@ ERROR: Unsupport platform linux.xxx
    PyArmro 注册问题
    运行加密脚本的问题
    已知的问题
+
+   从 v5.6.0 到 v5.7.0 这几个版本，交叉发布功能有一个问题。在 Windows
+   / Ubuntu / MacOS 等上面使用跨平台加密方式加密的脚本，拷贝到下面的任
+   一平台都不能正常运行::
+
+       armv5, android.aarch64, ppc64le, ios.arm64, freebsd, alpine, alpine.arm, poky-i586
+
+
    其他问题
 
 .. include:: _common_definitions.txt
