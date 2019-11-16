@@ -10,16 +10,16 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 使用，参考 `预安装的动态库清单`_ 。
 
 其他平台的动态库并没有随着安装包发布，参考 `其他平台的动态库清单`_ 。
-在这些平台下面，`pyarmor` 会首先搜索安装路径
-``PYARMOR_PACKAGE/platforms/SYSTEM/ARCH`` ，其中 ``SYSTEM.ARCH`` 是一
-个 `标准平台名称`_ 。如果还没有下载，那么会从远程服务器下载相应平台的
-动态库。
+在这些平台下面，`pyarmor` 会首先搜索
+``~/.pyarmor/platforms/SYSTEM/ARCH`` ，其中 ``SYSTEM.ARCH`` 是一个 `标
+准平台名称`_ 。如果还没有下载，那么会从远程服务器下载相应平台的动态库。
 
 有些平台 `pyarmor` 无法自动识别，但是在 `其他平台的动态库清单`_ 中有可
-用的动态库。可以直接下载下来，保存到 `pyarmor` 的搜索路径。使用命令
-`pyarmor -d download` 会在开始的时候显示 `pyarmor` 去那里找这个动态库。
-如果需要让 `pyarmor` 自动识别这个平台，请把下面这个脚本的输出发送到
-jondy.zhao@gmail.com
+用的动态库。可以直接下载下来，保存到这个平台的搜索路径
+``~/.pyarmor/platforms/SYSTEM/ARCH`` 下面。如果不能确定存放的路径，可
+以使用命令 ``pyarmor -d download`` 查看，在开始的时候会显示 `pyarmor`
+去那里查找动态库。如果需要让 `pyarmor` 自动识别这个平台，请把下面这个
+脚本的输出发送到 jondy.zhao@gmail.com
 
 .. code-block:: python
 
