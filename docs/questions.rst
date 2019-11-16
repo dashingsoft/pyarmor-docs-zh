@@ -254,9 +254,18 @@ No module name pytransform
 
     pyarmor pack --clean foo.py
 
+ERROR: Unsupport platform linux.xxx
+-----------------------------------
+
+有些平台 `pyarmor` 无法自动识别，如果在 `其他平台的动态库清单`_ 中有可
+用的动态库。可以直接下载下来，保存到 `pyarmor` 的搜索路径。使用命令
+`pyarmor -d download` 会在开始的时候显示 `pyarmor` 去那里找这个动态库。
+
+如果需要在上面没有列出的平台使用 PyArmor，请发送邮件到 jondy.zhao@gmail.com
+
 .. 分类:
 
-   公共问题
+   启动问题
    加密问题
    加密脚本的许可问题
    打包加密脚本的问题

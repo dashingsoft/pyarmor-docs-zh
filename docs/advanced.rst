@@ -55,21 +55,41 @@
 因为加密脚本的运行文件中有平台相关的动态库，所以跨平台发布需要指定目标
 平台。
 
-首先使用命令 :ref:`download` 查看所有支持的目标平台::
+首先使用命令 :ref:`download` 列出所有支持的标准平台名称::
 
+    pyarmor download
+    pyarmor download --help-platform
+
+使用选项 ``list`` 会显示详细的动态库特征信息::
+  
     pyarmor download --list
+    pyarmor download --list windows
+    pyarmor download --list windows.x86_64
 
-从其中找到目标平台，指定平台 ID, 下载相应的动态库文件::
+如果目标平台是 :ref:`预安装的动态库清单` 中的任意一个，那么可以直接使
+用，否则需要使用 :ref:`download` 指定平台名称下载对应的动态库::
+   
+    pyarmor download linux.armv7
 
-    pyarmor download armv5
+然后在加密脚本的时候指定目标平台名称::
 
-然后在加密脚本的时候指定目标平台 ID::
+    pyarmor obfuscate --platform linux.armv7 foo.py
 
-    pyarmor obfuscate --platform armv5 foo.py
+    # For project
+    pyarmor build --platform linux.armv7
 
-如果使用工程，那么::
+从 v5.7.5 版本开始，平台名称已经标准化，所有可以使用的名称在这里
+:ref:`标准平台名称` ，也支持运行加密脚本在多个平台。例如::
+       
+    pyarmor obfuscate --platform windows.x86_64 \
+                      --platform linux.x86_64 \
+                      --platform darwin.x86_64 \
+                      foo.py
+       
+.. note::
 
-    pyarmor build --platform armv5 -B
+   升级 `pyarmor` 之后，下载的动态库不会自动升级。如果加密后的脚本无法
+   运行，使用命令 :ref:`download` 重新下载相应的动态库。
 
 .. note::
 
@@ -78,15 +98,6 @@
    一平台都不能正常运行::
 
        armv5, android.aarch64, ppc64le, ios.arm64, freebsd, alpine, alpine.arm, poky-i586
-
-   在 v5.7.0 之后，如果交叉加密后的脚本依然无法在这些平台运行。尝试设
-   置环境变量 `PYARMOR_PLATFORM` 为 `simple` ，然后重新加密脚本::
-
-       PYARMOR_PLATFORM=simple pyarmor obfuscate --platform armv5 foo.py
-
-       # For windows
-       SET PYARMOR_PLATFORM=simple
-       pyarmor obfuscate --platform armv5 foo.py
 
 
 使用不同版本 Python 加密脚本

@@ -108,7 +108,9 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 关于插件的使用实例，请参考 :ref:`使用插件扩展认证方式`
 
 选项 ``--platform`` 用于指定加密脚本的运行平台，仅用于跨平台发布。因为加密脚本的
-运行文件中包括平台相关的动态库，所以跨平台发布需要指定该选项。
+运行文件中包括平台相关的动态库，所以跨平台发布需要指定该选项。这个选项可以使用多
+次，以支持加密脚本运行于不同平台。从 v5.7.5 开始，所有平台名称已经标准化，可用的
+平台名称可以使用命令 `download`_ 查看。
 
 选项 ``--restrict`` 用于指定加密脚本的约束模式，关于约束模式的详细说明，参考
 :ref:`约束模式`
@@ -201,10 +203,10 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 * 在 MacOS 平台下加密脚本，这些加密脚本将在 Ubuntu 下面运行，使用下面
   的命令进行加密::
 
-    pyarmor download --list
-    pyarmor download linux_x86_64
+    pyarmor download
+    pyarmor download linux.x86_64
 
-    pyarmor obfuscate --platform linux_x86_64 foo.py
+    pyarmor obfuscate --platform linux.x86_64 foo.py
 
 * 使用高级模式加密脚本::
 
@@ -563,6 +565,8 @@ build
 
     pyarmor build /path/to/project
 
+选项 ``--platform`` 和 ``--package-runtime`` 的使用，请参考命令 `obfuscate`_
+
 **示例**
 
 * 递增式加密工程中的脚本，上次运行该命令之后，没有修改过的脚本不会再被
@@ -589,10 +593,10 @@ build
 * 在 MacOS 平台下加密脚本，这些加密脚本将在 Ubuntu 下面运行，使用下面
   的命令进行加密::
 
-    pyarmor download --list
-    pyarmor download linux_x86_64
+    pyarmor download
+    pyarmor download linux.x86_64
 
-    pyarmor build -B --platform linux_x86_64
+    pyarmor build -B --platform linux.x86_64
 
 .. _info:
 
@@ -703,37 +707,39 @@ download
 
 **语法**::
 
-    pyarmor download <options> PLAT-ID
+    pyarmor download <options> NAME
 
 **选项**:
 
+--help-platform       显示所有支持的规范化平台名称
 --list PATTERN        查看所有可用的预编译动态库
 -O, --output PATH     下载之后保存的路径，默认是 `PLAT-ID`
 
 **描述**
 
-常用平台的预编译动态库已经和 PyArmor 的安装包一起发布，大部分的嵌入式设备可以自
-动下载相应的预编译动态库。但是对于部分无法识别平台的嵌入式设备，或者加密跨平台脚
-本，就需要人工下载。例如，启动过程提示::
+这个命令主要是用来下载其他平台的动态库，一般用于交叉平台的发布。
 
-    ERROR: Unsupport platform linux32/armv7l
+列出所有可用平台的规范化名称，例如::
 
-那么首先查看所有的预编译动态库::
+    pyarmor download
+    pyarmor download --help-platform
+
+下载其中的一个。例如::
+
+    pyarmor download linux.armv7
+    pyarmor download linux.x86_64
+
+默认情况下，下载的文件是保存在目录 ``~/.pyarmor/platforms`` 下面，使用相应的路径
+来存放不同平台的动态库。
+
+选项 ``--list`` 会显示详细的动态库信息，同时也可以过滤平台，搜索名称、CPU 架构、
+动态库特征等。例如::
 
     pyarmor download --list
-
-在列表中发现平台 `armv7` 可以使用，那么就可以使用下面的命令进行下载::
-
-    pyarmor download --output linux32/armv7l armv7
-
-也可以对平台进行过滤，例如查看 `linux32` 下所有可用的预编译动态库::
-
-    pyarmor download --list linux32
-
-加密其他平台下面使用的脚本，需要首先下载目标平台的动态库，例如::
-
-    pyarmor download armv5
-    pyarmor obfuscate --platform armv5 foo.py
+    pyarmor download --list windows
+    pyarmor download --list windows.x86_64
+    pyarmor download --list JIT
+    pyarmor download --list armv7
 
 .. _runtime:
 
@@ -760,6 +766,8 @@ runtime
 因为使用相同的 :ref:`全局密钥箱` 加密的脚本可以共享 :ref:`运行辅助包` ，所以单独
 创建运行辅助包之后，在加密脚本的时候就不需要每一次都重新生成运行辅助文件。
 
+选项 ``--platform`` 的使用，请参考命令 `obfuscate`_
+
 **EXAMPLES**
 
 * 在默认输出路径 `dist` 下面创建 :ref:`运行辅助包` ``pytransform``::
@@ -773,6 +781,6 @@ runtime
 * 为 `armv7` 平台创建 :ref:`运行辅助包` ，并且设置加密脚本的使用期限::
 
     pyarmor licenses --expired 2020-01-01 code-001
-    pyarmor runtime --with-license licenses/code-001/license.lic --platform armv7
+    pyarmor runtime --with-license licenses/code-001/license.lic --platform linux.armv7
 
 .. include:: _common_definitions.txt

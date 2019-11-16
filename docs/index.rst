@@ -39,10 +39,10 @@ Pi``, ``Banana Pi``, ``Orange Pi``, ``TS-4600 / TS-7600`` 等，但是这些
    how-to-do
    project
    advanced
+   platforms
    man
    examples
    questions
    license
-   platforms
 
 .. include:: _common_definitions.txt
