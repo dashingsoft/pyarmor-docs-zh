@@ -713,7 +713,8 @@ download
 
 --help-platform       显示所有支持的规范化平台名称
 --list PATTERN        查看所有可用的预编译动态库
--O, --output PATH     下载之后保存的路径，默认是 `PLAT-ID`
+-O, --output PATH     下载之后保存的路径
+--update              更新已经下载的动态库
 
 **描述**
 
@@ -723,6 +724,8 @@ download
 
     pyarmor download
     pyarmor download --help-platform
+    pyarmor download --help-platform windows
+    pyarmor download --help-platform linux.x86_64
 
 下载其中的一个。例如::
 
@@ -740,6 +743,11 @@ download
     pyarmor download --list windows.x86_64
     pyarmor download --list JIT
     pyarmor download --list armv7
+
+当 `pyarmor` 升级之后，已经下载的动态库不会自动更新，需要使用 ``--update`` 进行
+更新。例如::
+
+    pyarmor download --update
 
 .. _runtime:
 
