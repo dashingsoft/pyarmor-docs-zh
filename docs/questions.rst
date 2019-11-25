@@ -235,6 +235,14 @@ Error: Try to run unauthorized function
     xxd -s 0x56f8 -l 4 _pytransform.so | sed "s/56f8/5728/" | xxd -r - _pytransform.so
     xxd -s 0x5700 -l 4 _pytransform.so | sed "s/5700/5730/" | xxd -r - _pytransform.so
 
+.. note::
+
+   从 v5.7.8 开始，在 linux/x86_64 平台（例如，CentOS6）已经不需要这个补丁就可以工作了。
+
+   也可以在使用下面的命令在其他平台加密脚本::
+
+     pyarmor obfuscate --platform centos6.x86_64 foo.py
+
 购买的私有密钥箱没有起作用
 --------------------------
 
@@ -271,7 +279,7 @@ ERROR: Unsupport platform linux.xxx
    加密问题
    加密脚本的许可问题
    打包加密脚本的问题
-   PyArmro 注册问题
+   PyArmor 注册问题
    运行加密脚本的问题
    已知的问题
 
