@@ -327,11 +327,6 @@ pack
 
     pyinstaller myscript.spec
 
-如果已经有一个写好的 `.spec` 文件，也可以通过 ``-s`` 指定到这个文件，这样
-`pack`_ 就会直接使用这个文件，而不是重新创建一个新的::
-
-    pyarmor pack -s /path/to/myself.spec foo.py
-
 接下来 `pack`_ 会递归加密主脚本所在目录下面的所有 `.py` 文件。它使用选项 ``-r``,
 ``--output`` 以及 ``--xoptions`` 中指定的额外选项来调用 `pyarmor obfuscate`
 
@@ -346,6 +341,13 @@ pack
 
    命令 `pack` 会自动加密脚本，所以不要使用该命令去打包加密后的脚本，打包加密脚
    本会导致错误，因为脚本加密之后是无法自动找到的其他被引用的模块的。
+
+.. comment:
+
+    如果已经有一个写好的 `.spec` 文件，也可以通过 ``-s`` 指定到这个文
+    件，这样 `pack`_ 就会直接使用这个文件，而不是重新创建一个新的::
+
+    pyarmor pack -s /path/to/myself.spec foo.py
 
 **示例**
 
