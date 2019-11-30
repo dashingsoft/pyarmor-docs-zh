@@ -385,7 +385,8 @@ PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有
     pyinstaller --add-data dist/obf/license.lic
                 --add-data dist/obf/pytransform.key
                 --add-data dist/obf/_pytransform.*
-                hello.py dist/obf/hello.py
+                -p dist/obf --hidden-import pytransform
+                hello.py
 
 第三步是修改 `hello.spec`, 在 `Analysis` 之后插入下面的语句，主要作用是打包的时
 候使用加密后的脚本，而不是原来的脚本::
