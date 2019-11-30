@@ -406,7 +406,7 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
     pyarmor pack -s myscript.spec myscript.py
 
-这样就可以加密并打包 `myscript.py`。
+这样就可以加密并打包 `myscript.py` 。
 
 .. note::
 
