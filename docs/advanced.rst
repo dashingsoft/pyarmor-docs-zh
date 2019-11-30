@@ -379,6 +379,39 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
 4. 这时候在双击运行 `dist/foo.exe` ，在 2020-01-01 之前应该就可以正常运行
 
+.. _使用定制的 .spec 文件打包加密脚本:
+
+使用定制的 .spec 文件打包加密脚本
+---------------------------------
+
+如果已经有写好的 `.spec` 文件能够成功打包，例如::
+
+    pyinstaller myscript.spec
+
+那么对这个文件进行少量修改之后，就可以用来直接打包加密脚本:
+
+* 增加模块 ``pytransform`` 到 `hiddenimports`
+* 增加额外的路径 ``DISTPATH/obf`` 到 `pathex` 和 `hookspath`
+
+修改后的文件大概会是这样子的::
+
+    a = Analysis(['myscript.py'],
+                 pathex=[os.path.join(DISTPATH, 'obf'), ...],
+                 binaries=[],
+                 datas=[],
+                 hiddenimports=['pytransform', ...],
+                 hookspath=[os.path.join(DISTPATH, 'obf'), ...],
+
+现在使用下面的方式运行命令 :ref:`pack`::
+
+    pyarmor pack -s myscript.spec myscript.py
+
+这样就可以加密并打包 `myscript.py`。
+
+.. note::
+
+   这个功能是在 v5.8.0 新增加的
+
 .. _使用约束模式增加加密脚本安全性:
 
 使用约束模式增加加密脚本安全性
