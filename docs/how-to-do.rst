@@ -391,7 +391,7 @@ PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有
 第三步是修改 `hello.spec`, 在 `Analysis` 之后插入下面的语句，主要作用是打包的时
 候使用加密后的脚本，而不是原来的脚本::
 
-    src = os.path.abspath(a.pathex[0])
+    src = os.path.abspath('.')
     obf_src = os.path.abspath('dist/obf')
 
     for i in range(len(a.scripts)):
