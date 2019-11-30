@@ -140,7 +140,7 @@ PyArmor 是怎么加密 Python 源代码呢？
     # PyArmor Plugin: print('This is plugin code') ==> print('This is plugin code')
     # PyArmor Plugin: if sys.flags.debug:          ==> if sys.flags.debug:
     # PyArmor Plugin:     check_something():       ==>     check_something()
-    
+
 第二种格式 ``# pyarmor_`` 则只用于调用插件函数，并且仅仅当这个函数作为插件名称出
 现在命令行中时候才进行替换。例如，使用插件 `check_multi_mac` 加密脚本的时候，第
 一个调用桩会被替换，第二个不会被替换::
@@ -390,10 +390,18 @@ PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有
 第三步是修改 `hello.spec`, 在 `Analysis` 之后插入下面的语句，主要作用是打包的时
 候使用加密后的脚本，而不是原来的脚本::
 
-    a.scripts[-1] = 'hello', r'dist/obf/hello.py', 'PYSOURCE'
+    src = os.path.abspath(a.pathex[0])
+    obf_src = os.path.abspath('dist/obf')
+
+    for i in range(len(a.scripts)):
+        if a.scripts[i][1].startswith(src):
+            x = a.scripts[i][1].replace(src, obf_src)
+            if os.path.exists(x):
+                a.scripts[i] = a.scripts[i][0], x, a.scripts[i][2]
+
     for i in range(len(a.pure)):
-        if a.pure[i][1].startswith(a.pathex[0]):
-            x = a.pure[i][1].replace(a.pathex[0], os.path.abspath('dist/obf'))
+        if a.pure[i][1].startswith(src):
+            x = a.pure[i][1].replace(src, obf_src)
             if os.path.exists(x):
                 if hasattr(a.pure, '_code_cache'):
                     with open(x) as f:
