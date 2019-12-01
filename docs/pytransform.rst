@@ -44,14 +44,14 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
    * CODE：许可注册码
 
    如果许可证没有包含对应的键名，那么其值为 `None`
-   
-   如果许可文件非法，例如已经过期，会抛出异常 :exc:`PytransformError`
+
+   如果许可文件非法，例如已经过期，会抛出异常 :exc:`Exception`
 
 .. function:: get_license_code()
 
    返回字符串，该字符串是生成许可文件时指定的注册码参数。
 
-   如果认证文件非法或者无效，抛出异常 :exc:`PytransformError`
+   如果认证文件非法或者无效，抛出异常 :exc:`Exception`
 
 .. function:: get_hd_info(hdtype, size=256)
 
@@ -61,7 +61,7 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
    * HT_HARDDISK 返回硬盘序列号
    * HT_IFMAC 返回网卡Mac地址
 
-   无法获取硬件信息会抛出异常 :exc:`PytransformError`
+   无法获取硬件信息会抛出异常 :exc:`Exception`
 
 .. attribute:: HT_HARDDISK, HT_IFMAC
 
@@ -84,7 +84,7 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
            print('This license for %s is never expired' % code)
        else:
            print('This license for %s will be expired in %d days' % (code, left_days))
-   except PytransformError as e:
+   except Exception as e:
        print(e)
 
 
