@@ -156,6 +156,7 @@
 下面有几种情况可能会需要让 Python 自动识别加密脚本:
 
 * 几乎所有的脚本都会被作为主脚本来运行
+* 运行加密脚本的单元测试用例
 * 在加密脚本中使用模块 `multiprocessing` 创建新进程
 * 使用到 `Popen` 或者 `os.exec` 等调用加密后的脚本
 * 其他任何需要在很多脚本里面插入引导代码的情况
@@ -171,21 +172,19 @@
     echo "" > pytransform_bootstrap.py
     pyarmor obfuscate pytransform_bootstrap.py
 
-2. 其次把 :ref:`运行辅助包` 拷贝到任意的 Python 路径。例如::
+2. 其次需要建立一个运行加密脚本的虚拟环境，把 :ref:`运行辅助包` 和加密
+   后的空脚本 `dist/pytransform_bootstrap.py` (包含 :ref:`引导代码`)
+   拷贝到虚拟环境的库路径。例如::
 
     # For windows
-    mv dist/pytransform C:/Python37/Lib/site-packages/
-
+    mv dist/pytransform venv/Lib/
+    mv dist/pytransform_bootstrap.py venv/Lib/
+    
     # For linux
-    mv dist/pytransform /usr/local/lib/python3.5/dist-packages/
+    mv dist/pytransform venv/lib/python3.5/
+    mv dist/pytransform_bootstrap.py venv/lib/python3.5/
 
-3. 然后把加密后的空脚本 `dist/pytransform_bootstrap.py` (包含 :ref:`引
-   导代码`) 拷贝到任意的 Python 路径。例如::
-
-     mv dist/pytransform_bootstrap.py C:/Python37/Lib/
-     mv dist/pytransform_bootstrap.py /usr/lib/python3.5/
-
-4. 修改 `{prefix}/lib/site.py` (Windows) 或者 `{prefix}/lib/pythonX.Y/site.py`
+4. 修改 `venv/lib/site.py` (Windows) 或者 `venv/lib/pythonX.Y/site.py`
    (Linux), 插入一条导入语句，导入 `pytransform_bootstrap`::
 
     import pytransform_bootstrap
@@ -195,11 +194,15 @@
 
 也可以把这行代码添加到 `site.main` 里面，总之，只要能得到执行就可以。
 
-这样就可以使用 `python` 直接运行加密脚本了。 这主要使用到了 Python 在启动过程中
-默认会自动导入模块 `site` 的特性来实现，参考
+这样就可以使用虚拟环境中 `python` 直接运行加密脚本了。 这主要使用到了
+Python 在启动过程中默认会自动导入模块 `site` 的特性来实现，参考
 
 https://docs.python.org/3/library/site.html
 
+.. note::
+
+    这里配置的是运行加密脚本的环境，在这里 `pyarmor` 是无法运行的。
+    
 .. note::
 
     在 v5.7.0 之前，需要根据 :ref:`运行辅助文件` 人工创建 :ref:`运行辅助包`
