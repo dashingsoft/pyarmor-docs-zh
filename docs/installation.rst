@@ -37,17 +37,18 @@
 
 下列文件可能会在 `pyarmor` 运行时被创建::
 
-    {pyarmor-folder}/license.lic
-
     ~/.pyarmor_capsule.zip
+    ~/.pyarmor/license.lic (从 v5.8.0 开始)
     ~/.pyarmor/platforms/
+
+    {pyarmor-folder}/license.lic (在 v5.8.0 之前)
 
 执行下面的命令进行完全卸载::
 
     pip uninstall pyarmor
-    
+
     rm -rf {pyarmor-folder}
-    rm ~/.pyarmor_capsule.zip
-    rm -rf ~/.pyarmor/platforms
+    rm -rf ~/.pyarmor_capsule.zip
+    rm -rf ~/.pyarmor
 
 .. include:: _common_definitions.txt
