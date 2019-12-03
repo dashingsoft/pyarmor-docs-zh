@@ -60,19 +60,19 @@ obfuscate
 
 **选项**
 
--O, --output PATH           输出路径，默认是 `dist`
--r, --recursive             递归模式加密所有的脚本
--s, --src PATH              当主脚本不在顶层目录的时候指定搜索脚本的路径
---exclude PATH              在递归模式下排除某些目录，多个目录使用逗号分开，或者使用该选项多次
---exact                     只加密命令行中列出的脚本
---no-bootstrap              在主脚本中不要插入引导代码
---no-cross-protection       在主脚本中不要插入交叉保护代码
---plugin NAME               在加密之前，向主脚本中插入代码。这个选项可以使用多次。
---platform NAME             指定运行加密脚本的平台
---advanced <0,1>            使用高级模式加密脚本
---restrict <0,1,2,3,4>      设置约束模式
---package-runtime <0,1,2>   是否保存运行文件到一个单独的目录
---no-runtime                不生成任何运行辅助文件，只加密脚本
+-O, --output PATH               输出路径，默认是 `dist`
+-r, --recursive                 递归模式加密所有的脚本
+-s, --src PATH                  当主脚本不在顶层目录的时候指定搜索脚本的路径
+--exclude PATH                  在递归模式下排除某些目录，多个目录使用逗号分开，或者使用该选项多次
+--exact                         只加密命令行中列出的脚本
+--no-bootstrap                  在主脚本中不要插入引导代码
+--no-cross-protection           在主脚本中不要插入交叉保护代码
+--plugin NAME                   在加密之前，向主脚本中插入代码。这个选项可以使用多次。
+--platform NAME                 指定运行加密脚本的平台
+--advanced <0,1>                使用高级模式加密脚本
+--restrict <0,1,2,3,4>          设置约束模式
+--package-runtime <0,1,2,3>     如何保存运行文件的方式和如何生成引导代码
+--no-runtime                    不生成任何运行辅助文件，只加密脚本
 
 **描述**
 
@@ -115,6 +115,8 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 选项 ``--restrict`` 用于指定加密脚本的约束模式，关于约束模式的详细说明，参考
 :ref:`约束模式`
 
+**运行辅助文件**
+
 默认情况下，所有运行时刻文件会作为包保存在一个单独的目录 `pytransform` 下面::
 
     pytransform/
@@ -123,26 +125,29 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
         pytransform.key
         license.lic
 
-如果选项 ``--package-runtime`` 设置为 `0` ，那么生成的运行辅助文件和加密脚本存放
-在相同的目录下面::
+只有当选项 ``--package-runtime`` 设置为 `0` 的时候，生成的运行辅助文件和加密脚本
+存放在相同的目录下面::
 
     pytransform.py
     _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
     pytransform.key
     license.lic
 
-如果 ``--package-runtime`` 设置为 `2` ，就是指 :ref:`运行辅助包` 在运行时刻并不
-会和加密脚本存放在一起，而是在其他路径，所以这时候主脚本中的 :ref:`引导代码` 在
-任何情况下面，都是使用绝对导入方式::
+**引导代码**
+
+默认情况下，下面的 :ref:`引导代码` 会被插入到加密后的主脚本中::
 
     from pytransform import pyarmor_runtime
     pyarmor_runtime()
 
-否则当主脚本是 ``__init__.py`` 的时候， 会使用包含一个 ``.`` 的相对导入的方式::
+当主脚本是 ``__init__.py`` 的时候， 会使用包含一个 ``.`` 的相对导入的方式::
 
     from .pytransform import pyarmor_runtime
     pyarmor_runtime()
 
+但是选项 ``--package-runtime`` 会影响引导代码的生成。如果它被设置为 ``2``, 那么
+:ref:`引导代码` 总是使用绝对导入的方式；如果它被设置为 ``3`` ，那么总是使用包含
+前置 ``.`` 的相对导入方式。
 
 **示例**
 
@@ -479,7 +484,7 @@ config
 --cross-protection <0,1>        是否插入交叉保护代码到主脚本
 --runtime-path RPATH            设置运行文件所在路径
 --plugin NAME                   设置需要插入到主脚本的代码文件，这个选项可以使用多次
---package-runtime <0,1,2>       是否保存运行文件到一个单独的目录
+--package-runtime <0,1,2,3>     如何保存运行文件的方式和如何生成引导代码
 
 **描述**
 
@@ -550,12 +555,12 @@ build
 
 **选项**
 
--B, --force                 强制加密所有脚本，默认情况只加密上次构建之后修改过的脚本
--r, --only-runtime          只生成运行依赖文件
--n, --no-runtime            只加密脚本，不要生成运行依赖文件
--O, --output OUTPUT         输出路径，如果设置，那么工程属性里面的输出路径就无效
---platform NAME             指定加密脚本的运行平台，仅用于跨平台发布
---package-runtime <0,1,2>   是否把运行文件作为包保存到一个单独的目录
+-B, --force                     强制加密所有脚本，默认情况只加密上次构建之后修改过的脚本
+-r, --only-runtime              只生成运行依赖文件
+-n, --no-runtime                只加密脚本，不要生成运行依赖文件
+-O, --output OUTPUT             输出路径，如果设置，那么工程属性里面的输出路径就无效
+--platform NAME                 指定加密脚本的运行平台，仅用于跨平台发布
+--package-runtime <0,1,2,3>     如何保存运行文件的方式和如何生成引导代码
 
 **描述**
 
@@ -566,6 +571,9 @@ build
 或者在命令行指定工程所在路径::
 
     pyarmor build /path/to/project
+
+选择 ``--no-runtime`` 可能会影响 :ref:`引导代码` 的生成方式，设置之后在主脚本中
+引导代码总是会使用绝对导入的方式。
 
 选项 ``--platform`` 和 ``--package-runtime`` 的使用，请参考命令 `obfuscate`_
 
