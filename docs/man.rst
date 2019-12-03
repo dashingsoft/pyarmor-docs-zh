@@ -774,7 +774,7 @@ runtime
 
 -O, --output PATH             输出路径，默认是 `dist`
 -n, --no-package              不要使用包的形式来存放生成运行文件
--r, --relative                引导代码使用相对导入方式
+-i, --inside                  创建包含引导脚本的包 `pytransform_bootstrap`
 -L, --with-license FILE       使用这个文件替换默认的加密脚本许可文件
 --platform NAME               生成其他平台下的运行辅助包
 
@@ -786,11 +786,15 @@ runtime
 创建运行辅助包之后，在加密脚本的时候就不需要每一次都重新生成运行辅助文件。
 
 它同时也会在输出目录下面创建一个引导脚本 ``pytransform_bootstrap.py`` ，这是对一
-个空脚本进行加密之后生成的。它包含有 :ref:`引导代码` ，并且可以被其他没有加密的
-脚本导入。而一旦导入这个脚本，其他加密模块就都可以被正常导入了。例如::
+个空脚本进行加密之后生成的，包含有 :ref:`引导代码` 。它最主要用途就是可以让没有
+加密的脚本能够运行 :ref:`引导代码` 。例如，在脚本中导入这个模块之后，其他加密模
+块就都可以被正常导入了::
 
     import pytransform_bootstrap
-    import obf_mod_a
+    import obf_mod
+
+如果选项 ``--inside`` 被指定，那么将在输出目录使用包 ``pytransform_bootstrap``
+的形式来保存引导脚本。
 
 选项 ``--platform`` 的使用，请参考命令 `obfuscate`_
 
@@ -803,6 +807,10 @@ runtime
 * 创建独立的 :ref:`运行辅助文件` ，但是不使用包的形式存放::
 
     pyarmor runtime -n
+
+* 创建引导脚本在一个单独的包 ``pytransform_bootstrap``::
+
+    pyarmor runtime -i
 
 * 为 `armv7` 平台创建 :ref:`运行辅助包` ，并且设置加密脚本的使用期限::
 
