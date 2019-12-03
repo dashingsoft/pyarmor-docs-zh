@@ -180,8 +180,8 @@
 因为大部分的加密脚本都没有 :ref:`引导代码` ，所以在运行单元测试之前，
 必须首先运行引导代码。
 
-假设单元测试脚本为 `/path/to/tests/test_foo.py` ，首先创建引导辅助包
-:mod:`pytransform_bootstrap`::
+假设单元测试脚本为 :path:`/path/to/tests/test_foo.py` ，首先创建引导辅
+助包 :mod:`pytransform_bootstrap`::
 
     pyarmor runtime -i
     mv dist/pytransform_bootstrap /path/to/tests
