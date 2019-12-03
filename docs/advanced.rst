@@ -166,9 +166,10 @@
 
     import pytransform_bootstrap
 
-在 v5.8.1 之前，需要使用人工的方式生成这个引导辅助包::
+.. note::
 
-    mkdir pytransform_bootstrap
+   在 v5.8.1 之前，需要使用人工的方式生成这个引导辅助包::
+
     echo "" > __init__.py
     pyarmor obfuscate -O dist/pytransform_bootstrap --exact __init__.py
 
