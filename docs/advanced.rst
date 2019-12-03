@@ -225,7 +225,7 @@
 
 下面是基本操作步骤:
 
-1. 首先生成引导辅助包 :mod:``pytransform_bootstrap``::
+1. 首先生成引导辅助包 :mod:`pytransform_bootstrap`::
 
     pyarmor runtime -i
 
@@ -251,7 +251,7 @@
     if __name__ == '__main__':
         ...
 
-也可以把这行代码添加到 ``site.main`` 里面，总之，只要能得到执行就可以。
+也可以把这行代码添加到 ``main`` 函数里面，总之，只要能得到执行就可以。
 
 这样就可以使用虚拟环境中 ``python`` 直接运行加密脚本了。 这主要使用到
 了 Python 在启动过程中默认会自动导入模块 ``site`` 的特性来实现，参考
