@@ -195,10 +195,8 @@
     cd /path/to/tests
     python test_foo.py
 
-还有一种方式就是直接在系统包 :mod:`unittest` 中导入引导辅助包，这样不
-需要修改测试脚本，就可以直接来测试加密模块。
-
-假设系统模块 :mod:`unittest` 所在的路径为 ``/path/to/unittest``, 那么::
+还有一种方式就是直接修改系统包 :mod:`unittest` ，假设其所在的路径为
+:path:`/path/to/unittest`, 那么::
 
     pyarmor runtime -i
     mv dist/pytransform_bootstrap /path/to/unittest
@@ -207,7 +205,8 @@
 
     from . import pytransform_bootstrap
 
-这样，所有的单元测试脚本就都可以直接来测试加密后的模块了。
+这样，所有的单元测试脚本就都可以直接来测试加密后的模块了。如果有很多单
+元测试脚本，这种方式会更方便一些。
 
 让 Python 自动识别加密脚本
 --------------------------
