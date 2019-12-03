@@ -180,7 +180,7 @@
 因为大部分的加密脚本都没有 :ref:`引导代码` ，所以在运行单元测试之前，
 必须首先运行引导代码。
 
-假设单元测试脚本为 :path:`/path/to/tests/test_foo.py` ，首先创建引导辅
+假设单元测试脚本为 :file:`/path/to/tests/test_foo.py` ，首先创建引导辅
 助包 :mod:`pytransform_bootstrap`::
 
     pyarmor runtime -i
@@ -196,7 +196,7 @@
     python test_foo.py
 
 还有一种方式就是直接修改系统包 :mod:`unittest` ，假设其所在的路径为
-:path:`/path/to/unittest`, 那么::
+:file:`/path/to/unittest`, 那么::
 
     pyarmor runtime -i
     mv dist/pytransform_bootstrap /path/to/unittest
