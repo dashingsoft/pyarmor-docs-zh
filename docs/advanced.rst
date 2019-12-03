@@ -150,13 +150,71 @@
 
     C:\Python36\python C:\Python27\Lib\site-packages\pyarmor\pyarmor.py %*
 
+在没有加密的脚本中运行引导代码
+------------------------------
+
+有时候需要在普通脚本中运行引导代码，这样就可以正常的导入其他加密脚本，
+而不需要在每一个加密脚本中到插入引导代码。在 v5.7.0 之前，可以直接把两
+行 :ref:`引导代码` 插入到普通脚本中，但是之后的版本，为了提高安全性，
+已经不允许在普通脚本中直接运行引导代码，必须使用一种折衷的方式。
+
+首先使用命令 :ref:`runtime` 生成一个引导辅助包 :mod:`pytransform_bootstrap`::
+
+    pyarmor runtime -i
+
+然后在普通脚本到导入这个包之后，就可以自由的导入其他加密模块，例如::
+
+    import pytransform_bootstrap
+
+在 v5.8.1 之前，需要使用人工的方式生成这个引导辅助包::
+
+    mkdir pytransform_bootstrap
+    echo "" > __init__.py
+    pyarmor obfuscate -O dist/pytransform_bootstrap --exact __init__.py
+
+下面是一个实际的例子，运行加密脚本的单元测试用例。
+
+运行加密脚本的单元测试
+~~~~~~~~~~~~~~~~~~~~~~
+
+因为大部分的加密脚本都没有 :ref:`引导代码` ，所以在运行单元测试之前，
+必须首先运行引导代码。
+
+假设单元测试脚本为 `/path/to/tests/test_foo.py` ，首先创建引导辅助包
+:mod:`pytransform_bootstrap`::
+
+    pyarmor runtime -i
+    mv dist/pytransform_bootstrap /path/to/tests
+
+其次修改测试脚本，在导入加密脚本之前插入语句::
+
+    import pytransform_bootstrap
+
+这样就可以直接测试被加密的模块::
+
+    cd /path/to/tests
+    python test_foo.py
+
+还有一种方式就是直接在系统包 :mod:`unittest` 中导入引导辅助包，这样不
+需要修改测试脚本，就可以直接来测试加密模块。
+
+假设系统模块 :mod:`unittest` 所在的路径为 ``/path/to/unittest``, 那么::
+
+    pyarmor runtime -i
+    mv dist/pytransform_bootstrap /path/to/unittest
+
+然后修改 :file:`/path/to/unittest/__init__.py` ，插入语句::
+
+    from . import pytransform_bootstrap
+
+这样，所有的单元测试脚本就都可以直接来测试加密后的模块了。
+
 让 Python 自动识别加密脚本
 --------------------------
 
 下面有几种情况可能会需要让 Python 自动识别加密脚本:
 
 * 几乎所有的脚本都会被作为主脚本来运行
-* 运行加密脚本的单元测试用例
 * 在加密脚本中使用模块 `multiprocessing` 创建新进程
 * 使用到 `Popen` 或者 `os.exec` 等调用加密后的脚本
 * 其他任何需要在很多脚本里面插入引导代码的情况
@@ -167,45 +225,46 @@
 
 下面是基本操作步骤:
 
-1. 首先加密一个空的脚本，同时生成 :ref:`运行辅助包`::
+1. 首先生成引导辅助包 :mod:``pytransform_bootstrap``::
 
-    echo "" > pytransform_bootstrap.py
-    pyarmor obfuscate pytransform_bootstrap.py
+    pyarmor runtime -i
 
-2. 其次需要建立一个运行加密脚本的虚拟环境，把 :ref:`运行辅助包` 和加密
-   后的空脚本 `dist/pytransform_bootstrap.py` (包含 :ref:`引导代码`)
-   拷贝到虚拟环境的库路径。例如::
+   在 v5.8.1 之前，需要通过加密一个空脚本的方式生成引导辅助包::
+
+    echo "" > __init__.py
+    pyarmor obfuscate -O dist/pytransform_bootstrap --exact __init__.py
+
+2. 其次需要建立一个运行加密脚本的虚拟环境，把引导辅助包拷贝到虚拟环境
+   的库路径，例如::
 
     # For windows
-    mv dist/pytransform venv/Lib/
-    mv dist/pytransform_bootstrap.py venv/Lib/
-    
-    # For linux
-    mv dist/pytransform venv/lib/python3.5/
-    mv dist/pytransform_bootstrap.py venv/lib/python3.5/
+    mv dist/pytransform_bootstrap venv/Lib/
 
-4. 修改 `venv/lib/site.py` (Windows) 或者 `venv/lib/pythonX.Y/site.py`
-   (Linux), 插入一条导入语句，导入 `pytransform_bootstrap`::
+    # For linux
+    mv dist/pytransform_bootstrap venv/lib/python3.5/
+
+4. 最后修改 ``venv/lib/pythonX.Y/site.py`` 或者 ``venv/lib/site.py`` ,
+   插入一条导入语句::
 
     import pytransform_bootstrap
 
     if __name__ == '__main__':
         ...
 
-也可以把这行代码添加到 `site.main` 里面，总之，只要能得到执行就可以。
+也可以把这行代码添加到 ``site.main`` 里面，总之，只要能得到执行就可以。
 
-这样就可以使用虚拟环境中 `python` 直接运行加密脚本了。 这主要使用到了
-Python 在启动过程中默认会自动导入模块 `site` 的特性来实现，参考
+这样就可以使用虚拟环境中 ``python`` 直接运行加密脚本了。 这主要使用到
+了 Python 在启动过程中默认会自动导入模块 ``site`` 的特性来实现，参考
 
 https://docs.python.org/3/library/site.html
 
 .. note::
 
     这里配置的是运行加密脚本的环境，在这里 `pyarmor` 是无法运行的。
-    
+
 .. note::
 
-    在 v5.7.0 之前，需要根据 :ref:`运行辅助文件` 人工创建 :ref:`运行辅助包`
+    在 v5.7.0 之前，需要根据 :ref:`运行辅助文件` 人工创建引导辅助包
 
 使用不同的模式来加密脚本
 ------------------------
