@@ -774,6 +774,7 @@ runtime
 
 -O, --output PATH             输出路径，默认是 `dist`
 -n, --no-package              不要使用包的形式来存放生成运行文件
+-r, --relative                引导代码使用相对导入方式
 -L, --with-license FILE       使用这个文件替换默认的加密脚本许可文件
 --platform NAME               生成其他平台下的运行辅助包
 
@@ -783,6 +784,13 @@ runtime
 
 因为使用相同的 :ref:`全局密钥箱` 加密的脚本可以共享 :ref:`运行辅助包` ，所以单独
 创建运行辅助包之后，在加密脚本的时候就不需要每一次都重新生成运行辅助文件。
+
+它同时也会在输出目录下面创建一个引导脚本 ``pytransform_bootstrap.py`` ，这是对一
+个空脚本进行加密之后生成的。它包含有 :ref:`引导代码` ，并且可以被其他没有加密的
+脚本导入。而一旦导入这个脚本，其他加密模块就都可以被正常导入了。例如::
+
+    import pytransform_bootstrap
+    import obf_mod_a
 
 选项 ``--platform`` 的使用，请参考命令 `obfuscate`_
 
