@@ -150,6 +150,8 @@
 
     C:\Python36\python C:\Python27\Lib\site-packages\pyarmor\pyarmor.py %*
 
+.. _在没有加密的脚本中运行引导代码:
+
 在没有加密的脚本中运行引导代码
 ------------------------------
 
@@ -162,9 +164,20 @@
 
     pyarmor runtime -i
 
-然后在普通脚本到导入这个包之后，就可以自由的导入其他加密模块，例如::
+然后把生成的辅助包拷贝到脚本所在的目录::
+
+    mv dist/pytransform_bootstrap /path/to/scripts
+
+也可以把这个包拷贝到 Python 的库目录，例如::
+
+    mv dist/pytransform_bootstrap /usr/lib/python3.5/ (For Linux)
+    mv dist/pytransform_bootstrap C:/Python35/Lib/ (For Windows)
+
+最后修改普通脚本，在其中插入一条语句::
 
     import pytransform_bootstrap
+
+这样就可以在其后导入并使用其他加密模块。
 
 .. note::
 
@@ -178,33 +191,21 @@
 运行加密脚本的单元测试
 ~~~~~~~~~~~~~~~~~~~~~~
 
-因为大部分的加密脚本都没有 :ref:`引导代码` ，所以在运行单元测试之前，
-必须首先运行引导代码。
+因为大部分的加密脚本都没有 :ref:`引导代码` ，所以在运行单元测试之前，必须首先运
+行引导代码。
 
-假设单元测试脚本为 :file:`/path/to/tests/test_foo.py` ，首先创建引导辅
-助包 :mod:`pytransform_bootstrap`::
-
-    pyarmor runtime -i
-    mv dist/pytransform_bootstrap /path/to/tests
-
-其次修改测试脚本，在导入加密脚本之前插入语句::
-
-    import pytransform_bootstrap
-
-这样就可以直接测试被加密的模块::
+假设单元测试脚本为 :file:`/path/to/tests/test_foo.py` ，那么首先参考 `在没有加密
+的脚本中运行引导代码`_ 修改测试脚本，然后就可以直接测试被加密的模块::
 
     cd /path/to/tests
     python test_foo.py
 
-还有一种方式就是直接修改系统包 :mod:`unittest` ，假设其所在的路径为
-:file:`/path/to/unittest`, 那么::
+还有一种方式就是直接修改系统包 :mod:`unittest` ，首先要把引导辅助包拷贝到 Python
+所在的库路径下面，参考 `在没有加密的脚本中运行引导代码`_
 
-    pyarmor runtime -i
-    mv dist/pytransform_bootstrap /path/to/unittest
+然后在修改 :file:`/path/to/unittest/__init__.py` ，插入语句::
 
-然后修改 :file:`/path/to/unittest/__init__.py` ，插入语句::
-
-    from . import pytransform_bootstrap
+    import pytransform_bootstrap
 
 这样，所有的单元测试脚本就都可以直接来测试加密后的模块了。如果有很多单
 元测试脚本，这种方式会更方便一些。
