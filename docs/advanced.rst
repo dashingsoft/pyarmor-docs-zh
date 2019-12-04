@@ -426,7 +426,7 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
 2. 运行下面的命令打包加密脚本::
 
-    pyarmor pack --clean --without-license -x " --exclude copy_license.py" \
+    pyarmor pack --clean --without-license \
             -e " --onefile --icon logo.ico --runtime-hook copy_license.py" foo.py
 
    选项 ``--without-license`` 告诉 :ref:`pack` 不要把加密脚本的许可文件打包进去，
@@ -456,16 +456,16 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 那么对这个文件进行少量修改之后，就可以用来直接打包加密脚本:
 
 * 增加模块 ``pytransform`` 到 `hiddenimports`
-* 增加额外的路径 ``DISTPATH/obf`` 到 `pathex` 和 `hookspath`
+* 增加额外的路径 ``DISTPATH/obf/temp`` 到 `pathex` 和 `hookspath`
 
 修改后的文件大概会是这样子的::
 
     a = Analysis(['myscript.py'],
-                 pathex=[os.path.join(DISTPATH, 'obf'), ...],
+                 pathex=[os.path.join(DISTPATH, 'obf', 'temp'), ...],
                  binaries=[],
                  datas=[],
                  hiddenimports=['pytransform', ...],
-                 hookspath=[os.path.join(DISTPATH, 'obf'), ...],
+                 hookspath=[os.path.join(DISTPATH, 'obf', 'temp'), ...],
 
 现在使用下面的方式运行命令 :ref:`pack`::
 
@@ -476,6 +476,8 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 .. note::
 
    这个功能是在 v5.8.0 新增加的
+   
+   在 v5.8.2 之前，临时的路径是 ``DISTPATH/obf`` 而不是 ``DISTPATH/obf/temp``
 
 .. _使用约束模式增加加密脚本安全性:
 
