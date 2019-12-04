@@ -166,7 +166,7 @@
 
 然后把生成的辅助包拷贝到脚本所在的目录::
 
-    mv dist/pytransform_bootstrap /path/to/scripts
+    mv dist/pytransform_bootstrap /path/to/script
 
 也可以把这个包拷贝到 Python 的库目录，例如::
 
@@ -201,7 +201,7 @@
     python test_foo.py
 
 还有一种方式就是直接修改系统包 :mod:`unittest` ，首先要把引导辅助包拷贝到 Python
-所在的库路径下面，参考 `在没有加密的脚本中运行引导代码`_
+的系统库路径下面，参考 `在没有加密的脚本中运行引导代码`_
 
 然后在修改 :file:`/path/to/unittest/__init__.py` ，插入语句::
 
