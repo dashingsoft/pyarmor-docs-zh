@@ -426,7 +426,7 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
 2. 运行下面的命令打包加密脚本::
 
-    pyarmor pack --clean --without-license \
+    pyarmor pack --clean --without-license -x " --exclude copy_license.py" \
             -e " --onefile --icon logo.ico --runtime-hook copy_license.py" foo.py
 
    选项 ``--without-license`` 告诉 :ref:`pack` 不要把加密脚本的许可文件打包进去，
@@ -476,8 +476,8 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 .. note::
 
    这个功能是在 v5.8.0 新增加的
-   
-   在 v5.8.2 之前，临时的路径是 ``DISTPATH/obf`` 而不是 ``DISTPATH/obf/temp``
+
+   在 v5.8.2 之前，额外的路径是 ``DISTPATH/obf`` 而不是 ``DISTPATH/obf/temp``
 
 .. _使用约束模式增加加密脚本安全性:
 
