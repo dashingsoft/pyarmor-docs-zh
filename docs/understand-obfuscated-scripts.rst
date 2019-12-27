@@ -78,6 +78,11 @@
     from pytransform import pyarmor_runtime
     pyarmor_runtime('/path/to/runtime')
 
+从 v5.8.7 开始，运行辅助包（模块）也可能会有个后缀，引导代码会像这样::
+
+    from pytransform_vax_000001 import pyarmor_runtime
+    pyarmor_runtime(suffix='_vax_000001')
+
 .. _运行辅助包:
 
 运行辅助包
@@ -100,7 +105,6 @@
         pytransform.key              数据文件
         license.lic                  加密脚本的许可文件
 
-
 在 v5.7.0 之前, 运行辅助包是另外一种存放形式 `运行辅助文件`
 
 .. _运行辅助文件:
@@ -115,6 +119,15 @@
     license.lic                  加密脚本的许可文件
 
 很明显，使用运行辅助包的形式使得加密后的脚本目录结构更清晰。
+
+从 v5.8.7 开始，运行辅助包（模块）也可能会有个后缀，例如::
+
+    pytransform_vax_000001/
+        __init__.py
+        ...
+
+    pytransform_vax_000001.py
+    ...
 
 .. _加密脚本的许可文件:
 

@@ -73,6 +73,7 @@ obfuscate
 --restrict <0,1,2,3,4>          设置约束模式
 --package-runtime <0,1,2,3>     如何保存运行文件的方式和如何生成引导代码
 --no-runtime                    不生成任何运行辅助文件，只加密脚本
+--enable-suffix                 生成带有后缀名称的运行辅助包
 
 **描述**
 
@@ -133,6 +134,10 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
     pytransform.key
     license.lic
 
+如果指定了选项 ``--enable-suffix`` ，那么运行辅助包（模块）的名称会包含一个后缀，
+例如， ``pytransform_xxxx`` 。这里 ``xxxx`` 是根据 PyArmor 注册码得到的具有唯一
+性的字符串。
+
 **引导代码**
 
 默认情况下，下面的 :ref:`引导代码` 会被插入到加密后的主脚本中::
@@ -148,6 +153,11 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 但是选项 ``--package-runtime`` 会影响引导代码的生成。如果它被设置为 ``2``, 那么
 :ref:`引导代码` 总是使用绝对导入的方式；如果它被设置为 ``3`` ，那么总是使用包含
 前置 ``.`` 的相对导入方式。
+
+另外如果设置了选项 ``--enable-suffix`` ，那么 :ref:`引导代码` 可能会是这样子的::
+
+    from pytransform_vax_000001 import pyarmor_runtime
+    pyarmor_runtime(suffix='vax_000001')
 
 **示例**
 
@@ -491,6 +501,7 @@ config
 --runtime-path RPATH            设置运行文件所在路径
 --plugin NAME                   设置需要插入到主脚本的代码文件，这个选项可以使用多次
 --package-runtime <0,1,2,3>     如何保存运行文件的方式和如何生成引导代码
+--enable-suffix <0,1>           是否生成带有后缀名称的运行辅助包
 
 **描述**
 
@@ -520,6 +531,8 @@ config
 关于所有支持的模式，参考 https://docs.python.org/2/distutils/sourcedist.html#commands
 
 选项 ``--plugin`` 有一个特殊的值 `clear` ，用来清除所有的插件。
+
+所有选项的作用，请参考 :ref:`工程配置文件`
 
 **示例**
 
@@ -783,6 +796,7 @@ runtime
 -i, --inside                  创建包含引导脚本的包 `pytransform_bootstrap`
 -L, --with-license FILE       使用这个文件替换默认的加密脚本许可文件
 --platform NAME               生成其他平台下的运行辅助包
+--enable-suffix               生成带有后缀名称的运行辅助包
 
 **DESCRIPTION**
 
@@ -802,7 +816,7 @@ runtime
 如果选项 ``--inside`` 被指定，那么将在输出目录使用包 ``pytransform_bootstrap``
 的形式来保存引导脚本。
 
-选项 ``--platform`` 的使用，请参考命令 `obfuscate`_
+选项 ``--platform`` 和 ``--enable-suffix`` 的使用，请参考命令 `obfuscate`_
 
 **EXAMPLES**
 

@@ -247,4 +247,16 @@
 
     关于插件的使用实例，请参考 :ref:`使用插件扩展认证方式`
 
+* enable_suffix
+
+  是否生成带有后缀名称的运行辅助包:
+
+        - 0 (默认值)
+
+        运行辅助包（模块）的名称没有后缀，固定为 ``pytransform``
+
+        - 1
+
+        运行辅助包（模块）有后缀，例如， ``pytransform_vax_00001``
+
 .. include:: _common_definitions.txt
