@@ -313,6 +313,7 @@ pack
 -s FILE                 指定 `pyinstaller` 使用的 .spec 文件
 --clean                 打包之前删除缓存的 .spec 文件
 --without-license       不要将加密脚本的许可文件打包进去
+--with-license FILE     使用指定的许可文件替换加密脚本默认的许可文件
 --debug                 不要删除打包过程生成的中间文件
 
 **描述**
@@ -379,6 +380,11 @@ pack
 * 使用高级模式加密脚本，然后打包成为一个可执行文件::
 
     pyarmor pack -e " --onefile" -x " --advanced 1" foo.py
+
+* 使用有时间限制的许可证打包一个可执行文件::
+
+    pyarmor licenses -e 2020-12-25 cy2020
+    pyarmor pack --with-license licenses/cy2020/license.lic foo.py
 
 * 如果使用了 `PyInstaller` 的选项 `-n` 改变了打包文件的名称，必须同时使用选项
   `-s`, 例如::
