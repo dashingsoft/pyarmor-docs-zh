@@ -375,17 +375,21 @@ PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有
 
 `pyarmor pack` 命令的第一步是加密所有的脚本，保存到 ``dist/obf``::
 
-    pyarmor obfuscate --output dist/obf hello.py
+    pyarmor obfuscate --output dist/obf --package-runtime 0 hello.py
 
 第二步是生成 `.spec` 文件，这是 `PyInstaller` 需要的，把加密脚本需要的运行辅助文
 件也添加到里面::
 
-    pyinstaller --add-data dist/obf/license.lic
-                --add-data dist/obf/pytransform.key
-                --add-data dist/obf/_pytransform.*
+    pyinstaller --add-data dist/obf/license.lic:. \
+                --add-data dist/obf/pytransform.key:. \
+                --add-data dist/obf/_pytransform.*:. \
                 -p dist/obf --hidden-import pytransform
                 hello.py
 
+.. _note:
+
+    在 Windows 平台下，命令行中的 ``:`` 应该替换为 ``;``
+   
 第三步是修改 `hello.spec`, 在 `Analysis` 之后插入下面的语句，主要作用是打包的时
 候使用加密后的脚本，而不是原来的脚本::
 
