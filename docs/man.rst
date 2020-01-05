@@ -530,7 +530,7 @@ config
 
 关于所有支持的模式，参考 https://docs.python.org/2/distutils/sourcedist.html#commands
 
-选项 ``--plugin`` 有一个特殊的值 `clear` ，用来清除所有的插件。
+选项 ``--plugin`` 为空字符串有特殊作用，用来清除所有的插件。
 
 所有选项的作用，请参考 :ref:`工程配置文件`
 
@@ -559,7 +559,7 @@ config
 
 * 清除所有插件::
 
-    pyarmor config --plugin clear
+    pyarmor config --plugin ''
 
 .. _build:
 
