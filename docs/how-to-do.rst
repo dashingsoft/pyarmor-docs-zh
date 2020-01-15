@@ -375,7 +375,7 @@ PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有
 
 `pyarmor pack` 命令的第一步是加密所有的脚本，保存到 ``dist/obf``::
 
-    pyarmor obfuscate --output dist/obf --package-runtime 0 hello.py
+    pyarmor obfuscate --output dist/obf --runtime-mode 0 hello.py
 
 第二步是生成 `.spec` 文件，这是 `PyInstaller` 需要的，把加密脚本需要的运行辅助文
 件也添加到里面::

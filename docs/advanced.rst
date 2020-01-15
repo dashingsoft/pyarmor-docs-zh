@@ -46,7 +46,6 @@
 
        pyarmor runtime
 
-
 .. _如何加密能和其他加密包共存的包:
 
 如何加密能和其他加密包共存的包
@@ -58,11 +57,11 @@
 如果这两个包都是被试用版加密，那么没有问题。但是如果任何一个是被注册版本的
 PyArmor 加密，那么答案是否定的。
 
-从 v5.8.7 开始，使用选项 ``--enable-suffix`` 来加密时，:ref:`运行辅助包` 的名称
-不在固定为 ``pytransform`` ，而是会有一个唯一性的后缀，这样不同的加密包就可以实
-现共存。例如::
+从 v5.9.0 开始，使用选项 ``--runtime-mode`` 来加密时，可以指定是否增加一个唯一的
+后缀到 :ref:`运行辅助包` ，这样运行辅助包的名称不在固定为 ``pytransform`` ，而是
+会有一个唯一性的后缀，不同的加密包就可以实现共存。例如::
 
-    pyarmor obfuscate --enable-suffix foo.py
+    pyarmor obfuscate --runtime-mode 3 foo.py
 
 加密后的输出目录结构如下::
 
@@ -74,24 +73,26 @@ PyArmor 加密，那么答案是否定的。
 
 其中后缀 ``_vax_000001`` 是基于 PyArmor 的注册码生成的具有唯一性的字符串。
 
-对于使用工程加密的方式，则需要使用命令 :ref:`config` 来启用 ``enable-suffix``::
+对于使用工程加密的方式，则需要使用命令 :ref:`config` 来设置::
 
-    pyarmor config --enable-suffix 1
+    pyarmor config --runtime-mode 3
     pyarmor build -B
 
 使用下面的方式可以禁用后缀模式::
 
-    pyarmor config --enable-suffix 0
+    pyarmor config --runtime-mode 1
     pyarmor build -B
 
+.. note::
+
+   在 v5.8.7 ~ v5.8.9 这三个版本中能够使用选项 ``--enable-suffix`` 来达到相同目的。
 
 .. _跨平台发布加密脚本:
 
 跨平台发布加密脚本
-------------------
+----------------
 
-因为加密脚本的运行文件中有平台相关的动态库，所以跨平台发布需要指定目标
-平台。
+因为加密脚本的运行文件中有平台相关的动态库，所以跨平台发布需要指定目标平台。
 
 首先使用命令 :ref:`download` 列出所有支持的标准平台名称::
 
@@ -104,11 +105,6 @@ PyArmor 加密，那么答案是否定的。
     pyarmor download --list windows
     pyarmor download --list windows.x86_64
 
-如果目标平台是 :ref:`预安装的动态库清单` 中的任意一个，那么可以直接使
-用，否则需要使用 :ref:`download` 指定平台名称下载对应的动态库::
-
-    pyarmor download linux.armv7
-
 然后在加密脚本的时候指定目标平台名称::
 
     pyarmor obfuscate --platform linux.armv7 foo.py
@@ -116,10 +112,36 @@ PyArmor 加密，那么答案是否定的。
     # For project
     pyarmor build --platform linux.armv7
 
+使用不同特征的动态库
+~~~~~~~~~~~~~~~~~
+
+同一个平台下面，包含多个可用的动态库，不同的动态库具备不同的特征。例如，在相同的
+平台 ``windwos.x86_64`` 下面，有两个动态库 ``windows.x86_64.0`` 和
+``windows.x86_64.7`` ，其中最后的数字表示动态库的特征:
+
+  - 0: 没有反调试、动态代码、高级模式等特征，速度最快
+  - 7: 包含反调试、动态代码、高级模式等特征，安全性最高
+
+如果不指定特征码，默认是选择安全性最高的动态库，有些不平台只支持部分特征的动态库。
+在跨平台加密的时候也可以指定平台的特征，例如::
+
+    pyarmor obfuscate --platform linux.x86_64.7 foo.py
+
+需要注意的是不同特征的动态库相互并不兼容，例如，默认情况下 Windows 平台下使用的
+是高特征的动态库，直接在 Windows 平台下面加密低特征的动态库，是无法在目标平台运
+行的。例如，下面加密后的代码是无法在 ``linux`` 平台下面运行的::
+
+    pyarmor obfuscate --platform linux.x86_64.0 foo.py
+
+必须使用环境变量 ``PYARMOR_PLATFORM`` 设置当前平台使用低特征动态库才可以。例如，
+下面的命令加密后的脚本，就可以在 ``linux`` 平台下面运行的::
+
+    PYARMOR_PLATFORM=windows.x86_64.0 pyarmor obfuscate --platform linux.x86_64.0 foo.py
+
 .. _让加密脚本可以在多个平台运行:
 
 让加密脚本可以在多个平台运行
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 从 v5.7.5 版本开始，平台名称已经标准化，所有可用名称在这里 :ref:`标准平台名称`
 ，并且支持运行加密脚本在多个平台。
@@ -136,9 +158,9 @@ PyArmor 加密，那么答案是否定的。
 也可以使用命令 :ref:`runtime` 单独生成可以运行多个平台的 `运行辅助包` ，这样就不
 需要每次加密的时候都生成这些辅助文件。例如::
 
-    pyarmor runtime --platform windows.x86_64 --platform linux.x86_64 --platform darwin.x86_64
+    pyarmor runtime --platform windows.x86_64,linux.x86_64,darwin.x86_64
     pyarmor obfuscate --no-runtime --recursive \
-                      --platform windows.x86_64 --platform linux.x86_64 --platform darwin.x86_64 \
+                      --platform windows.x86_64,linux.x86_64,darwin.x86_64 \
                       foo.py
 
 即便使用了 ``--no-runtime`` ，在加密脚本的时候也需要指定运行的平台，因为加密脚本
@@ -150,12 +172,16 @@ PyArmor 加密，那么答案是否定的。
 
 .. note::
 
-   升级 `pyarmor` 之后，下载的动态库不会自动升级。如果加密后的脚本无法
-   运行，使用命令 :ref:`download` 重新下载相应的动态库。
+   如果指定了平台的特征，例如 ``windows.x86_64.7`` ，那么需要注意的是所有的平台
+   必须具备相同的特征，不同特征的动态库是无法共存在同一个包里面的。
 
-   从 v5.7.6 开始，可以直接使用下面的命令升级已经下载的动态库::
+.. note::
+
+   如果加密后的脚本无法运行，可以尝试使用下面的命令升级已经下载的动态库::
 
        pyarmor download --update
+
+   也可以直接删除缓存的动态库目录，默认是 ``$HOME/.pyarmor/platforms``
 
 使用不同版本 Python 加密脚本
 ----------------------------
