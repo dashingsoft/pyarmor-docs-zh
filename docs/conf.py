@@ -206,6 +206,11 @@ htmlhelp_basename = 'PyArmordoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
+# -- Fix PDF builder fail issue -------------------------------------------
+# https://docs.readthedocs.io/en/stable/guides/pdf-non-ascii-languages.html
+latex_engine = 'xelatex'
+latex_use_xindy = False
+
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').
 #'papersize': 'letterpaper',
@@ -215,6 +220,7 @@ latex_elements = {
 
 # Additional stuff for the LaTeX preamble.
 #'preamble': '',
+'preamble': '\\usepackage[UTF8]{ctex}\n',
 
 # Latex figure (float) alignment
 #'figure_align': 'htbp',
@@ -247,7 +253,6 @@ latex_documents = [
 
 # If false, no module index is generated.
 #latex_domain_indices = True
-
 
 # -- Options for manual page output ---------------------------------------
 
