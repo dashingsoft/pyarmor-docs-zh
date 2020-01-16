@@ -321,7 +321,7 @@ pack
 -e, --options OPTIONS   传递额外的参数到 `PyInstaller`_
 -x, --xoptions OPTIONS  传递额外的参数到 `obfuscate`_ 去加密脚本
 -s FILE                 使用外部的 .spec 文件来打包加密脚本
---clean                 打包之前删除缓存的 .spec 文件
+--clean                 打包之前删除缓存的文件
 --without-license       不要将加密脚本的许可文件打包进去
 --with-license FILE     使用指定的许可文件替换加密脚本默认的许可文件
 --debug                 不要删除打包过程生成的中间文件
@@ -502,6 +502,7 @@ config
 --plugin NAME                   设置需要插入到主脚本的代码文件，这个选项可以使用多次
 --runtime <0,1,2,3>             保存运行文件的方式
 --bootstrap <0,1,2,3>           如何生成引导代码
+--with-license FILENAME         使用这个许可文件替换默认的脚本许可文件
 
 **描述**
 
@@ -770,8 +771,8 @@ download
     pyarmor download --list JIT
     pyarmor download --list armv7
 
-当 `pyarmor` 升级之后，已经下载的动态库不会自动更新，需要使用 ``--update`` 进行
-更新。例如::
+当 `pyarmor` 升级之后，已经下载的动态库不会自动更新，可以使用 ``--update`` 更新
+全部已经下载的动态库。例如::
 
     pyarmor download --update
 
@@ -813,7 +814,8 @@ runtime
 如果选项 ``--inside`` 被指定，那么将在输出目录使用包 ``pytransform_bootstrap``
 的形式来保存引导脚本。
 
-选项 ``--platform`` 和 ``--mode`` 的使用，请参考命令 `obfuscate`_
+选项 ``--platform`` 和 ``--mode`` 的使用，请分别参考命令 `obfuscate`_ 中的选项
+``--platform`` 和 ``--runtime``
 
 **EXAMPLES**
 

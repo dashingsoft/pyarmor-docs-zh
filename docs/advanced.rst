@@ -441,8 +441,8 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
 这样插件输出的函数就可以被脚本调用。
 
-插件对应的文件一般存放在当前目录，如果存放在其他目录的话，可以指定绝对
-路径，例如::
+插件对应的文件一般存放在当前目录，或者 ``$HOME/.pyarmor/plugins`` 。如果存放在其
+他目录的话，可以指定绝对路径，例如::
 
     pyarmor obfuscate --plugin /usr/share/pyarmor/check_ntp_time foo.py
 
