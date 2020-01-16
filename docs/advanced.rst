@@ -51,17 +51,19 @@
 如何加密能和其他加密包共存的包
 --------------------------
 
+.. note:: New in v5.8.7
+
 假设有两个包分别被两个不同的开发人员进行加密，那么这两个包能不能在同一个 Python
 解释器中运行呢？
 
 如果这两个包都是被试用版加密，那么没有问题。但是如果任何一个是被注册版本的
 PyArmor 加密，那么答案是否定的。
 
-从 v5.9.0 开始，使用选项 ``--runtime-mode`` 来加密时，可以指定是否增加一个唯一的
-后缀到 :ref:`运行辅助包` ，这样运行辅助包的名称不在固定为 ``pytransform`` ，而是
-会有一个唯一性的后缀，不同的加密包就可以实现共存。例如::
+从 v5.8.7 开始，使用选项 ``--enable-suffix`` 来加密时， :ref:`运行辅助包` 的名称
+不在固定为 ``pytransform`` ，而是会有一个唯一性的后缀，这样不同的加密包就可以实
+现共存。例如::
 
-    pyarmor obfuscate --runtime-mode 3 foo.py
+    pyarmor obfuscate --enable-suffix foo.py
 
 加密后的输出目录结构如下::
 
@@ -75,17 +77,13 @@ PyArmor 加密，那么答案是否定的。
 
 对于使用工程加密的方式，则需要使用命令 :ref:`config` 来设置::
 
-    pyarmor config --runtime-mode 3
+    pyarmor config --enable-suffix 1
     pyarmor build -B
 
 使用下面的方式可以禁用后缀模式::
 
-    pyarmor config --runtime-mode 1
+    pyarmor config --enable-suffix 0
     pyarmor build -B
-
-.. note::
-
-   在 v5.8.7 ~ v5.8.9 这三个版本中能够使用选项 ``--enable-suffix`` 来达到相同目的。
 
 .. _跨平台发布加密脚本:
 

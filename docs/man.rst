@@ -71,9 +71,10 @@ obfuscate
 --platform NAME                 指定运行加密脚本的平台
 --advanced <0,1>                使用高级模式加密脚本
 --restrict <0,1,2,3,4>          设置约束模式
---runtime <0,1,2,3>             如何保存运行文件
+--package-runtime <0,1>         是否把运行文件保存为包的形式
 --no-runtime                    不生成任何运行辅助文件，只加密脚本
 --bootstrap <0,1,2,3>           如何生成引导代码
+--enable-suffix                 生成带有后缀名称的运行辅助包
 
 **描述**
 
@@ -126,18 +127,17 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
         pytransform.key
         license.lic
 
-如果选项 ``--runtime`` 是 `3` ， 那么包的名称会是 ``pytransform_xxx`` ，这里
-``xxx`` 是根据 PyArmor 注册码得到的具有唯一性的字符串。
-
-当选项 ``--runtime`` 设置为 `0` 和 `2` 的时候，生成的运行辅助文件和加密脚本存放
-在相同的目录下面::
+只有当选项 ``--package-runtime`` 设置为 `0` 的时候，生成的运行辅助文件和加密脚本
+存放在相同的目录下面::
 
     pytransform.py
     _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
     pytransform.key
     license.lic
 
-如果选项 ``--runtime`` 是 `2` ，运行辅助模块模块的名字会是 ``pytransform_xxx.py`` 。
+如果指定了选项 ``--enable-suffix`` ，那么运行辅助包（模块）的名称会包含一个后缀，
+例如， ``pytransform_xxxx`` 。这里 ``xxxx`` 是根据 PyArmor 注册码得到的具有唯一
+性的字符串。
 
 **引导代码**
 
@@ -154,7 +154,7 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 如果选项 ``--bootstrap`` 是 ``2``, 那么 :ref:`引导代码` 总是使用绝对导入的方式；
 如果它被设置为 ``3`` ，那么总是使用包含前置 ``.`` 的相对导入方式。
 
-另外如果选项 ``--runtime`` 是 `2` 或者 `3` 的话， :ref:`引导代码` 可能会是这样子的::
+另外如果指定了选项 ``--enable-suffix`` 的话， :ref:`引导代码` 可能会是这样子的::
 
     from pytransform_vax_000001 import pyarmor_runtime
     pyarmor_runtime(suffix='vax_000001')
@@ -235,10 +235,10 @@ PyArmor 会修改主脚本，插入交叉保护代码，然后把搜索到脚本
 
     pyarmor obfuscate --restrict 4 --exclude __init__.py --recursive .
 
-* 加密一个模块，并且把运行时刻文件保存为一个单独的包::
+* 生成一个可以被其他加密模块导入的包::
 
     cd /path/to/mypkg
-    pyarmor obfuscate -r --runtime 2 --output dist/mypkg __init__.py
+    pyarmor obfuscate -r --enable-suffix --output dist/mypkg __init__.py
 
 .. _licenses:
 
@@ -333,12 +333,6 @@ pack
 ``--options`` 的值会原封不动的被传递给 `PyInstaller`_ ，但是不能传递选项
 ``--distpath`` 。
 
-.. note::
-
-   如果当前目录下有一个 `.spec` 已经存在，PyArmor 会直接使用这个文件，而不是重新
-   创建一个新的。但是如果命令行使用了选项 ``--clean`` ，那么 PyArmor 总是会调用
-   `PyInstaller`_ 去创建一个新的，同时覆盖老的。
-
 当 `pack`_ 命令失败的时候，首先要确认这个 `.spec` 文件可以直接用 `PyInstaller`_
 打包成功。例如::
 
@@ -353,6 +347,17 @@ pack
 最后 `pack`_ 再次调用 `PyInstaller`_ 使用这个打过补丁的 `.spec` 文件来创建最终的输出。
 
 更多详细说明，请参考 :ref:`如何打包加密脚本`.
+
+.. note::
+
+   从 v5.9.0 开始，也可以直接打包一个工程，只需要最后一个参数指定工程所在的路径，
+   就可以加密工程中的文件，并使用工程主脚本进行打包。例如::
+
+     pyarmor init --entry main.py
+     pyarmor pack .
+
+   首先在当前目录创建一个工程，然后直接打包该工程，使用工程的好处是可以完全定制
+   加密选项。
 
 .. important::
 
@@ -500,7 +505,7 @@ config
 --cross-protection <0,1>        是否插入交叉保护代码到主脚本
 --runtime-path RPATH            设置运行文件所在路径
 --plugin NAME                   设置需要插入到主脚本的代码文件，这个选项可以使用多次
---runtime <0,1,2,3>             保存运行文件的方式
+--package-runtime <0,1>         是否保存运行文件为包的形式
 --bootstrap <0,1,2,3>           如何生成引导代码
 --with-license FILENAME         使用这个许可文件替换默认的脚本许可文件
 
@@ -580,7 +585,7 @@ build
 -n, --no-runtime                只加密脚本，不要生成运行依赖文件
 -O, --output OUTPUT             输出路径，如果设置，那么工程属性里面的输出路径就无效
 --platform NAME                 指定加密脚本的运行平台，仅用于跨平台发布
---runtime <0,1,2,3>             保存运行文件的方式
+--package-runtime <0,1>         是否保存运行文件为包的形式
 
 **描述**
 
@@ -595,7 +600,7 @@ build
 选择 ``--no-runtime`` 可能会影响 :ref:`引导代码` 的生成方式，设置之后在主脚本中
 引导代码总是会使用绝对导入的方式。
 
-选项 ``--platform`` 和 ``--runtime`` 的使用，请参考命令 `obfuscate`_
+选项 ``--platform`` 和 ``--package-runtime`` 的使用，请参考命令 `obfuscate`_
 
 **示例**
 
@@ -794,7 +799,7 @@ runtime
 -i, --inside                  创建包含引导脚本的包 `pytransform_bootstrap`
 -L, --with-license FILE       使用这个文件替换默认的加密脚本许可文件
 --platform NAME               生成其他平台下的运行辅助包
---mode <0,1,2,3>              保存运行文件的方式
+--enable-suffix               生成带有后缀名称的运行辅助包
 
 **DESCRIPTION**
 
@@ -814,8 +819,7 @@ runtime
 如果选项 ``--inside`` 被指定，那么将在输出目录使用包 ``pytransform_bootstrap``
 的形式来保存引导脚本。
 
-选项 ``--platform`` 和 ``--mode`` 的使用，请分别参考命令 `obfuscate`_ 中的选项
-``--platform`` 和 ``--runtime``
+选项 ``--platform`` 和 ``--enable-suffix`` 的使用，请参考命令 `obfuscate`_
 
 **EXAMPLES**
 
