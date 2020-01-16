@@ -406,6 +406,12 @@ pack
 
     pyarmor pack --name my_app foo.py
 
+* 使用高级模式加密脚本并打包一个工程::
+
+    pyarmor init --entry main.py
+    pyarmor config --advanced 1
+    pyarmor pack .
+
 .. _hdinfo:
 
 hdinfo
