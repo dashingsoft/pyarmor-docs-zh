@@ -492,11 +492,11 @@ config
 --manifest TEMPLATE             过滤脚本的模板语句
 --entry SCRIPT                  工程主脚本，可以多个，使用逗号分开
 --is-package <0,1>              管理的脚本是一个 Python 包类型
---restrict-mode <0,1,2,3,4>     设置约束模式
+--restrict <0,1,2,3,4>          设置约束模式
 --obf-mod <0,1>                 是否加密整个模块对象
 --obf-code <0,1,2>              是否加密每一个函数
 --wrap-mode <0,1>               是否启用包裹模式加密函数
---advanced-mode <0,1>           是否使用高级模式加密脚本
+--advanced <0,1>                是否使用高级模式加密脚本
 --cross-protection <0,1>        是否插入交叉保护代码到主脚本
 --runtime-path RPATH            设置运行文件所在路径
 --plugin NAME                   设置需要插入到主脚本的代码文件，这个选项可以使用多次
