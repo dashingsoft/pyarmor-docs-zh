@@ -255,7 +255,7 @@ licenses
 
 **选项**
 
--O OUTPUT, --output OUTPUT            输出路径
+-O OUTPUT, --output OUTPUT            输出路径，可以为 stdout 或者 stderr
 -e YYYY-MM-DD, --expired YYYY-MM-DD   加密脚本的有效期
 -d SN, --bind-disk SN                 绑定加密脚本到硬盘序列号
 -4 IPV4, --bind-ipv4 IPV4             绑定加密脚本到指定IP地址
@@ -297,6 +297,10 @@ licenses
     from pytransfrom import get_license_info
     info = get_license_info()
     print(info['DATA'])
+
+也可以输出生成的许可文件到标准输出，例如::
+
+    pyarmor --silent licenses --output stdout -x "2019-05-20" reg-0001
 
 .. note::
 
