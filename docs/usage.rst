@@ -65,7 +65,7 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
 注意的是 :ref:`运行辅助包` 必须也拷贝到运行环境，否则无法运行加密脚本。
 
 :ref:`运行辅助包` 并不是必须和加密脚本在一起，也可以拷贝到运行环境的任
-意的 Python 路径下面，只有能正确 `import pytransform` 就可以。
+意的 Python 路径下面，只要能正确 `import pytransform` 就可以。
 
 关于加密脚本的安全性的说明，参考 :ref:`PyArmor 的安全性`
 
@@ -98,7 +98,7 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
 
     cp licenses/code-001/license.lic dist/pytransform/
 
-这样，加密脚本在2009年1月1日之后就无法在运行了。
+这样，加密脚本在2019年1月1日之后就无法在运行了。
 
 如果想绑定加密脚本到固定机器上，首先在该机器上面运行下面的命令获取硬件信息::
 
