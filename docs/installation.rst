@@ -10,6 +10,9 @@
 
     pip install --upgrade pyarmor
 
+另外还有一个图形界面的包，需要的话可以安装::
+
+    pip install pyarmor-webui
 
 一旦成功安装，就可以直接运行命令 ``pyarmor`` ，例如::
 
@@ -26,11 +29,11 @@
 
 * ``pyarmor`` 这是主要的工具，参考 :ref:`使用 PyArmor`.
 
-* ``pyarmor-webui`` 用来打开一个简单的网页版的可视化界面
+* ``pyarmor-webui`` 用来打开网页版的可视化界面
 
 如果没有使用 `pip` 进行安装，上述命令无法使用，需要运行 `Python` 来执行
 相应的脚本。 ``pyarmor`` 等价于执行 :file:`{pyarmor-folder}/pyarmor.py`,
-``pyarmor-webui`` 等价于执行 :file:`{pyarmor-folder}/pyarmor-webui.py`
+``pyarmor-webui`` 等价于执行 :file:`{pyarmor-folder}/pyarmor/webui/server.py`
 
 完全卸载
 --------
