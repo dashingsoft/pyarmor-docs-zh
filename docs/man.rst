@@ -16,7 +16,6 @@ PyArmor 是一个命令行工具，用来加密脚本，绑定加密脚本到固
     licenses     为加密脚本生成新的许可文件
     pack         打包加密脚本
     hdinfo       获取硬件信息
-    runtime      创建运行辅助包
 
 和工程相关的命令::
 
@@ -32,6 +31,7 @@ PyArmor 是一个命令行工具，用来加密脚本，绑定加密脚本到固
     benchmark    测试加密脚本的性能
     register     生效注册文件
     download     查看和下载预编译的动态库
+    runtime      创建运行辅助包
 
 可以运行 `pyarmor <command> -h` 查看各个命令的详细使用方法。
 
