@@ -449,9 +449,9 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
     export PYARMOR_PLUGIN=/usr/share/pyarmor/plugins
     pyarmor obfuscate --plugin check_ntp_time foo.py
 
-最后为加密脚本生成许可文件，使用 `-x` 把自定义的有效期存储到认证文件::
+最后为加密脚本生成许可文件，使用 `--bind-data` 把自定义的有效期存储到认证文件::
 
-    pyarmor licenses -x 20190501 MYPRODUCT-0001
+    pyarmor licenses --bind-data 20190501 MYPRODUCT-0001
     cp licenses/MYPRODUCT-0001/license.lic dist/
 
 .. note::
