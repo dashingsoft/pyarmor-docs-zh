@@ -120,7 +120,7 @@ ERROR: Unsupport platform linux.xxx
 
    从 v5.7.9 开始，在 linux/x86_64 平台（例如，CentOS6）已经不需要这个补丁就可以工作了。
 
-   也可以在使用下面的命令在其他平台加密脚本::
+   在交叉发布的时候，可以在使用下面的命令加密脚本来解决这个问题::
 
      pyarmor obfuscate --platform centos6.x86_64 foo.py
 
