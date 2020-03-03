@@ -12,7 +12,10 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 其他平台的动态库并没有随着安装包发布，参考 `其他平台的动态库清单`_ 。
 在这些平台下面， `pyarmor` 会搜索 ``~/.pyarmor/platforms/SYSTEM/ARCH``
 ，其中 ``SYSTEM.ARCH`` 是一个 `标准平台名称`_ 。如果还没有下载，那么会
-从远程服务器下载相应平台的动态库。
+自动从远程服务器下载相应平台的动态库。
+
+最新的全部支持的动态库详细列表可以参考
+https://github.com/dashingsoft/pyarmor-core/blob/master/platforms/index.json
 
 在同一个平台下面可能有多个可用的动态库，分别具备不同的特征，一般在标准
 平台名称的后面增加一个数字来标识，组成一个唯一的平台 ID。例如，具备全
