@@ -252,6 +252,36 @@ The `license.lic` generated doesn't work
 通用的解决方法就是重新把加密脚本生成一下，然后在重新生成许可文件。
 
 
+导入 OpenCV 失败： `NEON - NOT AVAILABLE`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+在一些 Raspberry Pi 平台上面，在加密脚本中导入 OpenCV 会报错::
+
+    ************************************************** ****************
+    * FATAL ERROR: *
+    * This OpenCV build doesn't support current CPU / HW configuration *
+    * *
+    * Use OPENCV_DUMP_CONFIG = 1 environment variable for details *
+    ************************************************** ****************
+
+    Required baseline features:
+    NEON - NOT AVAILABLE
+    terminate called after throwing an instance of 'cv :: Exception'
+      what (): OpenCV (3.4.6) /home/pi/opencv-python/opencv/modules/core/src/system.cpp:538: error:
+    (-215: Assertion failed) Missing support for required CPU baseline features. Check OpenCV build
+    configuration and required CPU / HW setup. in function 'initialize'
+
+目前的解决方案是设置环境变量 `PYARMOR_PLATFORM=linux.armv7.0` ，例如::
+
+    PYARMOR_PLATFORM=linux.armv7.0 pyarmor obfuscate foo.py
+    PYARMOR_PLATFORM=linux.armv7.0 pyarmor build
+
+或者::
+
+   export PYARMOR_PLATFORM=linux.armv7.0
+   pyarmor obfuscate foo.py
+   pyarmor build
+
+
 打包加密问题
 ------------
 
