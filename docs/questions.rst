@@ -270,16 +270,22 @@ The `license.lic` generated doesn't work
     (-215: Assertion failed) Missing support for required CPU baseline features. Check OpenCV build
     configuration and required CPU / HW setup. in function 'initialize'
 
-目前的解决方案是设置环境变量 `PYARMOR_PLATFORM=linux.armv7.0` ，例如::
+当前的解决方案使用选项 ``--platform=linux.armv7.0`` ，例如::
+
+    pyarmor obfuscate --platform linux.armv7.0 foo.py
+    pyarmor build --platform linux.armv7.0
+    pyarmor runtime --platform linux.armv7.0
+
+另一种解决方案是设置环境变量 `PYARMOR_PLATFORM=linux.armv7.0` ，例如::
 
     PYARMOR_PLATFORM=linux.armv7.0 pyarmor obfuscate foo.py
     PYARMOR_PLATFORM=linux.armv7.0 pyarmor build
 
-或者::
+    或者，
 
-   export PYARMOR_PLATFORM=linux.armv7.0
-   pyarmor obfuscate foo.py
-   pyarmor build
+    export PYARMOR_PLATFORM=linux.armv7.0
+    pyarmor obfuscate foo.py
+    pyarmor build
 
 
 打包加密问题
