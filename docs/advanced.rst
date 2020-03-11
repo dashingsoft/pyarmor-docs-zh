@@ -707,6 +707,18 @@ Python 应用程序，例如::
 从 v5.7.3 开始，如果以这种方式调用 `pyarmor` 出现了错误，会抛出异常，而不是调用
 `sys.exit` 直接退出。
 
+运行加密脚本的时候周期性的检查许可文件
+---------------------------------
+
+通常情况下只有运行脚本开始启动的时候会检查许可文件，一旦运行之后，就不在检查。从
+v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性（每小时一次）检查的功能。
+所需要做的是使用选项 ``--enable-period-mode`` 生成一个新的许可文件，覆盖默认的许
+可文件即可。例如::
+
+    pyarmor obfuscate foo.py
+    pyarmor licenses --enable-period-mode code-001
+    cp licenses/code-001/license.lic ./dist
+
 .. 定制保护代码:
 
 .. include:: _common_definitions.txt
