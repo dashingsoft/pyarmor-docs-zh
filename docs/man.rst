@@ -265,6 +265,8 @@ licenses
 -4 IPV4, --bind-ipv4 IPV4             绑定加密脚本到指定IP地址
 -m MACADDR, --bind-mac MACADDR        绑定加密脚本到网卡的Mac地址
 -x, --bind-data DATA                  用于扩展认证类型的时候传递认证数据信息
+--disable-restrict-mode               运行加密脚本时候禁用所有约束模式
+--enable-period-mode                  运行加密脚本时候周期性（每小时）检查许可文件
 
 **描述**
 
