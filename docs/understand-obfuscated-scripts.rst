@@ -194,6 +194,8 @@
 * 使用 ``sys.settrace``, ``sys.setprofile``, ``threading.settrace`` 和
   ``threading.setprofile`` 设置的回调函数在加密脚本中将被忽略
 
+* 模块 ``inspect`` 的部分功能可能失效
+
 * 代码块的属性 ``__file__`` 在加密脚本是 ``<frozen name>`` ，而不是文件
   名称，在异常信息中会看到文件名的显示是 ``<frozen name>``
 
