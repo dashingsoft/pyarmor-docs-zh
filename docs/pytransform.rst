@@ -60,10 +60,12 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
    * HT_HARDDISK 返回硬盘序列号
    * HT_IFMAC 返回网卡Mac地址
+   * HT_IPV4 返回网卡的IPv4地址
+   * HT_DOMAIN 返回目标设备的域名
 
    无法获取硬件信息会抛出异常 :exc:`Exception`
 
-.. attribute:: HT_HARDDISK, HT_IFMAC
+.. attribute:: HT_HARDDISK, HT_IFMAC, HT_IPV4, HT_DOMAIN
 
    调用  :func:`get_hd_info` 时候 `hdtype` 的可以使用的常量
 
