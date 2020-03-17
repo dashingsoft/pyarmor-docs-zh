@@ -70,7 +70,8 @@ jondy.zhao@gmail.com
 * linux.aarch32
 * linux.aarch64
 * android.aarch64
-* android.armv7 (从 5.9.3 开始支持）  
+* android.armv7 (从 5.9.3 开始支持）
+* uclibc.armv7 (从 5.9.4 开始支持）
 * linux.ppc64
 * darwin.arm64
 * freebsd.x86_64
@@ -221,3 +222,9 @@ jondy.zhao@gmail.com
      -
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/android.armv7.0/_pytransform.so>`_
      - Build by android-ndk-r20/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-android21-clang
+   * - uclibc.armv7
+     - Linux
+     - armv7l
+     -
+     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/uclibc.armv7.0/_pytransform.so>`_
+     - Build by armv7-buildroot-uclibceabihf-gcc
