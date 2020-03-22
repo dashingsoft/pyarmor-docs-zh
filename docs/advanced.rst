@@ -701,10 +701,10 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
 因为加密后的脚本也是正常的 Python 脚本（外加运行辅助包 ``pyrtransform`` ），所以
 完全可以使用 Nuitka 对加密脚本进行处理，就像正常的 Python 脚本一样。但是加密脚本
-的时候，需要指定额外的选项 ``--restrict 0`` 和 ``--disable-cross-protection`` ，
+的时候，需要指定额外的选项 ``--restrict 0`` 和 ``--no-cross-protection`` ，
 否则加密脚本可能会报错。例如，首先加密脚本 ``foo.py``::
 
-    pyarmor obfuscate --restrict 0 --disable-cross-protection foo.py
+    pyarmor obfuscate --restrict 0 --no-cross-protection foo.py
 
 然后使用 Nuitka 把加密后的脚本转换成为可执行的文件::
 
