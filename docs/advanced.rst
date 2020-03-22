@@ -696,6 +696,48 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
     pyarmor licenses --enable-period-mode code-001
     cp licenses/code-001/license.lic ./dist
 
+使用 Nuitka 处理加密脚本
+----------------------
+
+因为加密后的脚本也是正常的 Python 脚本（外加运行辅助包 ``pyrtransform`` ），所以
+完全可以使用 Nuitka 对加密脚本进行处理，就像正常的 Python 脚本一样。但是加密脚本
+的时候，需要指定额外的选项 ``--restrict 0`` 和 ``--disable-cross-protection`` ，
+否则加密脚本可能会报错。例如，首先加密脚本 ``foo.py``::
+
+    pyarmor obfuscate --restrict 0 --disable-cross-protection foo.py
+
+然后使用 Nuitka 把加密后的脚本转换成为可执行的文件::
+
+    cd ./dist
+    python -m nuitka --include-package pytransform foo.py
+    ./foo.bin
+
+需要注意的是一旦脚本被加密之后，Nuitka 无法自动找到该模块导入的所有相关模块（包）。
+为了解决这个问题，首先调用 Nuitka 转换没有加密的脚本，生成相应的 ``.pyi`` 文件，
+然后把这个文件拷贝到加密脚本所在的目录，这样就可以正常的转换加密后的脚本。例如::
+
+    # 生成 "mymodule.pyi"
+    python -m nuitka --module mymodule.py
+
+    pyarmor obfuscate --restrict 0 --no-bootstrap mymodule.py
+    cp mymodule.pyi dist/
+
+    cd dist/
+    python -m nuitka --module mymodule.py
+
+但是这种方式可能基本没有使用 Nuitka 转换脚本的功能，所以在性能上提升应该不会太明显。
+
+.. note::
+
+   只有 Nuitka 还连接到 CPython 的库来执行转换后的 C 代码，pyarmor 就应该可以和
+   Nuitak 共存。但是 Nuitka 的官网上有一段对未来特征的描述::
+
+       It will do this - where possible - without accessing libpython but in C
+       with its native data types.
+
+   也就是说，Nuitka 将来要不需要 CPython 库，那么在这种情况下， pyarmor 加密的后
+   的脚本将无法在 Nuitka 下面执行。
+
 .. 定制保护代码:
 
 .. include:: _common_definitions.txt
