@@ -730,7 +730,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 .. note::
 
    只有 Nuitka 还连接到 CPython 的库来执行转换后的 C 代码，pyarmor 就应该可以和
-   Nuitak 共存。但是 Nuitka 的官网上有一段对未来特征的描述::
+   Nuitka 共存。但是 Nuitka 的官网上有一段对未来特征的描述::
 
        It will do this - where possible - without accessing libpython but in C
        with its native data types.
