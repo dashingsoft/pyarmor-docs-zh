@@ -92,13 +92,13 @@ PyArmor 是怎么加密 Python 源代码呢？
 如何处理插件
 ------------
 
-在 PyArmor 中插件主要用于在加密的过程中向脚本中注入代码，例如::
+在 PyArmor 中插件主要用于在加密的过程中向脚本中注入代码，例如，使用插件在加密脚
+本中检查网络时间::
 
-    pyarmor obfuscate --plugin check_multi_mac --plugin @assert_armored foo.py
+    pyarmor obfuscate --plugin check_ntp_time foo.py
 
-也可以指定插件所在路径，例如::
-
-    pyarmor obfuscate --plugin /path/to/check_ntp_time foo.py
+那么为什么不直接把这些代码插入到脚本中呢？主要是因为插件中用到的一些函数必须在加
+密脚本中才有效，例如，读取加密脚本中许可文件的有效期等。
 
 每一个插件对应一个 Python 的脚本文件， PyArmor 搜索插件的顺序:
 

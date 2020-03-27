@@ -375,89 +375,36 @@ https://docs.python.org/3/library/site.html
 PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网络时间而不是本地时间来校
 验有效期。
 
-首先定义插件文件 :file:`check_ntp_time.py`:
+首先定义插件文件 `check_ntp_time.py
+<https://github.com/dashingsoft/pyarmor/blob/master/plugins/check_ntp_time.py>`_
+插件的主函数是 `check_ntp_time` ，另外一个重要的函数是 `_get_license_data` ，用
+来从加密脚本的 `license.lic` 许可文件中获取自定义的数据信息。
 
-.. code-block:: python
-
-    # 当调试这个脚本的时候（还没有加密），需要把下面的两行代码前面的注释
-    # 去掉，否则在无法使用 pytransform 模块的功能
-    # from pytransform import pyarmor_init
-    # pyarmor_init()
-
-    from ntplib import NTPClient
-    from time import mktime, strptime
-    import sys
-
-    def get_license_data():
-        from ctypes import py_object, PYFUNCTYPE
-        from pytransform import _pytransform
-        prototype = PYFUNCTYPE(py_object)
-        dlfunc = prototype(('get_registration_code', _pytransform))
-        rcode = dlfunc().decode()
-        index = rcode.find(';', rcode.find('*CODE:'))
-        return rcode[index+1:]
-
-    def check_expired():
-        NTP_SERVER = 'europe.pool.ntp.org'
-        EXPIRED_DATE = get_license_data()
-        c = NTPClient()
-        response = c.request(NTP_SERVER, version=3)
-        if response.tx_time > mktime(strptime(EXPIRED_DATE, '%Y%m%d')):
-            sys.exit(1)
-
-然后在主脚本 :file:`foo.py` 插入下列两行注释::
-
-    ...
+然后在主脚本 `foo.py
+<https://github.com/dashingsoft/pyarmor/blob/master/plugins/foo.py>`_ 插入下列两
+行注释::
 
     # {PyArmor Plugins}
-
-    ...
-
-    def main():
-        # PyArmor Plugin: check_expired()
-
-    if __name__ == '__main__':
-        logging.basicConfig(level=logging.INFO)
-        main()
+    # PyArmor Plugin: check_ntp_time()
 
 执行下面的命令进行加密::
 
     pyarmor obfuscate --plugin check_ntp_time foo.py
 
-这样，在加密之前，文件 :file:`check_ntp_time.py` 会插入到第一个注释标
-志行之后::
-
-    # {PyArmor Plugins}
-
-    ... check_ntp_time.py 的文件内容
-
-同时，第二个注释标志行的注释标志会被删除，替换后的内容为::
-
-    def main():
-        # PyArmor Plugin: check_expired()
-        check_expired()
-
-这样插件输出的函数就可以被脚本调用。
-
-插件对应的文件一般存放在当前目录，或者 ``$HOME/.pyarmor/plugins`` 。如果存放在其
-他目录的话，可以指定绝对路径，例如::
+插件对应的文件一般存放在当前目录，如果存放在其他目录的话，可以指定绝对路径，例如::
 
     pyarmor obfuscate --plugin /usr/share/pyarmor/check_ntp_time foo.py
 
-也可以设置环境变量 `PYARMOR_PLUGIN` ，例如::
+最后为加密脚本生成许可文件，使用 ``-x`` 把自定义的有效期存储到认证文件，这样就可
+以通过插件脚本中定义的函数 `_get_license_data` 来读取这个数据::
 
-    export PYARMOR_PLUGIN=/usr/share/pyarmor/plugins
-    pyarmor obfuscate --plugin check_ntp_time foo.py
+    pyarmor licenses -x 20190501 rcode-001
+    cp licenses/rcode-001/license.lic dist/
 
-最后为加密脚本生成许可文件，使用 `--bind-data` 把自定义的有效期存储到认证文件::
+更多插件实例，参考 https://github.com/dashingsoft/pyarmor/tree/master/plugins
 
-    pyarmor licenses --bind-data 20190501 MYPRODUCT-0001
-    cp licenses/MYPRODUCT-0001/license.lic dist/
+关于插件的工作原理，参考 :ref:`如何处理插件`
 
-.. note::
-
-   为了提高安全性，可以要把 `ntplib.py` 内容全部拷贝过来，这样就不需要
-   从外部导入 `NTPClient`
 
 .. _打包加密脚本成为一个单独的可执行文件:
 
