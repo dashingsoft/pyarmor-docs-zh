@@ -104,7 +104,7 @@ PyArmor 是怎么加密 Python 源代码呢？
 
 * 如果插件指定了绝对路径，那么直接在这个路径下面查找对应的 `.py` 文件
 * 如果是相对路径，首先在当前目录下面找对应的 `.py` 文件，其次是
-  ``$HOME/.pyarmor/plugins`` ，最后到环境变量 ``PYARMOR_PLGUIN`` 指定的路径下查找
+  ``$HOME/.pyarmor/plugins`` ，最后是 ``{pyarmor_folder}/plugins``
 * 没有找到就抛出异常
 
 如果在加密脚本的时候指定了插件，PyArmor 在加密脚本之前，会逐行扫描源代码的注释去
