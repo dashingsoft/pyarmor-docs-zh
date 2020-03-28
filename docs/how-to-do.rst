@@ -272,10 +272,7 @@ PyArmor 就不会在主脚本中插入保护代码。
 
 * 使用 `ctypes` 来装载动态库 `_pytransform`
 * 检查授权文件 `dist/license.lic` 是否合法
-* 添加三个内置函数到模块 `builtins`
-    - `__pyarmor__`
-    - `__armor_enter__`
-    - `__armor_exit__`
+* 添加三个内置函数到模块 `builtins`: `__pyarmor__` ， `__armor_enter__` ， `__armor_exit__`
 
 最主要的是添加了三个内置函数，这样 `dist/foo.py` 的下一行代码才不会出错，
 因为它马上要调用函数 `__pyarmor__`::

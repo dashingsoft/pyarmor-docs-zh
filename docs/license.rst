@@ -46,7 +46,7 @@ b. 企业用户许可，适用于产品的所有权为法人（公司）所有�
 
 https://pyarmor.dashingsoft.com/cart/order.html
 
-如果需要发票，请通过下面的连接购买许可
+使用信用卡或者 PayPal 通过下面的连接购买许可
 
 https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 

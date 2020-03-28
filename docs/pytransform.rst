@@ -55,8 +55,8 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
 .. function:: get_hd_info(hdtype, size=256)
 
-   得到当前机器的硬件信息，通过 *hdtype* 传入需要获取的硬件类型，可用的
-   值如下：
+   得到当前机器的硬件信息，通过 *hdtype* 传入需要获取的硬件类型（整型），可用的
+   常量如下：
 
    * HT_HARDDISK 返回硬盘序列号
    * HT_IFMAC 返回网卡Mac地址
