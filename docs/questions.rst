@@ -11,7 +11,14 @@
 * 使用调试选项 ``-d`` 运行，显示执行堆栈和更多的调试信息。例如::
 
       pyarmor -d obfuscate --recurisve foo.py
+
+* 设置 Python 的调试标志，例如::
+
       PYTHONDEBUG=y pyarmor -d obfuscate --recurisve foo.py
+
+      # In Windows
+      set PYTHONDEBUG=y
+      pyarmor obfuscate --recurisve foo.py
 
 对于运行加密脚本出现的问题:
 
@@ -19,6 +26,10 @@
 
       python -d obf_foo.py
       PYTHONDEBUG=y python obf_foo.py
+
+      # In Windows
+      set PYTHONDEBUG=y
+      python obf_foo.py
 
 在任何情况下，打开 Python 的调试开关之后，会在当前目录创建一个日志文件
 `pytransform.log` ，里面包含有帮助定位问题的更多信息。
@@ -169,6 +180,23 @@ Error: Try to run unauthorized function
 试图使用没有授权的功能。出现这个问题一般是当前目录下面存在
 `license.lic`或者 `pytransform.key` 而导致的认证问题，解决方案是一是删
 除这些不必要文件，或者升级到 PyArmor 5.4.5 以后的版本。
+
+
+为什么插件不工作
+~~~~~~~~~~~~~~
+
+如果加密脚本的时候指定了插件，但是插件却没有像期望的那样工作。那么首先
+要检查插件是否被正确注入到主脚本中。例如::
+
+  # In linux
+  export PYTHONDEBUG=y
+  # In Windows
+  set PYTHONDEBUG=y
+
+  pyarmor obfuscate --exact --plugin check_ntp_time foo.py
+
+这样会生成一个调试文件 ``foo.py.pyarmor-patched`` ，检查这个文件，确保
+插件脚本被正确的插入到里面，并且能被调用。
 
 
 运行加密脚本的问题
