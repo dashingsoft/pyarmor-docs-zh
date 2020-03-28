@@ -25,9 +25,9 @@
 加密打包脚本如下::
 
     cd /path/to/src
-    pyarmor pack -e " --name easy-han --hidden-import comtypes --add-data 'config.json;.'" \
-                 -x " --exclude vnev --exclude tests" -s "easy-han.spec" main.py
-
+    pyarmor pack --name easy-han \
+                 -e " --hidden-import comtypes --add-data 'config.json;.'" \
+                 -x " --exclude vnev --exclude tests" main.py
     cd dist/easy-han
     ./easy-han
 

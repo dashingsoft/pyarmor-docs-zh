@@ -126,15 +126,20 @@ PyArmor 加密，那么答案是否定的。
     pyarmor obfuscate --platform linux.x86_64.7 foo.py
 
 需要注意的是不同特征的动态库相互并不兼容，例如，默认情况下 Windows 平台下使用的
-是高特征的动态库，直接在 Windows 平台下面加密低特征的动态库，是无法在目标平台运
-行的。例如，下面加密后的代码是无法在 ``linux`` 平台下面运行的::
+是高特征的动态库，当使用下面的命令在 Windows 平台下面加密低特征的动态库的时候::
 
-    pyarmor obfuscate --platform linux.x86_64.0 foo.py
+    pyarmor obfuscate --platform linux.arm.0 foo.py
 
-必须使用环境变量 ``PYARMOR_PLATFORM`` 设置当前平台使用低特征动态库才可以。例如，
-下面的命令加密后的脚本，就可以在 ``linux`` 平台下面运行的::
+在控制台能看到 PyArmor 会自动重启，使用低特征的库加载之后才对脚本进行加密。
 
-    PYARMOR_PLATFORM=windows.x86_64.0 pyarmor obfuscate --platform linux.x86_64.0 foo.py
+也可以使用环境变量 ``PYARMOR_PLATFORM`` 直接设置当前平台使用的动态库的特征。例如::
+
+    PYARMOR_PLATFORM=windows.x86_64.0 pyarmor obfuscate --platform linux.arm.0 foo.py
+
+    # 在 Windows 平台
+    set PYARMOR_PLATFORM=windows.x86_64.0
+    pyarmor obfuscate --platform linux.arm.0 foo.py
+    set PYARMOR_PLATFORM=
 
 .. _让加密脚本可以在多个平台运行:
 
