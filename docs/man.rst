@@ -339,8 +339,9 @@ pack
 **描述**
 
 命令 `pack`_ 首先调用 `PyInstaller`_ 生成一个和主脚本同名的 `.spec` 文件，选项
-``--options`` 的值会原封不动的被传递给 `PyInstaller`_ ，但是不能传递选项
-``--distpath`` 。
+``--options`` 的值会原封不动的被传递给 `PyInstaller`_ ，但是不能传递这些选项
+``-y`` ， ``--noconfirm`` ， ``-n`` ， ``--name`` ， ``--distpath`` ，因为这些会
+被 `pack`_ 命令内部使用。
 
 当 `pack`_ 命令失败的时候，首先要确认这个 `.spec` 文件可以直接用 `PyInstaller`_
 打包成功。例如::
@@ -348,7 +349,10 @@ pack
     pyinstaller myscript.spec
 
 接下来 `pack`_ 会递归加密主脚本所在目录下面的所有 `.py` 文件。它使用选项 ``-r``,
-``--output`` 以及 ``--xoptions`` 中指定的额外选项来调用 `pyarmor obfuscate`
+``--output`` 以及 ``--xoptions`` 中指定的额外选项来调用 `pyarmor obfuscate` 。当
+打包一个工程的时候，也就是说最后一个参数是工程路径而不是脚本的时候， `pack`_ 会
+直接调用命令 `build`_ 加密脚本，选项 ``--xoptions`` 的值会被忽略，这时候加密选项
+的控制是通过配置工程来实现。
 
 然后 `pack`_ 会基于原来的 `.spec` 文件，创建一个新的 `.spec` 文件，增加一些语句
 用于把原来的脚本替换为加密后的脚本。
@@ -356,6 +360,59 @@ pack
 最后 `pack`_ 再次调用 `PyInstaller`_ 使用这个打过补丁的 `.spec` 文件来创建最终的输出。
 
 更多详细说明，请参考 :ref:`如何打包加密脚本`.
+
+如果需要更改最后打包输出的可执行文件的名称，直接设置选项 ``--name`` ，不要使用
+``-e`` 把这个选项传递给 `PyInstaller`_ ，因为这个选项需要一些特殊处理。
+
+如果已经有一个能够打包的 `.spec` 文件，只需要通过选项 ``-s`` 指定这个文件，例如::
+
+    pyarmor pack -s foo.spec foo.py
+
+主脚本也必须在命令行列出，否则 `pack`_ 就不知道那些脚本需要加密，并且选项 ``-e``
+也会被忽略。
+
+如果设置了选项 ``--debug`` ，例如::
+
+    pyarmor pack --debug foo.py
+
+下面这些中间文件会被保留下来，正常情况下它们在打包成功之后会被删除::
+
+    foo-patched.spec
+    dist/obf/temp/hook-pytransform.py
+    dist/obf/*.py                       # All the obfuscated scripts
+
+这个打过补丁的 `foo-patched.spec` 可以被 `PyInstaller`_ 直接用来打包加密脚本，例
+如::
+
+    pyinstaller -y --clean foo-patched.spec
+
+当有些脚本被修改之后，只需要重新加密，然后调用这个命令快速打包，而加密命令
+`obfuscate`_ 需要的全部选项可以从命令 `pack`_ 在控制台的输出中找到。
+
+如果有很多数据文件或者隐含模块，最后的方式是使用 Hook 文件来自动发现它们。首先创
+建一个文件 ``hook-sys.py``::
+
+    from PyInstaller.utils.hooks import collect_data_files, collect_all
+    datas, binaries, hiddenimports = collect_all('my_module_name')
+    datas += collect_data_files('submodule')
+    hiddenimports += ['_gdbm', 'socket', 'h5py.defs']
+    datas += [ ('/usr/share/icons/education_*.png', 'icons') ]
+
+接下来使用额外选项 ``--additional-hooks-dir .`` 来调用 `pack`_ ，告诉
+`_PyInstaller`_ 在当前路径下面搜索 Hook 脚本::
+
+    pyarmor pack -e " --additional-hooks-dir ." foo.py
+
+更多关于 Hook 脚本的信息，参考
+https://pyinstaller.readthedocs.io/en/stable/hooks.html#understanding-pyinstaller-hooks
+
+最后，如果打包过程出现问题，打开 Python 调试标志来输出详细的错误信息::
+
+    PYTHONDEBUG=y pyarmor pack ...
+
+    # In windows
+    set PYTHONDEBUG=y
+    pyarmor pack ...
 
 **示例**
 
