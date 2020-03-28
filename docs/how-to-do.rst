@@ -103,8 +103,10 @@ PyArmor 是怎么加密 Python 源代码呢？
 每一个插件对应一个 Python 的脚本文件， PyArmor 搜索插件的顺序:
 
 * 如果插件指定了绝对路径，那么直接在这个路径下面查找对应的 `.py` 文件
-* 如果是相对路径，首先在当前目录下面找对应的 `.py` 文件，其次是
-  ``$HOME/.pyarmor/plugins`` ，最后是 ``{pyarmor_folder}/plugins``
+* 如果是相对路径，那么查找顺序是
+    - 当前目录
+    - ``$HOME/.pyarmor/plugins``
+    - ``{pyarmor_folder}/plugins``
 * 没有找到就抛出异常
 
 如果在加密脚本的时候指定了插件，PyArmor 在加密脚本之前，会逐行扫描源代码的注释去
@@ -133,7 +135,7 @@ PyArmor 是怎么加密 Python 源代码呢？
 对于第一种格式 ``# PyArmor Plugin:`` ，PyArmor 只是简单的把匹配的部分和紧随其后
 的一个空格删除，只剩下后半部分的代码。例如::
 
-    # PyArmor Plugin: check_ntp_time() ==> check_ntp_time()
+    # PyArmor Plugin: check_ntp_time()             ==> check_ntp_time()
 
 只要在命令行指定了插件，这种替换就会发生，它的后半部分可以是任何有效的 Python 语
 句，例如::
@@ -147,7 +149,7 @@ PyArmor 是怎么加密 Python 源代码呢？
 一个调用桩会被替换，第二个不会被替换::
 
     # pyarmor_check_multi_mac() ==> check_multi_mac()
-    # pyarmor_check_code() ==> # pyarmor_check_code()
+    # pyarmor_check_code()      ==> # pyarmor_check_code()
 
 第三种格式和第二种类似，只是 ``# @pyarmor_`` 会被替换成为 ``@`` ，主要用于注入修
 饰函数。例如::
@@ -271,9 +273,9 @@ PyArmor 就不会在主脚本中插入保护代码。
 * 使用 `ctypes` 来装载动态库 `_pytransform`
 * 检查授权文件 `dist/license.lic` 是否合法
 * 添加三个内置函数到模块 `builtins`
-  * `__pyarmor__`
-  * `__armor_enter__`
-  * `__armor_exit__`
+    - `__pyarmor__`
+    - `__armor_enter__`
+    - `__armor_exit__`
 
 最主要的是添加了三个内置函数，这样 `dist/foo.py` 的下一行代码才不会出错，
 因为它马上要调用函数 `__pyarmor__`::
