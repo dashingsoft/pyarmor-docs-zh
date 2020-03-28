@@ -47,10 +47,6 @@
     cd /path/to/src
     pyarmor obfuscate --exclude vnev --exclude tests main.py
 
-使用 ``-s`` 参数主要是因为 PyInstaller 使用 ``--name`` 修改了安装包的名称，默认
-生成的 `.spec` 文件不再是主脚本名称，所以要告诉 :ref:`pack` 命令修改后的 `.spec`
-文件名称。
-
 .. important::
 
    命令 `pack` 会自动加密脚本，所以不要使用该命令去打包加密后的脚本，
