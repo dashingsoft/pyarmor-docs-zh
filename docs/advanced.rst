@@ -467,7 +467,11 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
     pyinstaller myscript.spec
 
-那么对这个文件进行少量修改之后，就可以用来直接打包加密脚本:
+那么，现在就可以直接使用 :ref:`pack` 加密并打包 `myscript.py`::
+
+    pyarmor pack -s myscript.spec myscript.py
+
+在 v5.9.6 之前，还需要对这个文件进行少量修改:
 
 * 增加模块 ``pytransform`` 到 `hiddenimports`
 * 增加额外的路径 ``DISTPATH/obf/temp`` 到 `pathex` 和 `hookspath`
@@ -480,12 +484,7 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
                  datas=[],
                  hiddenimports=['pytransform', ...],
                  hookspath=[os.path.join(DISTPATH, 'obf', 'temp'), ...],
-
-现在使用下面的方式运行命令 :ref:`pack`::
-
-    pyarmor pack -s myscript.spec myscript.py
-
-这样就可以加密并打包 `myscript.py` 。
+                 ...
 
 .. note::
 
