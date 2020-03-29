@@ -371,7 +371,8 @@ pack
 
     foo.spec
     foo-patched.spec
-    dist/obf/temp/hook-pytransform.py
+    dist/obf/temp/hook-sys.py           # Since v5.9.6
+    dist/obf/temp/hook-pytransform.py   # Before v5.9.6
     dist/obf/*.py                       # All the obfuscated scripts
 
 这个打过补丁的 `foo-patched.spec` 可以被 `PyInstaller`_ 直接用来打包加密脚本，例
