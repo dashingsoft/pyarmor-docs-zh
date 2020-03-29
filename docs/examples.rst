@@ -45,7 +45,7 @@
 项可以正常加密脚本::
 
     cd /path/to/src
-    pyarmor obfuscate --exclude vnev --exclude tests main.py
+    pyarmor obfuscate -r --exclude vnev --exclude tests main.py
 
 .. important::
 
