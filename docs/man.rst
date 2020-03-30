@@ -347,15 +347,18 @@ pack
 ``--noconfirm`` ， ``-n`` ， ``--name`` ， ``--distpath`` ， ``--specpath`` ，因
 为这些会被 `pack`_ 命令内部使用。
 
-当 `pack`_ 命令失败的时候，首先要确认脚本文件可以直接用 `PyInstaller`_ 打包成功。
+当 `pack`_ 命令失败的时候，首先要确认脚本文件可以直接用 `PyInstaller`_ 打包成功，例如::
+
+    pyinstaller foo.py
+
 通常情况下，只要 `PyInstaller`_ 能打包成功，然后额外的参数通过 ``-e`` 传递过去，
 命令 `pack`_ 也不会有问题。
 
 接下来 `pack`_ 会递归加密主脚本所在目录下面的所有 `.py` 文件。它会使用 ``-x`` 中
-指定的额外选项来调用命令 `obfuscate`_ ，需要注意的是不可以在 ``-x`` 传入选项
-``-r`` ， ``--output`` ， ``--package-runtime`` 等，这些会被 `pack`_ 内部使用。
-当打包一个工程的时候，`pack`_ 会直接调用命令 `build`_ 加密工程，选项 ``-x`` 的值
-会被忽略，这时候加密选项的控制是通过配置工程来实现。
+指定的额外选项来调用命令 `obfuscate`_ ，但是不可以在 ``-x`` 传入选项 ``-r`` ，
+``--output`` ， ``--package-runtime`` 等，这些会被 `pack`_ 内部使用。当打包一个
+工程的时候， `pack`_ 会直接调用命令 `build`_ 加密工程，选项 ``-x`` 的值会被忽略，
+这时候加密选项的控制是通过配置工程来实现。
 
 然后 `pack`_ 会基于原来的 `.spec` 文件，创建一个新的 `.spec` 文件，增加一些语句
 用于把原来的脚本替换为加密后的脚本。
@@ -390,7 +393,7 @@ pack
 
     pyarmor pack -s foo.spec foo.py
 
-主脚本（这里是 `foo.py`) 需要在命令行列出，否则`pack`_ 就不知道那些脚本需要加密，
+主脚本（这里是 `foo.py`) 需要在命令行列出，否则 `pack`_ 就不知道那些脚本需要加密，
 详细说明请参考 :ref:`使用定制的 .spec 文件打包加密脚本` 。
 
 如果有很多数据文件或者隐含模块，最后的方式是使用 Hook 文件来自动发现它们。首先创
@@ -403,7 +406,7 @@ pack
     datas += [ ('/usr/share/icons/education_*.png', 'icons') ]
 
 接下来使用额外选项 ``--additional-hooks-dir .`` 来调用 `pack`_ ，告诉
-`_PyInstaller`_ 在当前路径下面搜索 Hook 脚本::
+`PyInstaller`_ 在当前路径下面搜索 Hook 脚本::
 
     pyarmor pack -e " --additional-hooks-dir ." foo.py
 
