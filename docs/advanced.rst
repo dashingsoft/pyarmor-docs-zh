@@ -471,7 +471,26 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
     pyarmor pack -s myscript.spec myscript.py
 
-在 v5.9.6 之前，还需要对这个文件进行少量修改:
+如果打包的时候出现下面的错误::
+
+    Unsupport .spec file, no XXX found
+
+那么请检查 `.spec` 文件，确保下列两行在文件中存在（没有缩进）::
+
+    a = Analysis(...
+    pyz = PYZ(...
+
+并且在创建 `Analysis` 对象的时候下列三个命名参数也存在，例如::
+
+    a = Analysis(
+        ...
+        pathex=...,
+        hiddenimports=...,
+        hookspath=...,
+        ...
+    )
+
+PyArmor 会自动把需要的相关参数添加到这些行。但是在 v5.9.6 之前，需要人工进行添加:
 
 * 增加模块 ``pytransform`` 到 `hiddenimports`
 * 增加额外的路径 ``DISTPATH/obf/temp`` 到 `pathex` 和 `hookspath`
