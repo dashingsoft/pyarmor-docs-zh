@@ -74,6 +74,7 @@ https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 2. 拷贝解压后的 "license.lic" 到 PyArmor 的安装目录下面
 3. 拷贝解压后的 ".pyarmor_capsule.zip" 到用户的 HOME 目录
 
-**软件注册码永久有效，可以一直使用，但是不能转接或者租用.**
+**软件注册码永久有效，可以一直使用，但是不能转接或者租用。另外，注册码也有可能在
+ 某一个新版本无法使用，虽然到现在为止，注册码可以应用于所有版本。**
 
 .. include:: _common_definitions.txt
