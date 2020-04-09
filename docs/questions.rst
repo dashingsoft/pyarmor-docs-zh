@@ -25,11 +25,6 @@
 * 尝试打开 Python 的调试选项查看更多的错误信息。例如::
 
       python -d obf_foo.py
-      PYTHONDEBUG=y python obf_foo.py
-
-      # In Windows
-      set PYTHONDEBUG=y
-      python obf_foo.py
 
 在任何情况下，打开 Python 的调试开关之后，会在当前目录创建一个日志文件
 `pytransform.log` ，里面包含有帮助定位问题的更多信息。

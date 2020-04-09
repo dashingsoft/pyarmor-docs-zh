@@ -413,13 +413,9 @@ pack
 更多关于 Hook 脚本的信息，参考
 https://pyinstaller.readthedocs.io/en/stable/hooks.html#understanding-pyinstaller-hooks
 
-最后，如果打包过程出现问题，打开 Python 调试标志来输出详细的错误信息::
+最后，如果打包过程出现问题，打开 PyArmor 调试标志来输出详细的错误信息::
 
-    PYTHONDEBUG=y pyarmor pack ...
-
-    # In windows
-    set PYTHONDEBUG=y
-    pyarmor pack ...
+    pyarmor -d pack ...
 
 **示例**
 
