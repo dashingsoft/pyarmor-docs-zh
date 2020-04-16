@@ -1,4 +1,4 @@
-.. _使用工程:
+.. _using project:
 
 使用工程
 ========
@@ -11,6 +11,8 @@
 * 定制选择工程包含的脚本文件，而不是一个目录下全部脚本
 * 设置加密模式和定制保护代码
 * 更加方便的管理加密脚本
+
+.. _managing obfuscated scripts with project:
 
 使用工程管理加密脚本
 --------------------
@@ -42,10 +44,12 @@
 
 使用命令 :ref:`config` 来修改工程的配置。
 
-例如，设置工程的 ``--manifest`` 选项，把 :file:`dist`, :file:`test` 目
-录下面的所有 `.py` 排除在工程之外::
+设置工程的 ``--manifest`` 选项，可以完全定制工程中所需要加密的脚本，例
+如，把 :file:`dist`, :file:`test` 目录下面的所有 `.py` 排除在工程之外::
 
     pyarmor config --manifest "include *.py, prune dist, prune test"
+
+详细内容请参考后面的章节 `工程配置文件`_ 中关于属性 `manifest` 的说明。
 
 默认情况下 :ref:`build` 仅仅加密修改过的文件，强制加密所有脚本::
 
@@ -56,7 +60,7 @@
     cd dist
     python pybench.py
 
-.. _使用不同加密模式:
+.. _obfuscating scripts with different modes:
 
 使用不同加密模式
 ----------------
@@ -69,7 +73,40 @@
 
     pyarmor build -B
 
-.. _工程配置文件:
+.. _obfuscating some special scripts with child project:
+
+使用子工程加密需要特殊处理的脚本
+--------------------------------
+
+假定在一个工程中大部分的脚本使用约束模式 3 进行加密，但是很少的几个需要使用约束
+模式 2 进行加密，那么这时候使用子工程就很方便。
+
+1. 首先在脚本所在路径创建一个工程::
+
+    cd /path/to/src
+    pyarmor init --entry foo.py
+    pyarmor config --restrict 3
+
+2. 接着拷贝工程配置文件为子工程 `.pyarmor_config-1`::
+
+    cp .pyarmor_config .pyarmor_config-1
+
+3. 然后配置这个子工程，没有主脚本，包含几个特殊脚本，并且约束模式为 2::
+
+    pyarmor config --entry "" \
+                   --manifest "include a.py other/path/sa*.py" \
+                   --restrict 2 \
+                   .pyarmor_config-1
+
+4. 最后依次加密工程和子工程::
+
+    pyarmor build -B
+    pyarmor build --no-runtime -B .pyarmor_config-1
+
+一般情况下我们并不需要在工程中把子工程中的脚本排除在外，因为加密子工程之后，输出
+目录相同，原来的加密脚本会被新的加密脚本覆盖。
+
+.. _project configuration file:
 
 工程配置文件
 ------------
