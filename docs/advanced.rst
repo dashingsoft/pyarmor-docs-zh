@@ -1,7 +1,9 @@
-.. _高级用法:
+.. _advanced topics:
 
 高级用法
 ========
+
+.. _obfuscating many packages:
 
 加密和使用多个包
 ----------------
@@ -46,7 +48,7 @@
 
        pyarmor runtime
 
-.. _如何加密能和其他加密包共存的包:
+.. _solve conflicts with other obfuscated libraries:
 
 如何加密能和其他加密包共存的包
 --------------------------
@@ -85,7 +87,7 @@ PyArmor 加密，那么答案是否定的。
     pyarmor config --enable-suffix 0
     pyarmor build -B
 
-.. _跨平台发布加密脚本:
+.. _distributing obfuscated scripts to other platform:
 
 跨平台发布加密脚本
 ----------------
@@ -109,6 +111,8 @@ PyArmor 加密，那么答案是否定的。
 
     # For project
     pyarmor build --platform linux.armv7
+
+.. _obfuscating scripts with different features:
 
 使用不同特征的动态库
 ~~~~~~~~~~~~~~~~~
@@ -141,7 +145,7 @@ PyArmor 加密，那么答案是否定的。
     pyarmor obfuscate --platform linux.arm.0 foo.py
     set PYARMOR_PLATFORM=
 
-.. _让加密脚本可以在多个平台运行:
+.. _running obfuscated scripts in multiple platforms:
 
 让加密脚本可以在多个平台运行
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -186,6 +190,8 @@ PyArmor 加密，那么答案是否定的。
 
    也可以直接删除缓存的动态库目录，默认是 ``$HOME/.pyarmor/platforms``
 
+.. _obfuscating scripts by other python version:
+
 使用不同版本 Python 加密脚本
 ----------------------------
 
@@ -217,7 +223,7 @@ PyArmor 加密，那么答案是否定的。
 
     C:\Python36\python C:\Python27\Lib\site-packages\pyarmor\pyarmor.py %*
 
-.. _在没有加密的脚本中运行引导代码:
+.. _run bootstrap code in plain scripts:
 
 在没有加密的脚本中运行引导代码
 ------------------------------
@@ -255,6 +261,8 @@ PyArmor 加密，那么答案是否定的。
 
 下面是一个实际的例子，运行加密脚本的单元测试用例。
 
+.. _run unittest of obfuscated scripts:
+
 运行加密脚本的单元测试
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -278,6 +286,8 @@ PyArmor 加密，那么答案是否定的。
 
 这样，所有的单元测试脚本就都可以直接来测试加密后的模块了。如果有很多单
 元测试脚本，这种方式会更方便一些。
+
+.. _let python interpreter recognize obfuscated scripts automatically:
 
 让 Python 自动识别加密脚本
 --------------------------
@@ -336,6 +346,8 @@ https://docs.python.org/3/library/site.html
 
     在 v5.7.0 之前，需要根据 :ref:`运行辅助文件` 人工创建引导辅助包
 
+.. _obfuscating python scripts in different modes:
+
 使用不同的模式来加密脚本
 ------------------------
 
@@ -372,7 +384,7 @@ https://docs.python.org/3/library/site.html
     pyarmor config --obf-mod=1 --obf-code=1 --wrap-mode=0
     pyarmor build
 
-.. _使用插件扩展认证方式:
+.. _using plugin to extend license type:
 
 使用插件扩展认证方式
 --------------------
@@ -410,8 +422,7 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
 关于插件的工作原理，参考 :ref:`如何处理插件`
 
-
-.. _打包加密脚本成为一个单独的可执行文件:
+.. _bundle obfuscated scripts to one executable file:
 
 打包加密脚本成为一个单独的可执行文件
 ------------------------------------
@@ -458,7 +469,7 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
 4. 这时候在双击运行 :file:`dist/foo.exe` ，在 2020-01-01 之前应该就可以正常运行
 
-.. _使用定制的 .spec 文件打包加密脚本:
+.. _bundle obfuscated scripts with customized spec file:
 
 使用定制的 .spec 文件打包加密脚本
 ---------------------------------
@@ -512,6 +523,8 @@ PyArmor 会自动把需要的相关参数添加到这些行。但是在 v5.9.6 �
 
    在 v5.8.2 之前，额外的路径是 ``DISTPATH/obf`` 而不是 ``DISTPATH/obf/temp``
 
+.. _improving the security by restrict mode:
+
 .. _使用约束模式增加加密脚本安全性:
 
 使用约束模式增加加密脚本安全性
@@ -546,6 +559,8 @@ Python 应用程序，例如::
             --exclude __init__.py --exclude exported_func.py .
 
 关于约束模式的详细说明，请参考 :ref:`约束模式`
+
+.. _checking imported function is obfuscated:
 
 检查被调用的函数是否经过加密
 ----------------------------
@@ -633,6 +648,7 @@ Python 应用程序，例如::
 
        # @pyarmor_assert_armored(foo.connect, foo.connect2)
 
+.. _call pyarmor from python script:
 
 在 Python 脚本内部调用 `pyarmor`
 --------------------------------
@@ -655,6 +671,8 @@ Python 应用程序，例如::
 从 v5.7.3 开始，如果以这种方式调用 `pyarmor` 出现了错误，会抛出异常，而不是调用
 `sys.exit` 直接退出。
 
+.. _check license periodly when the obfuscated script is running:
+
 运行加密脚本的时候周期性的检查许可文件
 ---------------------------------
 
@@ -666,6 +684,8 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
     pyarmor obfuscate foo.py
     pyarmor licenses --enable-period-mode code-001
     cp licenses/code-001/license.lic ./dist
+
+.. _work with nuitka:
 
 使用 Nuitka 处理加密脚本
 ----------------------
