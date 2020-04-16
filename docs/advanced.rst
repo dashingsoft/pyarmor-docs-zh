@@ -50,6 +50,8 @@
 
 .. _solve conflicts with other obfuscated libraries:
 
+.. _如何加密能和其他加密包共存的包:
+
 如何加密能和其他加密包共存的包
 --------------------------
 
@@ -88,6 +90,8 @@ PyArmor 加密，那么答案是否定的。
     pyarmor build -B
 
 .. _distributing obfuscated scripts to other platform:
+
+.. _跨平台发布加密脚本:
 
 跨平台发布加密脚本
 ----------------
@@ -146,6 +150,8 @@ PyArmor 加密，那么答案是否定的。
     set PYARMOR_PLATFORM=
 
 .. _running obfuscated scripts in multiple platforms:
+
+.. _让加密脚本可以在多个平台运行:
 
 让加密脚本可以在多个平台运行
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -224,6 +230,8 @@ PyArmor 加密，那么答案是否定的。
     C:\Python36\python C:\Python27\Lib\site-packages\pyarmor\pyarmor.py %*
 
 .. _run bootstrap code in plain scripts:
+
+.. _在没有加密的脚本中运行引导代码:
 
 在没有加密的脚本中运行引导代码
 ------------------------------
@@ -386,6 +394,8 @@ https://docs.python.org/3/library/site.html
 
 .. _using plugin to extend license type:
 
+.. _使用插件扩展认证方式:
+
 使用插件扩展认证方式
 --------------------
 
@@ -423,6 +433,8 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 关于插件的工作原理，参考 :ref:`如何处理插件`
 
 .. _bundle obfuscated scripts to one executable file:
+
+.. _打包加密脚本成为一个单独的可执行文件:
 
 打包加密脚本成为一个单独的可执行文件
 ------------------------------------
@@ -470,6 +482,8 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 4. 这时候在双击运行 :file:`dist/foo.exe` ，在 2020-01-01 之前应该就可以正常运行
 
 .. _bundle obfuscated scripts with customized spec file:
+
+.. _使用定制的 .spec 文件打包加密脚本:
 
 使用定制的 .spec 文件打包加密脚本
 ---------------------------------
