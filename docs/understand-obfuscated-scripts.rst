@@ -1,7 +1,9 @@
-.. _了解加密脚本:
+.. _understanding obfuscated scripts:
 
 了解加密脚本
 ============
+
+.. _global capsule:
 
 .. _全局密钥箱:
 
@@ -48,6 +50,8 @@
     pyarmor_runtime()
     __pyarmor__(__name__, __file__, b'\x0a\x02...')
 
+.. _entry script:
+
 .. _主脚本:
 
 主脚本
@@ -56,6 +60,8 @@
 在 PyArmor 中，主脚本并不一定是启动脚本，而是在运行 Python 解释器之后，第一个被
 执行（导入）的加密脚本。例如，如果只有一个 Python 包的被加密，那么这个包的
 `__init__.py` 就是主脚本。
+
+.. _bootstrap code:
 
 .. _引导代码:
 
@@ -83,6 +89,8 @@
     from pytransform_vax_000001 import pyarmor_runtime
     pyarmor_runtime(suffix='_vax_000001')
 
+.. _runtime package:
+
 .. _运行辅助包:
 
 运行辅助包
@@ -107,6 +115,8 @@
 
 在 v5.7.0 之前, 运行辅助包是另外一种存放形式 `运行辅助文件`
 
+.. _runtime files:
+
 .. _运行辅助文件:
 
 运行辅助文件
@@ -129,6 +139,8 @@
     pytransform_vax_000001.py
     ...
 
+.. _the license file for obfuscated script:
+
 .. _加密脚本的许可文件:
 
 加密脚本的许可文件
@@ -146,6 +158,8 @@
 
     PyArmor 的安装目录下面也有一个 `license.lic` ，这个文件主要是设置 PyArmor 自
     身的许可，这个许可是由我来发布的，：）
+
+.. _key points to use obfuscated scripts:
 
 使用加密脚本的基本原则
 ----------------------
@@ -175,6 +189,8 @@
   本会报错。
 
 更多详细的信息，可以参考 :ref:`如何加密脚本` 和 :ref:`如何运行加密脚本`
+
+.. _the differences of obfuscated scripts:
 
 .. _加密脚本和原脚本的区别:
 
