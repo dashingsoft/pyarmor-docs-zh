@@ -701,7 +701,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
 .. _work with nuitka:
 
-使用 Nuitka 处理加密脚本
+使用 Nuitka 发布加密脚本
 ----------------------
 
 因为加密后的脚本也是正常的 Python 脚本（外加运行辅助包 ``pyrtransform`` ），所以
@@ -742,6 +742,67 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
    也就是说，Nuitka 将来要不需要 CPython 库，那么在这种情况下， pyarmor 加密的后
    的脚本将无法在 Nuitka 下面执行。
+
+
+.. _work with cython:
+
+使用 Cython 发布加密脚本
+------------------------
+
+下面是一个简单的例子，来说明如何把一个脚本 :file:`foo.py` 使用 `PyArmor`_ 进行加
+密，然后在使用 `Cython`_ 把它转换成为扩展模块，脚本的内容如下::
+
+    print('Hello Cython')
+
+首先加密脚本，使用了一些额外的选项，这些选项的作用可参考命令 :ref:`obfuscate` 中
+的说明，加密后的脚本和运行辅助文件存放在目录 :file:`dist` 下面::
+
+    pyarmor obfuscate --package-runtime 0 --no-cross-protection --restrict 0 foo.py
+
+接下来使用 `cythonize` 把 `foo.py` 和 `pytransform.py` 转换成为 ``.c`` 文件::
+
+    cd dist
+    cythonize -3 -k --lenient foo.py pytransform.py
+
+注意需要使用选项 ``-k`` 和 ``--lenient`` ，否则会报错::
+
+    undeclared name not builtin: __pyarmor__
+
+然后把 `foo.c` and `pytransform.c` 编译成为扩展模块::
+
+    gcc -shared $(python-config --cflags) $(python-config --ldflags) \
+         -o foo$(python-config --extension-suffix) foo.c
+
+    gcc -shared $(python-config --cflags) $(python-config --ldflags) \
+        -o pytransform$(python-config --extension-suffix) pytransform.c
+
+最后测试一下这些扩展模块，把所以 `.py` 文件删除了，然后在执行导入命令::
+
+    mv foo.py pytransform.py /tmp
+    python -c 'import foo'
+
+像预想的那样会在控制台打印出 `Hello Cython`
+
+.. _work with pyupdater:
+
+使用 PyUpdater 发布加密脚本
+---------------------------
+
+`PyArmor`_ 可以使用下面的方式和 `PyUpdater`_ 一起工作。假设脚本为 `foo.py`::
+
+1. 首先使用 `PyUpdater`_ 生成 `foo.spec`
+
+2. 其次使用 `PyArmor`_ 生成 `foo-patched.spec` ，选项 ``--debug`` 可以保留这个中
+   间文件在命令执行完成之后不被删除::
+
+    pyarmor pack --debug -s foo.spec foo.py
+
+然后 `PyUpdater`_ 就可以使用这个 `foo-patched.spec` 进行构建。
+
+当脚本修改之后，只需要使用命令 :ref:`obfuscate` 重新加密脚本，加密脚本需要的全部
+选项可以在上面 :ref:`pack` 命令执行后的输出中找到。
+
+更多信息可以查看命令 :ref:`pack` 和 `使用定制的 .spec 文件打包加密脚本`_
 
 .. 定制保护代码:
 
