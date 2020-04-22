@@ -734,14 +734,14 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
 .. note::
 
-   只有 Nuitka 还连接到 CPython 的库来执行转换后的 C 代码，pyarmor 就应该可以和
+   只要 Nuitka 还连接到 CPython 的库来执行转换后的 C 代码，pyarmor 就应该可以和
    Nuitka 共存。但是 Nuitka 的官网上有一段对未来特征的描述::
 
        It will do this - where possible - without accessing libpython but in C
        with its native data types.
 
-   也就是说，Nuitka 将来要不需要 CPython 库，那么在这种情况下， pyarmor 加密的后
-   的脚本将无法在 Nuitka 下面执行。
+   也就是说，Nuitka 将来不需要 CPython 库，那么在这种情况下， pyarmor 加密的后的
+   脚本将无法在 Nuitka 下面执行。
 
 
 .. _work with cython:
@@ -768,7 +768,8 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
     undeclared name not builtin: __pyarmor__
 
-然后把 `foo.c` and `pytransform.c` 编译成为扩展模块::
+然后把 `foo.c` and `pytransform.c` 编译成为扩展模块，在 MacOS 平台下，直接执行下
+面的命令就可以；如果是 Linux p平台，需要把额外的编译选项 ``-fPIC`` 加入到命令行::
 
     gcc -shared $(python-config --cflags) $(python-config --ldflags) \
          -o foo$(python-config --extension-suffix) foo.c
@@ -776,7 +777,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
     gcc -shared $(python-config --cflags) $(python-config --ldflags) \
         -o pytransform$(python-config --extension-suffix) pytransform.c
 
-最后测试一下这些扩展模块，把所以 `.py` 文件删除了，然后在执行导入命令::
+最后测试一下这些扩展模块，把所有 `.py` 文件删除了，然后导入加密后的脚本::
 
     mv foo.py pytransform.py /tmp
     python -c 'import foo'
