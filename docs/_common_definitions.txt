@@ -8,7 +8,9 @@
 .. _issue: https://github.com/dashingsoft/pyarmor/issues/
 .. _pypi: https://pypi.python.org/pypi/pyarmor/
 
-.. _PyInstaller: http://www.pyinstaller.org/
+.. _PyInstaller: https://www.pyinstaller.org/
+.. _Cython: https://cython.org/
+.. _PyUpdater: https://www.pyupdater.org/
 .. _pip: http://www.pip-installer.org/
 .. _ASProtect: http://www.aspack.com/
 .. _VMProtect: https://vmpsoft.com/
