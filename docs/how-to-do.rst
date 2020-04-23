@@ -138,12 +138,18 @@ PyArmor 是怎么加密 Python 源代码呢？
 可以有任意多个。
 
 第一种格式又称为 `内联调用桩` ，PyArmor 只是简单的把匹配的部分和紧随其后的一个空
-格删除，只剩下后半部分的代码。例如::
+格删除，只剩下后半部分的代码。例如，在脚本 ``foo.py`` 有下列内联调用桩::
+    # PyArmor Plugin: check_ntp_time()
+    # PyArmor Plugin: print('This is plugin code')
+    # PyArmor Plugin: if sys.flags.debug:
+    # PyArmor Plugin:     check_something():
 
-    # PyArmor Plugin: check_ntp_time()             ==> check_ntp_time()
-    # PyArmor Plugin: print('This is plugin code') ==> print('This is plugin code')
-    # PyArmor Plugin: if sys.flags.debug:          ==> if sys.flags.debug:
-    # PyArmor Plugin:     check_something():       ==>     check_something()
+在加密后的脚本中 ``dist/foo.py`` ，它们将被替换为::
+
+    check_ntp_time()
+    print('This is plugin code')
+    if sys.flags.debug:
+        check_something()
 
 只要在命令行指定了插件，这种替换就会发生。如果没有外部的插件脚本，可以在命令行使
 用特殊的插件名称 ``on`` 来生效内联插件桩，例如::
@@ -159,16 +165,26 @@ PyArmor 是怎么加密 Python 源代码呢？
 ``check_ntp_time()`` ，但是第二个条件调用桩则不会被替换，还保留原来的注释前缀，
 因为它调用的函数 ``check_multi_mac`` 在命令行中没有对应的插件::
 
-    # pyarmor_check_ntp_time()      ==>   check_ntp_time()
-    # pyarmor_check_multi_mac()     ==>   # pyarmor_check_multi_mac()
+    # pyarmor_check_ntp_time()
+    # pyarmor_check_multi_mac()
+
+    ==>
+
+    check_ntp_time()
+    # pyarmor_check_multi_mac()
 
 第三种格式和第二种类似，只是把注释前缀替换成为 ``@`` ，主要用于注入修饰函数。例
 如::
 
-    # @pyarmor_assert_obfuscated(foo.connect) ==> @assert_obfuscated(foo.connect)
-    def login(user, name):                        def login(user, name):
-        foo.connect(user, name)                       foo.connect(user, name)
-        ...                                           ...
+    # @pyarmor_assert_obfuscated(foo.connect)
+    def login(user, name):
+        foo.connect(user, name)
+
+    ==>
+
+    @assert_obfuscated(foo.connect)
+    def login(user, name):
+        foo.connect(user, name)
 
 如果在指定插件名称的时候使用了前缀 ``@`` ，则插件脚本只有在被使用到的情况下，才
 会被注入加密脚本中；如果没有被用到，则会被忽略。例如::
@@ -179,8 +195,10 @@ PyArmor 是怎么加密 Python 源代码呢？
 
     # pyarmor_check_ntp_time()
 
-如果脚本中只是使用内联调用桩来调用插件函数 ``check_ntp_time`` ，而没有相应的条件
-调用桩，加密的时候插件脚本都不会被注入到加密脚本中。
+而如果脚本中使用的是下面的内联调用桩，那么插件脚本不会被注入，执行的时候会报错，
+找不到函数 ``check_ntp_time``::
+
+    # PyArmor Plugin: check_ntp_time()
 
 .. _special handling of entry script:
 
