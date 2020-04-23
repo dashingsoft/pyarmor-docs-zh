@@ -27,7 +27,7 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
 输出目录 :file:`dist` 包含运行加密脚本所需要的全部文件::
 
     dist/
-        myscript.py        
+        myscript.py
         pytransform
             __init__.py
             _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
@@ -118,7 +118,7 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
 .. note::
 
    在 v5.7.0 之前，默认许可文件 ``license.lic`` 没有在 ``dist/pytransform`` ，而是在 ``dist``
-    
+
 扩展其他认证方式
 ----------------
 
