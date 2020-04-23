@@ -588,7 +588,8 @@ Python 应用程序，例如::
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 虽然 `PyArmor` 自身提供了交叉保护功能来保护动态库，但是还可以增加自己的私有检查
-点，例如再次检查动态库的修改时间，在脚本 ``foo.py`` 中增加下面的注释
+点。下面这个例子使用内联插件来再次检查动态库的修改时间，首先在 ``main.py`` 中增
+加下面的注释
 
 .. code:: python
 
@@ -597,9 +598,9 @@ Python 应用程序，例如::
   # PyArmor Plugin: if not os.stat( libname ).st_mtime_ns == 102839284238:
   # PyArmor Plugin:     raise RuntimeError('Invalid Library')
 
-然后调用下面的加密命令::
+然后调用下面的加密命令来启用这个内联插件::
 
-  pyarmor obfuscate --plugin on foo.py
+  pyarmor obfuscate --plugin on main.py
 
 .. _checking imported function is obfuscated:
 
