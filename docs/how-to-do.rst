@@ -155,7 +155,7 @@ PyArmor 是怎么加密 Python 源代码呢？
 
     pyarmor obfuscate --plugin check_ntp_time foo.py
 
-而在 ``foo.py`` 中，下面的第一个条件调用桩会生效，会被替换成为函数调用的有效语句
+而在 ``foo.py`` 中，下面的第一个条件调用桩会生效，会被替换成为有效的函数调用语句
 ``check_ntp_time()`` ，但是第二个条件调用桩则不会被替换，还保留原来的注释前缀，
 因为它调用的函数 ``check_multi_mac`` 在命令行中没有对应的插件::
 
@@ -166,6 +166,9 @@ PyArmor 是怎么加密 Python 源代码呢？
 如::
 
     # @pyarmor_assert_obfuscated(foo.connect) ==> @assert_obfuscated(foo.connect)
+    def login(user, name):                        def login(user, name):
+        foo.connect(user, name)                       foo.connect(user, name)
+        ...                                           ...
 
 如果在指定插件名称的时候使用了前缀 ``@`` ，则插件脚本只有在被使用到的情况下，才
 会被注入加密脚本中；如果没有被用到，则会被忽略。例如::
