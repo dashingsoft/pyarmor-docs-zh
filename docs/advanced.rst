@@ -574,6 +574,8 @@ Python 应用程序，例如::
 
 关于约束模式的详细说明，请参考 :ref:`约束模式`
 
+.. _使用插件来进一步提高安全性:
+
 使用插件来进一步提高安全性
 --------------------------
 
@@ -601,6 +603,15 @@ Python 应用程序，例如::
 然后调用下面的加密命令来启用这个内联插件::
 
   pyarmor obfuscate --plugin on main.py
+
+这样，加密脚本在运行的时候就会首先运行下面的插件代码
+
+.. code:: python
+
+  import os
+  libname = os.path.join( os.path.dirname( __file__ ), '_pytransform.so' )
+  if not os.stat( libname ).st_mtime_ns == 102839284238:
+      raise RuntimeError('Invalid Library')
 
 .. _checking imported function is obfuscated:
 
