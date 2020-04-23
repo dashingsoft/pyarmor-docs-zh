@@ -574,35 +574,77 @@ Python 应用程序，例如::
 
 关于约束模式的详细说明，请参考 :ref:`约束模式`
 
+使用插件来进一步提高安全性
+--------------------------
+
+使用插件可以自由的加入自己的私有检查代码到被加密后的脚本，但是又不影响原来脚本的
+执行。因为这些代码一般情况下在没有加密的脚本中是无法正常运行的，如果直接把这些代
+码写到脚本里，原来的脚本就无法正常调试。
+
+通过增加私有的检查代码，可以很大程度上提高加密脚本的安全性，因为没有人知道你的检
+查逻辑，并且你可以随时更改这些检查逻辑。
+
+使用内联插件检查动态库没有被修改
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+虽然 `PyArmor` 自身提供了交叉保护功能来保护动态库，但是还可以增加自己的私有检查
+点，例如再次检查动态库的修改时间，在脚本 ``foo.py`` 中增加下面的注释
+
+.. code:: python
+
+  # PyArmor Plugin: import os
+  # PyArmor Plugin: libname = os.path.join( os.path.dirname( __file__ ), '_pytransform.so' )
+  # PyArmor Plugin: if not os.stat( libname ).st_mtime_ns == 102839284238:
+  # PyArmor Plugin:     raise RuntimeError('Invalid Library')
+
+然后调用下面的加密命令::
+
+  pyarmor obfuscate --plugin on foo.py
+
 .. _checking imported function is obfuscated:
 
-检查被调用的函数是否经过加密
-----------------------------
+使用插件检查被调用的函数是否经过加密
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 假设主脚本为 `main.py`, 需要调用模块 `foo.py` 里面的方法 `connect`, 并且需要传递
-敏感数据作为参数。两个脚本都已经被加密，但是用户可以自己写一个 `foo.py` 来代替加
-密的 `foo.py` ，例如::
+敏感数据作为参数。脚本的相关代码如下
+
+.. code:: python
+
+    # main.py
+
+    import foo
+
+    def start_server():
+        foo.connect('root', 'root password')
+        foo.connect2('user', 'user password')
+
+    # foo.py
+    def connect(username, password):
+        mysql.dbconnect(username, password)
+
+虽然两个脚本都已经被加密，但是用户可以自己写一个简单的脚本来代替加密的 `foo.py`
+
+.. code:: python
 
     def connect(username, password):
         print('password is %s', password)
 
 然后调用加密的主脚本 `main.py` ，虽然功能不能正常完成，但是敏感数据却被泄露。
 
-为了避免这种情况发生，需要在主脚本里面检查 `foo.py` 必须也是被加密的脚本。目前的
-解决方案是在脚本 `main.py` 里面增加修饰函数 `assert_armored`，例如::
+为了避免这种情况发生，最好的方式是使用相关 :ref:`约束模式` ，限制加密脚本被其他
+脚本调用。如果无法进行这种限制，那么需要使用插件为函数 `stare_server` 提供修饰函
+数 `assert_armored` 。这样在每次运行 `start_server` 之前，都会检查被调用的函数是
+否是自己定义的函数，如果不是，直接抛出异常。
 
-    import foo
+例如，首先在当前目录下定义插件文件 `asser_armored.py`
 
-    # 新增的修饰函数
+.. code:: python
+
     def assert_armored(*names):
         def wrapper(func):
             def _execute(*args, **kwargs):
                 for s in names:
-                    # For Python2
-                    # if not (s.func_code.co_flags & 0x20000000):
-                    # For Python3
-                    if not (s.__code__.co_flags & 0x20000000):
-                        raise RuntimeError('Access violate')
                     # Also check a piece of byte code for special function
                     if s.__name__ == 'connect':
                         if s.__code__.co_code[10:12] != b'\x90\xA2':
@@ -611,37 +653,9 @@ Python 应用程序，例如::
             return _execute
         return wrapper
 
-    # 使用修饰函数，把需要检查的函数名称都作为参数传递进去
-    @ assert_armored(foo.connect, foo.connect2)
-    def start_server():
-        foo.connect('root', 'root password')
-        foo.connect2('user', 'user password')
+然后修改 `main.py`, 增加相应的插件注释桩，修改后的代码如下
 
-这样在每次运行 `start_server` 之前，都会检查被调用的函数是否被加密，如果没有被加
-密，直接抛出异常。
-
-使用插件的实现方式
-~~~~~~~~~~~~~~~~~~
-首先在当前目录下定义插件文件 `asser_armored.py`::
-
-    def assert_armored(*names):
-        def wrapper(func):
-            def _execute(*args, **kwargs):
-                for s in names:
-                    # For Python2
-                    # if not (s.func_code.co_flags & 0x20000000):
-                    # For Python3
-                    if not (s.__code__.co_flags & 0x20000000):
-                        raise RuntimeError('Access violate')
-                    # Also check a piece of byte code for special function
-                    if s.__name__ == 'connect':
-                        if s.__code__.co_code[10:12] != b'\x90\xA2':
-                            raise RuntimeError('Access violate')
-                return func(*args, **kwargs)
-            return _execute
-        return wrapper
-
-然后修改 `main.py`, 增加相应的插件注释桩，例如::
+.. code:: python
 
     import foo
 
@@ -652,15 +666,14 @@ Python 应用程序，例如::
         foo.connect('root', 'root password')
         ...
 
-这样基本不影响原来的脚本调试，在加密脚本的时候只需要指定插件就可以::
+在加密脚本的时候只需要指定插件就可以::
 
     pyarmor obfuscate --plugin assert_armored main.py
 
-.. note::
+.. important::
 
-   在 v5.7.2 之后，还支持这种格式的插件桩::
-
-       # @pyarmor_assert_armored(foo.connect, foo.connect2)
+   上面的函数 ``assert_armored`` 只是示例，不一定能正常运行，为了保证安全性，请
+   编写自己私有的检查代码。
 
 .. _call pyarmor from python script:
 
