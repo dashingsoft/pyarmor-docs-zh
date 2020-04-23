@@ -132,41 +132,36 @@ PyArmor 是怎么加密 Python 源代码呢？
 插件调用桩可以有缩进，可以在模块的任何地方，但是必须在插件调用桩之后，插件调用桩
 可以有任意多个。
 
-对于第一种格式 ``# PyArmor Plugin:`` ，PyArmor 只是简单的把匹配的部分和紧随其后
-的一个空格删除，只剩下后半部分的代码。例如::
+第一种格式又称为 `内联调用桩` ，PyArmor 只是简单的把匹配的部分和紧随其后的一个空
+格删除，只剩下后半部分的代码。例如::
 
     # PyArmor Plugin: check_ntp_time()             ==> check_ntp_time()
-
-只要在命令行指定了插件，这种替换就会发生，它的后半部分可以是任何有效的 Python 语
-句，例如::
-
     # PyArmor Plugin: print('This is plugin code') ==> print('This is plugin code')
     # PyArmor Plugin: if sys.flags.debug:          ==> if sys.flags.debug:
     # PyArmor Plugin:     check_something():       ==>     check_something()
 
-第二种格式 ``# pyarmor_`` 则只用于调用插件函数，并且仅仅当这个函数作为插件名称出
-现在命令行中时候才进行替换。例如，使用插件 `check_multi_mac` 加密脚本的时候，第
-一个调用桩会被替换，第二个不会被替换::
+只要在命令行指定了插件，这种替换就会发生。如果没有外部的插件脚本，可以在命令行使
+用特殊的插件名称 ``on`` 来生效内联插件桩，例如::
 
-    # pyarmor_check_multi_mac() ==> check_multi_mac()
-    # pyarmor_check_code()      ==> # pyarmor_check_code()
+    pyarmor obfuscate --plugin on foo.py
 
-第三种格式和第二种类似，只是 ``# @pyarmor_`` 会被替换成为 ``@`` ，主要用于注入修
-饰函数。例如::
+而后面两种格式又称为 `条件调用桩` ，顾名思义，就是在满足一定条件下才会进行替换。
+首先它们只用于调用插件中函数，其次在加密的时候，必须使用前缀 ``@`` 来指定插件的
+名称，并且函数名称还必须和插件名称一致，例如::
+
+    pyarmor obfuscate --plugin @check_ntp_time foo.py
+
+而在 ``foo.py`` 中，下面的第一个条件调用桩不会被替换，还保留原来的注释前缀，因为
+它调用的函数 ``check_multi_mac`` 在命令行中没有对应的插件，而第二个条件调用桩则
+会进行替换::
+
+    # pyarmor_check_multi_mac()     ==>   # pyarmor_check_multi_mac()
+    # pyarmor_check_ntp_time()      ==>   check_ntp_time()
+
+第三种格式和第二种类似，只是把注释前缀替换成为 ``@`` ，主要用于注入修饰函数。例
+如::
 
     # @pyarmor_assert_obfuscated(foo.connect) ==> @assert_obfuscated(foo.connect)
-
-在命令行指定插件名称的时候，如果插件前面没有前置字母 ``@`` ，插件总是会被注入到
-插件定义桩下面。例如， 即便没有任何插件调用语句，脚本 `check_multi_mac.py` 和
-`assert_armored.py` 总是会被注入到插件定义桩下面::
-
-    pyarmor obfuscate --plugin check_multi_mac foo.py
-
-如果插件有一个前置字母 ``@`` ，那么只有在插件调用桩中出现的插件才会被导入进来。
-例如，如果 `foo.py` 中没有任何插件调用桩，下面的两个插件都会被忽略掉::
-
-    pyarmor obfuscate --plugin @assert_armored foo.py
-    pyarmor obfuscate --plugin @/path/to/check_ntp_time foo.py
 
 .. _对主脚本的特殊处理:
 
