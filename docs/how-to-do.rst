@@ -1,3 +1,5 @@
+.. _how pyarmor does it:
+
 PyArmor 的工作原理
 ==================
 
@@ -23,6 +25,8 @@ PyArmor 的工作原理
 就可以像正常脚本一样被运行。
 
 这是 PyArmor 的一个重要特征： **加密脚本无缝替换原来的脚本**
+
+.. _how to obfuscate scripts:
 
 .. _如何加密脚本:
 
@@ -86,6 +90,7 @@ PyArmor 是怎么加密 Python 源代码呢？
 
     __pyarmor__(__name__, __file__, b'\x01\x0a...')
 
+.. _how to deal with plugins:
 
 .. _如何处理插件:
 
@@ -146,22 +151,35 @@ PyArmor 是怎么加密 Python 源代码呢？
     pyarmor obfuscate --plugin on foo.py
 
 而后面两种格式又称为 `条件调用桩` ，顾名思义，就是在满足一定条件下才会进行替换。
-首先它们只用于调用插件中函数，其次在加密的时候，必须使用前缀 ``@`` 来指定插件的
-名称，并且函数名称还必须和插件名称一致，例如::
+首先它们只用于调用插件中函数，其次函数名称还必须和插件名称一致，例如::
 
-    pyarmor obfuscate --plugin @check_ntp_time foo.py
+    pyarmor obfuscate --plugin check_ntp_time foo.py
 
-而在 ``foo.py`` 中，下面的第一个条件调用桩不会被替换，还保留原来的注释前缀，因为
-它调用的函数 ``check_multi_mac`` 在命令行中没有对应的插件，而第二个条件调用桩则
-会进行替换::
+而在 ``foo.py`` 中，下面的第一个条件调用桩会生效，会被替换成为函数调用的有效语句
+``check_ntp_time()`` ，但是第二个条件调用桩则不会被替换，还保留原来的注释前缀，
+因为它调用的函数 ``check_multi_mac`` 在命令行中没有对应的插件::
 
-    # pyarmor_check_multi_mac()     ==>   # pyarmor_check_multi_mac()
     # pyarmor_check_ntp_time()      ==>   check_ntp_time()
+    # pyarmor_check_multi_mac()     ==>   # pyarmor_check_multi_mac()
 
 第三种格式和第二种类似，只是把注释前缀替换成为 ``@`` ，主要用于注入修饰函数。例
 如::
 
     # @pyarmor_assert_obfuscated(foo.connect) ==> @assert_obfuscated(foo.connect)
+
+如果在指定插件名称的时候使用了前缀 ``@`` ，则插件脚本只有在被使用到的情况下，才
+会被注入加密脚本中；如果没有被用到，则会被忽略。例如::
+
+    pyarmor obfuscate --plugin @check_ntp_time foo.py
+
+在脚本 ``foo.py`` 中必须使用条件调用桩来调用插件函数::
+
+    # pyarmor_check_ntp_time()
+
+如果脚本中只是使用内联调用桩来调用插件函数 ``check_ntp_time`` ，而没有相应的条件
+调用桩，加密的时候插件脚本都不会被注入到加密脚本中。
+
+.. _special handling of entry script:
 
 .. _对主脚本的特殊处理:
 
@@ -249,6 +267,7 @@ PyArmor 就不会在主脚本中插入保护代码。
 
 主脚本被加密之后， PyArmor 会在最前面插入 :ref:`引导代码` 。
 
+.. _how to run obfuscated scripts:
 
 .. _如何运行加密脚本:
 
@@ -340,6 +359,7 @@ PyArmor 就不会在主脚本中插入保护代码。
         Py_RETURN_NONE;
     }
 
+.. _how to pack obfuscated scripts:
 
 .. _如何打包加密脚本:
 
