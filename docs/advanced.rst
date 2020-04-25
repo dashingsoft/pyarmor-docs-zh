@@ -623,7 +623,9 @@ Python 应用程序，例如::
 
 .. code:: python
 
-    # main.py
+    #
+    # This is main.py
+    #
 
     import foo
 
@@ -631,7 +633,10 @@ Python 应用程序，例如::
         foo.connect('root', 'root password')
         foo.connect2('user', 'user password')
 
-    # foo.py
+    #
+    # This is foo.py
+    #
+
     def connect(username, password):
         mysql.dbconnect(username, password)
 
