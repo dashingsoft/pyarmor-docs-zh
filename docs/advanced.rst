@@ -866,12 +866,15 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 2. 其次使用 `PyArmor`_ 生成 `foo-patched.spec` ，选项 ``--debug`` 可以保留这个中
    间文件在命令执行完成之后不被删除::
 
-    pyarmor pack --debug -s foo.spec foo.py
+    pyarmor pack --debug -s foo.spec -x " --restrict 0 --no-cross-protection" foo.py
 
 然后 `PyUpdater`_ 就可以使用这个 `foo-patched.spec` 进行构建。
 
 当脚本修改之后，只需要使用命令 :ref:`obfuscate` 重新加密脚本，加密脚本需要的全部
 选项可以在上面 :ref:`pack` 命令执行后的输出中找到。
+
+如果上面生成的包在执行的时候存在问题，可以把 PyArmor 打好的包压缩成 `.zip` 然后
+放到 ``/pyu-data/new`` 下面，在这里签名，处理和上传更新包。
 
 更多信息可以查看命令 :ref:`pack` 和 `使用定制的 .spec 文件打包加密脚本`_
 
