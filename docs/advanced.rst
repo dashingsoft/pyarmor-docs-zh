@@ -652,13 +652,13 @@ Python 应用程序，例如::
 
 然后调用加密的主脚本 `main.py` ，虽然功能不能正常完成，但是敏感数据却被泄露。
 
-为了避免这种情况发生，最好的方式是使用相关 :ref:`约束模式` ，限制加密脚本被其他
-脚本调用。如果无法进行这种限制，那么需要使用插件为函数 `stare_server` 提供修饰函
-数 `assert_armored` 。这样在每次运行 `start_server` 之前，都会检查被调用的函数是
-否是自己定义的函数，如果不是，直接抛出异常。
+为了避免这种情况发生，需要使用插件为函数 `stare_server` 提供修饰函数，在每次运行
+`start_server` 之前，检查被调用的函数是否是自己定义的函数，如果不是，直接抛出异
+常。
 
-从 v6.0.2 开始， :ref:`运行辅助包` :mod:`pytransform` 提供了这个修饰函数，可以直
-接使用内联插件来保护关键代码。例如，修改 `main.py` 如下
+从 v6.0.2 开始， :ref:`运行辅助包` :mod:`pytransform` 提供一个修饰函数
+``assert_armored`` ，可以用来检查参数列表中函数是否被加密。现在，编辑脚本
+`main.py` ，如下所示的方式增加两个内联插件桩
 
 .. code:: python
 
@@ -686,11 +686,11 @@ Python 应用程序，例如::
     def start_server():
         foo.connect('root', 'root password')
 
-这样，在调用 ``start_server`` 之前，修改函数 ``assert_assert`` 会检查两个
+这样，在调用 ``start_server`` 之前，修饰函数 ``assert_assert`` 会检查两个
 ``connect`` 函数，如果它们没有被加密，就会抛出异常。
 
 为了进一步提高安全性，可以把使用外部插件脚本的方式，这样插件函数本身就不需要从外
-部导入。首先在当前目录下定义插件文件 ``asser_armored.py``
+部导入。首先在当前目录下创建一个插件脚本 ``asser_armored.py``
 
 .. code:: python
 
