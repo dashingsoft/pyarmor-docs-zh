@@ -866,6 +866,9 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 2. 其次使用 `PyArmor`_ 生成 `foo-patched.spec` ，选项 ``--debug`` 可以保留这个中
    间文件在命令执行完成之后不被删除::
 
+    pyarmor pack --debug -s foo.spec foo.py
+
+    # 如果运行可执行文件的时候抛出保护异常，尝试使用下面的命令禁用加密脚本的相关约束
     pyarmor pack --debug -s foo.spec -x " --restrict 0 --no-cross-protection" foo.py
 
 然后 `PyUpdater`_ 就可以使用这个 `foo-patched.spec` 进行构建。
