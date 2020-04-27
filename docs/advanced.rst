@@ -722,7 +722,7 @@ Python 应用程序，例如::
 
     import foo
 
-    # { PyArmor Plugins }
+    # {PyArmor Plugins}
 
     # PyArmor Plugin: @assert_armored(foo.connect, foo.connect2)
     def start_server():

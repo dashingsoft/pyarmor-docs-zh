@@ -1,5 +1,7 @@
 .. _加密模式:
 
+.. _the modes of obfuscated scripts:
+
 加密模式
 ========
 
@@ -9,6 +11,8 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
 要改变加密模式，这就需要理解 PyArmor 的不同加密模式。
 
 .. _高级模式:
+
+.. _advanced mode:
 
 高级模式
 --------
@@ -48,6 +52,8 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 
 .. _代码加密模式:
 
+.. _obfuscating code mode:
+
 代码加密模式
 ------------
 
@@ -68,6 +74,8 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 以比前者要慢一些。
 
 .. _代码包裹模式:
+
+.. _wrap mode:
 
 代码包裹模式
 ------------
@@ -128,6 +136,8 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 
 .. _模块加密模式:
 
+.. _obfuscating module mode:
+
 模块加密模式
 ------------
 
@@ -159,6 +169,8 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 来加密脚本。具体使用方法请参考工程的 :ref:`使用不同加密模式`
 
 .. _约束模式:
+
+.. _restrict mode:
 
 约束模式
 --------
