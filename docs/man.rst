@@ -270,6 +270,7 @@ licenses
 -x, --bind-data DATA                  用于扩展认证类型的时候传递认证数据信息
 --disable-restrict-mode               运行加密脚本时候禁用所有约束模式
 --enable-period-mode                  运行加密脚本时候周期性（每小时）检查许可文件
+--fixed key,...                       绑定加密脚本到特定的 Python 解释器
 
 **描述**
 
@@ -310,6 +311,18 @@ licenses
 也可以输出生成的许可文件到标准输出，例如::
 
     pyarmor --silent licenses --output stdout -x "2019-05-20" reg-0001
+
+有时候我们需要把加密脚本绑定到某一个 Python 解释器上，例如，不允许用户使用自定义
+的 Python 解释器来执行加密脚本，必须使用官方版本。这时候可以使用选项 ``--fixed``
+来指定解释器的特征码。例如，使用特殊的特征码 `1` 绑定到当前 Python 解释器::
+
+    pyarmor licenses --fixed 1
+
+也可以绑定到多个 Python 解释器，只需要把多个特征码使用逗号分开即可::
+
+    pyarmor licenses --fixed 4265050,5386060
+
+如何获得解释器的特征码，请参考 :ref:`绑定加密脚本到固定的 Python 解释器`
 
 .. note::
 
