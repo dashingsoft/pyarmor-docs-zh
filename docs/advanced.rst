@@ -881,11 +881,11 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
 更多信息可以查看命令 :ref:`pack` 和 `使用定制的 .spec 文件打包加密脚本`_
 
-.. _binding obfuscated scripts to fixed python library:
+.. _binding obfuscated scripts to python interpreter:
 
-.. _绑定加密脚本到固定的 Python 动态库:
+.. _绑定加密脚本到固定的 Python 解释器:
 
-绑定加密脚本到固定的 Python 动态库
+绑定加密脚本到固定的 Python 解释器
 ----------------------------------
 
 为了提高加密脚本的安全性，也可以把加密脚本绑定到某一个固定的 Python 解释器，如果
@@ -954,6 +954,12 @@ Python 解释器执行这个脚本:
 
   pyarmor licenses --fixed xxxxxx -O dist/license.lic
 
+也可以绑定许可文件到多个 Python 解释器，把需要绑定的特征码使用逗号分开即可::
+
+  pyarmor licenses --fixed 1,key2,key3 -O dist/license.lic
+  pyarmor licenses --fixed key1,key2,key3 -O dist/license.lic
+
+注意特征码 `1` 可以用来表示当前 Python 解释器。
 
 .. 定制保护代码:
 
