@@ -881,6 +881,80 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
 更多信息可以查看命令 :ref:`pack` 和 `使用定制的 .spec 文件打包加密脚本`_
 
+.. _binding obfuscated scripts to fixed python library:
+
+.. _绑定加密脚本到固定的 Python 动态库:
+
+绑定加密脚本到固定的 Python 动态库
+----------------------------------
+
+为了提高加密脚本的安全性，也可以把加密脚本绑定到某一个固定的 Python 解释器，如果
+用户修改了 Python 解释器，那么加密脚本就会直接退出。
+
+当然，在绑定之后，加密脚本的运行环境会有更多约束。有可能目标机器上 Python 的版本
+号和加密时候使用的 Python 版本号完全一致才能够运行加密脚本。
+
+如果你使用命令 :ref:`obfuscate` 来加密脚本，那么在加密之后，使用下面的命令生成一
+个新的许可文件，覆盖原来的许可文件。例如::
+
+  pyarmor licenses --fixed 1 -O dist/license.lic
+
+这样，加密脚本在运行的时候就会检查当前 Python 的动态库文件，根据平台的不同，它可
+能是 pythonXY.dll，libpythonXY.so 或者 libpythonXY.dylib。一旦发现运行环境的动态
+库被修改（和加密时候的不一样），加密脚本就会直接退出。
+
+如果你使用的是工程来加密脚本，那么首先生成一个绑定到固定 Python 解释器的许可证文件::
+
+  cd /path/to/project
+  pyarmor licenses --fixed 1
+
+默认情况下，它会存放在 `licenses/pyarmor/license.lic` ，然后修改工程配置，使用这
+个许可证文件::
+
+  pyarmor config --license=licenses/pyarmor/license.lic
+
+如果是跨平台发布加密脚本，那么还需要额外的工作，要得到目标平台的 Python 动态库的
+特征码。首先在目标平台下按照下面的内容创建一个 Python 脚本，然后使用相应的
+Python 解释器执行这个脚本:
+
+.. _code: python
+
+  import sys
+
+  from ctypes import CFUNCTYPE, cdll, pythonapi, string_at, c_void_p, c_char_p
+
+
+  def get_bind_key():
+      c = cdll.LoadLibrary(None)
+
+      if sys.platform.startswith('win'):
+          from ctypes import windll
+          dlsym = windll.kernel32.GetProcAddressA
+      else:
+          prototype = CFUNCTYPE(c_void_p, c_void_p, c_char_p)
+          dlsym = prototype(('dlsym', c))
+
+      refunc1 = dlsym(pythonapi._handle, 'PyEval_EvalFrame')
+      refunc2 = dlsym(pythonapi._handle, 'PyEval_GetFrame')
+
+      size = refunc2 - refunc1
+      code = string_at(refunc1, size)
+
+      checksum = 0
+      for c in code:
+          checksum += ord(c)
+      print('Get bind key: %s' % checksum)
+
+
+  if __name__ == '__main__':
+      get_bind_key()
+
+运行之后会打印出需要绑定的特征码 `xxxxxx` ，然后使用这个特征码生成相应的新的许可
+证::
+
+  pyarmor licenses --fixed xxxxxx -O dist/license.lic
+
+
 .. 定制保护代码:
 
 .. include:: _common_definitions.txt
