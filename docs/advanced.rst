@@ -960,8 +960,8 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
   pyarmor config --license=licenses/pyarmor/license.lic
 
 如果是跨平台发布加密脚本，那么还需要额外的工作，要得到目标平台的 Python 动态库的
-特征码。首先在目标平台下按照下面的内容创建一个 Python 脚本，然后使用相应的
-Python 解释器执行这个脚本:
+特征码。首先在目标平台下按照下面的内容创建一个 Python 脚本，然后使用相应的Python
+解释器执行这个脚本
 
 .. code:: python
 
@@ -994,6 +994,7 @@ Python 解释器执行这个脚本:
 
   if __name__ == '__main__':
       get_bind_key()
+
 
 运行之后会打印出需要绑定的特征码 `xxxxxx` ，然后使用这个特征码生成相应的新的许可
 证::
