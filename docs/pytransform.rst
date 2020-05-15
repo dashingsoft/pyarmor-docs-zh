@@ -53,6 +53,13 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
    如果认证文件非法或者无效，抛出异常 :exc:`Exception`
 
+.. function:: get_user_data()
+
+   返回字符串，该字符串是生成许可文件时指定的 ``-x`` 参数。 如果没有指
+   定该参数，那么返回 `None`
+
+   如果认证文件非法或者无效，抛出异常 :exc:`Exception`
+
 .. function:: get_hd_info(hdtype, size=256)
 
    得到当前机器的硬件信息，通过 *hdtype* 传入需要获取的硬件类型（整型），可用的
@@ -68,6 +75,12 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 .. attribute:: HT_HARDDISK, HT_IFMAC, HT_IPV4, HT_DOMAIN
 
    调用  :func:`get_hd_info` 时候 `hdtype` 的可以使用的常量
+
+.. function:: assert_armored(*args)
+
+   必须作为修饰函数来使用，用来检查传入的参数列表中的函数是经过加密的。
+
+   抛出异常 :exc:`Exception` 如果任何传入的一个函数不是 PyArmor 加密过的。
 
 示例
 ----
