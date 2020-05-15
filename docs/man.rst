@@ -69,12 +69,17 @@ obfuscate
 --no-cross-protection           在主脚本中不要插入交叉保护代码
 --plugin NAME                   在加密之前，向主脚本中插入代码。这个选项可以使用多次。
 --platform NAME                 指定运行加密脚本的平台
---advanced <0,1>                使用高级模式加密脚本
+--advanced <0,1,2>              使用高级模式 `1` 或者超级模式 `2` 加密脚本
 --restrict <0,1,2,3,4>          设置约束模式
 --package-runtime <0,1>         是否把运行文件保存为包的形式
 --no-runtime                    不生成任何运行辅助文件，只加密脚本
 --bootstrap <0,1,2,3>           如何生成引导代码
 --enable-suffix                 生成带有后缀名称的运行辅助包
+--obf-code <0,1,2>              指定代码加密模式
+--obf-mod <0,1>                 指定模块加密模式
+--wrap-mode <0,1>               指定包裹加密模式
+--with-license FILENAME         使用指定的许可文件，特殊值 `outer` 表示使用外部许可文件
+--cross-protection FILENAME     使用定制的交叉保护脚本
 
 **描述**
 
@@ -123,6 +128,11 @@ PyArmor 首先会修改主脚本，在其中插入交叉保护代码，详细处
 
 选项 ``--restrict`` 用于指定加密脚本的约束模式，关于约束模式的详细说明，参考
 :ref:`约束模式`
+
+如果指定了超级加密模式 ``--advanced 2`` ，这是一种和以前有很大区别的模式，下面的
+运行辅助文件和引导代码都不存在，只有一个运行需要的扩展模块::
+
+  pytransform.so or pytransform.dll
 
 **运行辅助文件**
 
@@ -246,6 +256,18 @@ PyArmor 首先会修改主脚本，在其中插入交叉保护代码，详细处
 
     cd /path/to/mypkg
     pyarmor obfuscate -r --enable-suffix --output dist/mypkg __init__.py
+
+* 使用超级模式进行加密，并使用有限制期限的许可文件::
+
+    pyarmor licenses -e 2020-10-05 regcode-01
+    pyarmor obfuscate --with-license licenses/regcode-01/license.lic \
+                      --advanced 2 foo.py
+
+* 使用超级模式进行加密，并使用定制的交叉保护脚本，同时使用外部的许可文
+  件，不要把 ``license.lic`` 嵌入到扩展模块中::
+
+    pyarmor obfuscate --cross-protection build/pytransform_protection.py \
+                      --with-license outer --advanced 2 foo.py
 
 .. _licenses:
 
@@ -589,13 +611,13 @@ config
 --obf-mod <0,1>                 是否加密整个模块对象
 --obf-code <0,1,2>              是否加密每一个函数
 --wrap-mode <0,1>               是否启用包裹模式加密函数
---advanced <0,1>                是否使用高级模式加密脚本
---cross-protection <0,1>        是否插入交叉保护代码到主脚本
+--advanced <0,1,2>              使用高级模式 `1` 或者超级模式 `2` 加密脚本
+--cross-protection <0,1>        是否插入交叉保护代码到主脚本，也可以直接指定脚本名称
 --runtime-path RPATH            设置运行文件所在路径
 --plugin NAME                   设置需要插入到主脚本的代码文件，这个选项可以使用多次
 --package-runtime <0,1>         是否保存运行文件为包的形式
 --bootstrap <0,1,2,3>           如何生成引导代码
---with-license FILENAME         使用这个许可文件替换默认的脚本许可文件
+--with-license FILENAME         使用指定的许可文件，特殊值 `outer` 表示使用外部许可文件
 
 **描述**
 
@@ -885,9 +907,10 @@ runtime
 -O, --output PATH             输出路径，默认是 `dist`
 -n, --no-package              不要使用包的形式来存放生成运行文件
 -i, --inside                  创建包含引导脚本的包 `pytransform_bootstrap`
--L, --with-license FILE       使用这个文件替换默认的加密脚本许可文件
+-L, --with-license FILE       使用这个文件替换默认的加密脚本许可文件，特殊值 `outer` 表示使用外部许可证
 --platform NAME               生成其他平台下的运行辅助包
 --enable-suffix               生成带有后缀名称的运行辅助包
+--super-mode                  为超级模式生成运行辅助文件
 
 **DESCRIPTION**
 
@@ -906,6 +929,13 @@ runtime
 
 如果选项 ``--inside`` 被指定，那么将在输出目录使用包 ``pytransform_bootstrap``
 的形式来保存引导脚本。
+
+从 v6.2.0 开始，这个命令还会另外创建辅助脚本 ``pytransform_protection.py`` ，这
+是默认的交叉保护脚本，这个脚本在运行时刻并不需要，它主要是作为模版来定制自己的交
+叉保护脚本，参考 :ref:`定制交叉保护脚本`
+
+选项 ``--super-mode`` 用来生成 :ref:`超级模式` 的运行辅助文件，需要注意的是超级
+模式的运行辅助文件和其他模式是完全不一样的。
 
 选项 ``--platform`` 和 ``--enable-suffix`` 的使用，请参考命令 `obfuscate`_
 
@@ -927,5 +957,15 @@ runtime
 
     pyarmor licenses --expired 2020-01-01 code-001
     pyarmor runtime --with-license licenses/code-001/license.lic --platform linux.armv7
+
+* 为超级模式创建运行辅助包::
+
+    pyarmor runtime --super-mode
+    pyarmor runtime --advanced 2
+
+* 为超级模式创建运行辅助包，同时使用外部许可文件，也就是说，不要把许可
+  文件嵌入到扩展模块里面::
+
+    pyarmor runtime --super-mode --with-license outer
 
 .. include:: _common_definitions.txt

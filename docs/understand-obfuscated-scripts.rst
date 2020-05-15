@@ -50,6 +50,33 @@
     pyarmor_runtime()
     __pyarmor__(__name__, __file__, b'\x0a\x02...')
 
+
+超级加密脚本
+~~~~~~~~~~~~
+
+使用 :ref:`超级模式` 加密后的脚本和上面的有所不同，运行辅助文件只需要一个扩展文
+件 ``pytransform`` ，加密后输出目录 `dist` 下的所有文件清单::
+
+    myscript.py
+    mymodule.py
+
+    pytransform.so or pytransform.dll
+
+而被加密的脚本也是一个普通的 Python 脚本， 加密后会是这样::
+
+    from pytransform import pyarmor
+    pyarmor(__name__, __file__, b'\x0a\x02...', 1)
+
+扩展模块也可能有一个后缀，例如::
+
+    from pytransform_vax_000001 import pyarmor
+    pyarmor(__name__, __file__, b'\x0a\x02...', 1)
+
+.. note::
+
+   下面章节中 `引导代码`_ ， `运行辅助包`_ ， `运行辅助文件`_ 在超级模式加密后的
+   脚本并不存在。
+
 .. _entry script:
 
 .. _主脚本:
