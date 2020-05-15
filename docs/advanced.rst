@@ -1060,7 +1060,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 在 Windows 下面，使用下面的命令把许可文件放到 ``C:/Users/Jondy/my_app``::
 
   cd /path/to/obfuscated/pytransform
-  mklink license.lic C:/Users/Jondy/my_app/license-a.lic
+  mklink license.lic C:/Users/Jondy/my_app/license.lic
 
 在发布加密包的时候，只要能够设法在安装完成之后，执行下面的脚本就可以放置加密脚本
 到任意指定的位置:
