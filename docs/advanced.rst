@@ -963,7 +963,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 特征码。首先在目标平台下按照下面的内容创建一个 Python 脚本，然后使用相应的
 Python 解释器执行这个脚本:
 
-.. code-block:: python
+.. code:: python
 
   import sys
 
