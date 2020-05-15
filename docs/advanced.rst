@@ -773,6 +773,11 @@ Python 应用程序，例如::
 
     pyarmor obfuscate --plugin assert_armored main.py
 
+.. note::
+
+   从 v6.2.0 开始，使用 :ref:`超级模式` 加密的脚本不需要也无法使用外部插件脚本，
+   直接使用扩展模块 :mod:`pytransform` 提供的修饰函数 ``assert_armored`` 即可。
+
 .. _call pyarmor from python script:
 
 在 Python 脚本内部调用 `pyarmor`
@@ -958,7 +963,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 特征码。首先在目标平台下按照下面的内容创建一个 Python 脚本，然后使用相应的
 Python 解释器执行这个脚本:
 
-.. _code: python
+.. code-block:: python
 
   import sys
 
