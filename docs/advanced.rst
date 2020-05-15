@@ -14,34 +14,34 @@
 引导代码，所有的加密脚本都长得一个样，大大简化了加密脚本的使用方法，并且极大的提
 高了安全性，唯一的缺点是目前支持的平台和Python版本还不完整。
 
-超级模式在命令行使用 `--advanced 2` 来指定，例如::
+超级模式在命令行使用 ``--advanced 2`` 来指定，例如::
 
   pyarmor obfuscate --advanced 2 foo.py
 
-而发布加密脚本的时候，只需要把扩展模块 ``pytransform`` ，放在任意的 Python 路径
+而发布加密脚本的时候，只需要把扩展模块 :mod:`pytransform` ，放在任意的 Python 路径
 下面，加密后的脚本就可以正常运行。
 
-如果需要对加密脚本进行限制，那么使用首先生成一个包含约束的 `license.lic` ，例如，
+如果需要对加密脚本进行限制，那么使用首先生成一个包含约束的 ``license.lic`` ，例如，
 绑定到网卡::
 
   pyarmor licenses --bind-mac xx:xx:xx:xx regcode-01
 
-然后在加密脚本的时候使用 `--with-license` 指定这个文件，例如::
+然后在加密脚本的时候使用 ``--with-license`` 指定这个文件，例如::
 
   pyarmor obufscate --with-license licenses/regcode-01/license.lic \
                     --advanced 2 foo.py
 
 这样就可以把指定的许可文件嵌入到扩展模块里面，如果不想把许可文件嵌入到扩展模块里
-面，而是使用外部 `license.lic` ，这样可以方便替换许可文件，那么在加密的时候需要
-指定 `--with-license outer` ，例如::
+面，而是使用外部 ``license.lic`` ，这样可以方便替换许可文件，那么在加密的时候需要
+指定 ``--with-license outer`` ，例如::
 
   pyarmor obfuscate --with-license outer --advanced 2 foo.py
 
-这样，运行加密脚本的时候就会在外部查找许可文件，查找外部 `license.lic` 的顺序
+这样，运行加密脚本的时候就会在外部查找许可文件，查找外部 ``license.lic`` 的顺序
 
 #. 如果设定了环境变量 ``PYARMOR_LICENSE`` ，直接使用这里指定的文件名
-#. 如果没有，那么查找当前路径下面的 license.lic
-#. 如果还没有，查找和扩展模块 ``pytransform`` 相同路径下面的 `license.lic`
+#. 如果没有，那么查找当前路径下面的 ``license.lic``
+#. 如果还没有，查找和扩展模块 ``pytransform`` 相同路径下面的 ``license.lic``
 #. 没有找到就报错
 
 .. _obfuscating many packages:
@@ -1019,12 +1019,12 @@ Python 解释器执行这个脚本:
 的保护代码，只要能达到在 Python 脚本里面检查动态库 `pytransform` 没有被修改的目
 的就可以。
 
-首先使用下面的命令生成默认的交叉保护脚本 `build/pytransform_protection.py` ::
+首先使用下面的命令生成默认的交叉保护脚本 ``build/pytransform_protection.py``::
 
   pyarmor runtime --super-mode -O build
 
-然后修改生成的脚本 `build/pytransform_protection.py` ，并在加密的时候使用选项
-`--cross-protection` 来指定这个脚本就可以了。例如::
+然后修改这个生成的脚本，并在加密的时候使用选项 ``--cross-protection`` 来指定这个
+脚本就可以了。例如::
 
   pyarmor obfuscate --cross-protection build/pytransform_protection.py \
                 --advanced 2 --obf-code 2 foo.py
