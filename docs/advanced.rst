@@ -1027,18 +1027,18 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
 首先使用下面的命令生成默认的交叉保护脚本 ``build/pytransform_protection.py``::
 
-  pyarmor runtime --super-mode -O build
+  pyarmor runtime --super-mode --output build
 
 然后修改这个生成的脚本，并在加密的时候使用选项 ``--cross-protection`` 来指定这个
 脚本就可以了。例如::
 
   pyarmor obfuscate --cross-protection build/pytransform_protection.py \
-                --advanced 2 --obf-code 2 foo.py
+                    --advanced 2 foo.py
 
 需要注意的是超级模式和其他任何模式使用的交叉保护脚本并不一样，所以如果不是使用超
 级模式进行加密，生成默认脚本的时候就不需要额外选项，例如::
 
-  pyarmor runtime -O build
+  pyarmor runtime --output build
 
 .. note::
 
