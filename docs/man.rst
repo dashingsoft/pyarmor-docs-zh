@@ -431,7 +431,7 @@ pack
 主脚本（这里是 `foo.py`) 需要在命令行列出，否则 `pack`_ 就不知道那些脚本需要加密，
 详细说明请参考 :ref:`使用定制的 .spec 文件打包加密脚本` 。
 
-如果有很多数据文件或者隐含模块，最后的方式是使用 Hook 文件来自动发现它们。首先创
+如果有很多数据文件或者隐含模块，最好的方式是使用 Hook 脚本来自动发现它们。首先创
 建一个文件 ``hook-sys.py`` ，下面是一些示例代码::
 
     from PyInstaller.utils.hooks import collect_data_files, collect_all
@@ -508,13 +508,6 @@ https://pyinstaller.readthedocs.io/en/stable/hooks.html#understanding-pyinstalle
 
    命令 `pack` 会自动加密脚本，所以不要使用该命令去打包加密后的脚本，打包加密脚
    本会导致错误，因为脚本加密之后是无法自动找到的其他被引用的模块的。
-
-.. comment:
-
-    如果已经有一个写好的 `.spec` 文件，也可以通过 ``-s`` 指定到这个文
-    件，这样 `pack`_ 就会直接使用这个文件，而不是重新创建一个新的::
-
-    pyarmor pack -s /path/to/myself.spec foo.py
 
 .. _hdinfo:
 
