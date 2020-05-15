@@ -1044,4 +1044,35 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
    使用 ``--advanced 1`` 加密并不是超级模式，只有 ``--advanced 2`` 才是超级模式
 
+.. _storing runtime file license.lic to any location:
+
+如何把许可文件 license.lic 存放到任意位置
+---------------------------------------
+
+默认情况下运行加密脚本需要的许可文件 `license.lic` 是和模块 :mod:`pytransform`
+存放在一起，但是也可以把这个文件放在任意位置，然后在原来的位置创建一个符号链接，指向真正的文件就可以。
+
+在 linux 下面，使用下面的命令把许可文件放到 ``/opt/my_app``::
+
+  cd /path/to/obfuscated/pytransform
+  ln -s /opt/my_app/license.lic license.lic
+
+在 Windows 下面，使用下面的命令把许可文件放到 ``C:/Users/Jondy/my_app``::
+
+  cd /path/to/obfuscated/pytransform
+  mklink license.lic C:/Users/Jondy/my_app/license-a.lic
+
+在发布加密包的时候，只要能够设法在安装完成之后，执行下面的脚本就可以放置加密脚本
+到任意指定的位置:
+
+.. code:: python
+
+   import os
+
+   def make_link_to_license_file(package_path, target_license="/opt/mypkg/license.lic"):
+       license_file = os.path.join(package_path, 'pytransform', 'license.lic')
+       if os.path.exists(license_file):
+           os.rename(license_file, target_license)
+       os.symlink(target_license, license_file)
+
 .. include:: _common_definitions.txt
