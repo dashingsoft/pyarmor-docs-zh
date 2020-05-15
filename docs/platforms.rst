@@ -14,6 +14,9 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 ，其中 ``SYSTEM.ARCH`` 是一个 `标准平台名称`_ 。如果还没有下载，那么会
 自动从远程服务器下载相应平台的动态库。
 
+从 v6.2.0 开始， 新增加的 :ref:`超级模式` 和以前的动态库不一样，它是直接使用扩展
+模块 :mod:`pytransform` ，预编译的扩展模块列在 `超级模式预编译扩展模块表`_
+
 最新的全部支持的动态库详细列表可以参考
 https://github.com/dashingsoft/pyarmor-core/blob/master/platforms/index.json
 
@@ -228,3 +231,27 @@ jondy.zhao@gmail.com
      -
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/uclibc.armv7.0/_pytransform.so>`_
      - Build by armv7-buildroot-uclibceabihf-gcc
+
+.. list-table:: Table-3. 超级模式预编译扩展模块表
+   :name: 超级模式预编译扩展模块表
+   :widths: 10 10 10 20 10 40
+   :header-rows: 1
+
+   * - 名称
+     - 操作系统
+     - CPU架构
+     - 特征
+     - 下载
+     - 说明
+   * - darwin.x86_64.11.py37
+     - MacOSX
+     - x86_64, intel
+     - Anti-Debug, JIT, SUPER
+     - `_pytransform.cpython-37m-darwin.so <http://pyarmor.dashingsoft.com/downloads/latest/darwin.x86_64.11.py37/_pytransform.cpython-37m-darwin.so>`_
+     - Built by CLang with MacOSX10.11
+   * - darwin.x86_64.11.py27
+     - MacOSX
+     - x86_64, intel
+     - Anti-Debug, JIT, SUPER
+     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/darwin.x86_64.11.py27/_pytransform.so>`_
+     - Built by CLang with MacOSX10.11
