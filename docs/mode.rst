@@ -25,12 +25,13 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
     from pytransform import pyarmor
     pyarmor(__name__, __file__, b'\x0a\x02...', 1)
 
-但是超级模式不是所有的 Python 版本都支持的，目前支持的版本有：
+但是超级模式不是所有的 Python 版本都支持的，目前只有最新的版本被支持：
 
 * Python 2.7
 * Python 3.7
+* Python 3.8
 
-Python 3.5 以及之后的版本会在随后被支持，但是 Python 3.0 ~ 3.4 不会被支持。
+Python 3.5，3.6 有可能随后会被支持，但是 Python 3.0 ~ 3.4 不会被支持。
 
 使用下面的命令可以启用超级模式加密脚本::
 
