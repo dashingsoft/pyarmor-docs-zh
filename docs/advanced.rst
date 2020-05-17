@@ -1073,4 +1073,38 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
            os.rename(license_file, target_license)
        os.symlink(target_license, license_file)
 
+.. _register multiple pyarmor in same machine:
+
+在同一台机器上注册多个 PyArmor
+------------------------------
+
+从 v5.9.0 开始，PyArmor 从环境变量 `PYARMOR_HOME` 读取全局密钥箱和注册信息，默认
+的路径是 `~/.pyarmor` 。所以设置环境变量 `PYARMOR_HOME` 指向另外一个路径，然后在
+执行命令 `pyarmor` ，就完全可以使用新的注册文件，而不影响原来的命令的注册数据。
+
+最好的方式是使用下面的方式为每一个注册的 PyArmor 创建一个新的命令。
+
+例如，在 Linux 下面，创建一个新的脚本文件 :file:`pyarmor2` ，内容如下
+
+.. code:: bash
+
+    export PYARMOR_HOME=$HOME/.pyarmor_2
+    pyarmor "$@"
+
+然后保存在 `/usr/local/pyarmor2` ，并赋予其执行权限::
+
+    chmod +x /usr/local/pyarmor2
+
+在 Windows 下面，则创建一个批处理文件 :file:`pyarmor2.bat`
+
+.. code:: bat
+
+    SET PYARMOR_HOME=%HOME%\another_pyarmor
+    pyarmor %%*
+
+这样，就可以使用命令 `pyarmor2` 注册新的文件，加密新的工程::
+
+    pyarmor2 register pyarmor-regkey-2.zip
+    pyarmor2 obfuscate foo2.py
+
 .. include:: _common_definitions.txt
