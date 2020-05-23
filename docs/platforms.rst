@@ -17,7 +17,7 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 从 v6.2.0 开始， 新增加的 :ref:`超级模式` 和以前的动态库不一样，它是直接使用扩展
 模块 :mod:`pytransform` ，可用的扩展模块列参看 `超级模式预编译扩展模块表`_
 
-最新的全部支持的动态库详细列表可以参考 `_pyarmor-core/platforms/index.json <https://github.com/dashingsoft/pyarmor-core/blob/master/platforms/index.json`_
+最新的全部支持的动态库详细列表可以参考 `pyarmor-core/platforms/index.json <https://github.com/dashingsoft/pyarmor-core/blob/master/platforms/index.json>`_
 
 在同一个平台下面可能有多个可用的动态库，分别具备不同的特征，一般在标准
 平台名称的后面增加一个数字来标识，组成一个唯一的平台 ID。
