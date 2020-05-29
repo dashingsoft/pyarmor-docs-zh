@@ -258,7 +258,7 @@ PyArmor 加密，那么答案是否定的。
 
 也可以创建一个便捷脚本 `/usr/local/bin/pyarmor3` ，内容如下::
 
-    /usr/bin/python3.6 /usr/local/lib/python2.7/dist-packages/pyarmor/pyarmor.py "$*"
+    /usr/bin/python3.6 /usr/local/lib/python2.7/dist-packages/pyarmor/pyarmor.py "$@"
 
 赋予其执行权限::
 
@@ -1100,7 +1100,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 .. code:: bat
 
     SET PYARMOR_HOME=%HOME%\another_pyarmor
-    pyarmor %%*
+    pyarmor %*
 
 这样，就可以使用命令 `pyarmor2` 注册新的文件，加密新的工程::
 
