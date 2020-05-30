@@ -51,7 +51,7 @@ PyArmor 是一个命令行工具，用来加密脚本，绑定加密脚本到固
 -v, --version                显示版本信息
 -q, --silent                 在控制台不显示日志
 -d, --debug                  打印更多的信息用于发现命令执行过程中问题
---home PATH                  指定 pyarmor 注册时的路径，仅用于同一台电脑注册有多个 pyarmor
+--home PATH                  指定 pyarmor 注册时的路径，通常用于同一台电脑注册有多个 pyarmor
 
 这些选项可以被用在 `pyarmor` 之后，子命令之前，例如，使用调试选项打印
 更多的错误信息::
