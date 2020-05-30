@@ -801,6 +801,39 @@ Python 应用程序，例如::
 从 v5.7.3 开始，如果以这种方式调用 `pyarmor` 出现了错误，会抛出异常，而不是调用
 `sys.exit` 直接退出。
 
+通过 Web API 生成许可文件
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+如果需要使用 Web API 为加密脚本生成许可，可以使用下面的方式生成许可证。它返回一
+个字符串，而不是直接写入到文件，这样可以把字符串返回给客户端进行处理。
+
+.. code-block:: python
+
+    from pyarmor.pyarmor import licenses as generate_license_key
+    lickey = generate_license_key(name='reg-001',
+                                  expired='2020-05-30',
+                                  bind_disk='013040BP2N80S13FJNT5',
+                                  bind_mac='70:f1:a1:23:f0:94',
+                                  bind_ipv4='192.168.121.110',
+                                  bind_data='any string')
+    print('Generate key: %s' % lickey)
+
+如果需要使用一个 API 为多个产品生成许可，那么需要使用参数 `home` 来区别不同产品
+的注册信息。例如
+
+.. code-block:: python
+
+    from pyarmor.pyarmor import licenses as generate_license_key
+    lickey = generate_license_key(name='product-001',
+                                  expired='2020-06-15',
+                                  home='~/.pyarmor-2')
+    print('Generate key for product 1: %s' % lickey)
+
+    lickey = generate_license_key(name='product-002',
+                                  expired='2020-05-30',
+                                  home='~/.pyarmor-2')
+    print('Generate key for product 2: %s' % lickey)
+
 .. _check license periodly when the obfuscated script is running:
 
 运行加密脚本的时候周期性的检查许可文件
