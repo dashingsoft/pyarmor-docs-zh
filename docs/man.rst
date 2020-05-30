@@ -491,6 +491,7 @@ https://pyinstaller.readthedocs.io/en/stable/hooks.html#understanding-pyinstalle
 * 传递额外的参数运行 `PyInstaller`::
 
     pyarmor pack --options '-w --icon app.ico' foo.py
+    pyarmor pack -e " --icon images\\app.ico" foo.py
 
 * 打包的时候不要加密目录 `venv` 和 `test` 下面的所有文件::
 
@@ -525,6 +526,12 @@ https://pyinstaller.readthedocs.io/en/stable/hooks.html#understanding-pyinstalle
 
    首先在当前目录创建一个工程，然后直接打包该工程，使用工程的好处是可以完全定制
    加密选项。
+
+.. note::
+
+   在 Windows 下面，附加选项里面如果用到反斜杠，必须是两个。例如::
+
+     pyarmor pack -e " --icon images\\app.ico" foo.py
 
 .. important::
 
