@@ -999,7 +999,6 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 .. code:: python
 
   import sys
-
   from ctypes import CFUNCTYPE, cdll, pythonapi, string_at, c_void_p, c_char_p
 
 
@@ -1019,10 +1018,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
       size = refunc2 - refunc1
       code = string_at(refunc1, size)
 
-      checksum = 0
-      for c in bytearray(code):
-          checksum += c
-      print('Get bind key: %s' % checksum)
+      print('Get bind key: %s' % sum(bytearray(code)))
 
 
   if __name__ == '__main__':
