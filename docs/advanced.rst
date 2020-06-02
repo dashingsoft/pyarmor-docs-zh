@@ -998,14 +998,14 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
 .. code:: python
 
-  import sys
   from ctypes import CFUNCTYPE, cdll, pythonapi, string_at, c_void_p, c_char_p
+  from sys import platform
 
 
   def get_bind_key():
       c = cdll.LoadLibrary(None)
 
-      if sys.platform.startswith('win'):
+      if platform.startswith('win'):
           from ctypes import windll
           dlsym = windll.kernel32.GetProcAddressA
       else:
@@ -1036,6 +1036,11 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
   pyarmor licenses --fixed key1,key2,key3 -O dist/license.lic
 
 注意特征码 `1` 可以用来表示当前 Python 解释器。
+
+.. note::
+
+   在32位的 Windows 平台上面无法使用这个特性，因为在不同的机器上甚至每次运行
+   Python 的特征码都是不相同的。
 
 .. _customizing cross protection code:
 
