@@ -1003,14 +1003,13 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
 
   def get_bind_key():
-      c = cdll.LoadLibrary(None)
 
       if platform.startswith('win'):
           from ctypes import windll
           dlsym = windll.kernel32.GetProcAddressA
       else:
           prototype = CFUNCTYPE(c_void_p, c_void_p, c_char_p)
-          dlsym = prototype(('dlsym', c))
+          dlsym = prototype(('dlsym', cdll.LoadLibrary(None)))
 
       refunc1 = dlsym(pythonapi._handle, b'PyEval_EvalCode')
       refunc2 = dlsym(pythonapi._handle, b'PyEval_GetFrame')
