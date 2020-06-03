@@ -1140,4 +1140,30 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
     pyarmor2 register pyarmor-regkey-2.zip
     pyarmor2 obfuscate foo2.py
 
+使用外部脚本获取加密包的许可证信息
+----------------------------------
+
+如果有一个加密后的包，如何获取它的发布者以及相关的许可信息呢？只需要在运行辅助包
+:mod:`pytransform` 所在的目录执行下面的脚本就可以
+
+.. code-block:: python
+
+   from pytransform import pyarmor_init, get_license_info
+   pyarmor_init(is_runtime=1)
+   licinfo = get_license_info()
+   print('This obfuscated package is issued by %s' % licinfo['ISSUER'])
+   print('License information:')
+   print(licinfo)
+
+如果是使用超级模式加密的脚本，只要一个扩展模块 `pytransform` ，使用下面的脚本，
+和上面的方式基本类似但是更简单
+
+.. code-block:: python
+
+   from pytransform import get_license_info
+   licinfo = get_license_info()
+   print('This obfuscated package is issued by %s' % licinfo['ISSUER'])
+   print('License information:')
+   print(licinfo)
+
 .. include:: _common_definitions.txt
