@@ -36,6 +36,7 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
    返回一个字典，可能的键名有：
 
+   * ISSUER: 许可证的发布者
    * expired: 许可过期的日期
    * IFMAC：绑定的网卡 MAC 地址
    * HARDDISK： 绑定的硬盘序列号
@@ -44,6 +45,11 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
    * CODE：许可注册码
 
    如果许可证没有包含对应的键名，那么其值为 `None`
+
+   `ISSUER` 是在版本 6.2.5 新增加的，使用试用版本生成的 `license.lic` ，它的值为
+   `trial` ，而对于购买 pyarmor 的发布者，它的值是注册码 `pyarmor-vax-NNNNNN` 。
+   需要注意的是如果 `license.lic` 是使用 pyarmor 6.0.1 之前的版本生成的，它的值
+   是 `None` 。
 
    如果许可文件非法，例如已经过期，会抛出异常 :exc:`Exception`
 
@@ -91,7 +97,7 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
 .. code-block:: python
 
-   from pytransform import PytransformError, get_license_info, get_expired_days
+   from pytransform import get_license_info, get_expired_days
    try:
        code = get_license_info()['CODE']
        left_days = get_expired_days()
