@@ -15,6 +15,8 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
 .. exception:: PytransformError
 
+   这个异常在 v6.0 之后已经不在使用。
+
    任何 PyArmor 的 api 失败都会抛出这个异常，传入的参数是错误发生的原因。
 
 .. function:: get_expired_days()
