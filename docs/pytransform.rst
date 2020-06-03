@@ -39,7 +39,7 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
    返回一个字典，可能的键名有：
 
    * ISSUER: 许可证的发布者
-   * expired: 许可过期的日期
+   * EXPIRED: 许可过期的日期
    * IFMAC：绑定的网卡 MAC 地址
    * HARDDISK： 绑定的硬盘序列号
    * IPV4：绑定的 IPv4 地址
