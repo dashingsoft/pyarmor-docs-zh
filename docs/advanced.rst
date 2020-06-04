@@ -1166,4 +1166,45 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
    print('License information:')
    print(licinfo)
 
+在 v6.2.7 之后，还可以直接调用辅助脚本::
+
+  cd /path/to/obfuscated_package
+  python -m pyarmor.helper.get_license_info
+
+.. _how to protect data files:
+
+.. _如何保护数据文件:
+
+如何保护数据文件
+----------------
+
+PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件包裹起来，然后使用约束模
+式 4 加密这个数据脚本文件，这样这个脚本就只能被其他加密脚本调用，通过这种方式来
+间接保护数据文件。
+
+在 v6.2.7 之后，可以直接使用辅助脚本来生成相应的数据脚本。例如，下面的命令根据数
+据文件 `data.txt` 生成对应的数据模块 `data.py`::
+
+    python -m pyarmor.helper.build_data_module data.txt > data.py
+
+接下来使用约束模式 4 来加密这个数据脚本::
+
+    pyarmor obfuscate --exact --restrict 4 --no-runtime data.py
+
+然后就可以使用下面的方式在其他脚本里面读取数据文件的数据::
+
+    import data
+
+    # 读取 "data.txt" 的实际内容到 value
+    value = data.get_value().decode()
+
+    ...
+
+    # 删除真实数据，清除内存
+    del value
+
+在 v6.2.7 之前，可以下载这个帮助脚本 `build_data_module.py <https://github.com/dashingsoft/pyarmor/raw/master/src/helper/build_data_module.py>`_ 然后直接运行::
+
+    python build_data_module.py data.txt > data.py
+
 .. include:: _common_definitions.txt
