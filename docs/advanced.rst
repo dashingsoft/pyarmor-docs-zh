@@ -1197,13 +1197,10 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
 
     import data
 
-    # 读取 "data.txt" 的实际内容到 value
-    value = data.get_value().decode()
-
-    ...
-
-    # 删除真实数据，清除内存
-    del value
+    # 这里装载数据文件的内容到内存变量 text
+    # 而在退出 with 语句的时候， 会把 text 从内存中清空
+    with data.Safestr() as text:
+      ...
 
 在 v6.2.7 之前，可以下载这个帮助脚本 `build_data_module.py <https://github.com/dashingsoft/pyarmor/raw/master/src/helper/build_data_module.py>`_ 然后直接运行::
 
