@@ -37,6 +37,9 @@
     pytransform/
         __init__.py
         _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
+
+在 v6.3.0 之前，这里还有两个额外的文件::
+  
         pytransform.key
         license.lic
 
@@ -132,11 +135,14 @@
 密的脚本都可以共用这个包。 你完全可以把这个包放到 Python 的系统库路径下面，这样
 加密后的脚本目录结构就和原来完全一样。
 
-运行辅助包里面有四个文件::
+运行辅助包里面有两个文件::
 
     pytransform/
         __init__.py                  Python 模块文件
         _pytransform.so/.dll/.lib    动态链接库，核心功能的实现
+
+在 v6.3.0 之前，还有两个额外的文件::
+        
         pytransform.key              数据文件
         license.lic                  加密脚本的许可文件
 
@@ -148,10 +154,13 @@
 
 运行辅助文件
 ~~~~~~~~~~~~
-它们不是以 Python 包的形式存在，而是四个单独文件::
+它们不是以 Python 包的形式存在，而是两个单独文件::
 
     pytransform.py               Python 模块文件
     _pytransform.so/.dll/.lib    动态链接库，核心功能的实现
+    
+在 v6.3.0 之前，还有两个额外的文件::
+  
     pytransform.key              数据文件
     license.lic                  加密脚本的许可文件
 
@@ -175,7 +184,7 @@
 
 运行辅助文件中的 `license.lic` 作用比较特殊，它包含着对加密脚本的运行许可信息。
 在加密脚本的同时会在输出目录下面生成一个默认许可文件，该文件允许加密脚本运行在任
-何机器并且永不过期。
+何机器并且永不过期。在 v6.3.0 之后，默认情况下这个文件会被嵌入到动态库里面。
 
 如果需要为加密脚本设置新的许可，例如设置有效期，限制加密脚本在特定机器上运行，需
 要运行命令 :ref:`licenses` 生成新的相应的许可文件，然后用新生成的 `license.lic`
@@ -209,8 +218,6 @@
     from pytransform import pyarmor_runtime
     pyarmor_runtime('/path/to/runtime')
 
-  运行辅助文件 `license.lic` 和 `pytransform.key` 必须也在这个目录下面
-
 * 如果在代码中动态创建新的执行环境，例如 `multiprocssing.Process`, `os.exec`,
   `subprocess.Popen` 等, 要确保 `引导代码`_ 在新的执行环境被首先执行，否则加密脚
   本会报错。
@@ -241,6 +248,9 @@
   的源代码或者 Byte Code ，也会失败或者得到错误的数据
 
 * 使用高级模式进行加密的脚本直接访问代码块的属性 ``co_const`` 可能会导致奔溃
+
+* 加密脚本抛出异常中的行号和原来的脚本是一致的，但是如果这个脚本在加密的时候插入
+  了交叉保护代码或者插件脚本，那么行号可能会不一致
 
 * 代码块的属性 ``__file__`` 在加密脚本是 ``<frozen name>`` ，而不是文件
   名称，在异常信息中会看到文件名的显示是 ``<frozen name>``
