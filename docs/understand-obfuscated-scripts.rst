@@ -39,7 +39,7 @@
         _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
 
 在 v6.3.0 之前，这里还有两个额外的文件::
-  
+
         pytransform.key
         license.lic
 
@@ -142,7 +142,7 @@
         _pytransform.so/.dll/.lib    动态链接库，核心功能的实现
 
 在 v6.3.0 之前，还有两个额外的文件::
-        
+
         pytransform.key              数据文件
         license.lic                  加密脚本的许可文件
 
@@ -158,9 +158,9 @@
 
     pytransform.py               Python 模块文件
     _pytransform.so/.dll/.lib    动态链接库，核心功能的实现
-    
+
 在 v6.3.0 之前，还有两个额外的文件::
-  
+
     pytransform.key              数据文件
     license.lic                  加密脚本的许可文件
 
@@ -249,8 +249,8 @@
 
 * 使用高级模式进行加密的脚本直接访问代码块的属性 ``co_const`` 可能会导致奔溃
 
-* 加密脚本抛出异常中的行号和原来的脚本是一致的，但是如果这个脚本在加密的时候插入
-  了交叉保护代码或者插件脚本，那么行号可能会不一致
+* 加密脚本抛出异常中的行号和原来的脚本会不一样，尤其是这个脚本在加密的时候插入了
+  交叉保护代码或者其他插件脚本
 
 * 代码块的属性 ``__file__`` 在加密脚本是 ``<frozen name>`` ，而不是文件
   名称，在异常信息中会看到文件名的显示是 ``<frozen name>``
