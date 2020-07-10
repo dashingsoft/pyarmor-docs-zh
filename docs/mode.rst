@@ -182,6 +182,10 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
     char *obfuscated_code = obfuscate_algorithm( original_code  );
     sprintf( buffer, "__pyarmor__(__name__, __file__, b'%s', 1)", obfuscated_code );
 
+* obf_mod == 2
+
+和上一中方式类似，只是使用不同的加密算法。
+
 * obf_mod == 0
 
 在这种模式下，最终生成的代码如下（最后一个参数为 0）::
@@ -202,75 +206,66 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 约束模式
 --------
 
-从 PyArmor 5.7.0 开始， :ref:`引导代码` 必须在加密脚本中，并且加密脚本
-还必须是主脚本。例如，同一个目录下有两个文件 `foo.py` 和 `test.py` ，
-使用下面的命令加密::
+约束模式是和具体的脚本相关的，用来限制脚本的使用方式。在同一个项目中，可以根据需
+要为不同的脚本设置不同的约束模式。
 
-    pyarmor obfuscate foo.py
-
-如果直接往加密后的脚本 `dist/test.py` 中插入 `引导代码` ，这个加密脚本
-就无法使用，因为这个脚本加密的时候没有被指定为主脚本。只能使用下面的命
-令来插入 `引导代码`::
-
-    pyarmor obfuscate --no-runtime --exact test.py
-
-如果需要在没有加密的脚本中运行 :ref:`引导代码` ，可以使用一种变通方式。
-首先加密一个空脚本::
-
-    echo "" > pytransform_bootstrap.py
-    pyarmor obfuscate --no-runtime --exact pytransform_bootstrap.py
-
-然后在导入这个加密后的空脚本 `import pytransform_bootstrap` 。
-
-从 PyArmor 5.5.6 开始，约束模式有四种形式 。
+约束模式共用四种类型，其中模式 2 和 3 主要用于保护可以单独运行的脚本，而模式 4
+主要用于保护加密的 Python 包。
 
 * 模式 1
 
-在此约束模式下，加密脚本必须是下面的形式之一::
+使用这个模式加密的脚本不允许别人修改，在加密模块加载的时候会检查代码，如果被修改
+过，那么就会抛出保护异常。
 
-    __pyarmor__(__name__, __file__, b'...')
+例如，插入一条 `print` 语句在加密脚本 `foo.py`::
 
-    Or
+    __pyarmor__(__name__, __file__, b'...', 1)
+    print('This is obfuscated module')
 
-    from pytransform import pyarmor_runtime
-    pyarmor_runtime()
-    __pyarmor__(__name__, __file__, b'...')
-
-    Or
-
-    from pytransform import pyarmor_runtime
-    pyarmor_runtime('...')
-    __pyarmor__(__name__, __file__, b'...')
-
-例如，下面的这个加密脚本就无法运行，因为有一条额外的语句 `print`::
-
-    $ cat b.py
-    from pytransform import pyarmor_runtime
-    pyarmor_runtime()
-    __pyarmor__(__name__, __file__, b'...')
-    print(__name__)
-
-    $ python b.py
+这个脚本就无法被运行或者导入。
 
 * 模式 2
 
-在此约束模式下，除了加密脚本不能被修改约束外，主脚本必须是加密脚本，并
-且加密脚本不能被非加密脚本导入和使用，一般用于提高 Python 开发的独立的
-应用程序的安全性。
+使用这个模式加密的脚本不允许别人使用 `import` 导入，只能使用 Python 解释器直接运
+行，其主要作用是保护主脚本不能被其他用户随便导入使用。
 
-例如，使用下面的方式导入使用约束模式 2 加密后的主脚本 `foo` 会出错::
+例如，使用模式 2 加密的脚本 `foo2.py` ，可以使用下面的方式运行::
 
-    $ python -c'import foo'
+    python foo2.py
+
+但是不论是通过脚本，还是直接从命令行导入这个加密脚本，都会报错。
+
+例如，下面的命令会抛出保护异常::
+
+    python -c'import foo2'
 
 * 模式 3
 
-在此约束模式下，除了满足约束模式 2 之外，加密脚本里面的函数只能被加密
-后的模块（函数）调用。
+模式 3 是模式 2 的增强版，除了不允许被其他用户导入之外，这个模块中的任意一个函数
+被调用的时候，也会对调用者进行检查。如果调用者是被加密的兄弟脚本，那么允许调用，
+否则也会抛出保护异常。
+
+例如，使用模式 3 加密的两个脚本 `foo3.py` ， `mod3.py` 。前者是主脚本，会调用后
+者里面定义的函数。如果尝试使用下面的脚本 `test.py` 来调用 `mod3`::
+
+    import mod3
+    mod3.hello()
+
+运行 `python test.py` ，当执行第一行 `import` 语句的时候，PyArmor 会对主脚本
+`hello.py` 进行检查，发现其不是加密脚本，会抛出保护异常。
+
+需要注意的如果 `mod3` 之前已经被导入到系统中，那么执行 `import` 语句的时候，
+PyArmor 不会对主脚本进行检查。
+
+而第二行调用 `mod3.hello` 的时候，PyArmor 会检查调用者 `test.py` ，如果发现其不
+是加密脚本，那么就会抛出保护异常。
 
 * 模式 4
 
-此约束模式和模式 3 基本相似，只是主脚本不需要是加密脚本。一般用于加密
-Python 包的部分脚本，以提高加密脚本安全性。
+和模式 3 类似，这个模块中的任意一个函数被调用的时候，会对调用者进行检查。但是这
+种模式加密的模块在导入的时候不会对主脚本进行检查，允许主脚本是没有加密的脚本。
+
+一般用于加密 Python 包的部分脚本，以提高加密脚本安全性。
 
 典型的应用是使用约束模式 1 加密 Python 包中 `__init__.py` 和其他需要被
 外部使用的脚本，而使用约束模式 4 来加密那些只是在包内部使用的脚本。
@@ -325,5 +320,24 @@ Python 包的部分脚本，以提高加密脚本安全性。
     pyarmor build -B
 
 详细示例请参考 :ref:`使用约束模式增加加密脚本安全性`
+
+从 PyArmor 5.7.0 开始，还有另外一个约束， :ref:`引导代码` 必须在加密脚本中，并且
+加密脚本还必须是主脚本。例如，同一个目录下有两个文件 `foo.py` 和 `test.py` ，使
+用下面的命令加密::
+
+    pyarmor obfuscate foo.py
+
+如果直接往加密后的脚本 `dist/test.py` 中插入 `引导代码` ，这个加密脚本就无法使用，
+因为这个脚本加密的时候没有被指定为主脚本。只能使用下面的命令来插入 `引导代码`::
+
+    pyarmor obfuscate --no-runtime --exact test.py
+
+如果需要在没有加密的脚本中运行 :ref:`引导代码` ，可以使用一种变通方式。首先加密
+一个空脚本::
+
+    echo "" > pytransform_bootstrap.py
+    pyarmor obfuscate --no-runtime --exact pytransform_bootstrap.py
+
+然后在导入这个加密后的空脚本 `import pytransform_bootstrap` 。
 
 .. include:: _common_definitions.txt
