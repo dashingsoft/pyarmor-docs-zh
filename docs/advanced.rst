@@ -606,12 +606,46 @@ Python 应用程序，例如::
 * 使用约束模式 1 加密这些需要被外部调用的文件
 * 使用约束模式 4 加密其他的脚本文件
 
-例如::
+例如，包 `mypkg` 有两个文件:
+
+* __init__.py
+* foo.py
+
+其中 `mypkg/__init__.py` 内容如下
+
+.. code-block:: python
+
+    from .foo import hello
+
+    def open_hello(msg):
+        print('This is public hello: %s' % msg)
+
+    def proxy_hello(msg):
+        print('This is proxy hello from foo: %s' % msg)
+        hello(msg)
+
+现在使用下面的方式来加密这个包::
 
     cd /path/to/mypkg
-    pyarmor obfuscate --exact __init__.py exported_func.py
-    pyarmor obfuscate --restrict 4 --recursive \
-            --exclude __init__.py --exclude exported_func.py .
+    pyarmor obfuscate -O obf/mypkg --exact __init__.py
+    pyarmor obfuscate -O obf/mypkg --restrict 4 --recursive --exclude __init__.py .
+
+那么，对于加密后的包，可以直接调用 `__init__.py` 中任何函数::
+
+    cd /path/to/mypkg/obf
+    python
+
+    >>> import mypkg
+    >>> mypkg.open_hello("it should work")
+    >>> mypkg.proxy_hello("also OK")
+
+但是却不能直接调用 `mypkg.foo` 中任何函数。例如::
+
+    cd /path/to/mypkg/obf
+    python
+
+    >>> import mypkg
+    >>> mypkg.foo.hello("it should not work")
 
 关于约束模式的详细说明，请参考 :ref:`约束模式`
 

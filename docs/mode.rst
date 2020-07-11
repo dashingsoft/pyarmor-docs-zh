@@ -206,11 +206,13 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 约束模式
 --------
 
-约束模式是和具体的脚本相关的，用来限制脚本的使用方式。在同一个项目中，可以根据需
-要为不同的脚本设置不同的约束模式。
+约束模式是和具体的脚本相关的，用来限制脚本的使用方式。当加密模块被导入的时候，或
+者开始运行一个加密模块中的函数的时候，首先会检查约束模式，如果违反了约束，那么就
+会抛出保护异常。
 
 约束模式共用四种类型，其中模式 2 和 3 主要用于保护可以单独运行的脚本，而模式 4
-主要用于保护加密的 Python 包。
+主要用于保护加密的 Python 包。在同一个项目中，可以根据需要为不同的脚本设置不同的
+约束模式。
 
 * 模式 1
 
@@ -257,8 +259,8 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 需要注意的如果 `mod3` 之前已经被导入到系统中，那么执行 `import` 语句的时候，
 PyArmor 不会对主脚本进行检查。
 
-而第二行调用 `mod3.hello` 的时候，PyArmor 会检查调用者 `test.py` ，如果发现其不
-是加密脚本，那么就会抛出保护异常。
+而第二行调用 `mod3.hello` 的时候，PyArmor 会再次检查调用者 `test.py` ，如果发现
+其不是加密脚本，那么就会抛出保护异常。
 
 * 模式 4
 
@@ -269,27 +271,6 @@ PyArmor 不会对主脚本进行检查。
 
 典型的应用是使用约束模式 1 加密 Python 包中 `__init__.py` 和其他需要被
 外部使用的脚本，而使用约束模式 4 来加密那些只是在包内部使用的脚本。
-
-例如，加密后 `mypkg/__init__.py` 的可访问性如下
-
-.. code-block:: python
-
-    # mypkg/
-    #     __init__.py 使用约束模式 1 加密
-    #     foo.py 使用约束模式 4 加密
-
-    # "foo.hello" 不能被没有加密的脚本直接调用
-    from .foo import hello
-
-    # "open_hello" 可以被其他脚本直接调用
-    def open_hello(msg):
-        print('This is public hello: %s' % msg)
-
-    # "proxy_hello" 可以被其他脚本直接调用
-    def proxy_hello(msg):
-        print('This is proxy hello: %s' % msg)
-        # "foo.hello" 可以被加密脚本 "__init__.py" 调用
-        hello(msg)
 
 .. note::
 
