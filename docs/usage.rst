@@ -30,9 +30,7 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
         myscript.py
         pytransform
             __init__.py
-            _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
-            pytransform.key
-            license.lic
+            _pytransform.so or _pytransform.dll or _pytransform.dylib
 
 除了加密脚本之外，额外的那个目录 `pytransform` 叫做 :ref:`运行辅助包` ，它是运行
 加密脚本不可缺少的。
@@ -78,27 +76,27 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
 
 使用命令 :ref:`licenses` 为加密脚本生成新的许可文件 :file:`license.lic`
 
-加密脚本的同时会在输出目录下面生成一个默认许可文件 :file:`dist/license.lic` ，它
-允许加密脚本运行在任何设备上并且永不过期。
-
 如果需要设置加密脚本的使用期限或者限制脚本在特定的机器使用，需要生成新的许可文件，
-并覆盖默认许可文件。
+并使用新的许可文件加密脚本。
 
 例如::
 
-    pyarmor licenses --expired 2019-01-01 code-001
+    pyarmor licenses --expired 2019-01-01 r001
 
 执行这条命令 PyArmor 会生成一个带有效期的认证文件:
 
 * 从 :file:`.pyarmor_capsule.zip` 读取相关数据
-* 创建 :file:`license.lic` ，保存在 ``licenses/code-001``
-* 创建 :file:`license.lic.txt` ，保存在 ``licenses/code-001``
+* 创建 :file:`license.lic` ，保存在 ``licenses/r001``
+* 创建 :file:`license.lic.txt` ，保存在 ``licenses/r001``
 
-然后，使用新生成的许可文件覆盖默认的许可文件::
+然后，使用新生成的许可文件加密脚本::
 
-    cp licenses/code-001/license.lic dist/pytransform/
+    pyarmor obfuscate --with-license licenses/r001/license.lic myscript.py
 
-这样，加密脚本在2019年1月1日之后就无法在运行了。
+这样，使用下面的命令运行脚本在2019年1月1日之后就会报错::
+
+    cd dist/
+    python myscript.py
 
 如果想绑定加密脚本到固定机器上，首先在该机器上面运行下面的命令获取硬件信息::
 
@@ -108,16 +106,17 @@ PyArmor 会加密 :file:`myscript.py` 和相同目录下面的所有 :file:`*.py
 
     pyarmor licenses --bind-disk "100304PBN2081SF3NJ5T" --bind-mac "20:c1:d2:2f:a0:96" code-002
 
-同样，覆盖默认许可文件，这样加密脚本就只能在指定机器上运行::
+同样，使用这个许可文件加密脚本，加密脚本就只能在指定机器上运行::
 
-    cp licenses/code-002/license.lic dist/pytransform/
+    pyarmor obfuscate --with-license licenses/code-002/license.lic myscript.py
 
     cd dist/
     python myscript.py
 
-.. note::
-
-   在 v5.7.0 之前，默认许可文件 ``license.lic`` 没有在 ``dist/pytransform`` ，而是在 ``dist``
+在 6.3.0 之前，使用的是一个外部许可文件 ``license.lic`` 。使用这种方式
+的好处是只需要加密脚本一次，之后就不需要在加密脚本。只要把新生成的许可
+证文件覆盖原来的许可证，就可以使得新的许可证生效。关于这种使用方法，请
+参考高级用法中 :ref:`如何使用外部许可文件`
 
 扩展其他认证方式
 ----------------
@@ -186,15 +185,10 @@ PyArmor 通过以下的步骤将所有需要的文件打包成为一个独立可
 
     dist/myscript/myscript
 
-检查脚本是否加密。如果加密，下面的第二条命令应该执行失败::
-
-    rm dist/myscript/license.lic
-    dist/myscript/myscript
-
 为加密脚本设置有效期::
 
     pyarmor licenses --expired 2019-01-01 code-003
-    cp licenses/code-003/license.lic dist/myscript
+    pyarmor pack --with-license licenses/code-003/license.lic myscript.py
 
     dist/myscript/myscript
 
@@ -207,7 +201,8 @@ PyArmor 通过以下的步骤将所有需要的文件打包成为一个独立可
 下面这些 `PyArmor`_ 的特征可以进一步提高加密脚本的安全性:
 
 1. 尽可能的 :ref:`使用超级模式加密脚本` ，如果使用的平台或者Python版本不被支持，
-   那么，启用 :ref:`高级模式`
+   那么，启用 :ref:`高级模式` 。对于 Windows 平台来说，如果性能可以达到要求，启
+   用 :ref:`虚拟模式`
 2. 如果情况允许的话，尝试 :ref:`绑定加密脚本到固定的 Python 解释器` ，通常情况
    下，:ref:`超级模式` 不需要这种额外的保护。
 3. 确保主脚本启用了 `交叉保护代码

@@ -32,10 +32,23 @@
                     --advanced 2 foo.py
 
 这样就可以把指定的许可文件嵌入到扩展模块里面，如果不想把许可文件嵌入到扩展模块里
-面，而是使用外部 ``license.lic`` ，这样可以方便替换许可文件，那么在加密的时候需要
-指定 ``--with-license outer`` ，例如::
+面，而是使用外部 ``license.lic`` ，这样可以方便替换许可文件，那么在加密的
+时候需要指定 ``--with-license outer`` ，例如::
 
-  pyarmor obfuscate --with-license outer --advanced 2 foo.py
+  pyarmor obfuscate --with-license --advanced 2 outer foo.py
+
+更多说明，请参考下一个章节。
+
+.. _如何使用外部许可文件:
+
+如何使用外部许可文件
+--------------------
+
+从 6.3.0 开始，默认情况下许可证是被嵌入到动态库中，如果不想把许可文件嵌入到扩展
+模块里面，而是使用外部 ``license.lic`` ，这样可以方便替换许可文件。那么在加密的
+时候需要指定 ``--with-license outer`` ，例如::
+
+  pyarmor obfuscate --with-license outer foo.py
 
 这样，运行加密脚本的时候就会在外部查找许可文件，查找外部 ``license.lic`` 的顺序
 

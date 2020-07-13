@@ -36,7 +36,7 @@
 
     pytransform/
         __init__.py
-        _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
+        _pytransform.so/.dll/.dylib
 
 在 v6.3.0 之前，这里还有两个额外的文件::
 
@@ -63,7 +63,7 @@
     myscript.py
     mymodule.py
 
-    pytransform.so or pytransform.dll
+    pytransform.so or pytransform.pyd
 
 而被加密的脚本也是一个普通的 Python 脚本， 加密后会是这样::
 
