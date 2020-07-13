@@ -90,4 +90,10 @@ PyArmor 使用一个简单脚本 `bfoo.py` 来进行测试，里面有两个函�
 
     pyarmor benchmark --debug
 
+.. _不同模式的性能比较:
+
+不同模式的性能比较
+------------------
+
+
 .. include:: _common_definitions.txt

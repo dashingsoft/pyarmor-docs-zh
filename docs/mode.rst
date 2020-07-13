@@ -77,6 +77,29 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
    报告问题到 https://github.com/dashingsoft/pyarmor/issues 或者发送邮
    件到 jondy.zhao@gmail.com
 
+.. _vm mode:
+
+.. _虚拟模式:
+
+虚拟模式
+--------
+
+虚拟模式是 6.3.3 才新增加的特性，主要是核心算法使用虚拟代码来实现从而提高安全性，
+目前只支持 Windows 平台。虚拟模式不能单独使用，它是高级模式和超级模式的增强版，
+分别用于增强两种模式下动态库的安全性。
+
+使用下面的命令同时启用高级模式和虚拟模式::
+
+    pyarmor obfuscate --advanced 3 foo.py
+
+使用下面的命令可以同时启用超级模式和虚拟模式::
+
+    pyarmor obfuscate --advanced 4 foo.py
+
+虽然虚拟模式能显著的增强安全性，但是动态库变胖并且性能有所下降。原来的动态库的大
+小大约为 600K~800K 左右，虚拟模式的动态库则一般在 4M 左右。关于对性能的影响，可
+以参考 :ref:`不同模式的性能比较`
+
 .. _代码加密模式:
 
 .. _obfuscating code mode:
