@@ -98,7 +98,7 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 
 虽然虚拟模式能显著的增强安全性，但是动态库变胖并且性能有所下降。原来的动态库的大
 小大约为 600K~800K 左右，虚拟模式的动态库则一般在 4M 左右。关于对性能的影响，可
-以参考 :ref:`不同模式的性能比较`
+以参考 :ref:`加密脚本的性能` 进行实际的测试。
 
 .. _代码加密模式:
 
@@ -191,7 +191,7 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 模块加密模式
 ------------
 
-* obf_mod == 1 （默认值）
+* obf_mod == 1
 
 在这种模式下，最终生成的加密脚本如下::
 
@@ -205,9 +205,10 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
     char *obfuscated_code = obfuscate_algorithm( original_code  );
     sprintf( buffer, "__pyarmor__(__name__, __file__, b'%s', 1)", obfuscated_code );
 
-* obf_mod == 2
+* obf_mod == 2 （默认值）
 
-和上一中方式类似，只是使用不同的加密算法。
+和上一中方式类似，只是使用不同的加密算法，但是安全性更高，性能更好，是从 6.3.0
+新增加的。
 
 * obf_mod == 0
 
