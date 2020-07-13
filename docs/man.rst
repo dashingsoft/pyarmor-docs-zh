@@ -14,7 +14,7 @@ PyArmor 是一个命令行工具，用来加密脚本，绑定加密脚本到固
 
     obfuscate    加密脚本
     licenses     为加密脚本生成新的许可文件
-    pack         打包加密脚本
+    pack         加密脚本然后直接打包成为单独执行的文件
     hdinfo       获取硬件信息
 
 和工程相关的命令::
@@ -92,14 +92,14 @@ obfuscate
 --no-cross-protection           在主脚本中不要插入交叉保护代码
 --plugin NAME                   在加密之前，向主脚本中插入代码。这个选项可以使用多次。
 --platform NAME                 指定运行加密脚本的平台
---advanced <0,1,2>              使用高级模式 `1` 或者超级模式 `2` 加密脚本
+--advanced <0,1,2,3,4>          使用高级模式 `1` ，超级模式 `2` ， 虚拟模式 `3` 和 `4` 加密脚本
 --restrict <0,1,2,3,4>          设置约束模式
 --package-runtime <0,1>         是否把运行文件保存为包的形式
 --no-runtime                    不生成任何运行辅助文件，只加密脚本
 --bootstrap <0,1,2,3>           如何生成引导代码
 --enable-suffix                 生成带有后缀名称的运行辅助包
 --obf-code <0,1,2>              指定代码加密模式
---obf-mod <0,1>                 指定模块加密模式
+--obf-mod <0,1,2>               指定模块加密模式
 --wrap-mode <0,1>               指定包裹加密模式
 --with-license FILENAME         使用指定的许可文件，特殊值 `outer` 表示使用外部许可文件
 --cross-protection FILENAME     使用定制的交叉保护脚本
@@ -152,10 +152,16 @@ PyArmor 首先会修改主脚本，在其中插入交叉保护代码，详细处
 选项 ``--restrict`` 用于指定加密脚本的约束模式，关于约束模式的详细说明，参考
 :ref:`约束模式`
 
-如果指定了超级加密模式 ``--advanced 2`` ，这是一种和以前有很大区别的模式，下面的
-运行辅助文件和引导代码都不存在，只有一个运行需要的扩展模块::
+选项 ``--advanced`` 用来启用一些高级特性以增加安全性，它可用的值有
 
-  pytransform.so or pytransform.dll
+* 0: 禁用所有高级特性
+* 1: 启用 :ref:`高级模式`
+* 2: 启用 :ref:`超级模式`
+* 3: 启用 :ref:`高级模式` 和 :ref:`虚拟模式`
+* 4: 启用 :ref:`超级模式` 和 :ref:`虚拟模式`
+
+如果启用了超级加密模式，这是一种和以前有很大区别的模式，下面的运行辅助文件和引导
+代码都不存在，只有一个运行需要的扩展模块 `pytransform.pyd` 或者 `pytransform.so`
 
 **运行辅助文件**
 
@@ -163,17 +169,13 @@ PyArmor 首先会修改主脚本，在其中插入交叉保护代码，详细处
 
     pytransform/
         __init__.py
-        _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
-        pytransform.key
-        license.lic
+        _pytransform.so / _pytransform.dll / _pytransform.dylib
 
 只有当选项 ``--package-runtime`` 设置为 `0` 的时候，生成的运行辅助文件和加密脚本
 存放在相同的目录下面::
 
     pytransform.py
-    _pytransform.so, or _pytransform.dll in Windows, _pytransform.dylib in MacOS
-    pytransform.key
-    license.lic
+    _pytransform.so / _pytransform.dll / _pytransform.dylib
 
 如果指定了选项 ``--enable-suffix`` ，那么运行辅助包（模块）的名称会包含一个后缀，
 例如， ``pytransform_xxxx`` 。这里 ``xxxx`` 是根据 PyArmor 注册码得到的具有唯一
@@ -634,10 +636,10 @@ config
 --entry SCRIPT                  工程主脚本，可以多个，使用逗号分开
 --is-package <0,1>              管理的脚本是一个 Python 包类型
 --restrict <0,1,2,3,4>          设置约束模式
---obf-mod <0,1>                 是否加密整个模块对象
+--obf-mod <0,1,2>               是否加密整个模块对象
 --obf-code <0,1,2>              是否加密每一个函数
 --wrap-mode <0,1>               是否启用包裹模式加密函数
---advanced <0,1,2>              使用高级模式 `1` 或者超级模式 `2` 加密脚本
+--advanced <0,1,2,3,4>          使用高级模式 `1` ，超级模式 `2` ，虚拟模式 `3` 和 `4` 加密脚本
 --cross-protection <0,1>        是否插入交叉保护代码到主脚本，也可以直接指定脚本名称
 --runtime-path RPATH            设置运行文件所在路径
 --plugin NAME                   设置需要插入到主脚本的代码文件，这个选项可以使用多次
@@ -821,11 +823,11 @@ banchmark
 
 **选项**:
 
--m, --obf-mode <0,1,2>   是否加密模块
--c, --obf-code <0,1,2>   是否单独加密每一个函数
--w, --wrap-mode <0,1>    是否使用包裹模式加密函数
--a, --advanced <0,1,2>   是否高级模式/超级模式加密函数
---debug                  保留测试使用的测试脚本
+-m, --obf-mod <0,1,2>        是否加密模块
+-c, --obf-code <0,1,2>       是否单独加密每一个函数
+-w, --wrap-mode <0,1>        是否使用包裹模式加密函数
+-a, --advanced <0,1,2,3,4>   是否高级模式/超级模式加密函数
+--debug                      保留测试使用的测试脚本
 
 **描述**
 
@@ -938,6 +940,7 @@ runtime
 --platform NAME               生成其他平台下的运行辅助包
 --enable-suffix               生成带有后缀名称的运行辅助包
 --super-mode                  为超级模式生成运行辅助文件
+--vm-mode                     为虚拟模式生成运行辅助文件
 
 **DESCRIPTION**
 
