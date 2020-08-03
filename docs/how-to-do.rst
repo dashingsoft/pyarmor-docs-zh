@@ -421,7 +421,11 @@ PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有
                 -p dist/obf --hidden-import pytransform
                 hello.py
 
-如果是使用超级模式加密脚本，那么使用下面的命令生成 `.spec` 文件::
+如果是使用超级模式加密脚本::
+
+    pyarmor obfuscate --output dist/obf --advanced 2 --package-runtime 0 hello.py
+
+那么使用下面的命令生成 `.spec` 文件::
 
     pyi-makespec -p dist/obf --hidden-import pytransform hello.py
 
@@ -458,15 +462,8 @@ PyArmor 需要 `PyInstaller` 来完成加密脚本的打包工作，如果没有
 
    必须要指定选项 ``--clean`` ，否则不会把原来的脚本替换成为加密脚本。
 
-检查一下安装包中的脚本是否已经加密::
+运行打包好的脚本::
 
-   # It works
    dist/hello/hello.exe
-
-   rm dist/hello/license.lic
-
-   # It should not work
-   dist/hello/hello.exe
-
 
 .. include:: _common_definitions.txt
