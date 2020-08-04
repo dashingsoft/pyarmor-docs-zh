@@ -1253,4 +1253,18 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
 
     python build_data_module.py data.txt > data.py
 
+.. _how to remove docstrings:
+
+如何删除函数和方法的说明文档
+------------------------
+
+在命令行设置环境变量 `PYTHONOPTIMIZE=2` 可以删除函数或者方法中的说明文档，例如::
+
+    # In linux
+    PYTHONOPTIMIZE=2 pyarmor obfuscate foo.py
+
+    # In Windows
+    set PYTHONOPTIMIZE=2
+    pyarmor obfuscate foo.py
+
 .. include:: _common_definitions.txt
