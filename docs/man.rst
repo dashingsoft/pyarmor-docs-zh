@@ -96,6 +96,7 @@ obfuscate
 --restrict <0,1,2,3,4>          设置约束模式
 --package-runtime <0,1>         是否把运行文件保存为包的形式
 --no-runtime                    不生成任何运行辅助文件，只加密脚本
+--runtime [@]PATH               使用预先生成的运行辅助包
 --bootstrap <0,1,2,3>           如何生成引导代码
 --enable-suffix                 生成带有后缀名称的运行辅助包
 --obf-code <0,1,2>              指定代码加密模式
@@ -162,6 +163,8 @@ PyArmor 首先会修改主脚本，在其中插入交叉保护代码，详细处
 
 如果启用了超级加密模式，这是一种和以前有很大区别的模式，下面的运行辅助文件和引导
 代码都不存在，只有一个运行需要的扩展模块 `pytransform.pyd` 或者 `pytransform.so`
+
+关于选项 ``--runtime`` 的用法，请参考命令 `runtime`_
 
 **运行辅助文件**
 
@@ -293,6 +296,12 @@ PyArmor 首先会修改主脚本，在其中插入交叉保护代码，详细处
 
     pyarmor obfuscate --cross-protection build/pytransform_protection.py \
                       --with-license outer --advanced 2 foo.py
+
+* 使用预先生成的运行辅助包来加密脚本::
+
+    pyarmor runtime --advanced 2 --with-license outer -O myruntime-1
+    pyarmor obfuscate --runtime myruntime-1 --with-license licenses/r001/license.lic foo.py
+    pyarmor obfuscate --runtime @myruntime-1 --exact foo-2.py foo-3.py
 
 .. _licenses:
 
@@ -721,6 +730,7 @@ build
 -B, --force                     强制加密所有脚本，默认情况只加密上次构建之后修改过的脚本
 -r, --only-runtime              只生成运行依赖文件
 -n, --no-runtime                只加密脚本，不要生成运行依赖文件
+--runtime [@]PATH               使用预先生成的运行辅助包
 -O, --output OUTPUT             输出路径，如果设置，那么工程属性里面的输出路径就无效
 --platform NAME                 指定加密脚本的运行平台，仅用于跨平台发布
 --package-runtime <0,1>         是否保存运行文件为包的形式
@@ -739,6 +749,8 @@ build
 引导代码总是会使用绝对导入的方式。
 
 选项 ``--platform`` 和 ``--package-runtime`` 的使用，请参考命令 `obfuscate`_
+
+选项 ``--runtime`` 的使用，请参考命令 `runtime`_
 
 **示例**
 
@@ -939,8 +951,7 @@ runtime
 -L, --with-license FILE       使用这个文件替换默认的加密脚本许可文件，特殊值 `outer` 表示使用外部许可证
 --platform NAME               生成其他平台下的运行辅助包
 --enable-suffix               生成带有后缀名称的运行辅助包
---super-mode                  为超级模式生成运行辅助文件
---vm-mode                     为虚拟模式生成运行辅助文件
+--advanced <0,1,2,3,4>        生成高级运行辅助包
 
 **DESCRIPTION**
 
@@ -964,10 +975,26 @@ runtime
 是默认的交叉保护脚本，这个脚本在运行时刻并不需要，它主要是作为模版来定制自己的交
 叉保护脚本，参考 :ref:`定制交叉保护脚本`
 
-选项 ``--super-mode`` 用来生成 :ref:`超级模式` 的运行辅助文件，需要注意的是超级
-模式的运行辅助文件和其他模式是完全不一样的。
+选项 ``--advanced`` 用来生成高级运行辅助文件，例如为 :ref:`超级模式` 生成运行辅
+助包。
 
 选项 ``--platform`` 和 ``--enable-suffix`` 的使用，请参考命令 `obfuscate`_
+
+在 v6.3.7 之后，运行辅助包会记住创建时候的选项 ``--advanced`` ， ``--platform``
+， ``--enable-suffix`` 。当使用选项 ``--runtime`` 加密脚本的时候，就可以自动读取
+这些设置，而不需要在命令行重新指定。例如::
+
+    pyarmor runtime --platform linux.armv7 --enable-suffix --advanced 1 -O myruntime-1
+    pyarmor obfuscate --runtime myruntime-1 foo.py
+
+这里的加密命令等价于::
+
+    pyarmor obfuscate --platform linux.armv7 --enable-suffix --advanced 1 foo.py
+
+如果有多个入口脚本，加密的时候只需要自动读取相关的选项，而不需要再次拷贝运行辅助
+文件，那么在路径的前面增加一个 ``@`` 就可以。例如::
+
+    pyarmor obfuscate --runtime @myruntime-1 --exact foo-2.py foo-3.py
 
 **EXAMPLES**
 
