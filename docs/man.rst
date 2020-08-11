@@ -96,7 +96,7 @@ obfuscate
 --restrict <0,1,2,3,4>          设置约束模式
 --package-runtime <0,1>         是否把运行文件保存为包的形式
 --no-runtime                    不生成任何运行辅助文件，只加密脚本
---runtime [@]PATH               使用预先生成的运行辅助包
+--runtime PATH                  使用预先生成的运行辅助包
 --bootstrap <0,1,2,3>           如何生成引导代码
 --enable-suffix                 生成带有后缀名称的运行辅助包
 --obf-code <0,1,2>              指定代码加密模式
@@ -730,7 +730,7 @@ build
 -B, --force                     强制加密所有脚本，默认情况只加密上次构建之后修改过的脚本
 -r, --only-runtime              只生成运行依赖文件
 -n, --no-runtime                只加密脚本，不要生成运行依赖文件
---runtime [@]PATH               使用预先生成的运行辅助包
+--runtime PATH                  使用预先生成的运行辅助包
 -O, --output OUTPUT             输出路径，如果设置，那么工程属性里面的输出路径就无效
 --platform NAME                 指定加密脚本的运行平台，仅用于跨平台发布
 --package-runtime <0,1>         是否保存运行文件为包的形式
