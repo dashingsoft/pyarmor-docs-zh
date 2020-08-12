@@ -12,14 +12,6 @@
 
       pyarmor -d obfuscate --recurisve foo.py
 
-* 设置 Python 的调试标志，例如::
-
-      PYTHONDEBUG=y pyarmor -d obfuscate --recurisve foo.py
-
-      # In Windows
-      set PYTHONDEBUG=y
-      pyarmor obfuscate --recurisve foo.py
-
 对于运行加密脚本出现的问题:
 
 * 尝试打开 Python 的调试选项查看更多的错误信息。例如::
@@ -336,6 +328,24 @@ No module name pytransform
 
     pyarmor pack --clean foo.py
 
+打包好的可执行文件运行有问题
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+首先确认脚本可以直接使用 PyInstaller 打包，并且打包好的可执行文件运行正常。
+
+其次确认加密后的脚本，没有打包可以正确运行。
+
+如果两者都正常，那么删除输出路径 `dist` 和 PyInstaller 的缓存路径
+`build` ，然后使用选项 ``--debug`` 进行打包::
+
+    pyarmor pack --debug foo.py
+
+这样所有的中间文件都会保留下来，其中有打过补丁的 `foo-patched.spec` 可
+以被 PyInstaller 直接调用来打包加密脚本，例如::
+
+    pyinstaller -y --clean foo-patched.spec
+
+检查这个文件，并调整里面的选项，确保最后打包好的文件能够正常工作。
 
 PyArmor 注册问题
 ----------------
