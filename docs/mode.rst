@@ -231,8 +231,8 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 --------
 
 约束模式是和具体的脚本相关的，用来限制脚本的使用方式。当加密模块被导入的时候，或
-者开始运行一个加密模块中的函数的时候，首先会检查约束模式，如果违反了约束，那么就
-会抛出保护异常。
+者开始使用加密模块中的函数和属性的时候，首先会检查约束模式，如果违反了约束，那么
+就会抛出保护异常。
 
 约束模式共用四种类型，其中模式 2 和 3 主要用于保护可以单独运行的脚本，而模式 4
 主要用于保护加密的 Python 包。在同一个项目中，可以根据需要为不同的脚本设置不同的
@@ -267,40 +267,89 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 
 * 模式 3
 
-模式 3 是模式 2 的增强版，除了不允许被其他用户导入之外，这个模块中的任意一个函数
-被调用的时候，也会对调用者进行检查。如果调用者是被加密的兄弟脚本，那么允许调用，
-否则也会抛出保护异常。
-
-例如，使用模式 3 加密的两个脚本 `foo3.py` ， `mod3.py` 。前者是主脚本，会调用后
-者里面定义的函数。如果尝试使用下面的脚本 `test.py` 来调用 `mod3`::
-
-    import mod3
-    mod3.hello()
-
-运行 `python test.py` ，当执行第一行 `import` 语句的时候，PyArmor 会对主脚本
-`hello.py` 进行检查，发现其不是加密脚本，会抛出保护异常。
-
-需要注意的如果 `mod3` 之前已经被导入到系统中，那么执行 `import` 语句的时候，
-PyArmor 不会对主脚本进行检查。
-
-而第二行调用 `mod3.hello` 的时候，PyArmor 会再次检查调用者 `test.py` ，如果发现
-其不是加密脚本，那么就会抛出保护异常。
+模式 3 是模式 2 的增强版，除了不允许被其他用户导入之外，这个模块中的属性和函数调
+用也会受到保护。访问模块的属性或者调用其中的函数的时候，会对调用者进行检查。如果
+调用者是被加密的兄弟脚本，那么允许调用，否则也会抛出保护异常。
 
 * 模式 4
 
-和模式 3 类似，这个模块中的任意一个函数被调用的时候，会对调用者进行检查。但是这
-种模式加密的模块在导入的时候不会对主脚本进行检查，允许主脚本是没有加密的脚本。
-
-一般用于加密 Python 包的部分脚本，以提高加密脚本安全性。
+和模式 3 类似，会对模块的属性和函数调用进行保护。唯一的区别是允许主脚本是没有加
+密的脚本。一般用于加密 Python 包的部分脚本，以提高加密脚本安全性。
 
 典型的应用是使用约束模式 1 加密 Python 包中 `__init__.py` 和其他需要被
 外部使用的脚本，而使用约束模式 4 来加密那些只是在包内部使用的脚本。
 
+例如，有一个包 `mypkg`::
+
+    mypkg/
+        __init__.py
+        private_a.py
+        private_b.py
+
+在脚本 ``__init__.py`` 中定义公开的函数和属性:
+
+.. code:: python
+
+    from . import private_a as ma
+    from . import private_b as mb
+
+    public_data = 'welcome'
+
+    def proxy_hello():
+        print('Call private hello')
+        ma.hello()
+
+    def public_hello():
+        print('This is public hello')
+
+而在脚本 ``private_a.py`` 中定义私有的方法和属性:
+
+.. code:: python
+
+    import sys
+
+    password = 'xxxxxx'
+
+    def hello():
+        print('password is: %s' % password)
+
+然后使用模式 1 加密 ``__init__.py`` ，使用模式 4 加密其他模块，保存到 `dist`::
+
+    dist/
+        __init__.py
+        private_a.py
+        private_b.py
+
+现在直接使用 Python 解释器进行一些测试:
+
+.. code:: python
+
+    import dist as mypkg
+
+    # 下面这些应该能够正常工作
+    mypkg.public_hello()
+    mypkg.proxy_hello()
+    print(mypkg.public_data)
+    print(mypkg.ma)
+
+    # 下面这些应该抛出保护异常
+    mypkg.ma.hello()
+    print(mypkg.ma.password)
+
 .. important::
 
-   在 v6.3.7 中有一个重要的改进。如果模块使用约束模式 3 或者 4 进行
-   加密，那么没有加密的脚本将无法访问模块中的任何属性。在前面的版本里
-   面，主要是对约束模块中的函数能严格进行限制，对于数据属性没有进行约束。
+   在 v6.3.7 中有一个重要的改进。如果模块使用约束模式 3 或者 4 进行加密，那么没
+   有加密的脚本将无法访问模块中的任何属性。在前面的版本里面，主要是对约束模块中
+   的函数能严格进行限制，对于数据属性没有进行约束。
+
+   不要在公开模块 ``__init__.py`` 中导入私有模块的函数或者类，因为只有模块的属性
+   是被保护的，其他类型的属性是没有被保护的::
+
+       # 正确，导入模块名称
+       from . import private_a as ma
+
+       # 错误，函数 `hello` 的所有属性可以被外部脚本访问
+       from .private_a import hello
 
 .. note::
 
