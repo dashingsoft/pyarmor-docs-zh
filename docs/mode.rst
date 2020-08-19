@@ -352,6 +352,17 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
        # 错误，函数 `hello` 的所有属性可以被外部脚本访问
        from .private_a import hello
 
+   在使用约束模式 3 或者 4 加密的私有模块中，必须在模块级别导入所有需要的名称，
+   在函数或者类内导入模块可能无法正常工作::
+
+       # 正确
+       import shutil
+       from time import sleep
+
+       def foo(n):
+           # 错误
+           from os.path import join
+
 .. note::
 
    约束模式 2 和 3 不能用于加密 Python 包，否则加密后的包是无法被非加
