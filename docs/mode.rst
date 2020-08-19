@@ -339,9 +339,9 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 
 .. important::
 
-   在 v6.3.7 中有一个重要的改进。如果模块使用约束模式 3 或者 4 进行加密，那么没
-   有加密的脚本将无法访问模块中的任何属性。在前面的版本里面，主要是对约束模块中
-   的函数能严格进行限制，对于数据属性没有进行约束。
+   在 v6.3.7 中有一个重要的改进，使用约束模式 3 或者 4 进行加密模块，其数据属性
+   也会受到保护，没有加密的脚本将无法访问模块中的任何属性。在前面的版本里面，主
+   要是对约束模块中的函数能严格进行限制，对于数据属性没有进行约束。
 
    不要在公开模块 ``__init__.py`` 中导入私有模块的函数或者类，因为只有模块的属性
    是被保护的，其他类型的属性是没有被保护的::
@@ -351,17 +351,6 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 
        # 错误，函数 `hello` 的所有属性可以被外部脚本访问
        from .private_a import hello
-
-   在使用约束模式 3 或者 4 加密的私有模块中，必须在模块级别导入所有需要的名称，
-   在函数或者类内导入模块可能无法正常工作::
-
-       # 正确
-       import shutil
-       from time import sleep
-
-       def foo(n):
-           # 错误
-           from os.path import join
 
 .. note::
 
