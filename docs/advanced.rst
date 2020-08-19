@@ -1267,4 +1267,54 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
     set PYTHONOPTIMIZE=2
     pyarmor obfuscate foo.py
 
+.. _using restrict mode with threading and multiprocessing:
+
+在约束模块中使用 threading 和 multiprocessing
+---------------------------------------------
+
+如果一个脚本中使用了 :mod:`threading` 和 :mod:`multiprocessing` ，并且使用
+:ref:`约束模式` 3 或者 4 进行加密，那么运行的时候会抛出保护异常。因为这两个系统
+模块都没有加密，但是它们会直接调用约束模块里面的函数，这会触发保护异常。
+
+
+为了解决这个问题，需要定义一个公共的代理模块，这个公共模块使用普通约束，让系统模
+块来调用代理模块里面的函数，而不是直接调用私有模块里面的函数。
+
+例如，这个示例脚本 ``foo.py`` 就使用了代理模块 ``pub_foo.py`` 来解决约束冲突
+
+.. code:: python
+
+    import multiprocessing as mp
+    import pub_foo
+
+    def hello(q):
+        print('module name: %s' % __name__)
+        q.put('hello')
+
+    if __name__ == '__main__':
+        ctx = mp.get_context('spawn')
+        q = ctx.Queue()
+        # call "proxy_hello" in public module instead private "hello"
+        p = ctx.Process(target=pub_foo.proxy_hello, args=(q,))
+        p.start()
+        print(q.get())
+        p.join()
+
+代理模块 ``pub_foo.py`` 的定义如下
+
+.. code:: python
+
+    import foo
+
+    def proxy_hello(q):
+        return foo.hello(q)
+
+现在使用不同的约束模式来分别加密这两个脚本::
+
+    pyarmor obfuscate --restrict 3 foo.py
+    pyarmor obfuscate --restrict 1 --exact --no-runtime pub_foo.py
+
+    # Test it
+    python dist/foo.py
+
 .. include:: _common_definitions.txt
