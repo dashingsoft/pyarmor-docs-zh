@@ -1312,9 +1312,8 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
 现在使用不同的约束模式来分别加密这两个脚本::
 
     pyarmor obfuscate --restrict 3 foo.py
-    pyarmor obfuscate --restrict 1 --exact --no-runtime pub_foo.py
 
-    # Test it
-    python dist/foo.py
+    # 为了不影响其他加密脚本，选项 --exact 和 --no-runtime 都是必须的
+    pyarmor obfuscate --restrict 1 --exact --no-runtime pub_foo.py
 
 .. include:: _common_definitions.txt
