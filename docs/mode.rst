@@ -234,9 +234,9 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 者开始使用加密模块中的函数和属性的时候，首先会检查约束模式，如果违反了约束，那么
 就会抛出保护异常。
 
-约束模式共用四种类型，其中模式 2 和 3 主要用于保护可以单独运行的脚本，而模式 4
-主要用于保护加密的 Python 包。在同一个项目中，可以根据需要为不同的脚本设置不同的
-约束模式。
+约束模式共用五种类型，其中模式 2 和 3 主要用于保护可以单独运行的脚本，而模式 4
+主要用于保护加密的 Python 包。模式 5 安全性最高，两者都适用。在同一个项目中，可
+以根据需要为不同的脚本设置不同的约束模式。
 
 * 模式 1
 
@@ -337,6 +337,12 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
     mypkg.ma.hello()
     print(mypkg.ma.password)
 
+* 模式 5 (v6.4.0 新增)
+
+模式 5 是模式 4 的增强版，会对运行堆栈中全局变量进行保护。当运行模式 5 中任意函
+数的时候，外部脚本就无法访问函数的全局变量。这是安全性最高的一种约束模式，即可用
+于保护独立脚本，也可用于保护包。但是因为要对全局变量进行约束，对性能可能会有影响。
+
 .. important::
 
    在 v6.3.7 中有一个重要的改进，使用约束模式 3 或者 4 进行加密模块，其数据属性
@@ -354,8 +360,8 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 
 .. note::
 
-   约束模式 2 和 3 不能用于加密 Python 包，否则加密后的包是无法被非加
-   密的脚本导入的。
+   约束模式 2 和 3 不能用于加密 Python 包，否则加密后的包是无法被非加密的脚本导
+   入的。
 
 .. note::
 
