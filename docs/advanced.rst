@@ -1107,7 +1107,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 
 首先使用下面的命令生成默认的交叉保护脚本 ``build/pytransform_protection.py``::
 
-  pyarmor runtime --super-mode --output build
+  pyarmor runtime --advanced 2 --output build
 
 然后修改这个生成的脚本，并在加密的时候使用选项 ``--cross-protection`` 来指定这个
 脚本就可以了。例如::
@@ -1115,14 +1115,10 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
   pyarmor obfuscate --cross-protection build/pytransform_protection.py \
                     --advanced 2 foo.py
 
-需要注意的是超级模式和其他任何模式使用的交叉保护脚本并不一样，所以如果不是使用超
-级模式进行加密，生成默认脚本的时候就不需要额外选项，例如::
-
-  pyarmor runtime --output build
-
 .. note::
 
-   使用 ``--advanced 1`` 加密并不是超级模式，只有 ``--advanced 2`` 才是超级模式
+   加密时候的 ``--advanced`` 和生成运行辅助文件时候的 ``--advanced`` 必须一致，
+   不同的值生成的运行辅助文件并不相同。
 
 .. _storing runtime file license.lic to any location:
 
@@ -1276,7 +1272,6 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
 :ref:`约束模式` 3 或者 4 进行加密，那么运行的时候会抛出保护异常。因为这两个系统
 模块都没有加密，但是它们会直接调用约束模块里面的函数，这会触发保护异常。
 
-
 为了解决这个问题，需要定义一个公共的代理模块，这个公共模块使用普通约束，让系统模
 块来调用代理模块里面的函数，而不是直接调用私有模块里面的函数。
 
@@ -1315,5 +1310,9 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
 
     # 为了不影响其他加密脚本，选项 --exact 和 --no-runtime 都是必须的
     pyarmor obfuscate --restrict 1 --exact --no-runtime pub_foo.py
+
+另外一种解决方案是使用约束模式 1 加密相关的系统模块，例如 :mod:`threading` ，这
+样就不会违反约束模式的要求。对于 :mod:`multiprocessing` 来说，不需要加密里面的所
+有模块，仅仅加密那些会直接调用约束模块的脚本就可以了。
 
 .. include:: _common_definitions.txt
