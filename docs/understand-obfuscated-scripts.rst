@@ -267,6 +267,19 @@
       # The output will be '<frozen foo>'
       print(hello.__file__)
 
+* 对于超级模式，内置函数 `exec()`, `eval()` 调用的时候必须指定 ``locals`` ，否则
+  无法工作，需要使用下面的等价方式调用::
+
+       exec(s) => exec(s, globals(), locals())
+       eval(s) => eval(s, globals(), locals())
+
+  `dirs()`, `vars()` 没有参数的情况下也无法工作，需要使用下面的等价方式调用::
+
+       dirs() => sorted(locals().keys())
+       vars() => locals()
+
+  不过，如果 `x` 不是 `None` 的话， `dirs(x)`, `vars(x)` 可以被正常调用。
+
 第三方解释器的支持
 ------------------
 
