@@ -203,8 +203,7 @@ PyArmor 通过以下的步骤将所有需要的文件打包成为一个独立可
 1. 尽可能的 :ref:`使用超级模式加密脚本` ，如果使用的平台或者Python版本不被支持，
    那么，启用 :ref:`高级模式` 。对于 Windows 平台来说，如果性能可以达到要求，启
    用 :ref:`虚拟模式`
-2. 如果情况允许的话，尝试 :ref:`绑定加密脚本到固定的 Python 解释器` ，通常情况
-   下，:ref:`超级模式` 不需要这种额外的保护。
+2. 如果情况允许的话，尝试 :ref:`绑定加密脚本到固定的 Python 解释器` 。
 3. 确保主脚本启用了 `交叉保护代码 <https://pyarmor.readthedocs.io/zh/latest/how-to-do.html#special-handling-of-entry-script>`_ ，可能的话最好能 :ref:`定制交叉保护脚本`
 4. 使用相应 :ref:`约束模式` 来加密脚本
 5. 使用更高安全级别的代码加密模式 ``--obf-code=2``
