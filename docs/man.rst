@@ -556,6 +556,13 @@ https://pyinstaller.readthedocs.io/en/stable/hooks.html#understanding-pyinstalle
 
      pyarmor pack -e " --icon images\\app.ico" foo.py
 
+.. note::
+
+   当使用选项 ``-e`` 和 ``-x`` 的时候，要在参数值前面增加一个空格，否则会提示命
+   令行错误。例如::
+
+     pyarmor pack -e " --onefile" -x " --advanced 2" foo.py
+
 .. important::
 
    命令 `pack` 会自动加密脚本，所以不要使用该命令去打包加密后的脚本，打包加密脚
