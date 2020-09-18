@@ -873,7 +873,7 @@ Python 应用程序，例如::
     from pyarmor.pyarmor import licenses as generate_license_key
     lickey = generate_license_key(name='product-001',
                                   expired='2020-06-15',
-                                  home='~/.pyarmor-2')
+                                  home='~/.pyarmor-1')
     print('Generate key for product 1: %s' % lickey)
 
     lickey = generate_license_key(name='product-002',
