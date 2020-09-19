@@ -352,22 +352,39 @@ licenses
 
     cp licenses/mycode/license.lic dist/pytransorm/
 
+从 v6.3.0 之后，许可文件 `license.lic` 已经被嵌入到动态库中，覆盖模式已经失效，
+需要在加密脚本的时候使用选项 ``--with-license`` 来指定许可文件，例如::
+
+  pyarmor obfuscate --with-licenses licenses/mycode/license.lic foo.py
+
+如果要使用传统的方式，请参考 :ref:`如何使用外部许可文件`
+
 另外一个例子，限制加密脚本在固定 Mac 地址，同时设置使用期限::
 
-    pyarmor licenses --expired 2019-10-10 --bind-mac 2a:33:50:46:8f tom
+    pyarmor licenses --expired 2019-10-10 --bind-mac f8:ff:c2:27:00:7f r001
     cp licenses/tom/license.lic dist/
 
 在这之前，一般需要运行命令 :ref:`hdinfo` 得到硬件的相关信息::
 
     pyarmor hdinfo
 
-选项 ``--bind-mac`` 可以使用下面的格式绑定一台机器上全部或者部分网卡，例如::
+    Hardware informations got by PyArmor:
+    Serial number of first harddisk: "FV994730S6LLF07AY"
+    Default Mac address: "f8:ff:c2:27:00:7f"
+    Ip address: "192.168.121.100"
 
-    pyarmor licenses --bind-mac "<2a:33:50:46:8f,f0:28:69:c0:24:3a>" r001
+如果一台机器上有多个网卡，那么 pyarmor 之后检查默认的网卡，也就是命令 `hdinfo`
+打印出来的网卡。如果需要绑定其他网卡，那么使用尖括号把网址包含起来，例如::
+
+    pyarmor licenses --bind-mac "<2a:33:50:46:8f>" r002
+
+选项 ``--bind-mac`` 也可以使用下面的格式绑定一台机器上全部或者部分网卡，例如::
+
+    pyarmor licenses --bind-mac "<2a:33:50:46:8f,f0:28:69:c0:24:3a>" r003
 
 在 Linux 系统下，还可以指定的网络接口的名称，例如::
 
-    pyarmor licenses --bind-mac "eth1/fa:33:50:46:8f:3d" r002
+    pyarmor licenses --bind-mac "eth1/fa:33:50:46:8f:3d" r004
 
 选项 `-x` 可以把任意字符串数据存放到许可文件里面，主要用于自定义认证类型的时候，
 传递参数给自定义认证函数。例如::
