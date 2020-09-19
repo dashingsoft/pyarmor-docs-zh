@@ -355,7 +355,7 @@ licenses
 从 v6.3.0 之后，许可文件 `license.lic` 已经被嵌入到动态库中，覆盖模式已经失效，
 需要在加密脚本的时候使用选项 ``--with-license`` 来指定许可文件，例如::
 
-  pyarmor obfuscate --with-licenses licenses/mycode/license.lic foo.py
+  pyarmor obfuscate --with-license licenses/mycode/license.lic foo.py
 
 如果要使用传统的方式，请参考 :ref:`如何使用外部许可文件`
 
