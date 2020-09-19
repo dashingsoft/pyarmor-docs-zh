@@ -361,6 +361,14 @@ licenses
 
     pyarmor hdinfo
 
+选项 ``--bind-mac`` 可以使用下面的格式绑定一台机器上全部或者部分网卡，例如::
+
+    pyarmor licenses --bind-mac "<2a:33:50:46:8f,f0:28:69:c0:24:3a>" r001
+
+在 Linux 系统下，还可以指定的网络接口的名称，例如::
+
+    pyarmor licenses --bind-mac "eth1/fa:33:50:46:8f:3d" r002
+
 选项 `-x` 可以把任意字符串数据存放到许可文件里面，主要用于自定义认证类型的时候，
 传递参数给自定义认证函数。例如::
 
