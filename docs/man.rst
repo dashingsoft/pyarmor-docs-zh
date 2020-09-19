@@ -362,7 +362,6 @@ licenses
 另外一个例子，限制加密脚本在固定 Mac 地址，同时设置使用期限::
 
     pyarmor licenses --expired 2019-10-10 --bind-mac f8:ff:c2:27:00:7f r001
-    cp licenses/tom/license.lic dist/
 
 在这之前，一般需要运行命令 :ref:`hdinfo` 得到硬件的相关信息::
 
@@ -389,7 +388,7 @@ licenses
 选项 `-x` 可以把任意字符串数据存放到许可文件里面，主要用于自定义认证类型的时候，
 传递参数给自定义认证函数。例如::
 
-    pyarmor licenses -x "2019-02-15" tom
+    pyarmor licenses -x "2019-02-15" r005
 
 然后在加密脚本中，可以从认证文件的信息中查询到传入的数据。例如::
 
