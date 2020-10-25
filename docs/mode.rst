@@ -30,6 +30,7 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
 * Python 2.7
 * Python 3.7
 * Python 3.8
+* Python 3.9
 
 Python 3.5，3.6 有可能随后会被支持，但是 Python 3.0 ~ 3.4 不会被支持。
 
@@ -71,11 +72,10 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
    不能超过大约 30 个左右，超过这个限制将无法被加密（但是依旧可以使用
    普通模式进行加密）。
 
-.. note::
+.. important::
 
-   如果在使用过程中出现正常的 Python 解释器无法在高级模式下运行，欢迎
-   报告问题到 https://github.com/dashingsoft/pyarmor/issues 或者发送邮
-   件到 jondy.zhao@gmail.com
+   从 Python3.9 不在支持高级模式，对于所有支持超级模式的 Python 版本，推荐使用超
+   级模式。
 
 .. _vm mode:
 
