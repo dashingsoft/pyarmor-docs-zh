@@ -55,29 +55,40 @@ https://pyarmor.dashingsoft.com/cart/order.html
 
 https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 
-支付成功之后注册文件会自动通过电子邮件发送过去。注册文件是一个压缩文件，
-里面包含 3 个文件:
+需要国内增值税发票的用户通过下面的链接购买许可
 
-* README.txt
-* license.lic (注册码)
-* .pyarmor_capsule.zip (私有密钥箱)
+http://www.sharebank.com.cn/soft/softbuy.php?soid=52382
 
-当收到包含注册文件的邮件之后，保存附件为 `profile-regfile-1.zip` ，然
-后使用下面的命令生效注册文件::
+支付成功之后注册码会自动通过电子邮件发送过去，有两种方式可以进行注册
 
-    pyarmor register pyarmor-regfile-1.zip
+a. 直接运行下面的命令完成激活和注册，适用于 PyArmor v6.5.0 之后的版本
 
-运行下面的命令查看注册信息
+       pyarmor register CODE
+
+   注册机器必须能够连接到互联网，远程服务器会对注册码进行验证。
+
+b. 如果使用的是 PyArmor v6.5.0 之前的版本，首先在浏览器打开下面的链接激活
+
+       https://api.dashingsoft.com/product/key/activate/CODE/
+
+   激活成功之后会下载一个注册文件 “pyarmor-regfile-1.zip”，然后使用下面的
+   命令完成注册
+
+       pyarmor register pyarmor-regfile-1.zip
+
+注册成功之后，可以运行下面的命令查看注册信息
 
     pyarmor register
 
-注册码生效之后，使用试用版本加密的脚本需要全部重新加密。
+然后在加密所有的脚本。
 
-如果你使用的是 PyArmor 5.6 之前的版本，使用下面的方式注册：
+.. note::
 
-1. 解压注册文件
-2. 拷贝解压后的 "license.lic" 到 PyArmor 的安装目录下面
-3. 拷贝解压后的 ".pyarmor_capsule.zip" 到用户的 HOME 目录
+    如果你使用的是 PyArmor 5.6 之前的版本，使用下面的方式注册：
+
+    1. 解压注册文件 "pyarmor-regfile-1.zip"
+    2. 拷贝解压后的 "license.lic" 到 PyArmor 的安装目录下面
+    3. 拷贝解压后的 ".pyarmor_capsule.zip" 到用户的 HOME 目录
 
 .. important::
 
