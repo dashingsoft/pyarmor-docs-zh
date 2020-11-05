@@ -905,7 +905,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
 的时候，需要指定额外的选项 ``--restrict 0`` 和 ``--no-cross-protection`` ，
 否则加密脚本可能会报错。例如，首先加密脚本 ``foo.py``::
 
-    pyarmor obfuscate --restrict 0 --no-cross-protection foo.py
+    pyarmor obfuscate --restrict 0 --no-cross-protection --package-runtime 0 foo.py
 
 然后使用 Nuitka 把加密后的脚本转换成为可执行的文件::
 
@@ -920,7 +920,7 @@ v5.9.3 之后，实现了在脚本运行过程中对许可文件进行周期性�
     # 生成 "mymodule.pyi"
     python -m nuitka --module mymodule.py
 
-    pyarmor obfuscate --restrict 0 --no-bootstrap mymodule.py
+    pyarmor obfuscate --restrict 0 --no-bootstrap --package-runtime 0 mymodule.py
     cp mymodule.pyi dist/
 
     cd dist/
