@@ -63,13 +63,13 @@ http://www.sharebank.com.cn/soft/softbuy.php?soid=52382
 行注册
 
 a. 直接运行下面的命令完成激活和注册，仅适用于 PyArmor 6.5.0 之后的版本，并且能够
-   连接到互联网
+   连接到互联网。请使用您收到的注册码替换下面的 “XXX”
 
-       pyarmor register CODE
+       pyarmor register XXX
 
-b. 在任意浏览器打开下面的链接进行激活
+b. 在任意浏览器打开下面的链接进行激活。请使用您收到的注册码替换下面的 “XXX”
 
-       https://api.dashingsoft.com/product/key/activate/CODE/
+       https://api.dashingsoft.com/product/key/activate/XXX/
 
    激活成功之后会下载一个文件 “pyarmor-regfile.zip”，然后使用下面的命令完成注册
 
