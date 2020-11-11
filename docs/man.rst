@@ -372,8 +372,12 @@ licenses
     Default Mac address: "f8:ff:c2:27:00:7f"
     Ip address: "192.168.121.100"
 
-如果一台机器上有多个网卡，那么 pyarmor 之后检查默认的网卡，也就是命令 `hdinfo`
-打印出来的网卡。如果需要绑定其他网卡，那么使用尖括号把网址包含起来，例如::
+如果一台机器上有多个网卡，那么 pyarmor 只检查默认的网卡，也就是命令 `hdinfo`_
+打印出来的网卡。例如::
+
+    pyarmor licenses --bind-mac "f8:ff:c2:27:00:7f" r002
+
+如果需要绑定其他网卡，那么使用尖括号把网址包含起来，例如::
 
     pyarmor licenses --bind-mac "<2a:33:50:46:8f>" r002
 
@@ -384,6 +388,20 @@ licenses
 在 Linux 系统下，还可以指定的网络接口的名称，例如::
 
     pyarmor licenses --bind-mac "eth1/fa:33:50:46:8f:3d" r004
+
+如果一台机器上有多个硬盘，那么 pyarmor 只检查默认的硬盘，也就是命令 `hdinfo`_
+打印出来的默认硬盘。例如::
+
+    pyarmor licenses --bind-disk "FV994730S6LLF07AY" r005
+
+如果需要绑定其他硬盘，那么需要指定硬盘的名称，例如::
+
+    # 适用于 Windows，分别绑定第一个硬盘和第二个硬盘
+    pyarmor licenses --bind-disk "/0:FV994730S6LLF07AY" r006
+    pyarmor licenses --bind-disk "/1:KDX3298FS6P5AX380" r007
+
+    # 适用于 Linux，绑定到硬盘设备名称 "/dev/vda2"
+    pyarmor licenses --bind-disk "/dev/vda2:KDX3298FS6P5AX380" r008
 
 选项 `-x` 可以把任意字符串数据存放到许可文件里面，主要用于自定义认证类型的时候，
 传递参数给自定义认证函数。例如::
@@ -604,6 +622,17 @@ hdinfo
 **语法**::
 
     pyarmor hdinfo
+
+没有参数运行这个命令，会显示所有可以获取到的硬件信息。
+
+在 Windows 下面，还可以指定硬盘的序列号，例如获取第一个硬盘和第三个硬盘::
+
+    pyarmor hdinfo /0 /3
+
+在 Linux 下面，可以指定硬盘的设备名称或者网卡名称显示特定的硬件信息，例如::
+
+    pyarmor hdinfo /dev/vda2
+    pyarmor hdinfo eth2
 
 如果没有装 `pyarmor`, 也可以在这里下载获取硬件信息的小工具 `hdinfo`
 
@@ -915,6 +944,7 @@ register
 生效购买的 PyArmor 注册文件::
 
     pyarmor register /path/to/pyarmor-regfile-1.zip
+    pyarmor register /path/to/pyarmor-keycode-1.txt
 
 查看注册信息::
 
