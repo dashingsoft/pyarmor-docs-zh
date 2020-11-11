@@ -68,7 +68,7 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
    如果认证文件非法或者无效，抛出异常 :exc:`Exception`
 
-.. function:: get_hd_info(hdtype, size=256)
+.. function:: get_hd_info(hdtype, name=None)
 
    得到当前机器的硬件信息，通过 *hdtype* 传入需要获取的硬件类型（整型），可用的
    常量如下：
@@ -79,6 +79,25 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
    * HT_DOMAIN 返回目标设备的域名
 
    无法获取硬件信息会抛出异常 :exc:`Exception`
+
+   在 Linux 下面，还可以使用参数 `name` 来指定网卡名称，或者硬盘的设备文件名，例如::
+
+     get_hd_info(HT_IFMAC, name="eth2")
+     get_hd_info(HT_HARDDISK, name="/dev/vda2")
+
+   在 Windows 下面，可以使用参数 `name` 来获取全部网卡和全部硬盘的信息，例如::
+
+     get_hd_info(HT_IFMAC, name="*")
+     get_hd_info(HT_HARDDISK, name="*")
+     get_hd_info(HT_HARDDISK, name="/0")    # First disk
+     get_hd_info(HT_HARDDISK, name="/1")    # Second disk
+
+   .. note::
+
+      在 v6.5.3 接口参数进行了调整
+
+       增加了关键字参数 `name`
+       删除了关键字参数 `size`
 
 .. attribute:: HT_HARDDISK, HT_IFMAC, HT_IPV4, HT_DOMAIN
 
