@@ -92,12 +92,10 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
      get_hd_info(HT_HARDDISK, name="/0")    # First disk
      get_hd_info(HT_HARDDISK, name="/1")    # Second disk
 
-   .. note::
+   .. note:: 在 v6.5.3 接口参数进行了调整
 
-      在 v6.5.3 接口参数进行了调整
-
-       增加了关键字参数 `name`
-       删除了关键字参数 `size`
+       * 增加了关键字参数 `name`
+       * 删除了关键字参数 `size`
 
 .. attribute:: HT_HARDDISK, HT_IFMAC, HT_IPV4, HT_DOMAIN
 
