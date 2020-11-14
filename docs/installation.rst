@@ -55,4 +55,8 @@
     rm -rf {pyarmor-folder}                 (在 v5.8.0 之前)
     rm -rf ~/.pyarmor_capsule.zip           (在 v6.2.0 之前)
 
+.. note::
+
+   使用不同用户登陆，路径 ``~`` 可能不一样。
+
 .. include:: _common_definitions.txt
