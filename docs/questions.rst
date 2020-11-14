@@ -356,11 +356,47 @@ PyArmor 注册问题
 
 购买的私有密钥箱没有起作用
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 使用私有密钥箱加密的脚本，依然可以在试用版本生成的许可证下运行:
 
 * 确认命令 `pyarmor register` 能显示正确的注册信息
-* 确认 :ref:`全局密钥箱` 文件 `~/.pyarmor_capsule.zip` 和注册文件 `pyarmor-regfile-1.zip` 中的 `.pyarmor_capsule.zip` 是同一个文件
+* 确认 :ref:`全局密钥箱` 文件 `~/.pyarmor/.pyarmor_capsule.zip` 和注册文件 `pyarmor-regfile-1.zip` 中的 `.pyarmor_capsule.zip` 是同一个文件
+* 把 PyArmor :ref:`完全卸载`，然后在重新注册
 * 重新启动系统
+
+Could not query registration information
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+注册 PyArmor 显示成功::
+
+    ~ % pyarmor register pyarmor-regfile-1.zip
+    INFO     PyArmor Version 6.5.2
+    INFO     Start to register keyfile: pyarmor-regfile-1.zip
+    INFO     Save registration data to: /Users/Jondy/.pyarmor
+    INFO     Extracting license.lic
+    INFO     Extracting .pyarmor_capsule.zip
+    INFO     This keyfile has been registered successfully.
+
+但是查询注册信息失败::
+
+    ~ % pyarmor register
+    INFO     PyArmor Version 6.5.2
+    PyArmor Version 6.5.2
+    Registration Code: pyarmor-vax-000383
+    Because of internet exception, could not query registration information.
+
+有可能是 DNS 解析问题，运行下面的命令确认域名 `api.dashingsoft.com` 能够解析，例
+如，显示出正确的 Ip 地址::
+
+    ~ % ping api.dashingsoft.com
+
+    PING api.dashingsoft.com (119.23.58.77): 56 data bytes
+    Request timeout for icmp_seq 0
+    Request timeout for icmp_seq 1
+
+如果主机无法解析，增加一行到文件 ``/etc/hosts``::
+
+    119.23.58.77 pyarmor.dashingsoft.com
 
 
 已知的问题
