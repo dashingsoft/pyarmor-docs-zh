@@ -351,6 +351,19 @@ No module name pytransform
 
 检查这个文件，并调整里面的选项，确保最后打包好的文件能够正常工作。
 
+NameError: name ‘__pyarmor__’ is not defined
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+检查错误堆栈的信息，发现抛出这个异常的脚本名称，这对于定位问题很有帮助。
+
+尝试只拷贝需要打包的脚本到一个空目录，然后进行打包。
+
+如果系统模块 `os` ， `ctypes` ，或者 PyArmor 的运行辅助模块 `pytransform.py` 被
+加密之后，也会抛出这个异常，不要尝试加密这些文件。
+
+如果试用版能正常打包，但是注册后出现这个问题，试试 :ref:`完全卸载` ，然后在重整
+PyArmor
+
 PyArmor 注册问题
 ----------------
 
@@ -360,8 +373,9 @@ PyArmor 注册问题
 使用私有密钥箱加密的脚本，依然可以在试用版本生成的许可证下运行:
 
 * 确认命令 `pyarmor register` 能显示正确的注册信息
-* 确认 :ref:`全局密钥箱` 文件 `~/.pyarmor/.pyarmor_capsule.zip` 和注册文件 `pyarmor-regfile-1.zip` 中的 `.pyarmor_capsule.zip` 是同一个文件
-* 把 PyArmor :ref:`完全卸载`，然后在重新注册
+* 确认当前登陆用户和注册 PyArmor 使用的是相同用户
+* 确认环境变量 `PYARMOR_HOME` 没有被设置，或者被正确设置
+* 把 PyArmor :ref:`完全卸载` ，然后在重新注册
 * 重新启动系统
 
 Could not query registration information
