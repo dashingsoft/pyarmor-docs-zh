@@ -1315,4 +1315,65 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
 样就不会违反约束模式的要求。对于 :mod:`multiprocessing` 来说，不需要加密里面的所
 有模块，仅仅加密那些会直接调用约束模块的脚本就可以了。
 
+.. _使用加密脚本直接替换PyInstaller生成的可执行文件:
+
+使用加密脚本直接替换PyInstaller生成的可执行文件
+-----------------------------------------------
+
+从 v6.5.5 开始，PyArmor 提供了一个辅助脚本 ``repack.py`` 可以用来直接替换
+PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的把里面的脚本替换成为加密
+后的脚本。
+
+* 首先是打包脚本，检查确认打包好的脚本可以正常工作::
+
+    # One folder mode
+    pyinstaller foo.py
+
+    # Check the final bundle works
+    dist/foo/foo
+
+    # One file mode
+    pyinstaller --onefile foo.py
+
+    # Check the final bundle works
+    dist/foo
+
+* 然后使用 PyArmor 加密脚本，保存到 ``obfdist`` ，检查确认加密脚本可以正确运行::
+
+    # 选项 --package-runtime 必须设置为 0
+    pyarmor obfuscate -O obfdist --package-runtime 0 foo.py
+
+    # 使用超级模式加密
+    pyarmor obfuscate -O obfdist --advanced 2 foo.py
+
+    # 检查加密脚本
+    python obfdist/foo.py
+
+* 接着使用这个脚本替换打包好的可执行文件，注意使用的 Python 解释器要和
+  PyInstaller 使用的一致::
+
+    # 单目录模式
+    python repack.py -p obfdist dist/foo/foo
+
+    # 单文件模式
+    python repack.py -p obfdist dist/foo
+
+* 最后使用输出文件 ``foo-obf`` 覆盖原来的文件::
+
+    # 单目录模式
+    cp foo-obf dist/foo/foo
+
+    # 单文件模式
+    cp foo-obf dist/foo
+
+.. note::
+
+    在 v6.5.5 之前，需要下载 ``repack.py``
+
+    https://github.com/dashingsoft/pyarmor/raw/master/src/helper/repack.py
+
+    从 v6.5.5 开始，可以直接使用下面的方式运行::
+
+        python -m pyarmor.helper.repack -p obfdist dist/foo
+
 .. include:: _common_definitions.txt
