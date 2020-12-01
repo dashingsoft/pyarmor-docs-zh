@@ -147,6 +147,40 @@ PyArmor 加密，那么答案是否定的。
     pyarmor config --enable-suffix 0
     pyarmor build -B
 
+.. _distributing obfuscated packages:
+
+发布多个加密包
+--------------
+
+如果有多个加密的包需要发布，推荐的方式是启用选项 ``--enable-suffix`` 生成一个单
+独的 :ref:`运行辅助包` ，然后其他加密包共享这个运行模块。
+
+例如，首先使用命令 :ref:`runtime` 生成 :ref:`运行辅助包`::
+
+    pyarmor runtime --enable-suffix -O dist/shared
+
+输出的包的名字可能是 ``dist/shared/pytransform_vax_000001`` ，不同的用户包的名字
+可能不一样。
+
+对每一个包，使用下面的方式进行加密::
+
+    pyarmor obfuscate --enable-suffix --recursive --bootstrap 2 \
+                      -O dist/pkg1 --runtime @dist/shared src/pkg1/__init__.py
+
+如果选项 ``--runtime`` 不可用，它是在 v6.3.7 才有的，那么直接使用选项
+``--no-runtime``::
+
+    pyarmor obfuscate --enable-suffix --recursive --bootstrap 2 \
+                      -O dist/pkg1 --no-runtime src/pkg1/__init__.py
+
+接下来把运行辅助包 `pytransform_vax_000001` 单独发布成为一个独立的包。
+
+最后，发布加密的包 `dist/pkg1` ，在安装脚本 ``setup.py`` 里面增加一个依赖包::
+
+    install_requires=['pytransform_vax_000001']
+
+对于其他包 `pkg2` ， `pkg3` 等，和 `pkg1` 一样进行发布。
+
 .. _distributing obfuscated scripts to other platform:
 
 .. _跨平台发布加密脚本:
