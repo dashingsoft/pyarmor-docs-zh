@@ -78,7 +78,11 @@
 
     pyarmor build --output dist --only-runtime pkg1
 
-分别加密三个包，也保存到 `dist` 下面::
+或者也可以使用命令 :ref:`runtime` 直接生成 :ref:`运行辅助包`::
+
+    pyarmor runtime --output dist
+
+在分别加密三个包，也保存到 `dist` 下面::
 
     pyarmor build --output dist --no-runtime pkg1
     pyarmor build --output dist --no-runtime pkg2
