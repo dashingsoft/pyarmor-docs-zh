@@ -204,13 +204,13 @@ jondy.zhao@gmail.com
      -
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/freebsd/_pytransform.so>`_
      - 不支持获取硬盘序列号
-   * - alpine.x86_64
+   * - musl.x86_64
      - Alpine Linux
      - x86_64
      -
      - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/alpine/_pytransform.so>`_
      - 可用于 Docker（musl-1.1.21）
-   * - alpine.arm
+   * - musl.arm
      - Alpine Linux
      - arm
      -
