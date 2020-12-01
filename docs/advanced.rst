@@ -1364,16 +1364,16 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
 
 * 首先是打包脚本，检查确认打包好的脚本可以正常工作::
 
-    # One folder mode
+    # 使用单目录模式
     pyinstaller foo.py
 
-    # Check the final bundle works
+    # 检查最终的可执行文件能正常运行
     dist/foo/foo
 
-    # One file mode
+    # 如果更喜欢单文件模块，使用下面的命令打包
     pyinstaller --onefile foo.py
 
-    # Check the final bundle works
+    # 检查最终的可执行文件能正常运行
     dist/foo
 
 * 然后使用 PyArmor 加密脚本，保存到 ``obfdist`` ，检查确认加密脚本可以正确运行::
@@ -1381,7 +1381,7 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
     # 选项 --package-runtime 必须设置为 0
     pyarmor obfuscate -O obfdist --package-runtime 0 foo.py
 
-    # 使用超级模式加密
+    # 如果要启用超级模式加密，使用下面的命令
     pyarmor obfuscate -O obfdist --advanced 2 foo.py
 
     # 检查加密脚本
@@ -1390,19 +1390,19 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
 * 接着使用这个脚本替换打包好的可执行文件，注意使用的 Python 解释器要和
   PyInstaller 使用的一致::
 
-    # 单目录模式
+    # 如果是单目录模式，那么
     python repack.py -p obfdist dist/foo/foo
 
-    # 单文件模式
-    python repack.py -p obfdist dist/foo
+    # 如果是单文件模式，那么
+    # python repack.py -p obfdist dist/foo
 
 * 最后使用输出文件 ``foo-obf`` 覆盖原来的文件::
 
-    # 单目录模式
+    # 如果是单目录模式，那么
     cp foo-obf dist/foo/foo
 
-    # 单文件模式
-    cp foo-obf dist/foo
+    # 如果是单文件模式，那么
+    # cp foo-obf dist/foo
 
 .. note::
 
