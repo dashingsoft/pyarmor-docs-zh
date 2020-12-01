@@ -210,6 +210,8 @@ PyArmor 加密，那么答案是否定的。
 
 .. _obfuscating scripts with different features:
 
+.. _使用不同特征的动态库:
+
 使用不同特征的动态库
 ~~~~~~~~~~~~~~~~~
 
