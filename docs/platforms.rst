@@ -444,3 +444,85 @@ jondy.zhao@gmail.com
      - Anti-Debug, SUPER, VM
      - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86.25.py27/pytransform.pyd>`_
      - Cross compile by i686-w64-mingw32-gcc in cygwin
+
+.. _如何人工下载和配置动态库:
+
+如何人工下载和配置动态库
+------------------------
+
+在联网的情况下，PyArmor 可以自动下载和配置需要的动态库，在不联网的机器上则需要把
+预先下载的动态库放置在相应的目录下面。
+
+首先下载 ``platforms/index.json`` ，如果是使用 pip 安装的话，可以忽略这一步，因
+为这个文件会被自动安装的。在没有联网的机子上运行相应的命令，会出现如下提示，例如::
+
+    pyarmor.py o --advanced 2 test.py
+
+    INFO     PyArmor Version 6.4.2
+    INFO     Target platforms: Native
+    INFO     Getting remote file: https://github.com/dashingsoft/pyarmor-core/raw/r34.8/platforms/index.json
+    INFO     Could not get file from https://github.com/dashingsoft/pyarmor-core/raw/r34.8/platforms: <urlopen error timed out>
+    INFO     Getting remote file: https://pyarmor.dashingsoft.com/downloads/r34.8/index.json
+    INFO     Could not get file from https://pyarmor.dashingsoft.com/downloads/r34.8: <urlopen error timed out>
+    ERROR    No platform list file /data/user/.pyarmor/platforms/index.json found
+
+上面提示中有两个下载地址，选择其中一个在联网的机子上下载 ``index.json`` ，例如
+
+https://pyarmor.dashingsoft.com/downloads/r34.8/index.json
+
+然后把下载的文件拷贝到没有联网机子上，保存在提示中的位置。例如，示例中的提示地址::
+
+    /data/user/.pyarmor/platforms/index.json
+
+需要注意不同版本的 PyArmor 都有自己对应的 ``index.json`` ，必须保持一致。
+
+接下来再次运行相应的命令，这时候同样会提示下载的动态库的地址，例如::
+
+    pyarmor o --advanced 2 test.py
+
+    ...
+    INFO Use capsule: /root/.pyarmor/.pyarmor_capsule.zip
+    INFO Output path is: /root/supervisor/dist
+    INFO Taget platforms: []
+    INFO Update target platforms to: [u'linux.x86_64.11.py27']
+    INFO Generating super runtime library to dist
+    INFO Search library for platform: linux.x86_64.11.py27
+    INFO Found available libraries: [u'linux.x86_64.11.py27']
+    INFO Target path for linux.x86_64.11.py27: /home/jondy/.pyarmor/platforms/linux/x86_64/11/py27
+    INFO Downloading library file for linux.x86_64.11.py27 ...
+    INFO Getting remote file: https://github.com/dashingsoft/pyarmor-core/raw/r34.8/platforms/linux.x86_64.11.py27/pytransform.so
+    INFO Could not get file from https://github.com/dashingsoft/pyarmor-core/raw/r34.8/platforms: <urlopen error [Errno 111] Connection refused>
+    INFO Getting remote file: https://pyarmor.dashingsoft.com/downloads/r34.8/linux.x86_64.11.py27/pytransform.so
+    INFO Could not get file from https://pyarmor.dashingsoft.com/downloads/r34.8: <urlopen error [Errno 111] Connection refused>
+    ERROR Download library file failed
+
+按照提示的任意一个地址下载相应的动态库，例如
+
+https://github.com/dashingsoft/pyarmor-core/raw/r34.8/platforms/linux.x86_64.11.py27/pytransform.so
+
+然后保存到日志 ``INFO Target path`` 后面列出的路径，例如，这里是::
+
+    /home/jondy/.pyarmor/platforms/linux/x86_64/11/py27
+
+对于 PyArmor 6.5.5 之前的版本，没有保存提示路径。可以直接存放到
+``~/.pyarmor/platforms/`` 加上平台路径，平台路径一般就是把平台名称中的点替换为路
+径分隔符，例如，平台名称 ``linux.x86_64.11.py27`` 的存放路径就是
+``~/.pyarmor/platforms/linux/x86_64/11/py27``
+
+请注意检查下载的动态库的 sha256 的值，要确保其和 ``index.json`` 文件中对应的值一
+致。
+
+另外所有版本的动态库和对应的 ``index.json`` 都存放在 github 库 `pyarmor-core`
+
+https://github.com/dashingsoft/pyarmor-core
+
+也可以直接在上面下载对应版本的动态库，PyArmor 每一个版本都有一个对应的 tag ，例
+如这里 PyArmor 是 6.4.2 ，对应的核心库 tag 是 ``r34.8`` ，所以可以切换这个库里面
+到 tag ``r34.8`` ，然后在目录 `platforms` 下面下载对应的动态库。
+
+.. note::
+
+   如果存在 DSN 问题，执行 ``ping pyarmor.dashingsoft.com`` 提示主机名找不到，请
+   增加一行到 ``/etc/hosts``::
+
+       119.23.58.77 pyarmor.dashingsoft.com
