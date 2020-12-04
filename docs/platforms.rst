@@ -299,7 +299,13 @@ jondy.zhao@gmail.com
      - x86_64
      - Anti-Debug, JIT, SUPER
      - `pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.x86_64.11.py27/pytransform.so>`_
-     - Built by gcc
+     - Built by gcc, UCS4
+   * - centos6.x86_64.11.py27
+     - Linux
+     - x86_64
+     - Anti-Debug, JIT, SUPER
+     - `pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/centos6.x86_64.11.py27/pytransform.so>`_
+     - Built by gcc, UCS2
    * - windows.x86_64.11.py38
      - Windows
      - AMD64
