@@ -337,6 +337,51 @@ The `license.lic` generated doesn't work
     pyarmor obfuscate foo.py
     pyarmor build
 
+如何定制错误消息
+~~~~~~~~~~~~~~~~
+
+当加密脚本检查许可失败的时候，例如超过使用期限，会抛出异常 “License is expired”。
+那么，是否可以定制这个错误信息呢？
+
+可以通过修改 PyArmor 包所在目录下面的脚本 `pytransform.py` 来实现。它里面定义了
+一个函数 `pyarmor_runtime`
+
+.. code:: python
+
+    def pyarmor_runtime(path=None, suffix='', advanced=0):
+        ...
+        try:
+            pyarmor_init(path, is_runtime=1, suffix=suffix, advanced=advanced)
+            init_runtime()
+        except Exception as e:
+            if sys.flags.debug or hasattr(sys, '_catch_pyarmor'):
+                raise
+            sys.stderr.write("%s\n" % str(e))
+            sys.exit(1)
+
+按照自己的需要修改里面的异常处理语句即可。
+
+但是这种方式对于超级模式加密的脚本并不起作用，对于超级模式加密的脚本，可以使用创
+建一个启动脚本去捕获异常。例如
+
+.. code:: python
+
+   try:
+       import obfuscated_script
+   except Exception as e:
+       print('something is wrong')
+
+但是这种方式的副作用就是不仅仅是许可失败的异常，正常脚本的异常也会被捕获到的。
+
+
+undefined symbol: PyUnicodeUCS4_AsUTF8String
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+如果 Python 解释器使用的 UCS2 ，那么当它运行超级模式加密的脚本，会抛出这个异常。
+解决方式就是使用平台 ``centos6.x86_64`` 进行加密，例如::
+
+    pyarmor obfuscate --advanced 2 --platform centos6.x86_64 foo.py
+
 
 打包加密问题
 ------------
