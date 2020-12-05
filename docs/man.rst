@@ -1065,6 +1065,11 @@ runtime
 
     pyarmor obfuscate --runtime @myruntime-1 --exact foo-2.py foo-3.py
 
+如果是使用工程来加密脚本的话，那么可以在运行 :ref:`build` 的时候使用选
+项 ``--runtime`` 指定预编译包，例如::
+
+    pyarmor build --runtime @myruntime-1
+
 **EXAMPLES**
 
 * 在默认输出路径 `dist` 下面创建 :ref:`运行辅助包` ``pytransform``::
