@@ -362,16 +362,34 @@ The `license.lic` generated doesn't work
 按照自己的需要修改里面的异常处理语句即可。
 
 但是这种方式对于超级模式加密的脚本并不起作用，对于超级模式加密的脚本，可以使用创
-建一个启动脚本去捕获异常。例如
+建一个启动脚本在其中导入加密的主脚本 ``foo.py`` 并捕获异常。例如
 
 .. code:: python
 
    try:
-       import obfuscated_script
+       import foo
    except Exception as e:
        print('something is wrong')
 
-但是这种方式的副作用就是不仅仅是许可失败的异常，正常脚本的异常也会被捕获到的。
+但是这种方式的副作用就是不仅仅是许可失败的异常，正常脚本的异常也会被捕获到的。如
+果只需要捕获许可失败的异常，可以使用 :ref:`runtime` 创建一个独立的运行辅助包，并
+使用这个运行辅助包加密脚本::
+
+    pyarmor runtime --advanced 2 -O dist
+    pyarmor obfuscate --advanced 2 --runtime @dist foo.py
+
+然后创建一个启动脚本 ``dist/foo_boot.py`` ，例如
+.. code:: python
+
+   try:
+       import pytransform_bootstrap
+   except Exception as e:
+       print('something is wrong')
+   else:
+       import foo
+
+导入的这个脚本 ``pytransform_bootstrap.py`` 是被 :ref:`runtime` 自动创建的，它是
+由空脚本加密生成的，所以它抛出的异常就只有 pyarmor 引导过程的异常。
 
 
 undefined symbol: PyUnicodeUCS4_AsUTF8String
