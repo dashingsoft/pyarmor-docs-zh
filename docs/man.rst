@@ -718,7 +718,7 @@ config
 --wrap-mode <0,1>               是否启用包裹模式加密函数
 --advanced <0,1,2,3,4>          使用高级模式 `1` ，超级模式 `2` ，虚拟模式 `3` 和 `4` 加密脚本
 --cross-protection <0,1>        是否插入交叉保护代码到主脚本，也可以直接指定脚本名称
---runtime-path RPATH            设置运行文件所在路径
+--rpath RPATH                   设置运行文件在目标机器上的路径
 --plugin NAME                   设置需要插入到主脚本的代码文件，这个选项可以使用多次
 --package-runtime <0,1>         是否保存运行文件为包的形式
 --bootstrap <0,1,2,3>           如何生成引导代码
