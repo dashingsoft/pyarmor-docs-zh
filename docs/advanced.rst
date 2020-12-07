@@ -588,7 +588,9 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
 
     pyinstaller myscript.spec
 
-那么，现在就可以直接使用 :ref:`pack` 加密并打包 `myscript.py`::
+那么可以首先打包好脚本，然后参考 `使用加密脚本直接替换PyInstaller生成的可执行文件`_
+
+也可以使用 :ref:`pack` 和选项 ``-s`` 直接加密并打包 `myscript.py`::
 
     pyarmor pack -s myscript.spec myscript.py
 
