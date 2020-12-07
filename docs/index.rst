@@ -44,5 +44,6 @@ Pi``, ``Banana Pi``, ``Orange Pi``, ``TS-4600 / TS-7600`` 等，但是这些
    security
    questions
    license
+   change-logs
 
 .. include:: _common_definitions.txt
