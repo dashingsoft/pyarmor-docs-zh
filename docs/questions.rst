@@ -279,6 +279,10 @@ Protection Fault: unexpected xxx
 * pytransform.py
 * _pytransform.so/.dll/.dylib
 
+如果使用新版本重新加密了主脚本，但是运行辅助文件没有替换，也可能会出现这个异常，
+可以在加密的时候使用选项 ``--no-cross-protection`` 禁用交叉保护功能，或者使用选
+项 ``--runtime`` 指定相同的运行辅助文件。
+
 更多信息参考 :ref:`对主脚本的特殊处理`
 
 
