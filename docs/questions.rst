@@ -442,6 +442,9 @@ No module name pytransform
 
 检查这个文件，并调整里面的选项，确保最后打包好的文件能够正常工作。
 
+也可以参考这里 :ref:`使用加密脚本直接替换PyInstaller生成的可执行文件` ，尝试使用
+这种方式打包加密脚本。
+
 NameError: name ‘__pyarmor__’ is not defined
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
