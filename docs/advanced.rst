@@ -1316,8 +1316,29 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
 :ref:`约束模式` 3 或者 4 进行加密，那么运行的时候会抛出保护异常。因为这两个系统
 模块都没有加密，但是它们会直接调用约束模块里面的函数，这会触发保护异常。
 
-为了解决这个问题，需要定义一个公共的代理模块，这个公共模块使用普通约束，让系统模
-块来调用代理模块里面的函数，而不是直接调用私有模块里面的函数。
+一种解决方案是在加密脚本内部继承原来的类，使用自定义的类来创建线程，例如
+
+.. code:: python
+
+    from threading import Thread
+
+    class PrivateThread(Thread):
+
+        def run(self):
+            try:
+                if self._target:
+                    self._target(*self._args, **self._kwargs)
+            finally:
+                del self._target, self._args, self._kwargs
+
+    def foo():
+        print('Hello')
+
+    t = PrivateThread(target=foo)
+    t.start()
+
+另外一种解决方案是定义一个公共的代理模块，这个公共模块使用普通约束，让系统模块来
+调用代理模块里面的函数，而不是直接调用私有模块里面的函数。
 
 例如，这个示例脚本 ``foo.py`` 就使用了代理模块 ``pub_foo.py`` 来解决约束冲突
 
@@ -1355,7 +1376,7 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
     # 为了不影响其他加密脚本，选项 --exact 和 --no-runtime 都是必须的
     pyarmor obfuscate --restrict 1 --exact --no-runtime pub_foo.py
 
-另外一种解决方案是使用约束模式 1 加密相关的系统模块，例如 :mod:`threading` ，这
+还有一种解决方案是使用约束模式 1 加密相关的系统模块，例如 :mod:`threading` ，这
 样就不会违反约束模式的要求。对于 :mod:`multiprocessing` 来说，不需要加密里面的所
 有模块，仅仅加密那些会直接调用约束模块的脚本就可以了。
 
