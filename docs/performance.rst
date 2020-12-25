@@ -110,4 +110,22 @@ PyArmor 使用一个简单脚本 `bfoo.py` 来进行测试，里面有两个函�
 时候会更快一些。但是 :ref:`虚拟模式` 会明显慢一些，因为核心算法使用的
 虚拟指令。
 
+使用 cProfile 测试加密脚本性能
+------------------------------
+
+加密脚本可以使用 `cProfile` 或者 `profile` 来测试性能，例如::
+
+  pyarmor obfuscate foo.py
+
+  python -m cProfile dist/foo.py
+
+有些加密脚本使用 `cProfile` 或者 `profile` 运行可能会抛出异常，请根据
+异常信息对系统脚本 `cProfile.py` 或者 `profile.py` 打补丁，使之能够正
+常处理加密脚本中的一些特殊情况。
+
+.. note::
+
+   老版本的 pyarmor 并不支持 `cProfile` 和 `profile` ，请升级 pyarmor
+   并重新加密脚本，然后重新运行。
+
 .. include:: _common_definitions.txt
