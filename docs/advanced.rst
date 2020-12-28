@@ -1444,4 +1444,39 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
 
         python -m pyarmor.helper.repack -p obfdist dist/foo
 
+
+.. _转换加密脚本为扩展模块:
+
+转换加密脚本为扩展模块
+----------------------
+
+在 pyarmor 的包里面有一个帮助脚本文件 ``buildext.py`` 可以用来把加密模块转换成为扩展模块
+
+1. 首先使用选项 ``--no-cross-protection`` 和 ``--restrict 0`` 加密脚本，例如::
+
+    pyarmor obfuscate --no-cross-protection --restrict 0 foo.py
+
+2. 然后使用帮助脚本进行转换，例如::
+
+    python buildext.py dist/foo.py
+
+或者也可以先把加密脚本 ``dist/foo.py`` 转换成为 .c 文件，然后在使用编
+译器直接编译成为扩展模块，例如::
+
+    python buildext.py -c dist/foo.py
+    gcc $(python-config --cflags) $(python-config --ldflags) \
+        -shared -o dist/foo$(python-config --extension-suffix) \
+        dist/foo.c
+
+.. note::
+
+    在 v6.6.0 之前，需要下载 ``buildext.py``
+
+    https://github.com/dashingsoft/pyarmor/raw/master/src/helper/buildext.py
+
+    从 v6.6.0 开始，可以直接使用下面的方式运行::
+
+        python -m pyarmor.helper.buildext ...
+
+
 .. include:: _common_definitions.txt
