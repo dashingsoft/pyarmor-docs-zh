@@ -134,6 +134,10 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 代码包裹模式
 ------------
 
+.. note::
+
+    代码包裹模式只适用于非超级模式，超级模式总是要启用包裹模式的。
+
 * wrap_mode == 0
 
 当包裹模式关闭，代码块使用下面的方式进行加密::
