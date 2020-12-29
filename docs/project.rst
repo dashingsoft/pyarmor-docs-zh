@@ -51,6 +51,11 @@
 
     pyarmor config --manifest "include *.py, prune dist, prune test"
 
+也可以指定数据文件，数据文件会被直接拷贝到输出目录，例如::
+
+    pyarmor config --manifest "include *.py, include config.json"
+    pyarmor build
+
 详细内容请参考后面的章节 `工程配置文件`_ 中关于属性 `manifest` 的说明。
 
 默认情况下 :ref:`build` 仅仅加密修改过的文件，强制加密所有脚本::
@@ -138,6 +143,8 @@
     多个模式使用逗号分开，例如::
 
         global-include *.py, exclude __mainfest__.py, prune test
+
+    也可以在其中指定数据文件，数据文件会被直接拷贝到输出目录。
 
     关于所有支持的模式，参考
     https://docs.python.org/2/distutils/sourcedist.html#commands

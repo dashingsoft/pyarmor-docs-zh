@@ -749,6 +749,10 @@ config
 
     global-include *.py, exclude __mainfest__.py, prune test
 
+也可以在其中指定数据文件，数据文件会被直接拷贝到输出目录，例如::
+
+    global-include *.py, include Readme.md, include config.json
+
 关于所有支持的模式，参考 https://docs.python.org/2/distutils/sourcedist.html#commands
 
 选项 ``--plugin`` 为空字符串有特殊作用，用来清除所有的插件。
