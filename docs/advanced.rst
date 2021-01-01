@@ -1460,13 +1460,18 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
 
     python buildext.py dist/foo.py
 
-或者也可以先把加密脚本 ``dist/foo.py`` 转换成为 .c 文件，然后在使用编
-译器直接编译成为扩展模块，例如::
+或者也可以使用选项 ``-c`` 先把加密脚本 ``dist/foo.py`` 转换成为 `.c` 文件，然后
+修改定制 `.c` 文件之后，在编译成为扩展模块，例如::
 
     python buildext.py -c dist/foo.py
     gcc $(python-config --cflags) $(python-config --ldflags) \
         -shared -o dist/foo$(python-config --extension-suffix) \
         dist/foo.c
+
+也可以使用选项 ``-e`` 把脚本直接转换成为可执行文件，例如::
+
+    python buildext.py -e dist/foo.py
+    dist/foo.exe
 
 .. note::
 
