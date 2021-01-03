@@ -234,7 +234,8 @@ NameError: name '__pyarmor__' is not defined
   使用加密脚本的。
 * 如果是 `pytransform.py` 或者 `pytransform/__init__.py` 那么报这个错误，那么确
   认这个模块没有被加密，这个模块是不能被加密的
-* 同时检查系统模块 `os` ， `ctypes` 确保它们也没有被加密，，不要尝试加密这些文件
+* 同时检查系统模块 `os` ， `ctypes` 确保它们也没有被加密，，不要尝试加密这些文件，
+  使用选项 ``--exclude`` 把 Python 系统库所在的目录排除。
 
 
 Marshal loads failed when running xxx.py
@@ -456,7 +457,8 @@ NameError: name ‘__pyarmor__’ is not defined
 
 * 如果是 `pytransform.py` 或者 `pytransform/__init__.py` 那么报这个错误，那么确
   认这个模块没有被加密，这个模块是不能被加密的
-* 同时检查系统模块 `os` ， `ctypes` 确保它们也没有被加密，，不要尝试加密这些文件
+* 同时检查系统模块 `os` ， `ctypes` 确保它们也没有被加密，不要尝试加密这些文件，
+  使用选项 ``-x`` 把系统库目录排除，具体示例参考命令 :ref:`pack`
 * 尝试只拷贝需要打包的脚本到一个空目录，然后进行打包。
 * 如果试用版能正常打包，但是注册后出现这个问题，试试 :ref:`完全卸载` ，然后重
   装 PyArmor 之后在打包
