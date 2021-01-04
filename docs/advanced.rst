@@ -1456,22 +1456,41 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
 
     pyarmor obfuscate --no-cross-protection --restrict 0 foo.py
 
-2. 然后使用帮助脚本进行转换，例如::
+2. 然后使用帮助脚本 ``buildext.py`` 转换 ``dist`` 下面的所有加密脚本，例如::
 
-    python buildext.py dist/foo.py
+    python buildext.py dist/
 
-或者也可以使用选项 ``-c`` 先把加密脚本 ``dist/foo.py`` 转换成为 `.c` 文件，然后
-修改定制 `.c` 文件之后，在编译成为扩展模块，例如::
+使用 ``-i`` 选项可以在生成扩展模块之后把加密脚本删除，这样 ``dist`` 下面的文件就
+可以直接发布，例如::
 
-    python buildext.py -c dist/foo.py
-    gcc $(python-config --cflags) $(python-config --ldflags) \
-        -shared -o dist/foo$(python-config --extension-suffix) \
-        dist/foo.c
+    python buildext.py -i dist/
 
-也可以使用选项 ``-e`` 把脚本直接转换成为可执行文件，例如::
+默认情况下只有 ``dist`` 下面的加密脚本被转换，如果存在多个子目录，可以依次列出所
+有子目录，例如::
+
+    python buildext.py dist/ dist/a/ dist/b/
+
+或者在命令行列出所有 ``.py`` 脚本，例如::
+
+    # 在 Linix 环境
+    python buildext.py $(find dist/ -name "*.py")
+
+    # 在 Windows 环境
+    FOR /R dist\ %i IN (*.py) DO python buildext.py %i
+
+需要注意的是扩展模块并不会执行 ``if __name__ == "__main__"`` 语句块，如果需要执
+行这个语句块，可以使用选项 ``-e`` 把脚本直接转换成为可执行文件，例如::
 
     python buildext.py -e dist/foo.py
     dist/foo.exe
+
+但是这个可执行文件不能脱离当前 Python 环境独立运行，其本质相当于::
+
+    python dist/foo.py
+
+更多功能和选项，请使用 ``-h`` 查看::
+
+    python buildext.py -h
 
 .. note::
 
