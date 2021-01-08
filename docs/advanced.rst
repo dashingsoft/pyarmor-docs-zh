@@ -1503,4 +1503,49 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
         python -m pyarmor.helper.buildext ...
 
 
+.. _distributing obfuscated package with pip:
+
+使用 pip 发布加密包
+-------------------
+
+这是一个简单的包目录结构
+
+.. code:: raw
+    .
+    └── mylib
+        ├── mylib
+        │   ├── __init__.py
+        │   └── main.py
+        └── setup.py
+
+首先使用选项 ``--enable-suffix 1`` 生成具有唯一名称的运行辅助包::
+
+  cd mylib
+  pyarmor runtime -O dist/share --enable-suffix 1
+
+然后使用这个运行辅助文件来加密包::
+
+  pyarmor obfuscate --with-runtime @dist/share mylib/__init__.py
+
+接着编辑 ``setup.py`` ，把所有运行辅助文件作为数据文件增加到里面。例如，这个例子
+里面假设运行辅助包的名称为 ``pytransform_vax_xxxxxx``
+
+.. code:: python
+
+   setup(name='mylib',
+         ...
+         packages=['mylib'],
+         package_dir={'mylib': 'dist'},
+         data_files=[('pytransform_vax_xxxxxx', 'dist/share/pytransform_vax_xxxxxx/*')]
+         ...
+         )
+
+最后生成发布包::
+
+  python setup.py sdist
+
+.. note::
+
+   对于超级模式，运行辅助文件是不一样的，请根据实现文件修改 ``setup.py``
+
 .. include:: _common_definitions.txt
