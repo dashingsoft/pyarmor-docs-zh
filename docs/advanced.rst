@@ -1546,6 +1546,8 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
 
 .. note::
 
+   不要加密 ``setup.py``
+
    对于超级模式，运行辅助文件是不一样的，请根据实现文件修改 ``setup.py``
 
 .. include:: _common_definitions.txt
