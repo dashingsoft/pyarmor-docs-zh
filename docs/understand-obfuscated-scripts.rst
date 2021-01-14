@@ -75,11 +75,6 @@
     from pytransform_vax_000001 import pyarmor
     pyarmor(__name__, __file__, b'\x0a\x02...', 1)
 
-.. note::
-
-   下面章节中 `引导代码`_ ， `运行辅助包`_ ， `运行辅助文件`_ 在超级模式加密后的
-   脚本并不存在。
-
 .. _entry script:
 
 .. _主脚本:
@@ -98,7 +93,7 @@
 引导代码
 --------
 
-主脚本的前两行就是 `引导代码` ，它一般出现在主脚本中::
+对于非超级模式来说，主脚本的前两行就是 `引导代码`::
 
     from pytransform import pyarmor_runtime
     pyarmor_runtime()
@@ -118,6 +113,11 @@
 
     from pytransform_vax_000001 import pyarmor_runtime
     pyarmor_runtime(suffix='_vax_000001')
+
+对于超级模式来说，引导代码和非超级模式是不同的，并且不仅仅是主脚本，所以的加密脚
+本都会有一行引导代码::
+
+    from pytransform import pyarmor
 
 .. _runtime package:
 
@@ -147,6 +147,14 @@
         license.lic                  加密脚本的许可文件
 
 在 v5.7.0 之前, 运行辅助包是另外一种存放形式 `运行辅助文件`
+
+对于超级模式来说，运行辅助包和运行辅助文件都只有一个扩展模块 `pytransform` ，在
+不同的操作系统和不同的Python版本，它的名称可以都不一样。例如::
+
+      pytransform.pyd
+      pytransform.so
+      pytransform.cpython-38-darwin.so
+      pytransform.cpython-38-x86_64-linux-gnu.so
 
 .. _runtime files:
 
@@ -205,6 +213,8 @@
 * 唯一的改变是， `引导代码`_ 必须被首先执行，加密脚本才能正常运行，否则会报错。
 
 * `运行辅助包`_ 必须在任何 Python 路径下面，确保 `引导代码`_ 能被正确导入。
+
+下面这些仅适用于非超级模式
 
 * `引导代码`_ 会使用 `ctypes` 装载动态库 `_pytransform.so/.dll/.dylib` 。动态库
   是平台相关的，所有预编译的动态库列表在这里 :ref:`支持的平台列表`
