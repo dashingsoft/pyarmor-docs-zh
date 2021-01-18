@@ -1393,9 +1393,10 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
 后的脚本。
 
 * 首先是打包脚本，检查确认打包好的脚本可以正常工作，根据具体的脚本，可能会需要设
-  置不同的选项，具体使用方法请参考 PyIntaller 的文档，这里的例子只是说明这一步需
-  要使用 PyInstaller 生成可执行文件，也可以使用其他任何方式。如果在这一步有问题，
-  请提交问题报告到 `PyInstaller`_::
+  置不同的选项，具体使用方法请参考 `PyInstaller 的文档
+  <https://pyinstaller.readthedocs.io>`_ ，这里的例子只是说明这一步需要使用
+  PyInstaller 生成可执行文件。如果在这一步有问题，请提交问题报告到 `PyInstaller
+  <https://github.com/pyinstaller/pyinstaller/issues>`_::
 
     # 使用单目录模式
     pyinstaller foo.py
