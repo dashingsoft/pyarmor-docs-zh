@@ -1392,21 +1392,27 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
 PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的把里面的脚本替换成为加密
 后的脚本。
 
-* 首先是打包脚本，检查确认打包好的脚本可以正常工作::
+* 首先是打包脚本，检查确认打包好的脚本可以正常工作，根据具体的脚本，可能会需要设
+  置不同的选项，具体使用方法请参考 PyIntaller 的文档，这里的例子只是说明这一步需
+  要使用 PyInstaller 生成可执行文件，也可以使用其他任何方式。如果在这一步有问题，
+  请提交问题报告到 `PyInstaller`_::
 
     # 使用单目录模式
     pyinstaller foo.py
 
     # 检查最终的可执行文件能正常运行
-    dist/foo/foo
+    dist/foo/foo.exe
 
     # 如果更喜欢单文件模块，使用下面的命令打包
     pyinstaller --onefile foo.py
 
     # 检查最终的可执行文件能正常运行
-    dist/foo
+    dist/foo.exe
 
-* 然后使用 PyArmor 加密脚本，保存到 ``obfdist`` ，检查确认加密脚本可以正确运行::
+* 然后使用 PyArmor 加密脚本，保存到 ``obfdist`` ，检查确认加密脚本可以正确运行。
+  这里的例子是使用 :ref:`obfuscate` 进行加密，请根据需要设置必要的选项，除了下面
+  注明的之外，其他选项没有使用约束，只要能把脚本加密就行，当然也可以使用工程的方
+  式进行加密::
 
     # 选项 --package-runtime 必须设置为 0
     pyarmor obfuscate -O obfdist --package-runtime 0 foo.py
@@ -1421,18 +1427,18 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
   PyInstaller 使用的一致::
 
     # 如果是单目录模式，那么
-    python repack.py -p obfdist dist/foo/foo
+    python repack.py -p obfdist dist/foo/foo.exe
 
     # 如果是单文件模式，那么
-    # python repack.py -p obfdist dist/foo
+    # python repack.py -p obfdist dist/foo.exe
 
-* 最后使用输出文件 ``foo-obf`` 覆盖原来的文件::
+* 最后使用输出文件 ``foo-obf.exe`` 覆盖原来的文件::
 
     # 如果是单目录模式，那么
-    cp foo-obf dist/foo/foo
+    cp foo-obf.exe dist/foo/foo.exe
 
     # 如果是单文件模式，那么
-    # cp foo-obf dist/foo
+    # cp foo-obf.exe dist/foo.exe
 
 .. note::
 
