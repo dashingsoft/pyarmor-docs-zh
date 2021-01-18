@@ -128,4 +128,93 @@ PyArmor 使用一个简单脚本 `bfoo.py` 来进行测试，里面有两个函�
    老版本的 pyarmor 并不支持 `cProfile` 和 `profile` ，请升级 pyarmor
    并重新加密脚本，然后重新运行。
 
+超级大脚本的运行性能
+--------------------
+
+下面是测试了一个大小为 81M 的脚本的运行性能，测试平台为 MacOS 10.14，
+双核 8G 内存，Python 3.7。
+
+测试脚本 ``big.py`` 定义了多个相同内容但是名称不同的函数，大小为 81M
+
+.. code:: python
+
+    def fib0(n):   # return Fibonacci series up to n
+        result = []
+        a, b = 0, 1
+        while a < n:
+            result.append(a)
+            a, b = b, a+b
+        return result
+
+
+    def fib1(n):   # return Fibonacci series up to n
+        result = []
+        a, b = 0, 1
+        while a < n:
+            result.append(a)
+            a, b = b, a+b
+        return result
+
+
+    def fib2(n):   # return Fibonacci series up to n
+        result = []
+        a, b = 0, 1
+        while a < n:
+            result.append(a)
+            a, b = b, a+b
+        return result
+
+    ...
+
+主脚本 ``main.py`` 如下
+
+.. code:: python
+
+    import sys
+    import time
+
+    def metricmethod(func):
+        if not hasattr(time, 'process_time'):
+            time.process_time = time.clock
+
+        def wrap(*args, **kwargs):
+            t1 = time.process_time()
+            result = func(*args, **kwargs)
+            t2 = time.process_time()
+            print('%-50s: %10.6f ms' % (func.__name__, (t2 - t1) * 1000))
+            return result
+        return wrap
+
+    @metricmethod
+    def import_big_module(name):
+        return __import__(name)
+
+    @metricmethod
+    def call_module_function(m):
+        m.fib2(20)
+
+    name = sys.argv[1] if len(sys.argv) > 1 else 'big'
+    call_module_function(import_big_module(name))
+
+运行 ``python3 main.py`` 在不同情况下进行测试。
+
+没有加密的测试结果，在测试之前删除 ``__pycache__``::
+
+   import_big_module      : 52905.399000 ms
+   call_module_function   :   0.020000 ms
+
+存在 ``__pycache__`` 情况下的测试结果::
+
+   import_big_module      : 2065.303000 ms
+   call_module_function   :   0.011000 ms
+
+使用下面的命令加密::
+
+   pyarmor obfuscate big.py
+
+测试结果如下::
+
+   import_big_module      : 8690.256000 ms
+   call_module_function   :   0.015000 ms
+
 .. include:: _common_definitions.txt
