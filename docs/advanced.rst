@@ -1340,6 +1340,22 @@ PyArmor 不会加密数据文件，但是可以把数据文件使用脚本文件
     t = PrivateThread(target=foo)
     t.start()
 
+如果已经定义了自己的类来扩展系统类 `Thread` ，那么只需要将方法 `run`
+重命名为 `lambda_run` ，另外新增加一个方法 `run` 。例如
+
+.. code:: python
+
+    from threading import Thread
+
+    class MyThread(Thread):
+
+        # def run(self):
+        def lambda_run(self):
+            ...
+
+        # 使用 `lambda` 重新定义 `run`
+        run = lambda self : self.lambda_run()
+
 另外一种解决方案是定义一个公共的代理模块，这个公共模块使用普通约束，让系统模块来
 调用代理模块里面的函数，而不是直接调用私有模块里面的函数。
 
