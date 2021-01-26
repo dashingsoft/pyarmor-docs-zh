@@ -243,13 +243,15 @@
 
 加密脚本和原来的脚本相比，存在下列一些的不同:
 
-* 运行加密脚本的 Python 主版本和加密脚本使用的 Python 主版本应该要一致，
-  因为加密的脚本实际上已经是 `.pyc` 文件，如果主版本不一致，有些指令无
-  法识别或者会出错。尤其是 Python3.6，在这个版本引入了新的指令系统，所
-  以和 Python3.5 以及之前的版本完全不同。
+* 加密脚本是和 Python 版本绑定的，例如使用 Python 3.5 加密的脚本，只能使用
+  Python 3.5 去运行，而无法使用 Python 3.6 去运行，但是可以使用不同补丁的 3.5 版
+  本。
 
-* 执行加密角本的 Python 不能是调试版，准确的说，不能是设置了
-  Py_TRACE_REFS 或者 Py_DEBUG 生成的 Python
+* 加密脚本是平台相关，因为使用到了动态库，不同的平台需要相应平台的动态库。平台根
+  据操作系统，CPU 架构来进行区别，例如 32 位 X86 Windows，Linux Aarch64。
+
+* 执行加密角本的 Python 不能是调试版，准确的说，不能是设置了 Py_TRACE_REFS 或者
+  Py_DEBUG 生成的 Python
 
 * 使用 ``sys.settrace``, ``sys.setprofile``, ``threading.settrace`` 和
   ``threading.setprofile`` 设置的回调函数在加密脚本中将被忽略
