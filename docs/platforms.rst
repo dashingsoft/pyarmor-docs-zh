@@ -82,6 +82,8 @@ jondy.zhao@gmail.com
 * linux.aarch64
 * android.aarch64
 * android.armv7 (从 5.9.3 开始支持）
+* android.x86 (从 6.6.1 开始支持）
+* android.x86_64 (从 6.6.1 开始支持）
 * uclibc.armv7 (从 5.9.4 开始支持）
 * linux.ppc64
 * darwin.arm64
@@ -100,37 +102,31 @@ jondy.zhao@gmail.com
      - 操作系统
      - CPU架构
      - 特征
-     - 下载
      - 说明
    * - windows.x86
      - Windows
      - i686
      - 反调试、JIT、高级模式
-     - `_pytransform.dll <http://pyarmor.dashingsoft.com/downloads/latest/win32/_pytransform.dll>`_
      - 使用 i686-pc-mingw32-gcc 交叉编译
    * - windows.x86_64
      - Windows
      - AMD64
      - 反调试、JIT、高级模式
-     - `_pytransform.dll <http://pyarmor.dashingsoft.com/downloads/latest/win_amd64/_pytransform.dll>`_
      - 使用 x86_64-w64-mingw32-gcc 交叉编译
    * - linux.x86
      - Linux
      - i686
      - 反调试、JIT、高级模式
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/linux_i386/_pytransform.so>`_
      - 使用 GCC 编译
    * - linux.x86_64
      - Linux
      - x86_64
      - 反调试、JIT、高级模式
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/linux_x86_64/_pytransform.so>`_
      - 使用 GCC 编译
    * - darwin.x86_64
      - MacOSX
      - x86_64, intel
      - 反调试、JIT、高级模式
-     - `_pytransform.dylib <http://pyarmor.dashingsoft.com/downloads/latest/macosx_x86_64/_pytransform.dylib>`_
      - 使用 CLang 编译（MacOSX10.11）
 
 .. list-table:: 表-2. 其他平台的动态库清单
@@ -142,115 +138,106 @@ jondy.zhao@gmail.com
      - 操作系统
      - CPU架构
      - 特征
-     - 下载
      - 说明
    * - vs2015.x86
      - Windows
      - x86
      -
-     - `_pytransform.dll <http://pyarmor.dashingsoft.com/downloads/latest/vs2015/x86/_pytransform.dll>`_
      - 使用 VS2015 编译
    * - vs2015.x86_64
      - Windows
      - x64
      -
-     - `_pytransform.dll <http://pyarmor.dashingsoft.com/downloads/latest/vs2015/x64/_pytransform.dll>`_
      - 使用 VS2015 编译
    * - linux.arm
      - Linux
      - armv5
      -
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/armv5/_pytransform.so>`_
      - 32-bit Armv5 (arm926ej-s)
    * - linxu.armv6
      - Linux
      - armv6
      - 反调试、JIT
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.armv6.3/_pytransform.so>`_
      - 32-bit Armv6 (-marm -march=armv6 -mfloat-abi=hard)
    * - linux.armv7
      - Linux
      - armv7
      - 反调试、JIT
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/armv7/_pytransform.so>`_
      - 32-bit Armv7 Cortex-A, hard-float, little-endian
    * - linux.aarch32
      - Linux
      - aarch32
      - 反调试、JIT
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/armv8.32-bit/_pytransform.so>`_
      - 32-bit Armv8 Cortex-A, hard-float, little-endian
    * - linux.aarch64
      - Linux
      - aarch64
      - 反调试、JIT
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/armv8.64-bit/_pytransform.so>`_
      - 64-bit Armv8 Cortex-A, little-endian
    * - linux.ppc64
      - Linux
      - ppc64le
      -
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/ppc64le/_pytransform.so>`_
      - 适用于 POWER8
    * - darwin.arm64
      - iOS
      - arm64
      -
-     - `_pytransform.dylib <http://pyarmor.dashingsoft.com/downloads/latest/ios.arm64/_pytransform.dylib>`_
      - 使用 CLang 编译（iPhoneOS9.3sdk）
    * - freebsd.x86_64
      - FreeBSD
      - x86_64
      -
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/freebsd/_pytransform.so>`_
      - 不支持获取硬盘序列号
    * - musl.x86_64
      - Alpine Linux
      - x86_64
      -
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/alpine/_pytransform.so>`_
      - 可用于 Docker（musl-1.1.21）
    * - musl.arm
      - Alpine Linux
      - arm
      -
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/alpine.arm/_pytransform.so>`_
      - 可用于 Docker（musl-1.1.21）, 32 bit Armv5T, hard-float, little-endian
    * - poky.x86
      - Inel Quark
      - i586
      -
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/intel-quark/_pytransform.so>`_
      - 使用 i586-poky-linux 交叉编译
    * - android.aarch64
      - Android
      - aarch64
      -
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/android.aarch64/_pytransform.so>`_
      - Build by android-ndk-r20/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang
    * - android.armv7
      - Android
      - armv7l
      -
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/android.armv7.0/_pytransform.so>`_
      - Build by android-ndk-r20/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-android21-clang
+   * - android.x86
+     - Android
+     - x86
+     -
+     - Build by android-ndk-r20/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android21-clang
+   * - android.x86_64
+     - Android
+     - x86_64
+     -
+     - Build by android-ndk-r20/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android21-clang
    * - uclibc.armv7
      - Linux
      - armv7l
      -
-     - `_pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/uclibc.armv7.0/_pytransform.so>`_
      - Build by armv7-buildroot-uclibceabihf-gcc
    * - windows.x86.21
      - Windows
      - i686
      - 反调试、高级模式、虚拟模式
-     - `_pytransform.dll <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86.21/_pytransform.dll>`_
      - 使用 i686-w64-mingw32-gcc 交叉编译
    * - windows.x86_64.21
      - Windows
      - AMD64
      - 反调试、高级模式、虚拟模式
-     - `_pytransform.dll <http://pyarmor.dashingsoft.com/downloads/latest/windwos.x86_64.21/_pytransform.dll>`_
      - 使用 x86_64-w64-mingw32-gcc 交叉编译
 
 .. list-table:: Table-3. 超级模式预编译扩展模块表
@@ -262,193 +249,161 @@ jondy.zhao@gmail.com
      - 操作系统
      - CPU架构
      - 特征
-     - 下载
      - 说明
    * - darwin.x86_64.11.py38
      - MacOSX
      - x86_64, intel
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-38-darwin.so <http://pyarmor.dashingsoft.com/downloads/latest/darwin.x86_64.11.py38/pytransform.cpython-38-darwin.so>`_
      - Built by CLang with MacOSX10.11
    * - darwin.x86_64.11.py37
      - MacOSX
      - x86_64, intel
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-37m-darwin.so <http://pyarmor.dashingsoft.com/downloads/latest/darwin.x86_64.11.py37/pytransform.cpython-37-darwin.so>`_
      - Built by CLang with MacOSX10.11
    * - darwin.x86_64.11.py27
      - MacOSX
      - x86_64, intel
      - Anti-Debug, JIT, SUPER
-     - `pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/darwin.x86_64.11.py27/pytransform.so>`_
      - Built by CLang with MacOSX10.11
    * - linux.x86_64.11.py38
      - Linux
      - x86_64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-38-x86_64-linux-gnu.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.x86_64.11.py38/pytransform.cpython-38-x86_64-linux-gnu.so>`_
      - Built by gcc
    * - linux.x86_64.11.py37
      - Linux
      - x86_64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-37m-x86_64-linux-gnu.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.x86_64.11.py37/pytransform.cpython-37m-x86_64-linux-gnu.so>`_
      - Built by gcc
    * - linux.x86_64.11.py27
      - Linux
      - x86_64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.x86_64.11.py27/pytransform.so>`_
      - Built by gcc, UCS4
    * - centos6.x86_64.11.py27
      - Linux
      - x86_64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/centos6.x86_64.11.py27/pytransform.so>`_
      - Built by gcc, UCS2
    * - windows.x86_64.11.py38
      - Windows
      - AMD64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86_64.11.py38/pytransform.pyd>`_
      - Cross compile by x86_64-w64-mingw32-gcc in cygwin
    * - windows.x86_64.11.py37
      - Windows
      - AMD64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86_64.11.py37/pytransform.pyd>`_
      - Cross compile by x86_64-w64-mingw32-gcc in cygwin
    * - windows.x86_64.11.py27
      - Windows
      - AMD64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86_64.11.py27/pytransform.pyd>`_
      - Cross compile by x86_64-w64-mingw32-gcc in cygwin
    * - windows.x86.11.py38
      - Windows
      - i386
      - Anti-Debug, JIT, SUPER
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86.11.py38/pytransform.pyd>`_
      - Cross compile by i686-w64-mingw32-gcc in cygwin
    * - windows.x86.11.py37
      - Windows
      - i386
      - Anti-Debug, JIT, SUPER
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86.11.py37/pytransform.pyd>`_
      - Cross compile by i686-w64-mingw32-gcc in cygwin
    * - windows.x86.11.py27
      - Windows
      - i386
      - Anti-Debug, JIT, SUPER
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86.11.py27/pytransform.pyd>`_
      - Cross compile by i686-w64-mingw32-gcc in cygwin
    * - linux.x86.11.py38
      - Linux
      - i386
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-38-i386-linux-gnu.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.x86.11.py38/pytransform.cpython-38-i386-linux-gnu.so>`_
      - Built by gcc
    * - linux.x86.11.py37
      - Linux
      - i386
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-37m-i386-linux-gnu.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.x86.11.py37/pytransform.cpython-37m-i386-linux-gnu.so>`_
      - Built by gcc
    * - linux.x86.11.py27
      - Linux
      - i386
      - Anti-Debug, JIT, SUPER
-     - `pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.x86.11.py27/pytransform.so>`_
      - Built by gcc
    * - linux.aarch64.11.py38
      - Linux
      - aarch64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-38-aarch64-linux-gnu.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.aarch64.11.py38/pytransform.cpython-38-aarch64-linux-gnu.so>`_
      - Built by gcc
    * - linux.aarch64.11.py37
      - Linux
      - aarch64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-37m-aarch64-linux-gnu.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.aarch64.11.py37/pytransform.cpython-37m-aarch64-linux-gnu.so>`_
      - Built by gcc
    * - linux.aarch64.11.py27
      - Linux
      - aarch64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.aarch64.11.py27/pytransform.so>`_
      - Built by gcc
    * - linux.aarch32.11.py38
      - Linux
      - aarch32
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-38-arm-linux-gnu.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.aarch32.11.py38/pytransform.cpython-38-arm-linux-gnu.so>`_
      - Built by gcc
    * - linux.aarch32.11.py37
      - Linux
      - aarch32
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-37m-arm-linux-gnu.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.aarch32.11.py37/pytransform.cpython-37m-arm-linux-gnu.so>`_
      - Built by gcc
    * - linux.aarch32.11.py27
      - Linux
      - aarch32
      - Anti-Debug, JIT, SUPER
-     - `pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.aarch32.11.py27/pytransform.so>`_
      - Built by gcc
    * - linux.armv7.11.py38
      - Linux
      - armv7l
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-38-arm-linux-gnu.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.armv7.11.py38/pytransform.cpython-38-arm-linux-gnu.so>`_
      - Built by gcc
    * - linux.armv7.11.py37
      - Linux
      - armv7l
      - Anti-Debug, JIT, SUPER
-     - `pytransform.cpython-37m-arm-linux-gnu.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.armv7.11.py37/pytransform.cpython-37m-arm-linux-gnu.so>`_
      - Built by gcc
    * - linux.armv7.11.py27
      - Linux
      - armv7l
      - Anti-Debug, JIT, SUPER
-     - `pytransform.so <http://pyarmor.dashingsoft.com/downloads/latest/linux.armv7.11.py27/pytransform.so>`_
      - Built by gcc
    * - windows.x86_64.25.py38
      - Windows
      - AMD64
      - Anti-Debug, SUPER, VM
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86_64.25.py38/pytransform.pyd>`_
      - Cross compile by x86_64-w64-mingw32-gcc in cygwin
    * - windows.x86_64.25.py37
      - Windows
      - AMD64
      - Anti-Debug, SUPER, VM
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86_64.25.py37/pytransform.pyd>`_
      - Cross compile by x86_64-w64-mingw32-gcc in cygwin
    * - windows.x86_64.25.py27
      - Windows
      - AMD64
      - Anti-Debug, JIT, SUPER
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86_64.25.py27/pytransform.pyd>`_
      - Cross compile by x86_64-w64-mingw32-gcc in cygwin
    * - windows.x86.25.py38
      - Windows
      - i386
      - Anti-Debug, SUPER, VM
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86.25.py38/pytransform.pyd>`_
      - Cross compile by i686-w64-mingw32-gcc in cygwin
    * - windows.x86.25.py37
      - Windows
      - i386
      - Anti-Debug, SUPER, VM
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86.25.py37/pytransform.pyd>`_
      - Cross compile by i686-w64-mingw32-gcc in cygwin
    * - windows.x86.25.py27
      - Windows
      - i386
      - Anti-Debug, SUPER, VM
-     - `pytransform.pyd <http://pyarmor.dashingsoft.com/downloads/latest/windows.x86.25.py27/pytransform.pyd>`_
      - Cross compile by i686-w64-mingw32-gcc in cygwin
 
 .. _如何人工下载和配置动态库:
