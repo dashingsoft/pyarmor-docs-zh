@@ -15,9 +15,10 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
     darwin.x86_64/x86
 
 其他平台的动态库并没有随着安装包发布，在这些平台下面运行 `pyarmor` 的时候，默认
-情况下会搜索路径 ``~/.pyarmor/platforms/SYSTEM/ARCH`` 去查找相应平台的动态库，其
-中 ``SYSTEM.ARCH`` 是一个 `标准平台名称`_ 。如果没有发现，那么会自动从远程服务器
-查找和下载相应平台的动态库，目前支持的其他平台包括::
+情况下会搜索路径 ``~/.pyarmor/platforms/SYSTEM/ARCH/N/`` 去查找相应平台的动态库，
+其中 ``SYSTEM.ARCH`` 是一个 `标准平台名称`_ 。 ``N`` 一般为数值，用来标示动态库
+的特征，关于不同特征的动态库参考下面的说明。如果没有发现任何可用的动态库，那么会
+自动从远程服务器查找和下载相应平台的动态库，目前支持的其他平台包括::
 
     darwin.arm64
     linux.arm
@@ -31,6 +32,7 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
     android.x86
     android.x86_64
     uclibc.armv7
+    centos6.x86_64
     freebsd.x86_64
     musl.x86_64
     musl.arm
@@ -40,17 +42,17 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 一些 Linux 平台使用不同的 c 库，例如 Docker 基于 Alpine Linux，使用的是 `musl`
 ，有的嵌入系统使用的是 `uclibc` ，在平台名称中使用第一个标识符来区别。
 
+其中 ``centos6`` 是一个特殊名称，用来标示 ``glibc`` 版本小于 2.14 的 Linux 平台。
+
 :ref:`超级模式` 是直接使用扩展模块 :mod:`pytransform` ，不同版本的 Python 分别对
 应相应的一个扩展模块，并保存在 ``~/.pyarmor/platforms/SYSTEM/ARCH/N/pyXY`` 下面。
-最后的一级目录是对应的 Python 版本，上一级目录 ``N`` 是动态库特征码（参考下面的
-说明），对于超级模式来说，特征码一般就是 ``11`` ，例如 ``linux/x86_64/11/py38``
-用来存放 64位 Linux 下 Python38 的超级模式动态库。
+最后的一级目录是对应的 Python 版本，对于超级模式来说，特征值一般就是 ``11`` ，例
+如 ``linux/x86_64/11/py38`` 用来存放 64位 Linux 下 Python38 的超级模式动态库。
 
 目前超级模式支持的所有平台和架构如下
 
 .. list-table:: 表-1. 超级模式预编译扩展模块表
    :name: 超级模式预编译扩展模块表
-   :widths: 20 20 60
    :header-rows: 1
 
    * - 平台名称
@@ -86,6 +88,14 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 
 最新的全部支持的动态库详细列表可以参考 `pyarmor-core/platforms/index.json <https://github.com/dashingsoft/pyarmor-core/blob/master/platforms/index.json>`_
 
+有些平台 pyarmor 无法自动识别，但是有可用的动态库。可以直接下载下来，保存到平台
+的搜索路径 ``~/.pyarmor/platforms/SYSTEM/ARCH/N/`` 下面。如果不能确定存放的路径，
+可以使用命令 ``pyarmor -d download`` 查看，在输出日志中会显示 pyarmor 去那里查找
+动态库。
+
+动态库特征值
+-----------
+
 在同一个平台下面可能有多个可用的动态库，分别具备不同的特征，一般在标准平台名称的
 后面增加一个数字来标识，组成一个唯一的平台 ID。
 
@@ -100,15 +110,13 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 例如，动态库为 ``windows.x86_64.7`` 具备特征 反调试(1)，JIT(2)，高级模式(4)，而
 ``windows.x86_64.0`` 则表示没有任何额外的特征，相应的性能也最高。
 
+对于超级模式来说，还需要把 Python 版本标示出来，例如 ``windows.x86.11.py37``
+
 在跨平台发布的时候需要注意，特征为 ``0`` 的动态库和其他具备特征的动态库是相互不
 兼容的，为了提高安全性，没有任何特征的动态库使用的加密算法和有特征的库是不相同的。
 所以，动态库 ``windows.x86_64.7`` 是无法和 ``linux.armv7.0`` 共用相同的加密脚本
 的。
 
-有些平台 pyarmor 无法自动识别，但是有可用的动态库。可以直接下载下来，保存到平台
-的搜索路径 ``~/.pyarmor/platforms/SYSTEM/ARCH/N/`` 下面。如果不能确定存放的路径，
-可以使用命令 ``pyarmor -d download`` 查看，在输出日志中会显示 pyarmor 去那里查找
-动态库。
 
 .. _标准平台名称:
 
