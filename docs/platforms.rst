@@ -12,7 +12,7 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
     windows.x86_64
     linux.x86
     linux.x86_64
-    darwin.x86_64/x86
+    darwin.x86_64
 
 其他平台的动态库并没有随着安装包发布，在这些平台下面运行 `pyarmor` 的时候，默认
 情况下会搜索路径 ``~/.pyarmor/platforms/SYSTEM/ARCH/N/`` 去查找相应平台的动态库，
@@ -141,17 +141,26 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 * linux.aarch32
 * linux.aarch64
 * android.aarch64
-* android.armv7 (从 5.9.3 开始支持）
-* android.x86 (从 6.6.1 开始支持）
-* android.x86_64 (从 6.6.1 开始支持）
-* uclibc.armv7 (从 5.9.4 开始支持）
+* android.armv7
+* android.x86
+* android.x86_64
+* uclibc.armv7
 * linux.ppc64
 * darwin.arm64
 * freebsd.x86_64
-* musl.x86_64 （在 6.3.1 更名，原来的名字 alpine.x86_64）
-* musl.arm （在 6.3.1 更名，原来的名字 alpine.arm）
-* musl.mips32 （从 6.3.1 开始支持）
+* musl.x86_64
+* musl.arm
+* musl.mips32
 * poky.x86
+
+.. note::
+
+   不同版本新增的平台名称
+
+   * v5.9.3: android.armv7
+   * v5.9.4: uclibc.armv7
+   * v6.3.1: musl.x86_64, musl.arm, musl.mips32, linux.mips64, linux.mips64el
+   * v6.6.1: android.x86, android.x86_64
 
 .. _如何人工下载和配置动态库:
 
