@@ -93,6 +93,9 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 可以使用命令 ``pyarmor -d download`` 查看，在输出日志中会显示 pyarmor 去那里查找
 动态库。
 
+如果需要在上面没有列出的平台使用 PyArmor，请点击这里
+`提交一个新平台请求 <https://github.com/dashingsoft/pyarmor/issues>`_
+
 动态库特征值
 -----------
 

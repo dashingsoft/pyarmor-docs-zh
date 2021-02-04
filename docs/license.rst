@@ -88,9 +88,8 @@ http://www.sharebank.com.cn/soft/softbuy.php?soid=52382
 技术支持
 --------
 
-问题报告请提交到 https://github.com/dashingsoft/pyarmor/issues 或者发
-送邮件到 jondy.zhao@gmail.com ，一般在 24 小时之内回复。推荐使用前者，
-这样可以帮助有相同问题的其他用户。
+问题报告请提交到 https://github.com/dashingsoft/pyarmor/issues ，有关安全的问题
+请直接发送邮件到 jondy.zhao@gmail.com ，一般在 24 小时之内回复。
 
 一般来说，所有问题可以归结为以下三类:
 

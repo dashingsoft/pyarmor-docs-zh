@@ -148,13 +148,7 @@ Could not find `_pytransform`
 
 ERROR: Unsupport platform linux.xxx
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-有些平台 `pyarmor` 无法自动识别，如果在 `其他平台的动态库清单`_ 中有可
-用的动态库。可以直接下载下来，保存到这个平台的搜索路径
-``~/.pyarmor/platforms/SYSTEM/ARCH`` 下面。如果不能确定存放的路径，可
-以使用命令 ``pyarmor -d download`` 查看，在开始的时候会显示 `pyarmor`
-去那里查找动态库。
-
-如果需要在上面没有列出的平台使用 PyArmor，请发送邮件到 jondy.zhao@gmail.com
+请参考 :ref:`支持的平台列表`
 
 
 /lib64/libc.so.6: version 'GLIBC_2.14' not found
