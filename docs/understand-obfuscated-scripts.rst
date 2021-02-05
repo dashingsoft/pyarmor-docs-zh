@@ -1,4 +1,4 @@
-.. _understanding obfuscated scripts:
+.. _了解加密脚本:
 
 了解加密脚本
 ============
