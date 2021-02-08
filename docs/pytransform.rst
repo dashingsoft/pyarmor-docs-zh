@@ -103,9 +103,24 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
 .. function:: assert_armored(*args)
 
-   必须作为修饰函数来使用，用来检查传入的参数列表中的函数是经过加密的。
+   必须作为修饰函数来使用，用来检查传入的参数列表中的函数是经过加密的。例如::
+
+    @assert_armored(foo.connect, foo.connect2)
+    def start_server():
+        foo.connect('root', 'root password')
 
    抛出异常 :exc:`Exception` 如果任何传入的一个函数不是 PyArmor 加密过的。
+
+.. function:: check_armored(*args)
+
+   返回 1 如果所有列出的函数都是被加密的
+
+   返回 0 如果任何一个列出的函数没有被加密
+
+   返回 -1 表示未知的错误
+
+   .. note:: 在 v6.6.2 中新增
+
 
 示例
 ----
