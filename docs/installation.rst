@@ -47,6 +47,8 @@
     {pyarmor-folder}/license.lic            (在 v5.8.0 之前)
     ~/.pyarmor_capsule.zip                  (在 v6.2.0 之前)
 
+    /path/to/project/.pyarmor_config        (如果使用了工程）
+
 执行下面的命令进行完全卸载::
 
     pip uninstall pyarmor
@@ -54,6 +56,8 @@
 
     rm -rf {pyarmor-folder}                 (在 v5.8.0 之前)
     rm -rf ~/.pyarmor_capsule.zip           (在 v6.2.0 之前)
+
+    rm /path/to/project/.pyarmor_config
 
 .. note::
 
