@@ -716,7 +716,8 @@ Python 应用程序，例如::
 码写到脚本里，原来的脚本就无法正常调试。
 
 通过增加私有的检查代码，可以很大程度上提高加密脚本的安全性，因为没有人知道你的检
-查逻辑，并且你可以随时更改这些检查逻辑。
+查逻辑，并且你可以随时更改这些检查逻辑。例如检查当前是否有调试器进程，检查调用者
+的代码和 `sum(co_code)` ，当前函数的调用者可以通过 `sys._getframe` 得到等等。
 
 使用内联插件检查动态库没有被修改
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -749,6 +750,10 @@ Python 应用程序，例如::
 
 使用插件检查被调用的函数是否经过加密
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+运行辅助模块 :module:`pytransform` 里面的函数 :ref:`check_armored` 和修饰函数
+:ref:`assert_armored` 可以用来检查指定的函数是否是加密函数，从而避免其他人调用自
+己的关键函数。
 
 假设主脚本为 `main.py`, 需要调用模块 `foo.py` 里面的方法 `connect`, 并且需要传递
 敏感数据作为参数。脚本的相关代码如下
@@ -788,9 +793,7 @@ Python 应用程序，例如::
 `start_server` 之前，检查被调用的函数是否是自己定义的函数，如果不是，直接抛出异
 常。
 
-从 v6.0.2 开始， :ref:`运行辅助包` :mod:`pytransform` 提供一个修饰函数
-``assert_armored`` ，可以用来检查参数列表中函数是否被加密。现在，编辑脚本
-`main.py` ，如下所示的方式增加两个内联插件桩
+现在，编辑脚本 `main.py` ，如下所示的方式增加两个内联插件桩
 
 .. code:: python
 
@@ -821,53 +824,21 @@ Python 应用程序，例如::
 这样，在调用 ``start_server`` 之前，修饰函数 ``assert_assert`` 会检查两个
 ``connect`` 函数，如果它们没有被加密，就会抛出异常。
 
-为了进一步提高安全性，可以把使用外部插件脚本的方式，这样插件函数本身就不需要从外
-部导入。首先在当前目录下创建一个插件脚本 ``asser_armored.py``
-
-.. code:: python
-
-    from pytransform import _pytransform, PYFUNCTYPE, py_object
-
-    def assert_armored(*names):
-        prototype = PYFUNCTYPE(py_object, py_object)
-        dlfunc = prototype(('assert_armored', _pytransform))
-
-        def wrapper(func):
-            def _execute(*args, **kwargs):
-
-                # Call check point provide by PyArmor
-                dlfunc(names)
-
-                # Add your private check code
-                for s in names:
-                    if s.__name__ == 'connect':
-                        if s.__code__.co_code[10:12] != b'\x90\xA2':
-                            raise RuntimeError('Access violate')
-
-                return func(*args, **kwargs)
-            return _execute
-        return wrapper
-
-然后修改 `main.py`, 增加插件定义桩和插件调用桩，修改后的代码如下
+当然，你也可以自己调用 :ref:`check_armored` 来检查并进行处理
 
 .. code:: python
 
     import foo
 
-    # {PyArmor Plugins}
+    from pytransform import check_armored
 
-    # PyArmor Plugin: @assert_armored(foo.connect, foo.connect2)
     def start_server():
+
+        if not check_armored(foo.connect, foo.connect2):
+            print('Found hacker')
+            return
+
         foo.connect('root', 'root password')
-
-在加密脚本的时候指定插件名称::
-
-    pyarmor obfuscate --plugin assert_armored main.py
-
-.. note::
-
-   从 v6.2.0 开始，使用 :ref:`超级模式` 加密的脚本不需要也无法使用外部插件脚本，
-   直接使用扩展模块 :mod:`pytransform` 提供的修饰函数 ``assert_armored`` 即可。
 
 .. _call pyarmor from python script:
 

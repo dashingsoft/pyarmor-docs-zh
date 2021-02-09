@@ -103,19 +103,28 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
 .. function:: assert_armored(*args)
 
-   必须作为修饰函数来使用，用来检查传入的参数列表中的函数是经过加密的。例如::
-
-    @assert_armored(foo.connect, foo.connect2)
-    def start_server():
-        foo.connect('root', 'root password')
+   必须作为修饰函数来使用，用来检查传入的参数列表中的函数是经过加密的。
 
    抛出异常 :exc:`Exception` 如果任何传入的一个函数不是 PyArmor 加密过的。
+
+   例如::
+
+     from pytransform import assert_armored
+     @assert_armored(foo.connect, foo.connect2)
+     def start_server():
+         foo.connect('root', 'root password')
 
 .. function:: check_armored(*args)
 
    返回 True 如果所有列出的函数都是被加密的
 
    返回 False 如果任何一个列出的函数没有被加密
+
+   例如::
+
+     from pytransform import check_armored
+     if not check_armored(foo.connect, foo.connect2):
+         print('My script is hacked')
 
    .. note:: 在 v6.6.2 中新增
 
@@ -141,7 +150,7 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
        print(e)
 
 
-更多内容，请参考 :ref:`使用插件扩展认证方式`
+更多内容，请参考 :ref:`使用插件扩展认证方式` 和 :ref:`使用插件来进一步提高安全性`
 
 .. note::
 
