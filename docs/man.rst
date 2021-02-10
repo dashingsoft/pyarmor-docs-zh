@@ -609,6 +609,9 @@ https://pyinstaller.readthedocs.io/en/stable/hooks.html#understanding-pyinstalle
    命令 `pack` 会自动加密脚本，所以不要使用该命令去打包加密后的脚本，打包加密脚
    本会导致错误，因为脚本加密之后是无法自动找到的其他被引用的模块的。
 
+   默认情况下 `pack` 只会递归加密主脚本所在目录的所有文件，在其他目录的依赖模块
+   并不会被加密。
+
 .. _hdinfo:
 
 hdinfo
