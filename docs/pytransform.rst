@@ -114,6 +114,10 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
      def start_server():
          foo.connect('root', 'root password')
 
+   .. note::
+
+      它只能检查函数或者方法，其他类型例如自定义类等并不支持
+
 .. function:: check_armored(*args)
 
    返回 True 如果所有列出的函数都是被加密的
@@ -128,6 +132,7 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
    .. note:: 在 v6.6.2 中新增
 
+      它只能检查函数或者方法，其他类型例如自定义类等并不支持
 
 示例
 ----
