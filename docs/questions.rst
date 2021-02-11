@@ -12,7 +12,7 @@
 ----------------
 
 命令行
-++++++
+~~~~~~
 
 pyarmor 是一个命令行工具，你必须知道如何在终端运行命令。如果你对命令行不了解，也
 不想学习，那么请使用网页版的图形界面包 `pyarmor-webui`_
@@ -26,13 +26,13 @@ pyarmor 是一个命令行工具，你必须知道如何在终端运行命令。
 https://docs.microsoft.com/zh-cn/windows/terminal/
 
 Python
-++++++
+~~~~~~
 
 你必须了解如何在命令行运行 Python
 https://docs.python.org/zh-cn/3.8/tutorial/interpreter.html#using-the-python-interpreter
 
 脚本的字符编码
-++++++++++++++
+~~~~~~~~~~~~~~
 
 如果加密脚本的输出结果中出现乱码，你需要了解 Python 脚本的字符编码
 
@@ -42,7 +42,7 @@ https://docs.python.org/zh-cn/3.8/tutorial/interpreter.html#source-code-encoding
 常，然后在重新加密并运行脚本。
 
 Python如何导入模块和包
-++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~
 
 加密脚本需要运行辅助包来运行，运行辅助包是一个普通的 Python 包，可以像普通的模块
 一样被导入和使用。缺少运行辅助包，或者存放的位置不正确，都会导致加密脚本运行失败，
@@ -69,7 +69,7 @@ https://docs.python.org/zh-cn/3.8/reference/import.html#the-import-system
 
 
 PyInstaller
-+++++++++++
+~~~~~~~~~~~
 
 如果你需要把加密脚本打包成为可执行文件，那你必须了解 `PyInstaller`_ ，并且能够使
 用 `PyInstaller`_ 直接打包你的脚本。
