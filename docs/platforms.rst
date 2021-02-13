@@ -20,7 +20,8 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 的特征，关于不同特征的动态库参考下面的说明。如果在这个目录没有发现任何可用的动态
 库，那么会自动从远程服务器查找和下载相应平台的动态库，目前支持的其他平台包括::
 
-    darwin.arm64
+    darwin.aarch64
+    ios.aarch64
     linux.arm
     linux.armv6
     linux.armv7
@@ -69,7 +70,12 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
      - aarch64
      - 11
      - 38, 39
-     - ios/darwin arm64
+     - Apple Silicon
+   * - ios
+     - aarch64
+     - 11
+     - 38, 39
+     -
    * - linux
      - x86, x86_64, aarch64, aarch32, armv7
      - 11
