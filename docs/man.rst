@@ -333,7 +333,7 @@ licenses
 -x, --bind-data DATA                  用于扩展认证类型的时候传递认证数据信息
 --disable-restrict-mode               运行加密脚本时候禁用所有约束模式
 --enable-period-mode                  运行加密脚本时候周期性（每小时）检查许可文件
---fixed key,...                       绑定加密脚本到特定的 Python 解释器
+--fixed KEY                           绑定加密脚本到特定的 Python 解释器
 
 **描述**
 
