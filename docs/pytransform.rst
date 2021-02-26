@@ -105,34 +105,36 @@ Python 脚本里来做。在这个时候，模块 :mod:`pytransform` 会提供�
 
    必须作为修饰函数来使用，用来检查传入的参数列表中的函数是经过加密的。
 
+   可以用来检查函数，类方法和模块，但是其他类型并不支持，如果函数使用了内置的修
+   饰函数，例如 ``@staticmethod`` ，也会被认为是没有加密的函数。
+
    抛出异常 :exc:`Exception` 如果任何传入的一个函数不是 PyArmor 加密过的。
 
    例如::
 
      from pytransform import assert_armored
-     @assert_armored(foo.connect, foo.connect2)
+     @assert_armored(foo, foo.connect, foo.connect2)
      def start_server():
          foo.connect('root', 'root password')
 
-   .. note::
-
-      它只能检查函数或者方法，其他类型例如自定义类等并不支持
+   .. note:: 从 v6.6.2 支持检查模块，但只能用于超级模式，其他模式并不支持
 
 .. function:: check_armored(*args)
 
-   返回 True 如果所有列出的函数都是被加密的
+   返回 True 如果所有列出的函数，类方法和模块都是被加密的
 
    返回 False 如果任何一个列出的函数没有被加密
+
+   可以用来检查函数，类方法和模块，其他类型并不支持，如果函数使用了内置的修饰函
+   数，例如 ``@staticmethod`` ，也会被认为是没有加密的。
 
    例如::
 
      from pytransform import check_armored
-     if not check_armored(foo.connect, foo.connect2):
+     if not check_armored(foo, foo.connect, foo.connect2):
          print('My script is hacked')
 
-   .. note:: 在 v6.6.2 中新增
-
-      它只能检查函数或者方法，其他类型例如自定义类等并不支持
+   .. note:: 在 v6.6.2 中新增，只在超级模式中可用
 
 示例
 ----
