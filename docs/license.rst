@@ -61,10 +61,15 @@ https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 
 http://www.sharebank.com.cn/soft/softbuy.php?soid=52382
 
-支付成功之后一个名为 "pyarmor-regcode-1.txt" 的注册文件会自动通过电子邮件发送过
-去，把注册文件保存到磁盘，然后使用下面的命令进行注册
+对于类型为个人用户的许可，注册名称需要填写正确的姓名。
 
-    pyarmor register pyarmor-regcode-1.txt
+对于类型为企业用户的许可，除了注册名称需要填写正确的企业名称之外，还需要填写被授
+权的产品名称，如果仅在企业内部使用，不会用于任何被销售的产品，可以填写“内部使用”。
+
+支付成功之后一个名为 "pyarmor-regcode-xxxx.txt" 的注册文件会自动通过电子邮件发送
+过去，把注册文件保存到磁盘，然后使用下面的命令进行注册
+
+    pyarmor register pyarmor-regcode-xxxx.txt
 
 运行下面的命令查看注册信息
 
@@ -75,7 +80,7 @@ http://www.sharebank.com.cn/soft/softbuy.php?soid=52382
 .. note::
 
     如果你使用的是 PyArmor 6.5.2 之前的版本，使用任何文本编辑器打开注册文件
-    "pyarmor-regcode-1.txt"，参考里面的说明进行注册
+    "pyarmor-regcode-xxxx.txt"，参考里面的说明进行注册
 
 .. important::
 
