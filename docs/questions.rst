@@ -564,6 +564,8 @@ NameError: name '__armor_wrap__' is not defined
 
 不正确的使用 :ref:`约束模式` 可能导致出现这个问题，尝试使用约束模式 2 来加密脚本
 
+如果是线程导致的这个问题，参考这里 :ref:`在约束模块中使用 threading 和 multiprocessing`
+
 打包加密问题
 ------------
 
