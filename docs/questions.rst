@@ -566,6 +566,37 @@ NameError: name '__armor_wrap__' is not defined
 
 如果是线程导致的这个问题，参考这里 :ref:`在约束模块中使用 threading 和 multiprocessing`
 
+如果是在方法 `__del__` 中抛出这个异常，请参考下一个问题
+
+Object method `__del__` raise NameError exception
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+如果加密脚本中的类方法 `__del__` 抛出下面的异常::
+
+    NameError: name '__armor_enter__' is not defined
+    NameError: name '__armor_wrap__' is not defined
+
+请升级 pyarmor 到 v6.7.3+，并且重新加密脚本，主要是要重新生成运行辅助包。
+
+如果加密不是使用的超级模式，但是 Python 的版本有大于等于 3.7，请使用超级模式重新加密脚本。
+或者重构代码，不要加密方法 `__del__` 。例如
+
+.. code:: python
+
+    class MyData:
+
+        ...
+
+        def lambda_del(self):
+           # Real code for method __del__
+           ...
+
+        __del__ = lambda_del
+
+任何以 `lambda_` 开头的函数不会被 pyarmor 加密，所以上面的示例中，类方
+法 `__del__` 是没有加密的函数 ``lambda_del`` 。
+
+
 打包加密问题
 ------------
 
