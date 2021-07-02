@@ -596,6 +596,13 @@ Object method `__del__` raise NameError exception
 任何以 `lambda_` 开头的函数不会被 pyarmor 加密，所以上面的示例中，类方
 法 `__del__` 是没有加密的函数 ``lambda_del`` 。
 
+SystemError: module filename missing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+运行使用外部许可证的超级模式加密的脚本，如果当前目录下面没有找到 `license.lic`
+，那么加密脚本会抛出这个异常。如果 `license.lic` 在其他目录，那么使用环境变量
+`PYARMOR_LICNSE` 指向这个文件，例如::
+
+    export PYARMOR_LICNSE=/path/to/license.lic
 
 打包加密问题
 ------------
