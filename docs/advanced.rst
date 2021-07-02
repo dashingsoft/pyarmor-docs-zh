@@ -55,9 +55,33 @@
 这样，运行加密脚本的时候就会在外部查找许可文件，查找外部 ``license.lic`` 的顺序
 
 #. 如果设定了环境变量 ``PYARMOR_LICENSE`` ，直接使用这里指定的文件名
+#. 如果设置了 ``sys.PYARMOR_LICENSE`` ，直接使用这里指定的文件名
 #. 如果没有，那么查找当前路径下面的 ``license.lic``
-#. 如果还没有，查找和扩展模块 ``pytransform`` 相同路径下面的 ``license.lic``
 #. 没有找到就报错
+
+例如，使用 ``sys.PYARMOR_LICENSE`` 来指定外部许可证
+
+对于非超级模式，可以直接修改运行辅助文件 ``dist/pytransform/__init__.py`` 中的函
+数 ``pyarmor_runtime`` ，在其中增加一行::
+
+    sys.PYARMOR_LICENSE = '/path/to/license.lic'
+
+对于超级模式，需要把扩展模块转换成为包，例如，转换扩展模块 `pytransform.so` 为包
+`pytransform`::
+
+    cd dist
+    mkdir pytransform
+    mv pytransform.so pytransform/
+
+新增 ``dist/pytransform/__init__.py``
+
+.. code:: python
+
+    import sys
+    sys.PYARMOR_LICENSE = '/path/to/license.lic'
+    name = 'pytransform'
+    m = __import__(name, globals(), locals(), ['*'])
+    sys.modules[__name__].__dict__.update(m.__dict__)
 
 .. _obfuscating many packages:
 
