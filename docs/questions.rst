@@ -604,6 +604,19 @@ SystemError: module filename missing
 
     export PYARMOR_LICNSE=/path/to/license.lic
 
+Android problem
+~~~~~~~~~~~~~~~
+
+大部分的 Android 系统只允许从特定目录装载动态库，而运行加密脚本需要的辅助文件就
+有一个动态库文件 `_pytransform.so` ，所以直接拷贝加密脚本到 Android 系统运行可能
+会抛出这样的异常::
+
+    dlopen failed: couldn't map "/storage/emulated/0/dist/_pytransform.so"
+    segment 1: Operation not permitted
+
+请参考 Android 开发文档，拷贝整个目录 `pytransform` 到允许装载动态库的目录，然后
+设置 `PYTHONPATH` 或者其他任何方式让 Python 能够导入包 `pytransform` 即可。
+
 打包加密问题
 ------------
 
