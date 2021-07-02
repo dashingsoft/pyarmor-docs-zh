@@ -604,8 +604,8 @@ SystemError: module filename missing
 
     export PYARMOR_LICNSE=/path/to/license.lic
 
-Android problem
-~~~~~~~~~~~~~~~
+Android 保护机制导致的问题
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 大部分的 Android 系统只允许从特定目录装载动态库，而运行加密脚本需要的辅助文件就
 有一个动态库文件 `_pytransform.so` ，所以直接拷贝加密脚本到 Android 系统运行可能
