@@ -57,6 +57,7 @@
 #. 如果设定了环境变量 ``PYARMOR_LICENSE`` ，直接使用这里指定的文件名
 #. 如果设置了 ``sys.PYARMOR_LICENSE`` ，直接使用这里指定的文件名
 #. 如果没有，那么查找当前路径下面的 ``license.lic``
+#. 如果没有，对于非超级模式，还会在运行辅助包 ``pytransform`` 所在的路径查找 ``license.lic``
 #. 没有找到就报错
 
 例如，使用 ``sys.PYARMOR_LICENSE`` 来指定外部许可证
