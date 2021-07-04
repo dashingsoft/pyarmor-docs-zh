@@ -258,10 +258,17 @@
   Py_DEBUG 生成的 Python
 
 * 使用 ``sys.settrace``, ``sys.setprofile``, ``threading.settrace`` 和
-  ``threading.setprofile`` 设置的回调函数在加密脚本中将被忽略
+  ``threading.setprofile`` 设置的回调函数在加密脚本中将被忽略，所以任
+  何使用这些函数的工具无法正常工作。
 
 * 模块 ``inspect`` 和其他任何第三方包如果试图访问加密脚本的 Byte Code 或者直接访
   问代码对象的某些属性，也会崩溃，失败或者得到错误的数据
+
+* 使用 ``cPickle`` 或者其他序列化工具传递加密代码对象，传递之后的代码对象可能无
+  法正常运行。
+
+* ``sys._getframe([n])`` 可能得到的不是期望的运行框架，因为加密脚本可能增加了额
+  外的运行框架。
 
 * 加密脚本抛出异常中的行号和原来的脚本会不一样，尤其是这个脚本在加密的时候插入了
   交叉保护代码或者其他插件脚本
@@ -311,5 +318,7 @@
 
 * 模块 `ctypes` 必须存在并且 `ctypes.pythonapi._handle` 必须被设置为
   Python 动态库的句柄，PyArmor 会通过该句柄获取 Python C API 的地址。
+
+已知的有 `PyPy` 无法运行加密脚本，因为它完全不同于 `CPython` 。
 
 .. include:: _common_definitions.txt
