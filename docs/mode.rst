@@ -355,11 +355,14 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 `rm6` 使用模式 6 进行加密，那么即使是在加密脚本中，下面的代码也不能打印出数据字
 典的内容:
 
-.. code-block:: python
-  import rm6
+.. code:: python
 
-  # 输出的内容： "{...}"
-  print(rm6.__dict__)
+    import rm6
+    print(rm6.__dict__)
+
+最终输出的内容会是::
+
+    {...}
 
 .. important::
 
