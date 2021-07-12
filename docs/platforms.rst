@@ -162,6 +162,11 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 * musl.mips32
 * poky.x86
 
+如果不能确定目标平台的标准名称，下载这个帮助脚本
+`get_platform_name.py <https://github.com/dashingsoft/pyarmor/raw/master/src/helper/get_platform_name.py>`_ ，然后在目标机器上运行::
+
+    python get_platform_name.py
+
 .. note::
 
    不同版本新增的平台名称
