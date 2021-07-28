@@ -366,7 +366,7 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 
 .. code:: python
 
-    # 这是模块文件 foo6.py ，使用模式 106 进行加密
+    # 这是模块文件 foo6.py ，使用模式 105 进行加密
 
     # 下面语句都可以正常使用
     global var_a
