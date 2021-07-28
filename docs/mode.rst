@@ -362,20 +362,43 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
 * 模块被导入之后，就再也不能显示或者隐式的插入或者删除 `module.__dict__` 里面的键
 * 函数 `dirs` ， `vars` 等也会返回空
 
-例如，如果模块 ``rm6`` 启用了这个约束，那么即使在加密脚本中:
+例如:
 
 .. code:: python
 
-    import rm6
+    # 这是模块文件 foo6.py ，使用模式 106 进行加密
+
+    # 下面语句都可以正常使用
+    global var_a
+    var_a = 'This is global variable a'
+    var_b = 'This is global variable b'
+    del var_a
+
+    def fabico():
+        global var_b
+
+        # 错误，删除模块属性将隐式修改模块字典，只能在模块级别删除全局变量
+        del var_b
+
+    # 这是脚本 foo.py ，使用模式 101 进行加密
+
+    import foo6
 
     # 输出结果是 {}
-    rm6.__dict__
+    foo6.__dict__
 
     # 输出结果是 {}
-    vars(rm6)
+    vars(foo6)
 
     # 输出结果是 []
-    dirs(rm6)
+    dirs(foo6)
+
+    # 正确，可以访问修改已经存在的属性
+    foo6.var_a = 'Changed by foo'
+
+    # 错误，新增属性到模块字典，可能导致未知结果
+    foo6.__dict__['var_c'] = 1
+    foo6.var_d = 2
 
 并且该约束只适用于 Python 3.7 以及其后的版本，对之前的 Python 版本没有效果。
 
