@@ -55,10 +55,10 @@
 
 .. note::
 
-   从 PyArmor 5.5.0 开始，可以传入选项 ``--advanced`` 启用高级模式来更进
-   一步的提高加密脚本的安全性。例如::
+   可以传入选项 ``--advanced 2`` 启用超级模式来更进一步的提高加密脚本的安全性。
+   例如::
 
-       pyarmor pack -x " --advanced 1 --exclude tests" foo.py
+       pyarmor pack -x " --advanced 2 --exclude tests" foo.py
 
 使用 Apache 的 mod_wsgi 发布加密的 Django 应用
 ----------------------------------------------
