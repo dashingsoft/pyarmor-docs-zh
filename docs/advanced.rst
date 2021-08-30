@@ -1576,4 +1576,59 @@ PyInstaller 生成的可执行文件里面的脚本，这样就可以直观的�
 
    对于超级模式，运行辅助文件是不一样的，请根据实现文件修改 ``setup.py``
 
+.. _合并多个 Python 版本的加密脚本:
+
+合并多个 Python 版本的加密脚本
+----------------------------
+
+这个功能从 v6.8.0 开始支持。
+
+通常情况下，加密脚本是和 Python 版本绑定到一起的，为了能够使用不同版本的 Python
+来运行加密脚本，一种解决方案就是首先使用多个版本的 Python 对加密进行加密，然后把
+加密后的脚本合并成为一个脚本。
+
+PyArmor 提供了一个辅助脚本 ``merge.py`` 可以用来把不同 Python 版本加密的脚本进行
+合并，这样同一个加密脚本就可以被多个 Python 版本执行。
+
+下面是基本的使用方法::
+
+  # 使用 python2.7 加密脚本
+  python2.7 pyarmor.py obfuscate --no-cross-protection -O py27 foo.py
+
+  # 在使用另外一个版本的 python3.8 加密脚本
+  python3.8 pyarmor.py obfuscate --no-cross-protection -O py38 foo.py
+
+  # 然后使用辅助脚本进行合并，可以使用任意版本的 Python
+  python merge.py py38/ py27/
+
+  # 合并后结果存放默认在 merged_dist
+  ls merged_dist/
+
+需要注意的是非超级模式需要使用选项 ``--no-cross-protection`` 进行加密，否则合并
+后的运行辅助文件会出现保护异常的错误。
+
+对于超级模式，也基本相同::
+
+  # 使用 python2.7 加密脚本
+  python2.7 pyarmor.py obfuscate --advanced 2 -O py27 foo.py
+
+  # 在使用另外一个版本的 python3.8 加密脚本
+  python3.8 pyarmor.py obfuscate --advanced 2 -O py38 foo.py
+
+  # 然后使用辅助脚本进行合并，可以使用任意版本的 Python
+  python merge.py py38/ py27/
+
+  # 合并后结果存放默认在 merged_dist
+  ls merged_dist/
+
+.. note::
+
+    在 v6.8.0 之前，需要下载 ``merge.py``
+
+    https://github.com/dashingsoft/pyarmor/raw/master/src/helper/merge.py
+
+    从 v6.8.0 开始，可以直接使用下面的方式运行::
+
+        python -m pyarmor.helper.merge ...
+
 .. include:: _common_definitions.txt
