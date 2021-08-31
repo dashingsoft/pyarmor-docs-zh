@@ -1593,19 +1593,16 @@ PyArmor 提供了一个辅助脚本 ``merge.py`` 可以用来把不同 Python �
 下面是基本的使用方法::
 
   # 使用 python2.7 加密脚本
-  python2.7 pyarmor.py obfuscate --no-cross-protection -O py27 foo.py
+  python2.7 pyarmor.py obfuscate -O py27 foo.py
 
   # 在使用另外一个版本的 python3.8 加密脚本
-  python3.8 pyarmor.py obfuscate --no-cross-protection -O py38 foo.py
+  python3.8 pyarmor.py obfuscate -O py38 foo.py
 
   # 然后使用辅助脚本进行合并，可以使用任意版本的 Python
   python merge.py py38/ py27/
 
   # 合并后结果存放默认在 merged_dist
   ls merged_dist/
-
-需要注意的是非超级模式需要使用选项 ``--no-cross-protection`` 进行加密，否则合并
-后的运行辅助文件会出现保护异常的错误。
 
 对于超级模式，也基本相同::
 
@@ -1620,6 +1617,11 @@ PyArmor 提供了一个辅助脚本 ``merge.py`` 可以用来把不同 Python �
 
   # 合并后结果存放默认在 merged_dist
   ls merged_dist/
+
+.. note::
+
+   如果合并后的加密脚本运行时候出现保护异常，尝试使用加密选项
+   ``--no-cross-protection`` 来对脚本进行加密。
 
 .. note::
 
