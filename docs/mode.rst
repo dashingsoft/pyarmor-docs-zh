@@ -42,6 +42,60 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
 
    超级模式和非超级模式加密的脚本不能混合使用
 
+.. _终极模式:
+
+终极模式
+--------
+
+终极模式是基于超级模式的一种加强版，会把部分函数直接转换成为二进制代码。这个功能
+是在 PyArmor 6.9.0 中增加的，目前只支持 X86_64 架构和 Python 3.7，3.8，3.9
+
+使用之前需要配置 `c` 编译器，对于 `Linux` 和 `Darwin` 来说，一般不需要进行配置，
+只要使用默认的 ``gcc`` 和 ``clang`` 就可以。在 `Windows` 环境下面，目前只支持
+``clang.exe`` ，可以使用下面任意一种方式进行配置
+
+* 下载并安装 `LLVM 官网 <https://releases.llvm.org>`_ 的预编译版本
+* 下载 `https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip` ，解压后
+  存放在 `$HOME/.pyarmor` 下面，或者其它任何 ``%PATH%`` 配置的路径下面，只要直接
+  运行 ``clang.exe`` 不出错就可以
+* 如果安装在其它路径，配置环境变量 ``PYARMOR_CC`` 来指定 ``clang.exe``
+
+配置好之后使用 ``--advanced 5`` 来进行加密，例如::
+
+  pyarmor obfuscate --advanced 5 foo.py
+
+默认情况下，终极模式加密的函数只能被其它超级模式或者终极模式加密的脚本调用，否则
+会报错::
+
+    RuntimeError: Call spp code out of pyarmor
+
+如果某一个模块需要被其它非加密模块调用，那么可以在模块头部增加一行::
+
+  # pyarmor options: spp-export
+
+pyarmor 会从文件头部扫描以 ``#`` 开头的行，如果扫描到这个选项，会对这个模块进行
+额外处理，让这个模块中所有终极模式加密的函数可以被其它任意脚本调用。
+
+如果某一个模块使用终极模式加密之后出现问题，可以在模块头部指定选项::
+
+  # pyarmor options: no-spp-mode
+
+这样终极模式就会忽略这个模块，依旧使用原来的超级模式进行加密。这个选项也可以用在
+函数的文档中来忽略一个特定的函数。例如:
+
+.. code-block:: python
+
+    def foo(a, b):
+        '''pyarmor options: no-spp-mode'''
+        pass
+
+这个选项行必须单独占用一行，不能和其它文档在同一行。
+
+.. note::
+
+   不是模块内的所有函数都会使用终极模式加密，只有部分满足条件的函数才使用终极模
+   式进行加密，其它的所有代码依旧使用超级模式进行加密。
+
 .. _高级模式:
 
 .. _advanced mode:
