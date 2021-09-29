@@ -54,12 +54,11 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
 只要默认的 ``gcc`` 和 ``clang`` 能工作就可以。在 `Windows` 环境下面，可以使用下
 面任意一种方式配置 ``clang.exe`` ，目前其它编译器还不支持
 
-* 下载并安装 `LLVM 官网 <https://releases.llvm.org>`_ 的预编译版本
-* 下载 `https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip` ，解压后
-  存放在 `$HOME/.pyarmor` 下面
-* 如果已经有其它 ``clang.exe`` ，只要在任何其它路径直接运行 ``clang.exe`` 不出错
-  就可以。如果文件存在，但是无法直接运行，可以配置环境变量 ``PYARMOR_CC`` 来指定
-  这个文件
+* 如果已经有 ``clang.exe`` ，只要在其它路径直接运行 ``clang.exe`` 不出错就可以。
+  如果文件存在，但是无法直接运行，可以配置环境变量 ``PYARMOR_CC`` 来指定这个文件
+* 下载并安装 `LLVM 官网 <https://releases.llvm.org>`_ 的预编译版本即可
+* 下载 `https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip` ，压缩包
+  大小约为 26M 左右，里面只有一个可执行文件，解压后存放在 `$HOME/.pyarmor` 下面即可
 
 配置好之后使用 ``--advanced 5`` 来进行加密，例如::
 
@@ -82,12 +81,6 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
     def foo(a, b):
         '''pyarmor options: no-spp-mode'''
         pass
-
-下列特性并被终极模式支持:
-* 动态执行函数 ``exec``, ``eval``
-* 使用任何直接访问执行框架的功能，例如调用 ``sys._getframe``
-* 有 ``__slots__`` 属性的类定义
-* 所有异步功能，例如任何 ``async``
 
 .. _高级模式:
 
