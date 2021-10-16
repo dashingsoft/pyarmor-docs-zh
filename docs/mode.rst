@@ -82,6 +82,19 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
         '''pyarmor options: no-spp-mode'''
         pass
 
+终极模式和原来的脚本存在一些不同:
+
+* 在正常执行的函数调用没有参数的 `raise` 抛出的异常类型不同
+
+.. code-block:: python
+
+    >>> raise
+    RuntimeError: No active exception to reraise
+
+    # 在终极模式中
+    >>> raise
+    UnboundlocalError: local variable referenced before assignment
+
 .. _高级模式:
 
 .. _advanced mode:
