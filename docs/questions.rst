@@ -759,4 +759,15 @@ code 等这种类型的包是无法使用 pyarmor 的。
 
 对于不能完全肯定兼容的包，可以使用小脚本测试一下。
 
+请问如何在客户环境中 不安装pyarmor，可以正确的获取到客户硬盘的序列号
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+参考 :ref:`运行时刻模块 pytransform`, 在加密脚本中使用 `get_hd_info` 获取相关硬
+件信息。
+
+另外还可以从下面的链接中下载相应平台的 `hdinfo` ，在目标平台运行这个可执行文件获
+取硬件信息
+
+https://github.com/dashingsoft/pyarmor-core#hdinfo
+
 .. include:: _common_definitions.txt
