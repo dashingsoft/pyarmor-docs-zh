@@ -126,6 +126,8 @@ https://pyinstaller.readthedocs.io/en/stable/usage.html
 * 如果你使用 :ref:`约束模式` 3 以上，首先使用默认的约束模式进行加密，如果问题在
   默认约束模式不存在，那么你可能需要修改脚本使之符合高级约束模式的要求。
 
+* 如果你在加密一个复杂的脚本或者包，先尝试一个简单的脚本或者包，看看它们是否工作
+
 * 如果对 pyarmor 的某些特性不了解，花费几分钟的时间，在一个空白的目录做一个简单
   的测试。
 
@@ -164,6 +166,81 @@ pyarmor 的每一个命令都有很多选项，为各种不同的情况服务。
 
    有大量的问题报告和解决方法在 PyArmor 的问题库 `issues`_ 中，请首先搜索这里看
    看有没有相同的问题报告
+
+.. _问题报告和报告模版:
+
+问题报告和模版
+--------------
+
+如果文档中没有找到解决方案，请按照模版在 `issues`_ 提交问题报告，并提供必要的信息
+
+1. 加密或者打包使用的完整命令和完整的输出日志（必要）
+2. 如果是发布到不同机器，请说明那些文件被拷贝到目标机器（可选）
+3. 运行加密脚本的命令和完整的错误日志
+
+如果是运行 `pyarmor` 命令就出现错误，请使用 `pyarmor -d` 重新运行命令，
+输出更加详细的调试日志。
+
+下面是一个示例，可以直接拷贝下面的内容到 github 上，然后进行修改::
+
+    1. 在 MacOS 10.14 上面使用 pyarmor 加密脚本
+    ```
+    $ pyarmor obfuscate --exact main.py
+    INFO     Create pyarmor home path: /Users/jondy/.pyarmor
+    INFO     Create trial license file: /Users/jondy/.pyarmor/license.lic
+    INFO     Generating public capsule ...
+    INFO     PyArmor Trial Version 7.0.1
+    INFO     Python 3.7.10
+    INFO     Target platforms: Native
+    INFO     Source path is "/Users/jondy/workspace/pyarmor-webui/test/__runner__/__src__"
+    INFO     Entry scripts are ['main.py']
+    INFO     Use cached capsule /Users/jondy/.pyarmor/.pyarmor_capsule.zip
+    INFO     Search scripts mode: Exact
+    INFO     Save obfuscated scripts to "dist"
+    INFO     Read product key from capsule
+    INFO     Obfuscate module mode is 2
+    INFO     Obfuscate code mode is 1
+    INFO     Wrap mode is 1
+    INFO     Restrict mode is 1
+    INFO     Advanced value is 0
+    INFO     Super mode is False
+    INFO     Super plus mode is not enabled
+    INFO     Generating runtime files to dist/pytransform
+    INFO     Extract pytransform.key
+    INFO     Generate default license file
+    INFO     Update capsule to add default license file
+    INFO     Copying /Users/jondy/workspace/pyarmor-webui/venv/lib/python3.7/site-packages/pyarmor/platforms/darwin/x86_64/_pytransform.dylib
+    INFO     Patch library dist/pytransform/_pytransform.dylib
+    INFO     Patch library file OK
+    INFO     Copying /Users/jondy/workspace/pyarmor-webui/venv/lib/python3.7/site-packages/pyarmor/pytransform.py
+    INFO     Rename it to pytransform/__init__.py
+    INFO     Generate runtime files OK
+    INFO     Start obfuscating the scripts...
+    INFO     	/Users/jondy/workspace/pyarmor-webui/test/__runner__/__src__/main.py -> dist/main.py
+    INFO     Insert bootstrap code to entry script dist/main.py
+    INFO     Obfuscate 1 scripts OK.
+    ```
+    2. 拷贝 `dist/` 下面的所有目录到目标机器 Ubuntu
+    3. 在 Ubuntu 上面使用 Python 3.7 运行加密脚本出现下面的错误
+    ```
+    $ cd dist/
+    $ python3 main.py
+    Traceback (most recent call last):
+    File "main.py", line 1, in <module>
+      from pytransform import pyarmor
+    ImportError: cannot import name 'pyarmor' from 'pytransform' (/home/jondy/dist/pytransform/__init__.py)
+    ```
+
+这个问题的标题是::
+
+  cannot import name 'pyarmor' from 'pytransform'
+
+.. important::
+
+   关于安全方面的问题请发送邮件到 `jondy.zhao@gmail.com` ，其它任何问题请提交到
+   `issues`_ ，微信不回答任何技术问题。
+
+   没有按照模版缺少必要信息的问题将被标记为 ``invalid`` 并直接关闭。
 
 Segment fault
 -------------
