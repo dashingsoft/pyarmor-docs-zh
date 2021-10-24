@@ -181,10 +181,15 @@ pyarmor 的每一个命令都有很多选项，为各种不同的情况服务。
 2. 如果是发布到不同机器，请说明那些文件被拷贝到目标机器（可选）
 3. 运行加密脚本的命令和完整的错误日志
 
-如果是运行 `pyarmor` 命令就出现错误，请使用 `pyarmor -d` 重新运行命令，
-输出更加详细的调试日志。
+命令的输出可以使用重定向命令写到文件，然后拷贝文件内容到这里，例如::
 
-下面是一个示例，可以直接拷贝下面的内容到 github 上，然后进行修改::
+  pyarmor obfuscate foo.py >log.txt 2>&1
+
+下面是一个报告示例，报告的标题::
+
+  cannot import name 'pyarmor' from 'pytransform'
+
+报告的内容（可以直接拷贝下面的内容到 github 上，然后根据自己的情况进行修改）::
 
     1. 在 MacOS 10.14 上面使用 pyarmor 加密脚本
     ```
@@ -233,10 +238,6 @@ pyarmor 的每一个命令都有很多选项，为各种不同的情况服务。
       from pytransform import pyarmor
     ImportError: cannot import name 'pyarmor' from 'pytransform' (/home/jondy/dist/pytransform/__init__.py)
     ```
-
-这个问题的标题是::
-
-  cannot import name 'pyarmor' from 'pytransform'
 
 .. important::
 
