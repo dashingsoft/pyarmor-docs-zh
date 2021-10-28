@@ -460,6 +460,16 @@ NameError: name '__pyarmor__' is not defined
 * 同时检查系统模块 `os` ， `ctypes` 确保它们也没有被加密，，不要尝试加密这些文件，
   使用选项 ``--exclude`` 把 Python 系统库所在的目录排除。
 
+如何检查引导代码是否运行？ 一种简单的方法是在前面插入一条 print 语句，例如
+
+.. code:: python
+
+   print('Start to run bootstrap code')
+   from pytransfrom import pyarmor_runtime
+   pyarmor_runtime()
+
+如果调试信息被打印出来，那么说明引导代码已经被运行，删除这条 print 语句，排除引
+导代码的问题，查找其它可能原因。
 
 Marshal loads failed when running xxx.py
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -713,9 +723,19 @@ No module name pytransform
 打包好的可执行文件运行有问题
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-首先确认脚本可以直接使用 PyInstaller 打包，并且打包好的可执行文件运行正常。
+首先确认脚本可以直接使用 PyInstaller 打包，并且打包好的可执行文件运行正常。例如::
 
-其次确认加密后的脚本，没有打包可以正确运行。
+    pyinstaller foo.py
+    dist/foo/foo
+
+如果提示模块无法找到，或者其它原因而无法正常运行，说明缺少必要的 PyInstaller 的
+参数，请参考 https://pyinstaller.readthedocs.io/ 解决问题，确保直接使用
+PyInstaller 打包能够正常运行。
+
+其次确认加密后的脚本，没有打包可以正确运行。例如::
+
+    pyarmor obfuscate foo.py
+    python dist/foo.py
 
 如果两者都正常，那么删除输出路径 `dist` 和 PyInstaller 的缓存路径
 `build` ，然后使用选项 ``--debug`` 进行打包::
