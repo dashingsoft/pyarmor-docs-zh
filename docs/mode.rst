@@ -48,17 +48,21 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
 --------
 
 终极模式是基于超级模式的一种加强版，会把部分函数直接转换成为二进制代码。这个功能
-是在 PyArmor 6.9.0 中增加的，目前只支持 X86_64 架构和 Python 3.7，3.8，3.9
+是在 PyArmor 7.0.1 中增加的，目前只支持 X86_64 架构和 Python 3.7，3.8，3.9
 
 使用之前需要配置 `c` 编译器，对于 `Linux` 和 `Darwin` 来说，一般不需要进行配置，
 只要默认的 ``gcc`` 和 ``clang`` 能工作就可以。在 `Windows` 环境下面，可以使用下
 面任意一种方式配置 ``clang.exe`` ，目前其它编译器还不支持
 
 * 如果已经有 ``clang.exe`` ，只要在其它路径直接运行 ``clang.exe`` 不出错就可以。
-  如果文件存在，但是无法直接运行，可以配置环境变量 ``PYARMOR_CC`` 来指定这个文件
-* 下载并安装 `LLVM 官网 <https://releases.llvm.org>`_ 的预编译版本即可
-* 下载 `https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip` ，压缩包
-  大小约为 26M 左右，里面只有一个可执行文件，解压后存放在 `$HOME/.pyarmor` 下面即可
+  如果文件存在，但是无法在任意路径直接运行，可以配置环境变量 ``PYARMOR_CC`` 来指
+  定这个文件，例如::
+    set PYARMOR_CC=C:\path\to\clang.exe
+
+* 从 `LLVM 官网 <https://releases.llvm.org>`_ 下载并安装预编译版本
+* 从 PyArmor 官网下载 `clang-9.0.zip
+  <https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip>`_ ，压缩包大小
+  约为 26M 左右，里面只有一个可执行文件，解压后存放在 ``$HOME/.pyarmor`` 下面即可
 
 配置好之后使用 ``--advanced 5`` 来进行加密，例如::
 
