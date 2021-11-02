@@ -139,6 +139,7 @@ PyArmor 是怎么加密 Python 源代码呢？
 
 第一种格式又称为 `内联调用桩` ，PyArmor 只是简单的把匹配的部分和紧随其后的一个空
 格删除，只剩下后半部分的代码。例如，在脚本 ``foo.py`` 有下列内联调用桩::
+
     # PyArmor Plugin: check_ntp_time()
     # PyArmor Plugin: print('This is plugin code')
     # PyArmor Plugin: if sys.flags.debug:
