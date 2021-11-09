@@ -471,6 +471,8 @@ NameError: name '__pyarmor__' is not defined
 如果调试信息被打印出来，那么说明引导代码已经被运行，删除这条 print 语句，排除引
 导代码的问题，查找其它可能原因。
 
+解决这个问题的另外一种方案是 :ref:`使用超级模式加密脚本`
+
 Marshal loads failed when running xxx.py
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 当出现这个问题，依次进行下面的检查
@@ -686,6 +688,11 @@ Object method `__del__` raise NameError exception
 
 任何以 `lambda_` 开头的函数不会被 pyarmor 加密，所以上面的示例中，类方
 法 `__del__` 是没有加密的函数 ``lambda_del`` 。
+
+另外一种解决方案是重构代码，把 ``__del__`` 中使用的函数集中到一个脚本里面，然后
+不要加密这个脚本。最简单的方法就是显示按照原来的方式加密全部脚本，然后把这个脚本
+拷贝过去，覆盖加密后的同名脚本，也可以使用 ``--obf-code 0`` 来加密脚本，也可以达
+到同样效果。
 
 SystemError: module filename missing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
