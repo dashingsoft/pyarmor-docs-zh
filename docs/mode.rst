@@ -99,6 +99,10 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
     >>> raise
     UnboundlocalError: local variable referenced before assignment
 
+.. note::
+
+   终极模式在试用版中不可用。
+
 .. _高级模式:
 
 .. _advanced mode:
