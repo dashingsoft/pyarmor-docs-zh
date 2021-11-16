@@ -505,6 +505,17 @@ https://docs.python.org/3/library/site.html
     pyarmor config --restrict=0
     pyarmor build -B
 
+如果使用了命令 :ref:`licenses` 创建了自定义的许可证，那么禁用各种约束
+需要在生成许可证的时候使用选项 ``--disable-restrict-mode`` ，例如::
+
+    pyarmor licenses --disable-restrict-mode r001
+
+    pyarmor obfuscate --with-license=licenses/r001/license.lic foo.py
+
+    # For project
+    pyarmor config --with-license=licenses/r001/license.lic
+    pyarmor build -B
+
 指定 :ref:`代码加密模式`, :ref:`代码包裹模式`, :ref:`模块加密模式` 需
 要 :ref:`使用工程` 来加密脚本，直接使用命令 :ref:`obfuscate` 无法改变
 这些加密模式。例如::

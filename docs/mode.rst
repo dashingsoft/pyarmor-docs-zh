@@ -506,6 +506,17 @@ https://github.com/dashingsoft/pyarmor-core/tree/v5.3.0/tests/advanced_mode/READ
     pyarmor config --restrict=0
     pyarmor build -B
 
+如果使用了命令 :ref:`licenses` 创建了自定义的许可证，那么禁用各种约束
+需要在生成许可证的时候使用选项 ``--disable-restrict-mode`` ，例如::
+
+    pyarmor licenses --disable-restrict-mode r001
+
+    pyarmor obfuscate --with-license=licenses/r001/license.lic foo.py
+
+    # For project
+    pyarmor config --with-license=licenses/r001/license.lic
+    pyarmor build -B
+
 详细示例请参考 :ref:`使用约束模式增加加密脚本安全性`
 
 从 PyArmor 5.7.0 开始，还有另外一个约束， :ref:`引导代码` 必须在加密脚本中，并且
