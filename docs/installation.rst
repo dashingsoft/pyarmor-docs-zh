@@ -35,6 +35,8 @@
 相应的脚本。 ``pyarmor`` 等价于执行 :file:`{pyarmor-folder}/pyarmor.py`,
 ``pyarmor-webui`` 等价于执行 :file:`{pyarmor-folder}/pyarmor/webui/server.py`
 
+.. _完全卸载:
+
 完全卸载
 --------
 

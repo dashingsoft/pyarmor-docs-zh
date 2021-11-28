@@ -304,7 +304,7 @@ Could not find `_pytransform`
     from pytransform import pyarmor_runtime
     pyarmor_runtime('/path/to/dist')
 
-如果还是有问题，那么请报告 issue_
+如果还是有问题，那么请报告 issues_
 
 
 ERROR: Unsupport platform linux.xxx
@@ -429,7 +429,7 @@ PyArmor 5.4.5 以后的版本。
 
 
 为什么插件不工作
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 如果加密脚本的时候指定了插件，但是插件却没有像期望的那样工作。那么首先
 要检查插件是否被正确注入到主脚本中。例如::
@@ -555,7 +555,7 @@ The `license.lic` generated doesn't work
 
 
 导入 OpenCV 失败： `NEON - NOT AVAILABLE`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 在一些 Raspberry Pi 平台上面，在加密脚本中导入 OpenCV 会报错::
 
     ************************************************** ****************

@@ -64,7 +64,7 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
    * - darwin
      - x86_64
      - 11
-     - 27, 37, 38, 39
+     - 27, 37, 38, 39, 310
      -
    * - darwin
      - aarch64
@@ -77,7 +77,12 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
      - 38, 39
      -
    * - linux
-     - x86, x86_64, aarch64, aarch32, armv7
+     - x86_64
+     - 11
+     - 27, 37, 38, 39, 310
+     -
+   * - linux
+     - x86, aarch64, aarch32, armv7
      - 11
      - 27, 37, 38, 39
      -
@@ -87,12 +92,15 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
      - 27
      - Linux with glibc < 2.14 and UCS2
    * - windows
-     - x86, x86_64
+     - x86_64
+     - 11, 25
+     - 27, 37, 38, 39, 310
+     -
+   * - windows
+     - x86
      - 11, 25
      - 27, 37, 38, 39
      -
-
-最新的全部支持的动态库详细列表可以参考 `pyarmor-core/platforms/index.json <https://github.com/dashingsoft/pyarmor-core/blob/master/platforms/index.json>`_
 
 有些平台 pyarmor 无法自动识别，但是有可用的动态库。可以直接下载下来，保存到平台
 的搜索路径 ``~/.pyarmor/platforms/SYSTEM/ARCH/N/`` 下面。如果不能确定存放的路径，
@@ -103,7 +111,7 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 `提交一个新平台请求 <https://github.com/dashingsoft/pyarmor/issues>`_
 
 动态库特征值
------------
+------------
 
 在同一个平台下面可能有多个可用的动态库，分别具备不同的特征，一般在标准平台名称的
 后面增加一个数字来标识，组成一个唯一的平台 ID。
@@ -182,7 +190,7 @@ PyArmor 的核心函数使用 C 来实现，对于常用的平台和部分嵌入
 ------------------------
 
 在联网的情况下，PyArmor 可以自动下载和配置需要的动态库，在不联网的机器上则需要把
-预先下载的动态库放置在相应的目录下面。请通过命令 :ref:`downlaod` 在联网的机子下
+预先下载的动态库放置在相应的目录下面。请通过命令 :ref:`download` 在联网的机子下
 载，默认情况下，下载的所有文件存放在 `~/.pyarmor/platforms` 下面，下载好之后把整
 个目录拷贝到目标机器。
 

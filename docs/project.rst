@@ -69,6 +69,8 @@
 
 .. _obfuscating scripts with different modes:
 
+.. _使用不同加密模式:
+
 使用不同加密模式
 ----------------
 
@@ -114,6 +116,8 @@
 目录相同，原来的加密脚本会被新的加密脚本覆盖。
 
 .. _project configuration file:
+
+.. _工程配置文件:
 
 工程配置文件
 ------------

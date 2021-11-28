@@ -57,7 +57,8 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
 * 如果已经有 ``clang.exe`` ，只要在其它路径直接运行 ``clang.exe`` 不出错就可以。
   如果文件存在，但是无法在任意路径直接运行，可以配置环境变量 ``PYARMOR_CC`` 来指
   定这个文件，例如::
-    set PYARMOR_CC=C:\path\to\clang.exe
+
+      set PYARMOR_CC=C:\path\to\clang.exe
 
 * 从 `LLVM 官网 <https://releases.llvm.org>`_ 下载并安装预编译版本
 * 从 PyArmor 官网下载 `clang-9.0.zip
