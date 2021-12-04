@@ -102,7 +102,9 @@ http://www.sharebank.com.cn/soft/softbuy.php?soid=52382
 
 如果没有找到解决方案，那么对于技术问题请点击这里 `报告问题
 <https://github.com/dashingsoft/pyarmor/issues>`_ ，并按照模版填写问题报告。对于
-商务和有关安全方面的问题，请发送邮件到 jondy.zhao@gmail.com
+商务和有关安全方面的问题，请发送邮件到 pyarmor@163.com
+
+**邮件和微信不再接受和处理非安全相关的技术方面的问题报告，也不会进行回复**
 
 一般来说，所有问题可以归结为以下三类:
 
@@ -138,65 +140,58 @@ Python 在各个领域得到广泛的应用，有很多包我甚至从来都没�
 常，根据异常的行号给出附近的源代码，我可以帮助分析哪些地方可能和 pyarmor 发生冲
 突并给出相应的解决方案。
 
-.. important::
-
-   微信主要用于处理订单相关的事宜，不接受和处理技术方面的问题报告。
+.. _关于许可证的常见问题:
 
 Q & A
 -----
 
-1. Single PyArmor license purchased can be used on various machines for
-   obfuscation? or its valid only on one machine? Do we need to install license
-   on single machine and distribute obfuscate code?
+1. 单个许可证是否可以安装到不同的机器上，还是每一台机器都需要购买许可证？
 
-   | It can be used on various machines, but one license only for one product.
+   | 单个许可证可以被安装在不同的机器上，但是对于企业许可证，只能加密
+   | 属于同一个项目（产品）的脚本。
 
-2. Single license can be used to obfuscate Python code that will run various
-   platforms like windows, various Linux flavors?
+2. 单个许可证是否可以用于不同的平台，例如 Windows, 各种不同的 Linux等等？
 
-   | For all the features of current version, it's yes. But in future versions,
-   | I'm not sure one license could be used in all of platforms supported by
-   | PyArmor.
+   | 目前来说是这样子的，单个许可证可以运行于所有支持的平台。但是对于
+   | 以后的未来的所有版本，不排除单个许可证可能只能应用一个平台的可能性
 
-3. How long the purchased license is valid for? is it life long?
+3. 购买的许可证是否永久有效？还是每一年都需要收费？
 
-   | It's life long. But I can't promise it will work for the future version of PyArmor.
+   | 只需要一次付费，并且永远可以使用。但是，不承诺现在购买的许可证可
+   | 以用于所有的未来版本。有可能在某一个版本之后，当前的许可证就不能在
+   | 应用于新版本，需要重新付费升级。
 
-4. Can we use the single license to obfuscate various versions of Python
-   package/modules?
+4. 是否可以用一个许可证来加密不同版本的 Python 包/模块？
 
-   | Yes, only if they're belong to one product.
+   | 是的，只要它们都属于同一个产品。
 
-5. Is there support provided in case of issues encountered?
+5. 使用 pyarmor 的过程中提供什么样的支持?
 
-   | Report issue in github or send email to me.
+   | 提交报告到 github，详细请参考上面的技术支持章节。
 
-6. Does Pyarmor works on various Python versions?
+6. Pyarmor 是否支持不同版本的 Python?
 
-   | Most of features work on Python27, and Python30~Python38, a few features
-   | may only work for Python27, Python35 later.
+   | 基本功能目前支持 Python2.7~Python3.10 ，有些功能只支持部分版本。
+   | 例如超级模式，只有 Python2.7 和 Python 3.7 之后的版本支持。
 
-7. Are there plans to maintain PyArmor to support future released Python
-   versions?
+7. 是否会支持 Python 的后续版本呢？
 
-   | Yes. The goal of PyArmor is let Python could be widely used in the
-   | commercial softwares.
+   | 是的。pyarmor 的目标是让 Python 能更广泛的应用于商用软件。
 
-8. What is the mechanism in PyArmor to identify whether modules belong to same
-   product? how it identifies product?
+8. PyArmor 如何判断某个模块属于某一个产品呢？
 
-   | PyArmor could not identify it by itself, but I can check the obfuscated
-   | scripts to find which registerred user distributes them. So I can find two
-   | products are distributed by one same license.
+   | PyArmor 加密的脚本会把许可证的编号嵌入到加密脚本的许可证，通过加
+   | 密脚本所包含的信息，可以得到该许可证的合法拥有者。如果不同的产品使
+   | 用同一个许可证，那么加密后的脚本的许可证编号是相同的。
 
-9. If product undergoes revision ie. version changes, can same license be used
-   or need new license?
 
-   | Same license is OK.
+9. 如果同一个产品版本进行升级，原来购买的许可证是否可用？
 
-10. What means a product serials under PyArmor EULA?
+   | 可以使用。
 
-   | A product serial means a sale unit and its upgraded versions. For
-   | example, AutoCAD 2003, 2010 could be taken as a product serials.
+10. 在用户许可协议中，产品序列是指什么呢?
+
+   | 产品序列是指同一个销售产品以及其升级版本。例如，AutoCAD 2003 和
+   | AutoCAD 2010 可以被看作是一个产品系列。
 
 .. include:: _common_definitions.txt
