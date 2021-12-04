@@ -268,11 +268,11 @@ Segment fault
   加密的脚本，也无法导入约束模式 3 以上的加密脚本
 * 混合使用不同 ``--advanced`` 值加密的脚本
 * 在 MacOS 下面，如果 Python 的安装位置不在通常的位置，也有可能导致加密脚本崩溃。
-   这时候要使用``install_name_tool`` 修改 ``rpath`` 解决这类问题。
+  这时候要使用 ``install_name_tool`` 修改 ``rpath`` 解决这类问题。
 
 如果使用的是 PyArmor v5.5.0 ～ v6.6.0 之间的版本，有的机器可能因为不支持高级模式
 而崩溃。一个快速的解决方案是禁用高级模式，直接修改 pyarmor 安装包路径下面的
-`pytransform.py` , 找到函数 `_load_library` ，把禁用高级模式的注释去掉，修改成为
+``pytransform.py`` , 找到函数 ``_load_library`` ，把禁用高级模式的注释去掉，修改成为
 下面的样子::
 
     # Disable advanced mode if required
