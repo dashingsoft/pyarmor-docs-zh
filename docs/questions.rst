@@ -733,7 +733,9 @@ No module name pytransform
 打包好的可执行文件运行有问题
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-首先确认脚本可以直接使用 PyInstaller 打包，并且打包好的可执行文件运行正常。例如::
+首先请仔细阅读命令手册中 :ref:`pack` 的所有相关内容。
+
+然后确认脚本可以直接使用 PyInstaller 打包，并且打包好的可执行文件运行正常。例如::
 
     pyinstaller foo.py
     dist/foo/foo
