@@ -32,6 +32,7 @@ Pi``, ``Banana Pi``, ``Orange Pi``, ``TS-4600 / TS-7600`` 等，但是这些
    installation
    usage
    advanced
+   build-wheel
    examples
    project
    man
