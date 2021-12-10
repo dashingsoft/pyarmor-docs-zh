@@ -63,4 +63,6 @@
 <https://github.com/dashingsoft/pyarmor/blob/master/src/build_meta.py#L83>`_ 中
 的函数 ``bdist_wheel``
 
+目前只有最基本的功能被实现，如果对这个功能有新的需求，欢迎提交 pull request 到 github
+
 .. include:: _common_definitions.txt
