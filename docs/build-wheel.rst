@@ -41,11 +41,11 @@
     cd mypkg/
     pip wheel .
 
-如果想使用 :ref:`超级模式` 加密脚本，那么通过选项 ``--global-option`` 传递相应的
-参数。例如::
+如果想使用 :ref:`超级模式` 加密脚本，那么通过环境变量 ``PIP_PYARMOR_OPTIONS`` 传
+递相应的加密参数。例如::
 
     cd mypkg/
-    pip wheel --global-option="--super-mode" .
+    PIP_PYARMOR_OPTIONS="--advanced 2" pip wheel .
 
 内部工作原理
 ------------
@@ -60,7 +60,7 @@
 5. 把临时目录中文件重新生成一个 Wheel ，这就是最终加密后的 Wheel
 
 关于实现细节，请参考 `pyarmor/build_meta.py
-<https://github.com/dashingsoft/pyarmor/blob/master/src/build_meta.py#L83>`_ 中
+<https://github.com/dashingsoft/pyarmor/blob/master/src/build_meta.py#L86>`_ 中
 的函数 ``bdist_wheel``
 
 目前只有最基本的功能被实现，如果对这个功能有新的需求，欢迎提交 pull request 到 github
