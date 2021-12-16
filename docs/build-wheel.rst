@@ -53,12 +53,12 @@
     # In Linux or MacOs
     PIP_PYARMOR_OPTIONS="--advanced 2" pip wheel .
 
-也可以通过 pip 选项 ``pyarmor.advanced`` 来实现，首先运行 `pip config
-<https://pip.pypa.io/en/stable/cli/pip_config/>`_ ::
+从 v7.2.4 开始，也可以通过 pip 选项 ``pyarmor.advanced`` 来实现，首先运行 `pip
+config <https://pip.pypa.io/en/stable/cli/pip_config/>`_ ::
 
     pip config set pyarmor.advanced 2
 
-然后::
+然后运行构建命令::
 
     cd mypkg/
     pip wheel .
