@@ -41,10 +41,20 @@
     cd mypkg/
     pip wheel .
 
-如果需要使用 :ref:`超级模式` 加密脚本，可以通过 pip 选项 ``pyarmor.advanced`` 来
-实现。
+如果需要使用 :ref:`超级模式` 加密脚本，那么通过环境变量 ``PIP_PYARMOR_OPTIONS``
+传递相应的加密参数。例如::
 
-首先运行 `pip config <https://pip.pypa.io/en/stable/cli/pip_config/>`_ ::
+    cd mypkg/
+
+    # In Windows
+    set PIP_PYARMOR_OPTIONS=--advanced 2
+    pip wheel .
+
+    # In Linux or MacOs
+    PIP_PYARMOR_OPTIONS="--advanced 2" pip wheel .
+
+也可以通过 pip 选项 ``pyarmor.advanced`` 来实现，首先运行 `pip config
+<https://pip.pypa.io/en/stable/cli/pip_config/>`_ ::
 
     pip config set pyarmor.advanced 2
 
@@ -55,7 +65,7 @@
 
 使用下面的命令删除这个选项::
 
-  pip config unset pyarmor.advanced
+    pip config unset pyarmor.advanced
 
 内部工作原理
 ------------
