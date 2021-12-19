@@ -100,6 +100,42 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
     >>> raise
     UnboundlocalError: local variable referenced before assignment
 
+终极模式不支持的特性:
+
+.. code-block:: python
+
+    unsupport_nodes = (
+        ast.Nonlocal,
+        ast.AsyncFunctionDef, ast.AsyncFor, ast.AsyncWith,
+        ast.Await, ast.Yield, ast.YieldFrom, ast.GeneratorExp
+    )
+    if hasattr(ast, 'MatchValue'):
+        unsupport_nodes += (
+            ast.MatchValue, ast.MatchSingleton, ast.MatchSequence,
+            ast.MatchMapping, ast.MatchClass, ast.MatchStar,
+            ast.MatchAs, ast.MatchOr
+        )
+
+以及不支持的函数::
+
+    exec, eval, super, locals, sys._getframe
+
+例如，下面这些函数都不会使用终极模式加密，因为它们或者使用了不支持的特性，或者调
+用了不支持的函数:
+
+.. code-block:: python
+
+   async def nested():
+       return 42
+
+   def foo1():
+       for n range(10):
+           yield n
+
+   def foo2():
+      frame = sys._getframe(2)
+      print('parent frame is', frame)
+
 .. note::
 
    终极模式在试用版中不可用。
