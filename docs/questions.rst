@@ -707,7 +707,6 @@ SystemError: module filename missing
 
 Android 保护机制导致的问题
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 大部分的 Android 系统只允许从特定目录装载动态库，而运行加密脚本需要的辅助文件就
 有一个动态库文件 `_pytransform.so` ，所以直接拷贝加密脚本到 Android 系统运行可能
 会抛出这样的异常::
@@ -717,6 +716,13 @@ Android 保护机制导致的问题
 
 请参考 Android 开发文档，拷贝整个目录 `pytransform` 到允许装载动态库的目录，然后
 设置 `PYTHONPATH` 或者其他任何方式让 Python 能够导入包 `pytransform` 即可。
+
+libpython3.9.so.1.0: cannot open shared object file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+如果运行加密脚本的时候缺少Python系统文件，例如 `python39.dll`, `libpython3.9.so`
+等, 请确认Python解释器是使用选项 `--enable-shared` 进行编译的，并搜索本机找到对
+应的文件. 这是因为默认情况下，运行辅助需要的扩展模块 `pytransform` 是链接到
+Python的动态库上的。
 
 打包加密问题
 ------------
