@@ -63,7 +63,8 @@ PyArmor 提供多种加密模式，以满足安全和性能方面的平衡。通
 * 从 `LLVM 官网 <https://releases.llvm.org>`_ 下载并安装预编译版本
 * 从 PyArmor 官网下载 `clang-9.0.zip
   <https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip>`_ ，压缩包大小
-  约为 26M 左右，里面只有一个可执行文件，解压后存放在 ``$HOME/.pyarmor`` 下面即可
+  约为 26M 左右，里面只有一个可执行文件，解压后存放在 ``$HOME/.pyarmor`` 下面即
+  可。 ``$HOME`` 是当前登录用户的个人目录，可以通过查看环境变量 ``HOME`` 得到具体位置。
 
 配置好之后使用 ``--advanced 5`` 来进行加密，例如::
 
