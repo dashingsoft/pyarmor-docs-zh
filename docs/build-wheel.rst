@@ -83,6 +83,26 @@ config <https://pip.pypa.io/en/stable/cli/pip_config/>`_ ::
 <https://github.com/dashingsoft/pyarmor/blob/master/src/build_meta.py#L86>`_ 中
 的函数 ``bdist_wheel``
 
-目前只有最基本的功能被实现，如果对这个功能有新的需求，欢迎提交 pull request 到 github
+这是一个非常简单的脚本，只有最基本的功能被实现，如果运行出错，可以使用人工方式或
+者写一个脚本来实现:
+
+1. 使用没有加密前的包直接创建一个 `.whl` 包
+2. 解压创建好的包到临时目录，参考使用下面的命令::
+     python3 -m wheel unpack --dest /path/to/temp xxx.whl
+3. 使用 `pyarmor obfuscate` 命令加密脚本，然后把加密脚本拷贝到解压目录中，覆盖原
+   理的同名脚本
+4. 增加 pyarmor 的运行辅助文件到这个文件 ``RECORD`` ， 直接在解压目录下面搜索这
+   个文件名，然后参考里面存在的文件格式把运行辅助文件都添加进去
+5. 最后生成包含加密脚本的 `.whl` 包::
+     python3 -m wheel pack /path/to/temp
+
+如果对这个功能有新的需求，欢迎提交 pull request 到 github
+
+.. important::
+
+    这个功能是一个辅助功能，不提供更多的技术支持。如果你不知道如何构建一个 Wheel
+    包，尤其是包含二进制文件（扩展模块）和数据文件的 Python 包，请首先参考相关文
+    档学习掌握。掌握了这个之后， 参考 :ref:`使用加密脚本的基本原则` ，把加密脚本
+    当作正常的 Python 包进行处理即可。
 
 .. include:: _common_definitions.txt
