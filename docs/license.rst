@@ -58,10 +58,6 @@ https://pyarmor.dashingsoft.com/cart/order.html
 
 https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 
-需要国内增值税发票的用户通过下面的链接购买许可
-
-http://www.sharebank.com.cn/soft/softbuy.php?soid=52382
-
 对于类型为个人用户的许可，注册名称需要填写正确的姓名。
 
 对于类型为企业用户的许可，除了注册名称需要填写正确的企业名称之外，还需要填写被授
