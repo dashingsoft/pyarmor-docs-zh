@@ -560,6 +560,12 @@ PyArmor 可以通过插件来扩展加密脚本的认证方式，例如检查网
     pyarmor licenses -x 20190501 rcode-001
     cp licenses/rcode-001/license.lic dist/
 
+使用命令 :ref:`pack` 的示例如下::
+
+    pyarmor licenses -x 20190501 rcode-001
+    pyarmor pack --with-license licenses/rcode-001/license.lic \
+                 -x " --plugin check_ntp_time" foo.py
+
 更多插件实例，参考 https://github.com/dashingsoft/pyarmor/tree/master/plugins
 
 关于插件的工作原理，参考 :ref:`如何处理插件`
