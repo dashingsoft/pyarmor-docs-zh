@@ -363,14 +363,27 @@ __snprintf_chk: symbol not found
 musl-libc, 但是 pyarmor 的默认动态库使用的是 glibc, 这个函数 ``__snprintf_chk``
 在 musl-libc 中并不存在。
 
-这时候，需要下载对应的动态库，这是 X86_64 的下载链接
+这时候，需要下载对应的动态库，使用下面的命令下载相应的核心库::
+
+  # For x86_64
+  pyarmor download musl.x86_64.7
+
+  # For arm64
+  pyarmor download musl.aarch64.3
+
+  # For armv7l
+  pyarmor download musl.arm.0
+
+然后使用这个覆盖原来的动态库，原来的动态库的位置可以在抛出的异常中找到
+
+对于 pyarmor v6.7.0 之前的版本，使用下面的链接下载
+
+这是 X86_64 的下载链接
 
 http://pyarmor.dashingsoft.com/downloads/latest/alpine/_pytransform.so
 
 这是 ARM 的下载链接
 http://pyarmor.dashingsoft.com/downloads/latest/alpine.arm/_pytransform.so
-
-然后使用这个覆盖原来的动态库，原来的动态库的位置可以在抛出的异常中找到
 
 加密脚本的问题
 --------------
