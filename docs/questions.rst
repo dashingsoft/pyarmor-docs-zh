@@ -749,6 +749,20 @@ No module name pytransform
 
     pyarmor pack --clean foo.py
 
+error: unrecognized arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+对于选项 `-e` 和 `-x` ，需要在选项值的前面增加一个额外的空格，否则会提示参数错误
+`error: unrecognized arguments` 。例如::
+
+  # 错误的方式，"--advanced 2" 之前没有空格
+  pyarmor pack -x "--advanced 2" ...
+
+  # 正确的方式
+  pyarmor pack -x " --advanced 2" ...
+
+如果没有使用选项 `-e` 和 `-x` ，请参考命令手册 :ref:`pack` 中的说明。
+
 打包好的可执行文件运行有问题
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

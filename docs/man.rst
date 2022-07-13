@@ -538,6 +538,17 @@ https://pyinstaller.readthedocs.io/en/stable/hooks.html#understanding-pyinstalle
 
     pyarmor -d pack ...
 
+.. important::
+
+   对于选项 `-e` 和 `-x` ，需要在选项值的前面增加一个额外的空格，否则会提示参数
+   错误 `error: unrecognized arguments` 。例如::
+
+     # 错误的方式，"--advanced 2" 之前没有空格
+     pyarmor pack -x "--advanced 2" ...
+
+     # 正确的方式
+     pyarmor pack -x " --advanced 2" ...
+
 **示例**
 
 * 加密脚本 foo.py 并打包到 `dist/foo` 下面::
