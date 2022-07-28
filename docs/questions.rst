@@ -115,7 +115,6 @@ https://pyinstaller.readthedocs.io/en/stable/usage.html
 
       python -d obf_foo.py
 
-
 * 如果你是跨平台发布，或者在不同机器上运行，请确保你使用了正确的跨平台加密参数。
   因为加密脚本在不同的平台需要不同的动态库，并且要求目标机器的 Python 版本必须和
   加密时候使用的版本一致，直接拷贝到不同平台的机器可能无法正确运行。
