@@ -919,4 +919,13 @@ code 等这种类型的包是无法使用 pyarmor 的。
 
 https://github.com/dashingsoft/pyarmor-core#hdinfo
 
+想了解一些技术支持情况
+~~~~~~~~~~~~~~~~~~~~~~
+pyarmor 有完整的文档系统，大部分常见问题请参考文档解决，程序中的 bug 通过 github 进行提及。
+https://pyarmor.readthedocs.io/zh/latest/questions.html
+
+具体支持协议请参考 pyarmor 用户许可的说明
+https://pyarmor.readthedocs.io/zh/latest/license.html
+
+
 .. include:: _common_definitions.txt
