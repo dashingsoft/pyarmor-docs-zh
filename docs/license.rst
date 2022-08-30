@@ -88,7 +88,9 @@ https://order.shareit.com/cart/add?vendorid=200089125&PRODUCT[300871197]=1
 --------
 
 在 **2017-10-10** 之前购买的许可证不在支持免费升级到最新版本，如果需要使用最新版
-本的 PyArmor ，需要购买新的许可证。
+本的 PyArmor ，需要购买新的许可证，然后使用选项 `-u` 进行注册，例如
+
+    pyarmor register -u /path/to/pyarmor-regcode-xxxx.txt
 
 技术支持
 --------
