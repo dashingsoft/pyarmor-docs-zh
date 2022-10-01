@@ -1655,4 +1655,99 @@ PyArmor 提供了一个辅助脚本 ``merge.py`` 可以用来把不同 Python �
 
         python -m pyarmor.helper.merge ...
 
+.. _如何定制错误消息:
+
+如何定制错误消息
+~~~~~~~~~~~~~~~~
+
+当加密脚本检查许可失败的时候，例如超过使用期限，会抛出异常 “License is expired”。
+那么，是否可以定制这个错误信息呢？
+
+从 pyarmor v7.8.0 开始，支持使用 Json 格式的配置文件 `~/.pyarmor/runtime.cfg` 定
+制两个错误消息:
+
+* License is expired
+* License is not for this machine
+
+通过设置 "errors" 的值可以指定检查许可失败之后的处理方式。
+
+1. 直接退出，设置 "errors" 的值为关键字 "exit" 即可
+
+.. code:: json
+    {
+       "errors": "exit"
+    }
+
+2. 设置为其它任意字符串，则所有错误信息显示为该字符串
+
+.. code:: json
+    {
+       "errors": "something is wrong"
+    }
+
+3. 设置为字符串列表，则不同的错误显示不同的消息，目前只支持两个错误消息的定制
+
+.. code:: json
+    {
+       "errors": ["this license is expired", "this license is not for this machine"]
+    }
+
+错误信息也可以使用中文，例如
+
+.. code:: json
+    {
+       "errors": "火星人来了"
+    }
+
+如果加密的时候配置文件出现编码错误，可以通过设置环境变量 `PYARMOR_ENCODING=xxx`
+来解决，其中 `xxx` 是文件正确的编码类型，例如 `gbk` 等。
+
+对于 pyarmor v7.8.0 之前的版本，可以通过修改 PyArmor 包所在目录下面的脚本
+`pytransform.py` 来实现。它里面定义了一个函数 `pyarmor_runtime`
+
+.. code:: python
+
+    def pyarmor_runtime(path=None, suffix='', advanced=0):
+        ...
+        try:
+            pyarmor_init(path, is_runtime=1, suffix=suffix, advanced=advanced)
+            init_runtime()
+        except Exception as e:
+            if sys.flags.debug or hasattr(sys, '_catch_pyarmor'):
+                raise
+            sys.stderr.write("%s\n" % str(e))
+            sys.exit(1)
+
+按照自己的需要修改里面的异常处理语句即可。
+
+但是这种方式对于超级模式加密的脚本并不起作用，对于超级模式加密的脚本，可以使用创
+建一个启动脚本在其中导入加密的主脚本 ``foo.py`` 并捕获异常。例如
+
+.. code:: python
+
+   try:
+       import foo
+   except Exception as e:
+       print('something is wrong')
+
+但是这种方式的副作用就是不仅仅是许可失败的异常，正常脚本的异常也会被捕获到的。如
+果只需要捕获许可失败的异常，可以使用 :ref:`runtime` 创建一个独立的运行辅助包，并
+使用这个运行辅助包加密脚本::
+
+    pyarmor runtime --advanced 2 -O dist
+    pyarmor obfuscate --advanced 2 --runtime @dist foo.py
+
+然后创建一个启动脚本 ``dist/foo_boot.py`` ，例如
+.. code:: python
+
+   try:
+       import pytransform_bootstrap
+   except Exception as e:
+       print('something is wrong')
+   else:
+       import foo
+
+导入的这个脚本 ``pytransform_bootstrap.py`` 是被 :ref:`runtime` 自动创建的，它是
+由空脚本加密生成的，所以它抛出的异常就只有 pyarmor 引导过程的异常。
+
 .. include:: _common_definitions.txt

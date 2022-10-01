@@ -607,6 +607,8 @@ The `license.lic` generated doesn't work
 如何定制错误消息
 ~~~~~~~~~~~~~~~~
 
+参考高级用法中 :ref:`如何定制错误消息`
+
 当加密脚本检查许可失败的时候，例如超过使用期限，会抛出异常 “License is expired”。
 那么，是否可以定制这个错误信息呢？
 
@@ -657,6 +659,12 @@ The `license.lic` generated doesn't work
 
 导入的这个脚本 ``pytransform_bootstrap.py`` 是被 :ref:`runtime` 自动创建的，它是
 由空脚本加密生成的，所以它抛出的异常就只有 pyarmor 引导过程的异常。
+
+
+如何定制错误消息
+~~~~~~~~~~~~~~~~
+
+参考高级用法中 :ref:`如何定制错误消息`
 
 
 undefined symbol: PyUnicodeUCS4_AsUTF8String
