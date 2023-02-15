@@ -1,0 +1,13 @@
+version: 2
+
+python:
+  install:
+    - requirements: docs/requirements.txt
+
+sphinx:
+  configuration: docs/conf.py
+  fail_on_warning: true
+
+formats:
+  - pdf
+  - epub
