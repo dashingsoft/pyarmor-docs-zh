@@ -75,8 +75,8 @@ Report bugs with Pyarmor_ in issues_
 户问题按照通用方法的步骤，都可以得到解决。后面的章节则分类列出了用户经常提问
 的一些问题和解决方案，使用过程中出现问题来这里通常是最快的解决方式。
 
-Table of Contents
-=================
+目录
+====
 
 .. toctree::
    :numbered:
@@ -90,8 +90,8 @@ Table of Contents
    licenses
    questions
 
-Indices and tables
-==================
+索引表
+======
 
 * :ref:`genindex`
 * :ref:`modindex`
