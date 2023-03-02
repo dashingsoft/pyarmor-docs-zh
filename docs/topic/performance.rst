@@ -217,4 +217,4 @@ PyArmor 使用一个简单脚本 `bfoo.py` 来进行测试，里面有两个函�
    import_big_module      : 8690.256000 ms
    call_module_function   :   0.015000 ms
 
-.. include:: _common_definitions.txt
+.. include:: ../_common_definitions.txt
