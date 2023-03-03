@@ -12,6 +12,12 @@ quickly get up and running.
    :local:
    :backlinks: top
 
+Pyarmor 是什么
+==============
+
+|Pyarmor| 是一个用于加密和保护 |Python| 脚本的工具。它能够在运行时刻保护|Python|
+脚本代码不被泄露，设置加密后脚本的使用期限，绑定加密脚本到硬盘、网卡等硬件设备。
+
 What's Pyarmor
 ==============
 

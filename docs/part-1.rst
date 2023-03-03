@@ -1,8 +1,6 @@
-.. highlight:: bash
-
-===========
- Tutorials
-===========
+==========
+ 使用教程
+==========
 
 .. toctree::
    :maxdepth: 3

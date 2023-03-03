@@ -1,12 +1,13 @@
-========
- Topics
-========
+==========
+ 深入了解
+==========
 
 .. toctree::
    :maxdepth: 3
 
    topic/obfuscation
    topic/obfuscated-script
+   topic/differences
    topic/localization
    topic/repack
    topic/rftmode

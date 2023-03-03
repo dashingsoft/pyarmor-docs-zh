@@ -1,8 +1,6 @@
-.. highlight:: bash
-
-========
- How To
-========
+==========
+ 如何去做
+==========
 
 .. toctree::
    :maxdepth: 3
