@@ -12,7 +12,7 @@
 .. |Author| replace:: 赵俊德
 .. |Contact| replace:: pyarmor@163.com
 
-.. |FAQ| replace:: :doc:`FAQ <questions>`
+.. |FAQ| replace:: :doc:`常见问题 <questions>`
 
 .. |Python| replace:: :term:`Python`
 
