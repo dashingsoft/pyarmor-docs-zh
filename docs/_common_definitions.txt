@@ -1,5 +1,5 @@
 .. _Pyarmor: https://pypi.python.org/pypi/pyarmor/
-.. _issues: https://github.com/dashingsoft/pyarmor/issues/
+.. _问题报告: https://github.com/dashingsoft/pyarmor/issues/
 .. _Pyarmor 在线文档: https://pyarmor.readthedocs.io/zh/stable/
 .. _Pyarmor 7.x 在线文档: https://pyarmor.readthedocs.io/zh/v7.x/
 .. _Pyarmor 最终用户许可协议: https://github.com/dashingsoft/pyarmor/blob/master/LICENSE-ZH

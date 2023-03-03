@@ -1,13 +1,13 @@
-.. highlight:: console
+==========
+ 快速开始
+==========
 
-=================
- Getting Started
-=================
+.. highlight:: console
 
 New to |Pyarmor|? Well, you came to the right place: read this material to
 quickly get up and running.
 
-.. contents:: Content
+.. contents:: 内容
    :depth: 2
    :local:
    :backlinks: top

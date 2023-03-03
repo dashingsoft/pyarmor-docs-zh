@@ -11,67 +11,42 @@
 如何阅读本手册
 ==============
 
-|Pyarmor| 有完备的文档系统，这里是帮助用户如何快速找到需要的相关内容：
+|Pyarmor| 有完备的文档系统，这里是帮助用户如何快速找到需要的相关内容
 
-对于第一次使用 `Pyarmor`_ 的用户来说，先把 :doc:`tutorial` 全部仔细看一下，
-然后在浏览一下 :doc:`usage` ，一般就可以完成对脚本的基本保护。
+* :doc:`Part 1: 基础教程 <part-1>` 适合第一次使用 Pyarmor 的用户，这里以实例的形
+  式一步接着一步的说明了加密脚本和包的最常用的场景。也可以先看
+  看 :doc:`tutorial/getting-started`
 
-接下来看一下 :doc:`advanced` 下的各个标题，这里面有很多实际的应用场景。
+* :doc:`Part 2: 如何去做 <part-2>` 针对每一个特定的需求，说明在 Pyarmor 中应该如
+  何去做，使用什么样的命令和选项去实现。阅读这部分内容需要对 Pyarmor 和 Python
+  都有一定的了解。
 
-|Pyarmor| 是一个命令行工具，它能够提供的功能都是通过不同的命令行选项来实现
-的，:doc:`man` 则详细说明了 |Pyarmor| 各个命令和选项的功能和作用。
+* :doc:`Part 3: 技术参考 <part-3>` 从技术层的角度详细列出了所有的概念定义，命令
+  手册，配置选项和错误信息代码。它适用于使用 Pyarmor 的高级用户，需要查找相关的
+  参数和配置，了解这些配置项的可用值和不同值的作用和含义。
 
-:doc:`insight-into` 则详细说明了 `Pyarmor`_ 组成和实现原理，有助于解决加密复
-杂应用时候出现的问题，知其所以然才能更好的使用 `Pyarmor`_ 。
+* :doc:`Part 4: 深入了解 <part-4>` 这部分针对 Pyarmor 提供的功能，从如何实现的层
+  面进行了详细的解释。阅读这部分内容需要完全掌握了 Pyarmor 使用到的主要概念，以
+  及对 Python 脚本的执行过程有相当了解。它适用于需要对 Pyarmor 进行扩展和定制，
+  以满足更高一层需求的用户。
 
-如果加密脚本的性能不能满足需要，那就需要看看 :doc:`performance` ，看看不同的
-选项是如何影响性能，以及不同性能下面的安全性。
+* :doc:`Part 5: 许可模式和许可证类型 <licenses>` 描述了 |Pyarmor| 的最终用户许可
+  协议， |Pyarmor| 的许可模式，不同的许可类型，以及如何购买 |Pyarmor| 许可证。
 
-:doc:`license` 描述了 `Pyarmor`_ 的最终用户使用协议， `Pyarmor`_ 的许可模式，
-各种许可模式的功能和限制，如何购买许可证以及关于许可证的一些常见问题。
+获取帮助
+========
 
-:doc:`questions` 的开始部分详细说明了对于常见问题的通用解决方法，大部分的用
-户问题按照通用方法的步骤，都可以得到解决。后面的章节则分类列出了用户经常提问
-的一些问题和解决方案，使用过程中出现问题来这里通常是最快的解决方式。
+使用中遇到问题？
 
+那么首先看看 :doc:`FAQ <questions>` – 这里详细说明了对于常见问题的通用解决方法，
+大部分的用户问题按照通用方法的步骤，都可以得到解决。后面的章节则分类列出了用户经
+常提问的一些问题和解决方案，使用过程中出现问题来这里通常是最快的解决方式。
 
-文档的组织结构
-==============
+想找某一个特定的关键字，搜一下 :ref:`genindex`, 或者浏览 :ref:`文档总目录 <mastertoc>`
 
-|Pyarmor| has a lot of documentation. A high-level overview of how it's
-organized will help you know where to look for certain things:
+还是没有找到？ 看一下 :ref:`如何在 Github 上提问 <asking questions>`.
 
-* :doc:`Part 1: Tutorials <part-1>` takes you by the hand through a series
-  of steps to obfuscate |Python| scripts and packages. Start here if you're
-  new to |Pyarmor|. Also look at the :doc:`tutorial/getting-started`
-
-* :doc:`Part 2: How To <part-2>` guides are recipes. They guide you through
-  the steps involved in addressing key problems and use-cases. They are more
-  advanced than tutorials and assume some knowledge of how |Python| works.
-
-* :doc:`Part 3: References <part-3>` guides contain key concepts, man page,
-  configurations and other aspects of |Pyarmor| machinery.
-
-* :doc:`Part 4: Topics <part-4>` guides insight into key topics and provide
-  useful background information and explanation. They describe how it works and
-  how to use it but assume that you have a basic understanding of key concepts.
-
-* :doc:`Part 5: Licneses <licenses>` describes EULA of |Pyarmor|, the different
-  |Pyarmor| licenses and how to purchase |Pyarmor| license.
-
-Getting help
-============
-
-Having trouble? We'd like to help!
-
-Try the :doc:`FAQ <questions>` – it's got answers to many common questions.
-
-Looking for specific information? Try the :ref:`genindex`, or :ref:`the
-detailed table of contents <mastertoc>`.
-
-Not found anything? See :ref:`asking questions in github <asking questions>`.
-
-Report bugs with Pyarmor_ in issues_
+发现 Pyarmor_ 的问题，请点击 `问题报告`_ 按照模版进行提交。
 
 目录
 ====

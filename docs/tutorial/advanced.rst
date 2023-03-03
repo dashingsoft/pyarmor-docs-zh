@@ -68,7 +68,7 @@ will be as a plugin marker.
 For example, these lines
 
 .. code-block:: python
-                :emphasize lines: 3,4
+    :emphasize-lines: 3,4
 
     print('start ...')
 
@@ -78,7 +78,7 @@ For example, these lines
 will be changed to
 
 .. code-block:: python
-                :emphasize lines: 3,4
+    :emphasize-lines: 3,4
 
     print('start ...')
 
