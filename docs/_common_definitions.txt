@@ -7,9 +7,9 @@
 .. |pyarmor| replace:: :doc:`pyarmor <man>`
 .. |Pyarmor| replace:: :term:`Pyarmor`
 .. |Home| replace:: https://github.com/dashingsoft/pyarmor/
-.. |Website| replace:: https://pyarmor.dashingsoft.com/
-.. |Manual| replace:: https://pyarmor.readthedocs.io/
-.. |Author| replace:: Jondy
+.. |Website| replace:: https://pyarmor.dashingsoft.com/index-zh.html
+.. |Manual| replace:: https://pyarmor.readthedocs.io/zh/stable/
+.. |Author| replace:: 赵俊德
 .. |Contact| replace:: pyarmor@163.com
 
 .. |FAQ| replace:: :doc:`FAQ <questions>`
