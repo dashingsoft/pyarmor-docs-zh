@@ -155,27 +155,27 @@ Generate obfuscated scripts and all the required runtime files.
 
 -h, --help                      show option list and help information then quit
 -O PATH, --output PATH          output path :option:`... <-O>`
--r, --recursive                 search scripts recursively :option:`... <-r>`
+-r, --recursive                 search scripts in recursive mode :option:`... <-r>`
 
--e DATE, --expired DATE         expired date of obfuscated scripts :option:`... <-e>`
+-e DATE, --expired DATE         set expired date :option:`... <-e>`
 -b DEV, --bind-device DEV       bind obfuscated scripts to device :option:`... <-b>`
 --period N                      check runtime key periodically :option:`... <--period>`
 --outer                         enable outer runtime key :option:`... <--outer>`
 
---platform NAME                 cross platform :option:`... <--platform>`
--i                              store runtime files inside package path :option:`... <-i>`
---prefix PREFIX                 运行辅助包的前缀名称，主要用于同时加密多个包的情况
+--platform NAME                 cross platform obfuscation :option:`... <--platform>`
+-i                              store runtime files inside package :option:`... <-i>`
+--prefix PREFIX                 导入运行辅助包的前缀名称 :option:`... <--prefix>`
 
---obf-module <0,1>              指定模块加密模式，默认是 1
---obf-code <0,1>                指定代码加密模式，默认是 1
---no-wrap                       禁用包裹加密模式
---enable <jit,rft,bcc,themida>  启用不同的保护特征
---mix-str                       混淆字符串常量
---restrict                      禁止外部脚本导入加密模块
---assert-import                 确保导入的脚本是加密后的模块
---assert-call                   确保调用的模块函数是经过加密的函数
+--obf-module <0,1>              指定模块加密模式，默认是 1 :option:`... <--obf-module>`
+--obf-code <0,1>                指定代码加密模式，默认是 1 :option:`... <--obf-code>`
+--no-wrap                       禁用包裹加密模式 :option:`... <--no-wrap>`
+--enable <jit,rft,bcc,themida>  启用不同的保护特征 :option:`... <--enable>`
+--mix-str                       混淆字符串常量 :option:`... <--mix-str>`
+--restrict                      启用约束模式加密包 :option:`... <--restrict>`
+--assert-import                 确保导入的脚本是经过加密的 :option:`... <--assert-import>`
+--assert-call                   确保调用的函数是经过加密的 :option:`... <--assert-call>`
 
---pack BUNDLE                   使用加密后的脚本替换打包成为可执行文件里面的原来脚本
+--pack BUNDLE                   使用加密后的脚本替换打包成为可执行文件里面的原来脚本 :option:`... <--pack>`
 
 .. describe:: Description
 
@@ -185,15 +185,57 @@ Generate obfuscated scripts and all the required runtime files.
 
 .. option:: -r, --recursive
 
-递归搜索目录下面的 Python 脚本，默认值搜索当前目录下面的脚本。
+递归搜索目录下面的 Python 脚本，否则只搜索当前目录下面的脚本
 
 .. option:: -i
 
-            保存运行辅助文件到加密包的内部
+保存运行辅助文件到加密包的内部。例如::
+
+    $ pyarmor gen -r -i mypkg
+
+The :term:`runtime package` will be stored inside package ``dist/mypkg``::
+
+    $ ls dist/
+    ...      mypkg/
+
+    $ ls dist/mypkg/
+    ...            pyarmor_runtime_000000/
+
+Without this option, the output path is like this::
+
+    $ ls dist/
+    ...      mypkg/
+    ...      pyarmor_runtime_000000/
+
+This option can't be used to obfuscate script.
+
+.. option:: --prefix PREFIX
+
+Only used when obfuscating many packages at the same time and still store the
+runtime package inside package.
+
+In this case, use this option to specify which package is used to store runtime
+package. For example::
+
+    $ pyarmor gen --prefix mypkg src/mypkg mypkg1 mypkg2
+
+This command tells pyarmor to store runtime package inside ``dist/mypkg``, and
+make ``dist/mypkg1`` and ``dist/mypkg2`` to import runtime package from
+``mypkg``.
+
+Checking  the content of ``.py`` files in output path to make it clear.
+
+As a comparison, obfuscating 3 packages without this option::
+
+    $ pyarmor gen -O dist2 src/mypkg mypkg1 mypkg2
+
+And check ``.py`` files in the path ``dist2``.
 
 .. option:: -e DATE, --expired DATE
 
-设置加密脚本的有效期，支持的格式:
+            设置加密脚本的有效期
+
+支持的格式:
 
 * 数字，表示从现在开始的天数
 * YYYY-MM-DD，直接指定有效期
@@ -256,8 +298,10 @@ Generate obfuscated scripts and all the required runtime files.
 
 .. option:: --period N
 
-周期性的检查许可证，单位为 小时。默认情况下是导入加密模块的时候会检查许可证，对
-于一些服务器应用，这个选项可以人工设置检查周期。
+.. option:: --period N
+
+周期性的检查运行设置文件，单位为 小时。默认情况下是导入加密模块的时候会检查运行
+设置信息，对于一些服务器应用，这个选项可以人工设置检查周期。
 
 支持的格式为数字+单位，单位支持时分秒，没有单位则默认为小时：
 
@@ -266,9 +310,17 @@ Generate obfuscated scripts and all the required runtime files.
 * 1m
 * 1h
 
-需要注意的是即便是设置了这个值，也必须是在运行加密函数的时候才进行检查。也就是说，
-如果一个无限循环没有调用任何加密函数，那么也不会检查许可证。变通的方式是在里面循
-环体里面增加一个空函数调用。
+下面的例子是等价的，都是每隔一个小时重新检查一下::
+
+    $ pyarmor gen --period 1 foo.py
+    $ pyarmor gen --period 3600s foo.py
+    $ pyarmor gen --period 60m foo.py
+    $ pyarmor gen --period 1h foo.py
+
+.. note::
+
+   需要注意的是即便是设置了这个值，也必须是在运行加密函数的时候才进行检查。也就
+   是说，如果一个无限循环没有调用任何加密函数，那么不会触发周期性检查事件。
 
 .. option:: --outer
 
@@ -282,7 +334,7 @@ Generate obfuscated scripts and all the required runtime files.
 外部密钥文件的名称默认为 ``pyarmor.rkey`` ，可以通过配置文件修改默认值，例如，使
 用前面有点的 ``.pyarmor.key``::
 
-    $ pyarmor cfg builder outer_keyname=".pyarmor.key"
+    $ pyarmor cfg outer_keyname=".pyarmor.key"
 
 这样外部密钥文件使用 :command:`ls` 就无法看到。
 
@@ -305,12 +357,170 @@ Generate obfuscated scripts and all the required runtime files.
 
             主要应用于保护加密包，保护包里面的模块，只能在包内部使用，不能被外部模块调用
 
+When restrict mode is enabled, all the modules excpet ``__init__.py`` in the
+package could not be imported by plain scripts.
+
+For example, obfuscate a restrict package to ``dist/joker``::
+
+    $ pyarmor gen -i --restrict joker
+    $ ls dist/
+    ...    joker/
+
+Then create a plaint script ``dist/foo.py``
+
+.. code-block:: python
+
+    import joker
+    print('import joker should be OK')
+    from joker import queens
+    print('import joker.queens should fail')
+
+Run it to verify::
+
+    $ cd dist
+    $ python foo.py
+    ... import joker should be OK
+    ... RuntimeError: unauthorized use of script
+
+If there are extra modules need to be exported, list all the modules in this
+command::
+
+    $ pyarmor cfg exclude_restrict_modules="__init__ queens"
+
+Then obfuscate the package again.
+
+.. option:: --obf-module <0,1>
+
+            Enable the whole module (default is 1)
+
+.. option:: --obf-code <0,1>
+
+            Enable each function in module (default is 1)
+
+.. option:: --no-wrap
+
+            Disable wrap mode
+
+If wrap mode is enabled, when enter a function, it's restored. but when exit,
+this function will be obfuscated again.
+
+If wrap mode is disabled, once the function is restored, it's never be
+obfuscated again.
+
+If :option:`--obf-code` is ``0``, this option is meaningless.
+
+.. option:: --enable <jit,rft,bcc,themida>
+
+            Enable different obfuscation features.
+
+.. option:: --enable-jit
+
+Use :term:`JIT` to process some sentensive data to improve security.
+
+.. option:: --enable-rft
+
+            Enable :term:`RFT Mode` to obfuscate the script :sup:`pro`
+
+.. option:: --enable-bcc
+
+            Enable :term:`BCC Mode` to obfuscate the script :sup:`pro`
+
+.. option:: --enable-themida
+
+            Use `Themida`_ to protect extension module in :term:`runtime package`
+
+            Only works for Windows platform.
+
+.. option:: --mix-str
+
+            Mix the string constant in scripts :sup:`basic`
+
+.. option:: --assert-call
+
+            Assert function is obfuscated
+
+If this option is enabled, Pyarmor scans each function call in the scripts. If
+the called function is in the obfuscated scripts, protect it as below, and leave
+others as it is. For example,
+
+.. code-block:: python
+    :emphasize-lines: 4
+
+    def fib(n):
+        a, b = 0, 1
+        return a, b
+
+    print('hello')
+    fib(n)
+
+will be changed to
+
+.. code-block:: python
+    :emphasize-lines: 4
+
+    def fib(n):
+        a, b = 0, 1
+
+    print('hello')
+    __assert_armored__(fib)(n)
+
+The function ``__assert_armored__`` is a builtin function in obfuscated script.
+It checks the argument, if it's an obfuscated function, then returns this
+function, otherwise raises protection exception.
+
+In this example, ``fib`` is protected, ``print`` is not.
+
+.. option:: --assert-import
+
+            Assert module is obfuscated
+
+If this option is enabled, Pyarmor scans each ``import`` statement in the
+scripts. If the imported module is obfuscated, protect it as below, and leave
+others as it is. For example,
+
+.. code-block:: python
+    :emphasize-lines: 2
+
+    import sys
+    import foo
+
+will be changed to
+
+.. code-block:: python
+    :emphasize-lines: 2,3
+
+    import sys
+    import foo
+    __assert_armored__(foo)
+
+The function ``__assert_armored__`` is a builtin function in obfuscated script.
+It checks the argument, if it's an obfuscated module, then return this module,
+otherwise raises protection exception.
+
+This option neither touchs statement ``from import``, nor the module imported by
+function ``__import__``.
+
+.. option:: --pack BUNDLE
+
+            Repack bundle with obfuscated scripts
+
+Here ``BUNDLE`` is an executable file generated by PyInstaller_
+
+Pyarmor just obfuscates the script first.
+
+Then unpack the bundle.
+
+Next replace all the ``.pyc`` in the bundle with obfuscated scripts, and append
+all the :term:`runtime files` to the bundle.
+
+Finally repack the bundle and overwrite the original ``BUNDLE``.
+
 .. _pyarmor gen key:
 
 pyarmor gen key
 ===============
 
-生成外部运行许可证
+Generate :term:`outer key` for obfuscated scripts.
 
 .. program:: pyarmor gen key
 
@@ -320,8 +530,37 @@ pyarmor gen key
 
 .. describe:: Options
 
--h, --help                      show option list and help information then quit
--O PATH, --output PATH          output path :option:`... <-O>`
+-O PATH, --output PATH      output path
+-e DATE, --expired DATE     set expired date
+--period N                  check runtime key periodically
+-b DEV, --bind-device DEV   bind obfuscated scripts to device
+
+.. describe:: Description
+
+This command is used to generate :term:`outer key`, the options in this command
+have same meaning as in the :ref:`pyarmor gen`.
+
+There must be at least one of option ``-e`` or ``-b`` for :term:`outer key`.
+
+It's invalid that outer key is neither expired nor binding to a device. For this
+case, don't use outer key.
+
+By default the outer key is saved to ``dist/pyarmor.rkey``. For example::
+
+    $ pyarmor gen key -e 30
+    $ ls dist/pyarmor.rkey
+
+Save outer key to other path by this way::
+
+    $ pyarmor gen key -O dist/mykey2 -e 10
+    $ ls dist/mykey2/pyarmor.rkey
+
+By default the outer key name is ``pyarmor.rkey``, use the following command to
+change outer key name to any others. For example, ``sky.lic``::
+
+    $ pyarmor cfg outer_keyname=sky.lic
+    $ pyarmor gen key -e 30
+    $ ls dist/sky.lic
 
 .. _pyarmor cfg:
 
@@ -379,12 +618,14 @@ Not only option ``excludes`` in section ``finder``, but also in other sections
 ``assert.call``, ``mix.str`` etc. are changed.
 
 .. option:: -p NAME
-            private settings for special module or package
+
+            Private settings for special module or package
 
 All the settings is only used for specified module `NAME`.
 
 .. option:: -g, --global
-            do everything in global settings
+
+            Do everything in global settings
 
 Without this option, all the changed settings are soted in :term:`Local
 Configuration Path`, generally it's ``.pyarmor`` in the current path. By this
@@ -392,6 +633,7 @@ option, everything is stored in :term:`Global Configuration Path`, generally
 it's ``~/.pyarmor/config``
 
 .. option:: -r, --reset
+
             Reset option to default value
 
 .. _pyarmor reg:
@@ -399,9 +641,9 @@ it's ``~/.pyarmor/config``
 pyarmor reg
 ===========
 
-register Pyarmor or upgrade Pyarmor license
+Register Pyarmor or upgrade Pyarmor license
 
-.. program:: pyarmor cfg
+.. program:: pyarmor reg
 
 .. describe:: Syntax
 
@@ -419,39 +661,10 @@ register Pyarmor or upgrade Pyarmor license
 
 The ``FILENAME`` must be one of these forms:
 
-* ``pyarmor-keycode-xxxx.txt`` got by purchasing Pyarmor license
+* ``pyarmor-regcode-xxxx.txt`` got by purchasing Pyarmor license
 * ``pyarmor-regfile-xxxx.zip`` got by initial registration with above file
 
 .. describe:: Description
-
-Before register Pyarmor, first purchase one :term:`pyarmor-basic` license or
-:term:`pyarmor-pro` license as needed in `MyCommerce website
-<https://order.mycommerce.com/product?vendorid=200089125&productid=301044051>`_
-
-After payment is complete successfully, in a few hours an activation file like
-:file:`pyarmor-keycode-xxxx.txt` will be sent to you by email.
-
-This file is used to initial registration. At the first time to register
-Pyarmor, :option:`-p` (product name) should be set. If not set, this Pyarmor
-license is bind to "non-profits", and could not be used for commercial product.
-
-For example, assume this license is used to protect your product ``Robot
-Studio``, initial registration by this command::
-
-    $ pyarmor reg -p "Robot Studio" /path/to/pyarmor-keycode-xxxx.txt
-
-Pyarmor will show registration information and ask your confirmation. If
-everything is fine, type :kbd:`yes` and :kbd:`Enter` to continue.
-
-If initial registration is successful, it prints final license information in
-the console. And a registration file named :file:`pyarmor-regfile-xxxx.zip` for
-this license is generated in the current path at the sametime. This file is used
-for next registration in other machines.
-
-Once register successfully, product name can't be changed.
-
-There is only one exception, if product name is set to ``TBD`` at the first
-time, it can be changed once later.
 
 Check the registration information::
 
@@ -461,27 +674,37 @@ Show verbose information::
 
     $ pyarmor reg
 
+.. option:: -p NAME, --product NAME
+
+            Set product name bind to license
+
+When initial registration, use this option to set proudct name bind to license.
+
+If no this option, the product name is set to ``non-profits``.
+
+It's meanless to use this option after initial registration.
+
+``TBD`` is a special product name. If product name is ``TBD`` at initial
+registration, the product name can be changed later.
+
+For any other product name, it can't be changed any more.
+
 .. option:: -y, --confirm
 
             In initial registration, without asking for confirmation
 
 .. option:: -u, --upgrade
 
-            Upgrade Pyarmor license from prior to 8.0
-
-This option is mainly used for purchased license before Pyarmor 8.0
+            Upgrade old license to Pyarmor 8.0 Licese
 
 .. important::
 
-   Once initial registration successfully, :file:`pyarmor-keycode-xxxx.txt` may
+   Once initial registration successfully, :file:`pyarmor-regcode-xxxx.txt` may
    not work again. Using registration file :file:`pyarmor-regfile-xxxx.zip` for
    next registration instead.
 
    PLEASE BACKUP registration file :file:`pyarmor-regfile-xxxx.zip` carefully,
    Pyarmor doesn't provide lost-found service
-
-Registration in other devices
------------------------------
 
 Using registration file :file:`pyarmor-regfile-xxxx.zip` to register Pyarmor in
 other machine.
@@ -489,80 +712,6 @@ other machine.
 Copy it to target device, then run this command::
 
     $ pyarmor reg pyarmor-regfile-xxxx.zip
-
-Upgrade to pyarmor-basic
-------------------------
-
-如果老版本许可证的注册文件的名称是像 pyarmor-keycode-xxxx.txt 这样的，可以免费升
-级到 pyarmor-basic，其它的无法升级到新版本，需要购买新的许可证使用最新版本。
-
-如果选择免费升级, 那么需要遵循新的许可协议。最明显的变化在于老版本的许可证升级之
-后，不管是个人版还是企业版，都必须绑定到一个产品。如果原来没有指定产品名称的，那
-么升级的时候需要指定产品名称。这一点主要是对个人版影响比较大，新的许可协议要求每
-一个产品对应一个许可证。所以个人版升级之后，升级后的许可证只能用于指定的产品，其
-它产品如需使用 Pyarmor 8.0+ 需要购买新的许可证。
-
-升级需要原来的注册码文件，是购买之后发送到注册邮箱里面的一个附件。
-
-下面的命令要在原来已经注册成功的机器上运行，首先升级到 Pyarmor 8.0 以上::
-
-    $ pip install pyarmor
-
-如果原来许可证没有产品名称，假定现在绑定的产品名称为 ``Robot Studio`` ，那么使用
-下面的命令进行升级::
-
-    $ pyarmor reg -p "Robot Studio" -u pyarmor-keycode-xxxx.txt
-
-如果原来的许可证已经有产品名称，不要指定产品名称，直接使用下面的命令进行升级::
-
-    $ pyarmor reg -u pyarmor-keycode-xxxx.txt
-
-Upgrade to pyarmor-pro
-------------------------
-
-如果老版本许可证的注册文件的名称是像 pyarmor-keycode-xxxx.txt 这样的，可以付费升
-级到 pyarmor-pro，其它的无法升级到新版本，需要购买新的许可证使用最新版本。
-
-
-根据需要购买 Pyarmor 基础版或者专家版许可证，
-
-支付成功之后会通过电子邮件收到许可证的激活码，在邮件的附件中，一般名称为
-:file:`pyarmor-keycode-xxxx.txt`
-
-第一次注册
-~~~~~~~~~~
-
-第一次注册 PyArmor 需要指定产品名称，根据 Pyarmor 许可协议，每一个许可证都绑定到
-一个指定产品，假设产品名称为 ``Robot Studio``::
-
-    pyarmor reg -p "Robot Studio" /path/to/pyarmor-keycode-xxxx.txt
-
-查看注册信息::
-
-    pyarmor -v
-
-注册成功的同时会在当前目录下生成离线注册文件 :file:`pyarmor-regfile-xxxx.zip`
-
-文本格式的激活码文件 :file:`pyarmor-keycode-xxxx.txt` 只能使用十次，超过之后将无法使用。
-
-所以一旦第一次注册成功之后，就可以使用离线注册文件在其它机器上注册 Pyarmor，而不
-要在使用激活码文件进行注册。
-
-请妥善保管离线注册文件，以后的在其它机器上注册都要使用此文件。如果丢失，Pyarmor
-不负责找回，由此造成该许可证无法使用的后果由用户自己承担。在此情况下，如果用户还
-需要使用 Pyarmor 需要重新购买。
-
-在其它设备注册
-~~~~~~~~~~~~~~
-
-离线注册文件可以在授权范围内的任何机器上使用，同样使用 :ref:`pyarmor reg` 命令进
-行注册，但是不需要指定产品名称。例如::
-
-      pyarmor reg pyarmor-regfile-xxxx.zip
-
-对于同时使用一个许可证的设备数量目前是限制在 100 台，所谓同时使用就是在 24 小时
-内使用 Pyarmor 进行过加密操作的不同设备的总数。可以安装在 1000 台设备上，只要不
-同时使用的数目不超过限制就可以。
 
 Environment Variables
 =====================
@@ -590,10 +739,10 @@ It's mainly used in some platforms Pyarmor could not tell right but still works.
 .. envvar:: PYARMOR_CLI
 
             Only for compatible with old Pyarmor, ignore this if you don't use
-            old command prior to Pyarmor 8.0
+            old command prior to 8.0
 
-If you always use old Pyarmor command prior to Pyarmor 8.0, set it to ``7``, for
-example::
+If you do not use new commands in Pyarmor 8.0, and prefer to only use old
+commands, set it to ``7``, for example::
 
     # In Linux
     export PYARMOR_CLI=7
@@ -606,9 +755,11 @@ example::
     set PYARMOR_CLI=7
     pyarmor -h
 
-By default :command:`pyarmor` first check new cli, if the command line couldn't
+It forces command :command:`pyarmor` to use old cli directly.
+
+Without it, :command:`pyarmor` first try new cli, if the command line couldn't
 be parsed by new cli, fallback to old cli.
 
-It could force :command:`pyarmor` to use specify cli directly.
+This only works for command :command:`pyarmor`.
 
 .. include:: ../_common_definitions.txt

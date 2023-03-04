@@ -2,49 +2,74 @@
  Environments
 ==============
 
-支持的平台
-支持的 Python 版本
+Building Device
+===============
 
-加密环境
-========
+Building device is to run :command:`pyarmor` to geneate obfuscated
+scripts and all the other required files.
 
-环境变量
---------
+Supported Platforms:
 
-配置文件
---------
+* Windows
+* Linux
+* Darwin
 
-全局配置
-本地配置
-私有配置，具体到某一个模块或者包
+Support Arches:
 
-命令行选项
-----------
+* x86_64
+* aarch64
+* i386
+* aarch32
+* armv7
 
-支持的平台列表
---------------
+Supported Pyton versions:
 
-加密脚本的运行环境
-==================
+* Python 3.7 ~ Python 3.11
 
-查找外部许可证的时候的位置
+Command line options and environment variables are described in :doc:`man`
 
-sys._MEIPASS
+Configuration files
+-------------------
 
-sys._PARLANG
+There are 3 kinds of configuration files
+
+* global: an ini file :file:`~/.pyarmor/config/global`
+* local: an ini file :file:`.pyarmor/config`
+* private: each module ``foo`` may has one ini file either
+  :file:`~/.pyarmor/foo.rules` or :file:`.pyarmor/foo.rules`
+
+Target Device
+=============
+
+Target device is to run the obfuscated scripts.
+
+Support platforms, arches and Python versions are same as `Building device`_
+
+:attr:`sys._MEIPASS`
+
+      Borrowed from PyInstaller_, set search path for :term:`outer key`.
+
+:attr:`sys._PARLANG`
+
+      It's used to set language for runtime error message.
+
+      If it's set, :envvar:`LANG` is ignored.
 
 .. envvar:: LANG
 
+            OS environment variable, used to select language for runtime error
+            message.
+
 .. envvar:: PYARMOR_LANG
+
+            It's used to set language for runtime error message.
+
+            If it's set, both :envvar:`LANG` and :attr:`sys._PARLANG` are ignored.
 
 .. envvar:: PYARMOR_RKEY
 
+            Set search path for :term:`outer key`
 
-错误信息代码
-------------
-
-支持平台列表
-------------
 
 
 .. include:: ../_common_definitions.txt

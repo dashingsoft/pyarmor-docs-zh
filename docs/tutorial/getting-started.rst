@@ -18,12 +18,6 @@ Pyarmor 是什么
 |Pyarmor| 是一个用于加密和保护 |Python| 脚本的工具。它能够在运行时刻保护|Python|
 脚本代码不被泄露，设置加密后脚本的使用期限，绑定加密脚本到硬盘、网卡等硬件设备。
 
-What's Pyarmor
-==============
-
-|Pyarmor| is a command line tool used to obfuscate |Python| scripts, bind
-obfuscated scripts to fixed machine or expire obfuscated scripts.
-
 Key Features:
 
 * The obfuscated scritpt is still a normal ``.py`` script, in most of cases the
