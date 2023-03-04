@@ -1,10 +1,7 @@
-.. highlight:: bash
+======================
+加密脚本打包的详细过程
+======================
 
-=========================
-Insight Into Pack Command
-=========================
-
-深入了解 pack 命令的工作原理
-
+.. highlight:: console
 
 .. include:: ../_common_definitions.txt
