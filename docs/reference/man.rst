@@ -1,13 +1,13 @@
-.. highlight:: console
-
 ==========
- Man Page
+ 命令手册
 ==========
 
 .. contents:: Contents
    :depth: 2
    :local:
    :backlinks: top
+
+.. highlight:: console
 
 Pyarmor is a powerful tool to obfuscate Python scripts with rich option set that
 provides both high-level operations and full access to internals.
@@ -295,8 +295,6 @@ And check ``.py`` files in the path ``dist2``.
 
     # 适用于 Linux，绑定到硬盘设备名称 "/dev/vda2"
     pyarmor gen -b "/dev/vda2:KDX3298FS6P5AX380" foo.py
-
-.. option:: --period N
 
 .. option:: --period N
 

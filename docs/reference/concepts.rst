@@ -1,5 +1,5 @@
 ==========
- Concepts
+ 概念定义
 ==========
 
 .. glossary::
@@ -42,9 +42,9 @@
 
   Pyarmor Home
 
-    Host in github: |Home|
+    项目文件存放在: |Home|
 
-    It serves open source part of Pyarmor, `issues`_ and documentations.
+    这里有 Pyarmor 开源部分的代码， 提交的 `问题报告`_ 和最新的文档。
 
   Pyarmor License
 

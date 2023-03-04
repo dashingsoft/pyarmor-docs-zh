@@ -1,13 +1,13 @@
-.. highlight:: console
-
-===================
- Basic Obfuscation
-===================
+==============
+ 基础用法教程
+==============
 
 .. contents:: Contents
    :depth: 2
    :local:
    :backlinks: top
+
+.. highlight:: console
 
 .. program:: pyarmor gen
 

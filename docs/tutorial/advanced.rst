@@ -1,13 +1,13 @@
-.. highlight:: console
-
-====================
- Advanced Tutorials
-====================
+==============
+ 高级用法教程
+==============
 
 .. contents:: Contents
    :depth: 2
    :local:
    :backlinks: top
+
+.. highlight:: console
 
 .. program:: pyarmor gen
 
