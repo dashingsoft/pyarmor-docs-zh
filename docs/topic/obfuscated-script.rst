@@ -9,17 +9,17 @@
 
 阅读本文档需要一定的 Python 基础，了解 Shell 脚本，环境变量等相关知识。
 
-如何运行 PyArmor 的加密脚本
+如何运行 Pyarmor 的加密脚本
 ===========================
 
-PyArmor 加密后的脚本输出的是同名的 `.py` 文件和扩展模块 `pyarmor_runtime`。例如
+Pyarmor 加密后的脚本输出的是同名的 `.py` 文件和扩展模块 `pyarmor_runtime`。例如
 foo.py 加密后在输出目录 dist 会创建下面的两个文件::
 
     dist/
         foo.py
         pyarmor_runtime.so
 
-它们和普通 Python 模块，可以被 Python 解释器调用执行，这也是 PyArmor 的一个加密
+它们和普通 Python 模块，可以被 Python 解释器调用执行，这也是 Pyarmor 的一个加密
 特点，可以使用加密后的脚本无缝替换原来的脚本。
 
 使用加密脚本完全和使用普通的 Python 脚本一样，例如，使用解释器直接运行::
@@ -51,7 +51,7 @@ foo.py 加密后在输出目录 dist 会创建下面的两个文件::
 目录，看看能否导入。
 
 在导入扩展模块 `pyarmor_runtime` 之前，所有的事情都是 Python 解释器的功能，和
-PyArmor 和加密脚本没有关系。解决这里出现的问题需要的就是学习 Python 相关的知识，
+Pyarmor 和加密脚本没有关系。解决这里出现的问题需要的就是学习 Python 相关的知识，
 特别是 Python 是如何根据模块名称去搜索和装载模块和扩展模块的。
 
 扩展模块 `pyarmor_runtime` 第一次被导入的时候，会进行一些初始化工作。
