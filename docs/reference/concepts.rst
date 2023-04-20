@@ -4,18 +4,18 @@
 
 .. glossary::
 
-  Activation File
+  激活文件
 
-    A text file used to initial registration :term:`Pyarmor License`
+    一个文本文件用来A text file used to initial registration :term:`Pyarmor License`
 
     When purchasing any :term:`Pyarmor License`, an activation file is be sent
     to registration email after payment is completed.
 
-  BCC Mode
+  BCC 模式
 
     An obfuscation method of Pyarmor by converting Python functions to C functions
 
-  Registration File
+  注册文件
 
     A zip file generated after initial registration is successful. It's used to
     register :term:`Pyarmor License` excpet initial registration.
@@ -32,11 +32,11 @@
       - :term:`Pyarmor Home`
       - :term:`pyarmor package`
 
-  Pyarmor Basic
+  Pyarmor 基础版
 
     A :term:`Pyarmor License` type
 
-  Pyarmor Group
+  Pyarmor 集团版
 
     A :term:`Pyarmor License` type
 
@@ -46,13 +46,13 @@
 
     这里有 Pyarmor 开源部分的代码， 提交的 `问题报告`_ 和最新的文档。
 
-  Pyarmor License
+  Pyarmor 许可证
 
     Issued by Pyarmor Team to unlock some limitations in Pyarmor trial version.
 
     Refer to :doc:`Pyarmor License Types <../licenses>`
 
-  Pyarmor Package
+  Pyarmor 包
 
     A :term:`Python Package`, it includes
 
@@ -61,7 +61,7 @@
       * :mod:`pyarmor.cli.core`
       * :mod:`pyarmor.cli.runtime`
 
-  Pyarmor Pro
+  Pyarmor 专家版
 
     A :term:`Pyarmor License` type
 
@@ -79,7 +79,7 @@
 
     Refer to https://docs.python.org/3.11/glossary.html#term-package
 
-  RFT Mode
+  RFT 模式
 
     An obfuscation method of Pyarmor by renaming function/class in the scripts
 

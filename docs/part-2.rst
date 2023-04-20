@@ -1,5 +1,5 @@
 ==========
- 如何去做
+ 应用实践
 ==========
 
 .. toctree::
@@ -8,6 +8,7 @@
    how-to/security
    how-to/obfuscation
    how-to/advanced
+   how-to/third-party
    how-to/register
 
 .. include:: _common_definitions.txt

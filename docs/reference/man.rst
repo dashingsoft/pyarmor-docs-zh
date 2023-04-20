@@ -159,6 +159,7 @@ Generate obfuscated scripts and all the required runtime files.
 
 -e DATE, --expired DATE         set expired date :option:`... <-e>`
 -b DEV, --bind-device DEV       bind obfuscated scripts to device :option:`... <-b>`
+--bind-DATA DATA                store private to runtime key :option:`... <--bind-data>`
 --period N                      check runtime key periodically :option:`... <--period>`
 --outer                         enable outer runtime key :option:`... <--outer>`
 
@@ -295,6 +296,16 @@ And check ``.py`` files in the path ``dist2``.
 
     # 适用于 Linux，绑定到硬盘设备名称 "/dev/vda2"
     pyarmor gen -b "/dev/vda2:KDX3298FS6P5AX380" foo.py
+
+.. option:: --bind-data DATA
+
+            DATA may be ``@FILENAME`` or string
+
+Store any private data to runtime key, then check it in the obfuscated scripts by yourself. It's mainly used with the hook script to extend runtime key verification method.
+
+If DATA has a leading ``@``, then the rest is a filename. Pyarmor reads the binary data from file, and store into runtime key.
+
+For any other case, DATA is converted to bytes as private data.
 
 .. option:: --period N
 
@@ -535,13 +546,11 @@ Generate :term:`outer key` for obfuscated scripts.
 
 .. describe:: Description
 
-This command is used to generate :term:`outer key`, the options in this command
-have same meaning as in the :ref:`pyarmor gen`.
+This command is used to generate :term:`outer key`, the options in this command have same meaning as in the :ref:`pyarmor gen`.
 
 There must be at least one of option ``-e`` or ``-b`` for :term:`outer key`.
 
-It's invalid that outer key is neither expired nor binding to a device. For this
-case, don't use outer key.
+It's invalid that outer key is neither expired nor binding to a device. For this case, don't use outer key.
 
 By default the outer key is saved to ``dist/pyarmor.rkey``. For example::
 
@@ -553,8 +562,7 @@ Save outer key to other path by this way::
     $ pyarmor gen key -O dist/mykey2 -e 10
     $ ls dist/mykey2/pyarmor.rkey
 
-By default the outer key name is ``pyarmor.rkey``, use the following command to
-change outer key name to any others. For example, ``sky.lic``::
+By default the outer key name is ``pyarmor.rkey``, use the following command to change outer key name to any others. For example, ``sky.lic``::
 
     $ pyarmor cfg outer_keyname=sky.lic
     $ pyarmor gen key -e 30
@@ -577,8 +585,7 @@ Configure or show Pyarmor environments
 
 -h, --help           show this help message and exit
 -p NAME              private settings for special module or package
--g, --global         do everything in global settings, otherwise local
-                     settings
+-g, --global         do everything in global settings, otherwise local settings
 -r, --reset          reset option to default value
 --encoding ENCODING  specify encoding to read configuration file
 
@@ -596,24 +603,74 @@ Show all options which start with ``obf``::
 
     $ pyarmor cfg obf*
 
-Set option to new value::
+Set option to int value by any of these forms::
 
+    $ pyarmor cfg obf_module 0
     $ pyarmor cfg obf_module=0
+    $ pyarmor cfg obf_module =0
+    $ pyarmor cfg obf_module = 0
+
+Set option to boolean value::
+
+    $ pyarmor cfg wrap_mode 0
+    $ pyarmor cfg wrap_mode=1
+
+Set option to string value::
+
+    $ pyarmor cfg outer_keyname "sky.lic"
+    $ pyarmor cfg outer_keyname = "sky.lic"
+
+Append word to an option. For example, ``pyexts`` has 2 words ``.py .pyw``, append new one to it::
+
+    $ pyarmor cfg pyexts + ".pym"
+
+    Current settings
+        pyexts = .py .pyw .pym
+
+Remove word from option::
+
+    $ pyarmor cfg pyexts - ".pym"
+
+    Current settings
+        pyexts = .py .pyw .pym
+
+Append new line to option::
+
+    $ pyarmor cfg rft_excludes ^ "/win.*/"
+
+    Current settings
+        rft_excludes = super
+            /win.*/
 
 Reset option to default::
 
-    $ pyarmor cfg -r obf_module
+    $ pyarmor cfg rft_excludes ""
+    $ pyarmor cfg rft_excludes=""
+    $ pyarmor cfg -r rft_excludes
 
 Change option ``excludes`` in the section ``finder`` by this form::
 
-    $ pyarmor cfg finder:excludes=ast
+    $ pyarmor cfg finder:excludes "ast"
 
 If no prefix ``finder``, for example::
 
-    $ pyarmor cfg excludes=ast
+    $ pyarmor cfg excludes "ast"
 
-Not only option ``excludes`` in section ``finder``, but also in other sections
-``assert.call``, ``mix.str`` etc. are changed.
+Not only option ``excludes`` in section ``finder``, but also in other sections ``assert.call``, ``mix.str`` etc. are changed.
+
+.. describe:: Sections
+
+Section is group name of options, here are popular sections
+
+* finder: how to search scripts
+* builder: how to obfuscate scripts, main section
+* runtime: how to generate runtime package and runtime key
+
+These are not popular sections
+* mix.str: how to filter mix string
+* assert.call: how to filter assert function
+* assert.import: how to filter assert module
+* bcc: how to convert function to C code
 
 .. option:: -p NAME
 
@@ -625,10 +682,7 @@ All the settings is only used for specified module `NAME`.
 
             Do everything in global settings
 
-Without this option, all the changed settings are soted in :term:`Local
-Configuration Path`, generally it's ``.pyarmor`` in the current path. By this
-option, everything is stored in :term:`Global Configuration Path`, generally
-it's ``~/.pyarmor/config``
+Without this option, all the changed settings are soted in :term:`Local Configuration Path`, generally it's ``.pyarmor`` in the current path. By this option, everything is stored in :term:`Global Configuration Path`, generally it's ``~/.pyarmor/config/global``
 
 .. option:: -r, --reset
 
@@ -682,8 +736,7 @@ If no this option, the product name is set to ``non-profits``.
 
 It's meanless to use this option after initial registration.
 
-``TBD`` is a special product name. If product name is ``TBD`` at initial
-registration, the product name can be changed later.
+``TBD`` is a special product name. If product name is ``TBD`` at initial registration, the product name can be changed later.
 
 For any other product name, it can't be changed any more.
 
@@ -697,15 +750,11 @@ For any other product name, it can't be changed any more.
 
 .. important::
 
-   Once initial registration successfully, :file:`pyarmor-regcode-xxxx.txt` may
-   not work again. Using registration file :file:`pyarmor-regfile-xxxx.zip` for
-   next registration instead.
+   Once initial registration successfully, :file:`pyarmor-regcode-xxxx.txt` may not work again. Using registration file :file:`pyarmor-regfile-xxxx.zip` for next registration instead.
 
-   PLEASE BACKUP registration file :file:`pyarmor-regfile-xxxx.zip` carefully,
-   Pyarmor doesn't provide lost-found service
+   PLEASE BACKUP registration file :file:`pyarmor-regfile-xxxx.zip` carefully, Pyarmor doesn't provide lost-found service
 
-Using registration file :file:`pyarmor-regfile-xxxx.zip` to register Pyarmor in
-other machine.
+Using registration file :file:`pyarmor-regfile-xxxx.zip` to register Pyarmor in other machine.
 
 Copy it to target device, then run this command::
 
@@ -714,15 +763,13 @@ Copy it to target device, then run this command::
 Environment Variables
 =====================
 
-The following environment variables only used in :term:`Build Machine` when
-generating the obfuscated scripts, not in :term:`Target Device`.
+The following environment variables only used in :term:`Build Machine` when generating the obfuscated scripts, not in :term:`Target Device`.
 
 .. envvar:: PYARMOR_HOME
 
             Same as :option:`pyarmor --home`
 
-It mainly used in the shell scrits to change Pyarmor settings. If
-:option:`pyarmor --home` is set, this environment var is ignored.
+It mainly used in the shell scrits to change Pyarmor settings. If :option:`pyarmor --home` is set, this environment var is ignored.
 
 .. envvar:: PYARMOR_PLATFORM
 
@@ -736,11 +783,9 @@ It's mainly used in some platforms Pyarmor could not tell right but still works.
 
 .. envvar:: PYARMOR_CLI
 
-            Only for compatible with old Pyarmor, ignore this if you don't use
-            old command prior to 8.0
+            Only for compatible with old Pyarmor, ignore this if you don't use old command prior to 8.0
 
-If you do not use new commands in Pyarmor 8.0, and prefer to only use old
-commands, set it to ``7``, for example::
+If you do not use new commands in Pyarmor 8.0, and prefer to only use old commands, set it to ``7``, for example::
 
     # In Linux
     export PYARMOR_CLI=7
@@ -755,8 +800,7 @@ commands, set it to ``7``, for example::
 
 It forces command :command:`pyarmor` to use old cli directly.
 
-Without it, :command:`pyarmor` first try new cli, if the command line couldn't
-be parsed by new cli, fallback to old cli.
+Without it, :command:`pyarmor` first try new cli, if the command line couldn't be parsed by new cli, fallback to old cli.
 
 This only works for command :command:`pyarmor`.
 
