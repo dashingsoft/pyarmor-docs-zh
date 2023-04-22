@@ -4,35 +4,37 @@
  构建加密脚本的环境
 ====================
 
-Command :command:`pyarmor` runs in :term:`build machine` to geneate obfuscated scripts and all the other required files.
+这里列出了和命令 :command:`pyarmor` 相关的所有一切。
 
-Here list everything related to :command:`pyarmor`.
+首先命令 :command:`pyarmor` 运行在 :term:`开发机器` 上面，使用 `supported Python versions`_ 运行在这些 `supported platforms`_
 
-Above all it only runs in the `supported platforms`_ by `supported Python versions`_.
+命令行选项， `配置文件选项`_ ， `加密插件和运行插件`_ 和一些环境变量影响和改变着命令 :command:`pyarmor` 的行为。
 
-Command line options, `configuration options`_, `plugin and hook`_  and a few environment variables control how to generate obfuscated scripts and runtime files.
+所有的命令行选项和相关的环境变量在 :doc:`man` 中有详细描述。
 
-All the command line options and environment variables are described in :doc:`man`
+.. _supported python versions:
 
-Supported Python versions
--------------------------
+支持的 Python 版本
+------------------
 
-.. table:: Table-1. Supported Python Versions
+.. table:: 表-1. 不同功能支持的 Python 版本表
    :widths: auto
 
    ===================  =====  =========  =========  ==========  ======  =======  ==============
-   Python Version        2.7    3.0~3.4    3.5~3.6    3.7~3.10    3.11    3.12+   Remark
+   Python               2.7    3.0~3.4    3.5~3.6    3.7~3.10    3.11    3.12+       备注
    ===================  =====  =========  =========  ==========  ======  =======  ==============
-   pyarmor 8 RFT Mode    No       No         No          Y         Y       N/y      [#]_
-   pyarmor 8 BCC Mode    No       No         No          Y         Y       N/y
-   pyarmor 8 others      No       No         No          Y         Y       N/y
+   RFT 模式              No       No         No          Y         Y       N/y      [#]_
+   BCC 模式              No       No         No          Y         Y       N/y
+   pyarmor 8 基础功能     No       No         No          Y         Y       N/y
    pyarmor-7             Y        Y          Y           Y         No      No
    ===================  =====  =========  =========  ==========  ======  =======  ==============
 
-Supported platforms
--------------------
+.. _supported platforms:
 
-.. table:: Table-2. Supported Platforms
+支持的平台
+----------
+
+.. table:: Table-2. 不同功能支持的平台列表
    :widths: auto
 
    ===================  ============  ========  =======  ============  =========  =======  =======
@@ -40,83 +42,83 @@ Supported platforms
    -------------------  ------------  -----------------  -----------------------------------------
    Arch                  x86/x86_64    x86_64    arm64    x86/x86_64    aarch64    armv7    armv6
    ===================  ============  ========  =======  ============  =========  =======  =======
-   Themida Protection        Y           No        No         No          No       No        No
-   pyarmor 8 RFT Mode        Y           Y         Y          Y           Y        Y         N/y
-   pyarmor 8 BCC Mode        Y           Y         Y          Y           Y        N/y       No
-   pyarmor 8 others          Y           Y         Y          Y           Y        Y         Y
-   pyarmor-7 [#]_            Y           Y         Y          Y           Y        Y         Y
+   Themida 保护              Y           No        No         No          No       No        No
+   RFT 模式                  Y           Y         Y          Y           Y        Y         N/y
+   BCC 模式                  Y           Y         Y          Y           Y        N/y       No
+   pyarmor 8 基础功能         Y           Y         Y          Y           Y        Y         Y
+   pyarmor-7 [#]_           Y           Y         Y          Y           Y        Y         Y
    ===================  ============  ========  =======  ============  =========  =======  =======
 
-.. rubric:: notes
+.. rubric:: 注释
 
-.. [#] ``N/y`` means not yet now, but will be supported in futer
-.. [#] pyarmor-7 also supports more linux arches, refer to `Pyarmor 7.x platforms`__.
+.. [#] ``N/y`` 意味着现在还不支持，但是将来会支持
+.. [#] pyarmor-7 支持更多的平台，参考 `Pyarmor 7.x 文档`__.
 
 .. important::
 
-   pyarmor-7 is bug fixed Pyarmor 7.x version, it's same as Pyarmor 7.x, and only works with old license. Do not use it with new license, it may report ``HTTP 401 error``.
+   pyarmor-7 是 Pyarmor 7.x 的问题修正版本，只支持老版本的许可证。在新版本的许可证下面使用可能会报错 ``HTTP 401 error``
 
-__ https://pyarmor.readthedocs.io/en/v7.7/platforms.html
+__ https://pyarmor.readthedocs.io/zh/v7.x/platforms.html
 
-Configuration options
----------------------
+配置文件选项
+------------
 
-There are 3 kinds of configuration files
+有三种类型的配置文件
 
-* global: an ini file :file:`~/.pyarmor/config/global`
-* local: an ini file :file:`.pyarmor/config`
-* private: each module may has one ini file in :term:`Local Configuration Path`. For example, :file:`.pyarmor/foo.rules` is private configuration of module ``foo``
+* :term:`全局配置` 文件，一个 ``.ini`` 格式的文件 :file:`~/.pyarmor/config/global`
+* :term:`本地配置` 文件，一个 ``.ini`` 格式的文件 :file:`.pyarmor/config`
+* :term:`模块私有配置` 每一个模块可以有自己的私有配置，存放在 :term:`本地配置` 的目录下面
 
-Use command :ref:`pyarmor cfg` to change options in configuration files.
+使用命令 :ref:`pyarmor cfg` 来查看和设置配置文件选项。
 
-Plugin and hook
----------------
+加密插件和运行插件
+------------------
 
 .. versionadded:: 8.x
-                  This feature is still not implemented
+                  这个功能尚未实现
 
 
 ====================
  运行加密脚本的环境
 ====================
 
-Obfuscated scripts run in :term:`target device`, support platforms, arches and Python versions are same as `Building Environments`_
+加密脚本运行在 :term:`客户设备` 上面，支持的平台和 Python 版本和 `构建加密脚本的环境`_ 是一样的。
 
-A few :mod:`sys` attributes and environment variables may change behaviours of obfuscated scripts.
+部分系统模块 :mod:`sys` 的属性和环境变量会被加密脚本使用来决定一些运行设置。
 
 :attr:`sys._MEIPASS`
 
-      Borrowed from PyInstaller_, set search path for :term:`outer key`.
+      借用 PyInstaller_ 的设置，加密脚本会在这里指定的路径下面搜索 :term:`外部密钥`
 
 :attr:`sys._PARLANG`
 
-      It's used to set runtime error language.
+      用来设置运行时刻使用的语言设置。
 
-      If it's set, :envvar:`LANG` is ignored.
+      如果这个属性存在，那么环境变量 :envvar:`LANG` 会被忽略
 
 .. envvar:: LANG
 
-      OS environment variable, used to select runtime error language.
+      操作系统环境变量，加密脚本读取它来决定运行时刻的语言设置
 
 .. envvar:: PYARMOR_LANG
 
-      It's used to set language runtime error language.
+      用来设置运行时刻使用的语言设置。
 
-      If it's set, both :envvar:`LANG` and :attr:`sys._PARLANG` are ignored.
+      如果这个变量存在，那么 :envvar:`LANG` 和 :attr:`sys._PARLANG` 都会被忽略
 
 .. envvar:: PYARMOR_RKEY
 
-      Set search path for :term:`outer key`
+      设置搜索 :term:`外部密钥` 的路径
 
-Specialized builtin functions
------------------------------
+.. _specialized builtin functions:
+
+加密脚本内置函数
+----------------
 
 .. versionadded:: 8.x
-                  This feature is still not implemented
+                  这个功能尚未实现
 
-There are 2 specialized builtin functions, both of them could be used without import in the obfuscated scripts.
-
-Generally they're used with inline marker or in the hook scripts.
+有两个特殊的函数无需导入，可以直接在加密脚本中使用，通常它们一般用在 :term:`运行插件` 中。
 
 .. function:: __pyarmor__(arg, kwarg, name, flag)
 
@@ -165,6 +167,7 @@ Generally they're used with inline marker or in the hook scripts.
    .. code-block:: python
 
          __pyarmor__(None, None, b'keyinfo', 1)   # return user data (bytes)
+         __pyarmor__(1, None, b'keyinfo', 1)      # return expired date (int)
 
    Raise :exc:`RuntimeError` if something is wrong.
 

@@ -4,191 +4,212 @@
 
 .. glossary::
 
-  激活文件
-
-    一个文本文件用来A text file used to initial registration :term:`Pyarmor License`
-
-    When purchasing any :term:`Pyarmor License`, an activation file is be sent
-    to registration email after payment is completed.
-
   BCC 模式
 
-    An obfuscation method of Pyarmor by converting Python functions to C functions
+      一种加密的方法，可以把脚本中的函数转换成为 :term:`C` 函数，然后使用优化选项编译生成机器指令。使用这种方式加密的函数是不可逆的，无法恢复成为原来的 Python 函数。
 
-  注册文件
+  本地配置
 
-    A zip file generated after initial registration is successful. It's used to
-    register :term:`Pyarmor License` excpet initial registration.
+      一般在当前目录下会创建一个目录 ``.pyarmor`` ，用来存放本地配置，默认本地配置的文件是 ``.pyarmor/config``
+
+      相同选项的本地配置会覆盖 :term:`全局配置`
+
+      参考 :ref:`pyarmor cfg`
+
+  C
+
+      一种最古老的编程语言，现在依然生命力旺盛。
+
+  加密插件
+
+      一个 :term:`Python` 脚本， 在加密过程被调用，可以对输出的文件进行一些额外的操作。
+
+      插件的类型有三种：
+
+      - KeyPlugin
+      - BuildPlugin
+      - RuntimePlugin
+
+  根目录
+
+      用来存放 Pyarmor 注册信息，全局配置文件等的路径，默认情况下是当前登陆用户的根目录下面的子目录 :file:`~/.pyarmor`
+
+      使用 sudo 命令可能会改变 Pyarmor 的根目录
+
+  激活文件
+
+      一个文本文件，购买任何 :term:`Pyarmor 许可证` 之后，都会有一个相应的激活文件发送到注册邮箱。
+
+      激活文件主要用于第一次注册 :term:`Pyarmor 许可证` ，激活文件一旦完成初始登记，就无法在继续使用。
+
+      初始登记成功会同时生成相应的 :term:`注册文件` ，后面在任何设备上进行注册都需要使用 :term:`注册文件` 。
+
+  JIT
+
+      JUST-IN-TIME 的缩写，是一种在运行时刻生成机器指令的技术，可以有效防止静态反编译工具对代码进行分析
+
+  开发机器
+
+      是指安装和运行 Pyarmor 的设备，在开发机器上对脚本进行加密
+
+      不是所有的平台都可以运行 Pyarmor，所有支持的运行环境请参考 :doc:`environments`
+
+  客户设备
+
+      是指运行加密脚本的设备
+
+      客户设备上面不需要安装 Pyarmor
+
+  扩展模块
+
+      一个使用 :term:`C` 或者 C++ 语言编写的 :term:`Python 模块`
+
+  模块私有配置
+
+      每一个加密模块可以有自己的私有配置，一般存放在 :term:`本地配置` 的目录下面，和模块同名的 ``module.ruler`` 文件
+
+      相同选项的私有配置会覆盖 :term:`本地配置`
 
   Pyarmor
 
-    Pyarmor is product domain, the goal is to provide functions
-    and services to obfuscate Python scripts in high security and
-    high performance. The mission of Pyarmor is let Python use
-    easily in commercial product.
+      Pyarmor 是一个用来加密 Python 脚本的工具。
 
-    Pyarmor is composed of
+      Pyarmor 的组成部分
 
-      - :term:`Pyarmor Home`
-      - :term:`pyarmor package`
-
-  Pyarmor 基础版
-
-    A :term:`Pyarmor License` type
-
-  Pyarmor 集团版
-
-    A :term:`Pyarmor License` type
-
-  Pyarmor Home
-
-    项目文件存放在: |Home|
-
-    这里有 Pyarmor 开源部分的代码， 提交的 `问题报告`_ 和最新的文档。
-
-  Pyarmor 许可证
-
-    Issued by Pyarmor Team to unlock some limitations in Pyarmor trial version.
-
-    Refer to :doc:`Pyarmor License Types <../licenses>`
+      - :term:`Pyarmor 项目`
+      - :term:`pyarmor 包`
 
   Pyarmor 包
 
-    A :term:`Python Package`, it includes
+      一个 :term:`Python 包` ，它包含下列包
 
       * :mod:`pyarmor`
       * :mod:`pyarmor.cli`
       * :mod:`pyarmor.cli.core`
       * :mod:`pyarmor.cli.runtime`
 
-  Pyarmor 专家版
+  Pyarmor 基础版许可证
 
-    A :term:`Pyarmor License` type
+      一种 :term:`Pyarmor 许可证` 类型
+
+  Pyarmor 集团版许可证
+
+      一种 :term:`Pyarmor 许可证` 类型
+
+  Pyarmor 用户
+
+      使用 :term:`Pyarmor` 的组织机构或者开发人员
+
+  Pyarmor 项目
+
+      项目文件存放在 |Home|
+
+      这里有 Pyarmor 开源部分的代码， 提交的 `问题报告`_ 和最新的文档。
+
+  Pyarmor 许可证
+
+      由 Pyarmor 开发团队颁发，用于解锁 Pyarmor 试用版本中功能限制
+
+      请参考 :doc:`Pyarmor 许可模式和许可证 <../licenses>`
+
+  Pyarmor 专家版许可证
+
+      一种 :term:`Pyarmor 许可证` 类型
 
   Python
 
-    A program language.
+      一种编程语言，官网地址 Python_
 
-  Python Script
+  Python 脚本
 
-    A file that serves as an organizational unit of Python code.
+      一个包含 Python 源代码的文件
 
-    Refer to https://docs.python.org/3.11/glossary.html#term-module
+      外部概念 https://docs.python.org/3.11/glossary.html#term-module
 
-  Python Package
+  Python 模块
 
-    Refer to https://docs.python.org/3.11/glossary.html#term-package
+      要么是一个 :term:`Python 脚本` ，要么是一个 :term:`扩展模块`
+
+  Python 包
+
+      外部概念 https://docs.python.org/3.11/glossary.html#term-package
+
+  全局配置
+
+      存放 Pyarmor 运行配置的全局文件，全局配置文件必须存放在 Pyarmor 的 :term:`根目录` ，默认的文件名称是 ``~/.pyarmor/config/global``
+
+      参考 :ref:`pyarmor cfg`
 
   RFT 模式
 
-    An obfuscation method of Pyarmor by renaming function/class in the scripts
+      一种不可逆的加密模式，可以重命名 Python 脚本中的函数，类，方法，变量和参数
 
-  Runtime Files
+  外部密钥
 
-    All the files required to run the obfuscated scripts.
+      一个用于存储 :term:`运行密钥` 的文件，通常的名称为 ``pyarmor.rkey``
 
-    Generally it equals :term:`Runtime Package`. If :term:`outer key` is used,
-    plus this outer key file.
+      外部密钥必须存放在下面的任何一个路径，才能被发现:
 
-  Runtime Key
+      - :term:`运行辅助包` 所在的路径
+      - 环境变量 :envvar:`PYARMOR_RKEY` 指定的路径
+      - :attr:`sys._MEIPASS` 指定的路径
+      - 当前路径
 
-    The settings of obfuscated scripts. It may include the expired date, device
-    information of bind to obfuscated scripts. Also include all the flags to
-    control the behaviours of obfuscated scripts.
+  运行插件
 
-    Generally it's embedded into :term:`Runtime Package`, but it also could be
-    stored to a independent file :term:`outer key`
+      一个 Python 脚本，可以被嵌入到加密脚本中，执行一些额外的检查。
 
-  Runtime Package
+  运行辅助包
 
-    A :term:`Python Package` generally named ``pyarmor_runtime_000000``.
+      一个 :term:`Python 包` ，名称一般为 ``pyarmor_runtime_xxxxxx``
 
-    When obfuscating the scripts, it's be generated at the same time.
+      一般生成加密脚本的同时，也会生成相应的运行辅助包，运行加密脚本需要有相应的运行辅助包。
 
-    It's required to run the obfuscated scripts.
+  运行辅助文件
 
-  Outer Key
+      是指运行加密脚本需要的所有其他文件
 
-    A file generally named ``pyarmor.rkey`` to store :term:`Runtime Key`
+      通常情况下它等价于 :term:`运行辅助包` ，如果使用了 :term:`外部密钥` ，那么也包含外部密钥
 
-    The outer key file must be located in one of path
+  运行密钥
 
-      - :term:`Runtime package`
-      - :envvar:`PYARMOR_RKEY`
-      - :attr:`sys._MEIPASS`
-      - Current path
+      保存加密脚本的运行设置和相关约束限制，包括脚本的有效期，脚本绑定的设备信息，也包括控制加密脚本行为的其他标志和设置。
 
-  Home Path
+      通常情况下运行密钥被嵌入到 :term:`运行辅助包` 里面，但是也可以是一个独立文件形式的 :term:`外部密钥`
 
-    Store Pyarmor registration file, global configuration, other data file
-    generated by :command:`pyarmor`, the default path is user home path
-    :file:`~/.pyarmor`
+  运行平台
 
-  Global Configuration Path
+      Pyarmor 定义的标准名称，用来标示运行 Pyarmor 和加密脚本的操作系统和 CPU 架构
 
-    Store Pyarmor local configuration file, default is :file:`.pyarmor` in the
-    current path
+      下面列出了所有定义的运行平台:
 
-  Local Configuration Path
+        * Windows
+            - windows.x86_64
+            - windows.x86
+        * Many Linuxs
+            - linux.x86_64
+            - linux.x86
+            - linux.aarch64
+            - linux.armv7
+        * Apple Intel and Silicon
+            - darwin.x86_64
+            - darwin.aarch64 or darwin.arm64
 
-    Store Pyarmor local configuration file, default is :file:`.pyarmor` in the
-    current path
+  注册文件
 
-  Registration File Path
+      一个 ``.zip`` 格式的压缩文件，主要用于除了初始登记之后的所有注册。
 
-    Store registration information of Pyarmor License, default is same as
-    :term:`Home Path`
+      第一次初始登记使用 :term:`激活文件` ，激活成功之后生成注册文件，之后在任何设备上都要使用注册文件进行注册。
 
-  Build Machine
-
-    The device in which to install pyarmor, and to run pyarmor to generate
-    obfuscated scripts.
-
-  Pyarmor Users
-
-    Developers or organizations who use Pyarmor to obfuscate their Python
-    scripts
-
-  Target Device
-
-    In which run the obfuscated scripts distributed by :term:`Pyarmor Users`,
-    generally it's in customer side
-
-  Platform
-
-    The standard platform name defined by Pyarmor. It's composed of os.arch.
-
-    Supported platforms list:
-
-      * Windows
-        - windows.x86_64
-        - windows.i386
-      * Many Linuxs
-        - linux.x86_64
-        - linux.i386
-        - linux.aarch64
-      * Apple Intel and Silicon
-        - darwin.x86_64
-        - darwin.aarch64
-
-  JIT
-
-    Abbr. JUST-IN-TIME, just generating machine instructions in run time.
-
-  extension module
-
-    A module written in C or C++, using Python’s C API to interact with the core
-    and with user code.
 
 .. module:: pyarmor
-    :synopsis: A command line tool used to obfuscate Python scripts
+    :synopsis: 一个用来加密 Python 脚本的命令行工具
 
 .. module:: pyarmor.cli
 .. module:: pyarmor.cli.core
-    :synopsis: A binary wheel to provide extension modules to pyarmor
+    :synopsis: 一个平台相关的二进制 Wheel 包，提供 Pyarmor 需要的核心扩展模块
 
 .. module:: pyarmor.cli.runtime
-    :synopsis: A binary wheel for pyarmor to obfuscate scripts to run
-               in multiple arches.
+    :synopsis: 支持 Pyarmor 跨平台加密的包，提供跨平台所需要的预编译动态库
 
 .. include:: ../_common_definitions.txt

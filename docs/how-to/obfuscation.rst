@@ -1,32 +1,33 @@
 .. highlight:: console
 
-========================
- Obfuscating django app
-========================
+..
+  ========================
+   Obfuscating django app
+  ========================
 
-TODO:
+  TODO:
 
-===========================
- Building obfuscated wheel
-===========================
+  ===========================
+   Building obfuscated wheel
+  ===========================
 
-TODO:
+  TODO:
 
-========================
- Packing with outer key
-========================
+  ========================
+   Packing with outer key
+  ========================
 
-TODO:
+  TODO:
 
-============================
- Protecting system packages
-============================
+  ============================
+   Protecting system packages
+  ============================
 
-.. versionadded:: 8.x
-                  This feature is still not implemented
+  .. versionadded:: 8.x
+                    This feature is still not implemented
 
-When packing the scripts, Pyarmor could also obfuscate system packages in the bundle.
+  When packing the scripts, Pyarmor could also obfuscate system packages in the bundle.
 
-TODO:
+  TODO:
 
 .. include:: ../_common_definitions.txt

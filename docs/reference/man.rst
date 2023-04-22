@@ -2,120 +2,94 @@
  命令手册
 ==========
 
-.. contents:: Contents
+.. contents:: 内容
    :depth: 2
    :local:
    :backlinks: top
 
 .. highlight:: console
 
-Pyarmor is a powerful tool to obfuscate Python scripts with rich option set that
-provides both high-level operations and full access to internals.
+Pyarmor 提供了丰富的选项来满足不同应用程序加密脚本的需求。
 
 pyarmor
 =======
 
 .. program:: pyarmor
 
-.. describe:: Syntax
+.. describe:: 语法
 
     pyarmor [options] <command> ...
 
-.. describe:: Options
+.. describe:: 选项
 
--h, --help            show available command set then quit
--v, --version         show version information then quit
--q, --silent          suppress all normal output :option:`... <-q>`
--d, --debug           show more information in the console :option:`... <-d>`
---home PATH           set Pyarmor HOME path :option:`... <--home>`
+-h, --help            显示所有可用的子命令并退出
+-v, --version         显示版本信息并退出
+-q, --silent          在控制台不显示日志 :option:`... <-q>`
+-d, --debug           打印更多的信息用于发现命令执行过程中问题 :option:`... <-d>`
+--home PATH           设置 :term:`根目录` :option:`... <--home>`
 
-These options can be used after :program:`pyarmor` but before command, here are
-available commands:
+这些选项可以在命令 :program:`pyarmor` 之后和下列子命令之前使用:
 
 ================================  ====================================
-:ref:`gen <pyarmor gen>`          Obfuscate scripts
-:ref:`gen key <pyarmor gen key>`  Generate outer runtime key
-:ref:`cfg <pyarmor cfg>`          Show and configure environments
-:ref:`reg <pyarmor reg>`          Register Pyarmor
+:ref:`gen <pyarmor gen>`          生成加密脚本以及运行辅助文件
+:ref:`gen key <pyarmor gen key>`  生成外部密钥文件
+:ref:`cfg <pyarmor cfg>`          显示和配置加密环境
+:ref:`reg <pyarmor reg>`          激活和注册 Pyarmor
 ================================  ====================================
 
-See :command:`pyarmor <command> -h` for more information on a specific command.
+使用 :command:`pyarmor <command> -h` 来查看每一个子命令的功能和所有的选项
 
-.. describe:: Description
+.. describe:: 描述
 
 .. option:: -q, --silent
 
-            Suppress all normal output.
+            不在控制台打印任何日志信息
 
-For example::
+例如::
 
     pyarmor -q gen foo.py
 
 .. option:: -d, --debug
 
-            Show more information in the console
+            在控制台打印更多的信息用于发现命令执行过程中问题
 
-When something is wrong, print more debug informations in the console. For
-example::
+加密脚本出现问题，或者想更多的了解加密过程，可以使用该选项打开调试模式。例如::
 
     pyarmor -d gen foo.py
 
 .. option:: --home PATH[,GLOBAL[,LOCAL[,REG]]]
 
-            Set Pyarmor :term:`Home Path`, :term:`Global Configuration Path`,
-            :term:`Local Configuration Path` and :term:`Registration File Path`
+            设置 :term:`根目录` ， :term:`全局配置` 目录 ， :term:`本地配置` 目录以及注册信息所在的目录
+            这个选项主要用于一台设备上需要使用多个不同的 :term:`Pyarmor 许可证` ，可以为每一个许可证设定一个 :term:`根目录` ，
 
-The default paths
+它们的默认值分别是
 
-* :term:`Home Path` is :file:`~/.pyarmor`
+* :term:`根目录` 是 :file:`~/.pyarmor/`
 
-* :term:`Global Configuration Path` is :file:`~/.pyarmor/config`, it's always
-  relative to :term:`Home Path`
+* :term:`全局配置` 目录是 :file:`~/.pyarmor/config/`
 
-* :term:`Local Configuration Path` is :file:`.pyarmor`
+* :term:`本地配置` 目录是 :file:`./.pyarmor/`
 
-* :term:`Registration File Path` is same as :term:`Home Path`
+默认存放注册文件的目录是 :term:`根目录`
 
-All of them could be changed by this option. For example, change home path to
-:file:`~/.pyarmor2`::
+这些目录配置都可以通过本选项进行设置。例如修改根目录为 :file:`~/.pyarmor2/`::
 
     $ pyarmor --home ~/.pyarmor2 ...
 
-Then
+这条命令同时修改
 
-* :term:`Global Configuration Path` is :file:`~/.pyarmor2/config`
-* :term:`Registration File Path` is :file:`~/.pyarmor2`
-* :term:`Local Configuration Path` still is :file:`.pyarmor`
+* :term:`全局配置` 目录是 :file:`~/.pyarmor2/config/`
+* 注册文件所在目录是 :file:`~/.pyarmor2/`
 
-Another example, keep all others but change global path only::
+下面的例子只修改 :term:`全局配置` 目录为 :file:`~/.pyarmor/config2/`::
 
     $ pyarmor --home ,config2 ...
 
-This command sets :term:`Global Configuration Path` to :file:`~/.pyarmor/config2`
-
-Another example, keep all others but change local path only::
+下面的命令只修改 :term:`本地配置` 目录为 :file:`/var/myproject`
 
     $ pyarmor --home ,,/var/myproject/ ...
 
-This command sets :term:`Local Configuration Path` to :file:`/var/myproject`
-
-Another example, set :term:`Registration File Path` to :file:`/opt/pyarmor/`::
-
-    $ pyarmor --home ,,,/opt/pyarmor ...
-
-It's useful when may use :command:`sudo` to run :command:`pyarmor`
-occassionally. This makes sure the registration file could be found even switch
-to another user.
-
-When there are many Pyarmor Licenses registerred in one machine, set each
-license to different :term:`Registration File Path`
-
-There are 2 soltions
-
-* one license one home
-* same home, one license one path
-
-For example, the first solution::
+当需要在一台设备上注册多个 :term:`Pyarmor 许可证` 的时候，可以为每一个许可证设置一个 :term:`根目录` 。例如::
 
     $ pyarmor --home ~/.pyarmor1 reg pyarmor-regfile-2051.zip
     $ pyarmor --home ~/.pyarmor2 reg pyarmor-regfile-2052.zip
@@ -123,16 +97,7 @@ For example, the first solution::
     $ pyarmor --home ~/.pyarmor1 gen project1/foo.py
     $ pyarmor --home ~/.pyarmor2 gen project2/foo.py
 
-The second solution::
-
-    $ pyarmor --home ,,,pyarmor1 reg pyarmor-regfile-2051.zip
-    $ pyarmor --home ,,,pyarmor2 reg pyarmor-regfile-2052.zip
-                     ,,,
-    $ pyarmor --home ,,,pyarmor1 gen project1/foo.py
-    $ pyarmor --home ,,,pyarmor2 gen project2/foo.py
-
-Start pyarmor with clean configuration by setting :term:`Global Configuration
-Path` and :term:`Local Configuration Path` to any non-exists path ``x``::
+在实际使用过程中，我们可能修改了很多配置，有时候出现问题之后，需要临时测试一下使用默认配置选项是否正常，但是又不想修改当前的配置。这时候可以通过设置全局配置目录和本地配置目录到一个不存在的路径来实现。例如::
 
     $ pyarmor --home ,x,x, gen foo.py
 
@@ -143,42 +108,43 @@ Path` and :term:`Local Configuration Path` to any non-exists path ``x``::
 pyarmor gen
 ===========
 
-Generate obfuscated scripts and all the required runtime files.
+生成加密脚本和所有需要的运行辅助文件。
 
 .. program:: pyarmor gen
 
-.. describe:: Syntax
+.. describe:: 语法
 
     pyarmor gen <options> <SCRIPT or PATH>
 
-.. describe:: Options
+.. describe:: 选项
 
--h, --help                      show option list and help information then quit
--O PATH, --output PATH          output path :option:`... <-O>`
--r, --recursive                 search scripts in recursive mode :option:`... <-r>`
+-h, --help                      显示选项列表并退出
+-O PATH, --output PATH          设置输出目录 :option:`... <-O>`
+-r, --recursive                 递归搜索目录中的脚本 :option:`... <-r>`
 
--e DATE, --expired DATE         set expired date :option:`... <-e>`
--b DEV, --bind-device DEV       bind obfuscated scripts to device :option:`... <-b>`
---bind-DATA DATA                store private to runtime key :option:`... <--bind-data>`
---period N                      check runtime key periodically :option:`... <--period>`
---outer                         enable outer runtime key :option:`... <--outer>`
+-e DATE, --expired DATE         设置脚本有效期 :option:`... <-e>`
+-b DEV, --bind-device DEV       绑定脚本到设备 :option:`... <-b>`
+--bind-data DATA                存储自定义数据到运行密钥 :option:`... <--bind-data>`
+--period N                      周期性检查运行密钥 :option:`... <--period>`
+--outer                         启用外部密钥文件 :option:`... <--outer>`
 
---platform NAME                 cross platform obfuscation :option:`... <--platform>`
--i                              store runtime files inside package :option:`... <-i>`
---prefix PREFIX                 导入运行辅助包的前缀名称 :option:`... <--prefix>`
+--platform NAME                 指定脚本运行的目标平台名称 :option:`... <--platform>`
+-i                              保存运行辅助文件到加密包的内部 :option:`... <-i>`
+--prefix PREFIX                 设置导入运行辅助包的前缀名称 :option:`... <--prefix>`
 
 --obf-module <0,1>              指定模块加密模式，默认是 1 :option:`... <--obf-module>`
 --obf-code <0,1>                指定代码加密模式，默认是 1 :option:`... <--obf-code>`
 --no-wrap                       禁用包裹加密模式 :option:`... <--no-wrap>`
 --enable <jit,rft,bcc,themida>  启用不同的保护特征 :option:`... <--enable>`
 --mix-str                       混淆字符串常量 :option:`... <--mix-str>`
+--private                       启用私有模块加密脚本 :option:`... <--private>`
 --restrict                      启用约束模式加密包 :option:`... <--restrict>`
 --assert-import                 确保导入的脚本是经过加密的 :option:`... <--assert-import>`
 --assert-call                   确保调用的函数是经过加密的 :option:`... <--assert-call>`
 
 --pack BUNDLE                   使用加密后的脚本替换打包成为可执行文件里面的原来脚本 :option:`... <--pack>`
 
-.. describe:: Description
+.. describe:: 描述
 
 .. option:: -O PATH, --output PATH
 
@@ -190,11 +156,9 @@ Generate obfuscated scripts and all the required runtime files.
 
 .. option:: -i
 
-保存运行辅助文件到加密包的内部。例如::
+保存运行辅助文件到加密包的内部。例如，下面的命令把 :term:`运行辅助包` 存放到 ``dist/mypkg`` 目录下面::
 
     $ pyarmor gen -r -i mypkg
-
-The :term:`runtime package` will be stored inside package ``dist/mypkg``::
 
     $ ls dist/
     ...      mypkg/
@@ -202,35 +166,35 @@ The :term:`runtime package` will be stored inside package ``dist/mypkg``::
     $ ls dist/mypkg/
     ...            pyarmor_runtime_000000/
 
-Without this option, the output path is like this::
+没有这个选项，输出的目录结构是::
 
     $ ls dist/
     ...      mypkg/
     ...      pyarmor_runtime_000000/
 
-This option can't be used to obfuscate script.
+这个选项同时会使用相对导入的方式导入运行辅助包，所以只能在加密包中使用，如果是单独加密脚本，不要使用这个选项。
 
 .. option:: --prefix PREFIX
 
-Only used when obfuscating many packages at the same time and still store the
-runtime package inside package.
+            设置导入运行辅助包的前缀
 
-In this case, use this option to specify which package is used to store runtime
-package. For example::
+主要应用于同时加密多个包，但是 :term:`运行辅助包` 又被存放在一个包里面，使用该选项告诉其他包如何正确导入运行辅助包。例如::
 
     $ pyarmor gen --prefix mypkg src/mypkg mypkg1 mypkg2
 
-This command tells pyarmor to store runtime package inside ``dist/mypkg``, and
-make ``dist/mypkg1`` and ``dist/mypkg2`` to import runtime package from
-``mypkg``.
+这个命令用于同时加密三个包，但是运行辅助包会存放在 ``dist/mypkg`` 里面，那么在 ``dist/mypkg/__init.py`` 里面，使用的是下面方式导入运行辅助包:
 
-Checking  the content of ``.py`` files in output path to make it clear.
+.. code-block:: python
 
-As a comparison, obfuscating 3 packages without this option::
+    from .pyarmor_runtime_000000 import __pyarmor__
+    __pyarmor__(__name__, __file__, b'...')
 
-    $ pyarmor gen -O dist2 src/mypkg mypkg1 mypkg2
+而在 ``dist/mypkg1/__init.py`` 里面，使用的是下面方式导入运行辅助包:
 
-And check ``.py`` files in the path ``dist2``.
+.. code-block:: python
+
+    from mypkg.pyarmor_runtime_000000 import __pyarmor__
+    __pyarmor__(__name__, __file__, b'...')
 
 .. option:: -e DATE, --expired DATE
 
@@ -299,13 +263,13 @@ And check ``.py`` files in the path ``dist2``.
 
 .. option:: --bind-data DATA
 
-            DATA may be ``@FILENAME`` or string
+            DATA 可以是字符串或者 ``@FILENAME``
 
-Store any private data to runtime key, then check it in the obfuscated scripts by yourself. It's mainly used with the hook script to extend runtime key verification method.
+这个选项可以存储任何数据到 :term:`运行密钥` 中，但是有长度限制，一般不超过 4096 个字节。主要用于用户扩展验证运行密钥的方式，在加密脚本中读取运行密钥中存放的数据，使用自己的算法进行校验和检查。
 
-If DATA has a leading ``@``, then the rest is a filename. Pyarmor reads the binary data from file, and store into runtime key.
+如果传入的参数以 ``@`` 开头，那么读取后面的文件内容，否则直接把参数的内容存放到运行密钥中。
 
-For any other case, DATA is converted to bytes as private data.
+不管哪一种情况，存放到运行密钥中都是 Bytes 类型。
 
 .. option:: --period N
 
@@ -356,26 +320,35 @@ For any other case, DATA is converted to bytes as private data.
 
             这个选项可以使用多次，也可以使用逗号把多个平台名称分开
 
-平台名称必须是 Pyarmor 定义的名称
+平台名称必须是 Pyarmor 定义的 :term:`运行平台` 名称
 
 不是所有的平台都可以组合在一起发布的
 
 跨平台加密需要安装包 :mod:`pyarmor.cli.runtime` ，只有包里面支持的平台才能使用
 
+.. option:: --private
+
+            启用私有模式来保护加密脚本
+
+启用私有模式之后，函数的名称在执行框架中会被隐藏，并且加密后的脚本也不能被其他脚本导入。
+
+选项 :option:`--restrict` 隐含启用私有模式。
+
 .. option:: --restrict
 
             主要应用于保护加密包，保护包里面的模块，只能在包内部使用，不能被外部模块调用
 
-When restrict mode is enabled, all the modules excpet ``__init__.py`` in the
-package could not be imported by plain scripts.
+            这个选项隐含启用 :option:`--private`
 
-For example, obfuscate a restrict package to ``dist/joker``::
+当约束模式启用之后，除了 ``__init__.py`` 输出的名称之外，其他模块都不能被外部脚本导入和使用。
+
+例如，使用下面的命令加密一个约束包 ``dist/joker``::
 
     $ pyarmor gen -i --restrict joker
     $ ls dist/
     ...    joker/
 
-Then create a plaint script ``dist/foo.py``
+然后在创建一个没有加密的脚本 ``foo.py`` 去导入加密包:
 
 .. code-block:: python
 
@@ -384,185 +357,109 @@ Then create a plaint script ``dist/foo.py``
     from joker import queens
     print('import joker.queens should fail')
 
-Run it to verify::
+运行结果如下::
 
     $ cd dist
     $ python foo.py
     ... import joker should be OK
     ... RuntimeError: unauthorized use of script
 
-If there are extra modules need to be exported, list all the modules in this
-command::
-
-    $ pyarmor cfg exclude_restrict_modules="__init__ queens"
-
-Then obfuscate the package again.
+约束模式一般只用于加密包（目录），如果使用该选项单独加密脚本（文件）之后，脚本无法被直接运行。
 
 .. option:: --obf-module <0,1>
 
-            Enable the whole module (default is 1)
+            加密模块对应 ``.pyc`` ，默认是 1
 
 .. option:: --obf-code <0,1>
 
-            Enable each function in module (default is 1)
+            加密模块中的每一个函数（二次加密），默认是 1
 
 .. option:: --no-wrap
 
-            Disable wrap mode
+            不使用包裹模式加密模块中函数
 
-If wrap mode is enabled, when enter a function, it's restored. but when exit,
-this function will be obfuscated again.
+使用包裹模式加密函数是指在调用函数的时候解密函数，调用完成重新加密函数。禁用之后第一次调用函数的解密函数，但是调用完成之后不在加密，以后调用的时候也无需重新解密。禁用包裹模式，对于多次执行的函数可以提高性能。
 
-If wrap mode is disabled, once the function is restored, it's never be
-obfuscated again.
-
-If :option:`--obf-code` is ``0``, this option is meaningless.
+如果 :option:`--obf-code` 是 ``0`` ，那么使用选项没有任何作用。
 
 .. option:: --enable <jit,rft,bcc,themida>
 
-            Enable different obfuscation features.
+            启用不同的加密模式
 
 .. option:: --enable-jit
 
-Use :term:`JIT` to process some sentensive data to improve security.
+            使用 :term:`JIT` 来处理一些敏感数据以增强安全性
 
 .. option:: --enable-rft
 
-            Enable :term:`RFT Mode` to obfuscate the script :sup:`pro`
+            启用 :term:`RFT 模式` :sup:`pro`
 
 .. option:: --enable-bcc
 
-            Enable :term:`BCC Mode` to obfuscate the script :sup:`pro`
+            启用 :term:`BCC 模式` :sup:`pro`
 
 .. option:: --enable-themida
 
-            Use `Themida`_ to protect extension module in :term:`runtime package`
-
-            Only works for Windows platform.
+            使用 `Themida`_ 来保护加密脚本，仅 Windows 平台可用
 
 .. option:: --mix-str
 
-            Mix the string constant in scripts :sup:`basic`
+            混淆脚本中字符串常量 :sup:`basic`
 
 .. option:: --assert-call
 
-            Assert function is obfuscated
-
-If this option is enabled, Pyarmor scans each function call in the scripts. If
-the called function is in the obfuscated scripts, protect it as below, and leave
-others as it is. For example,
-
-.. code-block:: python
-    :emphasize-lines: 4
-
-    def fib(n):
-        a, b = 0, 1
-        return a, b
-
-    print('hello')
-    fib(n)
-
-will be changed to
-
-.. code-block:: python
-    :emphasize-lines: 4
-
-    def fib(n):
-        a, b = 0, 1
-
-    print('hello')
-    __assert_armored__(fib)(n)
-
-The function ``__assert_armored__`` is a builtin function in obfuscated script.
-It checks the argument, if it's an obfuscated function, then returns this
-function, otherwise raises protection exception.
-
-In this example, ``fib`` is protected, ``print`` is not.
+            启用自动检查函数功能，确保加密函数没有被替换
 
 .. option:: --assert-import
 
-            Assert module is obfuscated
-
-If this option is enabled, Pyarmor scans each ``import`` statement in the
-scripts. If the imported module is obfuscated, protect it as below, and leave
-others as it is. For example,
-
-.. code-block:: python
-    :emphasize-lines: 2
-
-    import sys
-    import foo
-
-will be changed to
-
-.. code-block:: python
-    :emphasize-lines: 2,3
-
-    import sys
-    import foo
-    __assert_armored__(foo)
-
-The function ``__assert_armored__`` is a builtin function in obfuscated script.
-It checks the argument, if it's an obfuscated module, then return this module,
-otherwise raises protection exception.
-
-This option neither touchs statement ``from import``, nor the module imported by
-function ``__import__``.
+            启用自动检查模块功能，确保加密的模块没有被替换
 
 .. option:: --pack BUNDLE
 
-            Repack bundle with obfuscated scripts
+            使用加密脚本替换 BUNDLE 里面的 Python 脚本
 
-Here ``BUNDLE`` is an executable file generated by PyInstaller_
+参数中 ``BUNDLE`` 是使用 PyInstaller_ 生成的可执行文件。
 
-Pyarmor just obfuscates the script first.
-
-Then unpack the bundle.
-
-Next replace all the ``.pyc`` in the bundle with obfuscated scripts, and append
-all the :term:`runtime files` to the bundle.
-
-Finally repack the bundle and overwrite the original ``BUNDLE``.
+Pyarmor 首先加密脚本，接着使用加密后的脚本替换 BUNDLE 里面的同名 Python 脚本，最后使用修改后的可执行文件覆盖原文件。
 
 .. _pyarmor gen key:
 
 pyarmor gen key
 ===============
 
-Generate :term:`outer key` for obfuscated scripts.
+生成 :term:`外部密钥` 文件
 
 .. program:: pyarmor gen key
 
-.. describe:: Syntax
+.. describe:: 语法
 
     pyarmor gen key <options>
 
-.. describe:: Options
+.. describe:: 选项
 
--O PATH, --output PATH      output path
--e DATE, --expired DATE     set expired date
---period N                  check runtime key periodically
--b DEV, --bind-device DEV   bind obfuscated scripts to device
+-O PATH, --output PATH      输出路径
+-e DATE, --expired DATE     设置有效期
+--period N                  定时检查运行密钥
+-b DEV, --bind-device DEV   绑定加密脚本到指定设备
+--bind-data DATA            存储自定义数据到运行密钥
 
-.. describe:: Description
+.. describe:: 描述
 
-This command is used to generate :term:`outer key`, the options in this command have same meaning as in the :ref:`pyarmor gen`.
+这个命令用来生成 :term:`外部密钥` 文件，它使用到这些选项基本是命令 :ref:`pyarmor gen` 的子集，其作用和含义也一样，请参考上面的说明。
 
-There must be at least one of option ``-e`` or ``-b`` for :term:`outer key`.
+外部密钥必须至少包含 ``-e`` 或者 ``-b`` 一个选项，没有任何约束和限制的外部密钥存放安全风险，如果你确定需要这样的外部密钥，可以指定一万年的有效期，并且使用本地时间。
 
-It's invalid that outer key is neither expired nor binding to a device. For this case, don't use outer key.
-
-By default the outer key is saved to ``dist/pyarmor.rkey``. For example::
+通常情况下外部密钥文件保存在 ``dist/pyarmor.rkey`` 。例如::
 
     $ pyarmor gen key -e 30
     $ ls dist/pyarmor.rkey
 
-Save outer key to other path by this way::
+使用下面的命令保存外部密钥到其他路径::
 
     $ pyarmor gen key -O dist/mykey2 -e 10
     $ ls dist/mykey2/pyarmor.rkey
 
-By default the outer key name is ``pyarmor.rkey``, use the following command to change outer key name to any others. For example, ``sky.lic``::
+外部密钥的默认文件名称是 ``pyarmor.rkey`` ，它不能在命令行进行修改。但是可以通过配置文件进行修改。例如，下面的命令把外部密钥文件名称修改为 ``sky.lic``::
 
     $ pyarmor cfg outer_keyname=sky.lic
     $ pyarmor gen key -e 30
@@ -573,68 +470,68 @@ By default the outer key name is ``pyarmor.rkey``, use the following command to 
 pyarmor cfg
 ===========
 
-Configure or show Pyarmor environments
+显示和配置 Pyarmor 加密环境
 
 .. program:: pyarmor cfg
 
-.. describe:: Syntax
+.. describe:: 语法
 
     pyarmor cfg <options> [OPT[=VALUE]] ...
 
-.. describe:: Options
+.. describe:: 选项
 
--h, --help           show this help message and exit
--p NAME              private settings for special module or package
--g, --global         do everything in global settings, otherwise local settings
--r, --reset          reset option to default value
---encoding ENCODING  specify encoding to read configuration file
+-h, --help           显示选项和帮助信息然后退出
+-p NAME              指定私有设置的模块名称
+-g, --global         所有操作都是在 :term:`全局配置` 中进行
+-r, --reset          恢复配置项的默认值
+--encoding ENCODING  指定打开配置文件的编码
 
-.. describe:: Description
+.. describe:: 描述
 
-Run this command without arguments to show all available options::
+查看所有的可用配置项::
 
     $ pyarmor cfg
 
-Show one exact option ``obf_module``::
+只查看一个选项 ``obf_module``::
 
     $ pyarmor cfg obf_module
 
-Show all options which start with ``obf``::
+查看所有以 ``obf`` 开头的选项::
 
     $ pyarmor cfg obf*
 
-Set option to int value by any of these forms::
+设置一个整数型配置项的值，可以使用下面的任意一种方式::
 
     $ pyarmor cfg obf_module 0
     $ pyarmor cfg obf_module=0
     $ pyarmor cfg obf_module =0
     $ pyarmor cfg obf_module = 0
 
-Set option to boolean value::
+设置布尔型配置项的值::
 
     $ pyarmor cfg wrap_mode 0
     $ pyarmor cfg wrap_mode=1
 
-Set option to string value::
+设置字符串配置项的值::
 
     $ pyarmor cfg outer_keyname "sky.lic"
     $ pyarmor cfg outer_keyname = "sky.lic"
 
-Append word to an option. For example, ``pyexts`` has 2 words ``.py .pyw``, append new one to it::
+增加一个词到列表型配置项目使用运算符 ``+`` 。例如::
 
     $ pyarmor cfg pyexts + ".pym"
 
     Current settings
         pyexts = .py .pyw .pym
 
-Remove word from option::
+删除一个词使用 ``-`` 。例如::
 
     $ pyarmor cfg pyexts - ".pym"
 
     Current settings
-        pyexts = .py .pyw .pym
+        pyexts = .py .pyw
 
-Append new line to option::
+增加一行到配置项使用 ``^`` ，例如::
 
     $ pyarmor cfg rft_excludes ^ "/win.*/"
 
@@ -642,166 +539,147 @@ Append new line to option::
         rft_excludes = super
             /win.*/
 
-Reset option to default::
+恢复配置项的默认值，可以使用下面的任意一种格式::
 
     $ pyarmor cfg rft_excludes ""
     $ pyarmor cfg rft_excludes=""
     $ pyarmor cfg -r rft_excludes
 
-Change option ``excludes`` in the section ``finder`` by this form::
+指定选项所在的组中使用前缀 ``group:`` 。例如 修改组 ``finder`` 中的配置项 ``excludes``::
 
     $ pyarmor cfg finder:excludes "ast"
 
-If no prefix ``finder``, for example::
+如果没有组前缀 ``finder`` ，那么其他组中的配置项 ``excludes`` 也会被修改。
 
-    $ pyarmor cfg excludes "ast"
+.. describe:: 配置组
 
-Not only option ``excludes`` in section ``finder``, but also in other sections ``assert.call``, ``mix.str`` etc. are changed.
+组是多个配置项的集合，常用的组有
 
-.. describe:: Sections
+* finder: 如何搜索脚本
+* builder: 如果加密脚本，大部分的选项是在这里
+* runtime: 如何生成运行辅助包和运行密钥
 
-Section is group name of options, here are popular sections
+另外还有几个不常用的组
 
-* finder: how to search scripts
-* builder: how to obfuscate scripts, main section
-* runtime: how to generate runtime package and runtime key
-
-These are not popular sections
-* mix.str: how to filter mix string
-* assert.call: how to filter assert function
-* assert.import: how to filter assert module
-* bcc: how to convert function to C code
+* mix.str: 如何选择需要加密的字符串
+* assert.call: 如何选择需要保护的函数
+* assert.import: 如何选择需要保护的模块
+* bcc: 如何转换 Python 函数为 :term:`C` 函数
 
 .. option:: -p NAME
 
-            Private settings for special module or package
+            指定 :term:`模块私有配置` 的模块名称
 
-All the settings is only used for specified module `NAME`.
+所有的配置操作都是在该模块中，不影响其他模块。
+
+对于包里面的模块，需要使用全路径名称来指定，例如 ``pkgname.modname.submodule``
 
 .. option:: -g, --global
 
-            Do everything in global settings
+            所有操作都是在 :term:`全局配置` 中进行
 
-Without this option, all the changed settings are soted in :term:`Local Configuration Path`, generally it's ``.pyarmor`` in the current path. By this option, everything is stored in :term:`Global Configuration Path`, generally it's ``~/.pyarmor/config/global``
+没有指定这个选项的话，所有的操作都是在 :term:`本地配置` 中，通常就是 ``./.pyarmor/`` 。 指定了这个选项，所有的操作都在 :term:`全局配置` 中，通常就是 ``~/.pyarmor/config/``
 
 .. option:: -r, --reset
 
-            Reset option to default value
+            恢复配置项的默认值
 
 .. _pyarmor reg:
 
 pyarmor reg
 ===========
 
-Register Pyarmor or upgrade Pyarmor license
+激活，注册和升级 Pyarmor
 
 .. program:: pyarmor reg
 
-.. describe:: Syntax
+.. describe:: 语法
 
     pyarmor reg [OPTIONS] [FILENAME]
 
-.. describe:: Options
+.. describe:: 选项
 
--h, --help            show this help message and exit
+-h, --help            显示可用选项和帮助信息然后退出
 -p NAME, --product NAME
-                      license to this product
--u, --upgrade         upgrade Pyarmor license
--y, --confirm         register Pyarmor without asking for confirmation
+                      指定许可证绑定的产品名称
+-u, --upgrade         升级 Pyarmor 许可证
 
-.. describe:: Arguments
+.. describe:: 参数
 
-The ``FILENAME`` must be one of these forms:
+参数 ``FILENAME`` 必须是下面任意一种文件
 
-* ``pyarmor-regcode-xxxx.txt`` got by purchasing Pyarmor license
-* ``pyarmor-regfile-xxxx.zip`` got by initial registration with above file
+* ``pyarmor-regcode-xxxx.txt``
+* ``pyarmor-regfile-xxxx.zip``
 
-.. describe:: Description
+.. describe:: 描述
 
-Check the registration information::
+检查当前设备的注册信息::
 
     $ pyarmor -v
-
-Show verbose information::
-
     $ pyarmor reg
 
 .. option:: -p NAME, --product NAME
 
-            Set product name bind to license
+            指定许可证绑定的产品名称
 
-When initial registration, use this option to set proudct name bind to license.
+第一次注册的时候指定许可证绑定的产品名称
 
-If no this option, the product name is set to ``non-profits``.
+没有这个选项，产品名称会被设定为 ``non-profits``
 
-It's meanless to use this option after initial registration.
+之后的注册不需要使用该选项，使用该选项可能会报错。
 
-``TBD`` is a special product name. If product name is ``TBD`` at initial registration, the product name can be changed later.
+绑定的产品名称一旦设定之后就无法更改，除了一个特殊名称 ``TBD``
 
-For any other product name, it can't be changed any more.
+如果产品名称设置为 ``TBD`` ，那么可以在随后修改一次。这个主要用于产品还在开发阶段，尚未确定名称的时候使用，在产品正式销售之前需要修改为正确的产品名称。
 
-.. option:: -y, --confirm
-
-            In initial registration, without asking for confirmation
+如果是升级许可证，产品的名称不可以被设定为 ``TBD``
 
 .. option:: -u, --upgrade
 
-            Upgrade old license to Pyarmor 8.0 Licese
+            升级老版本的许可证为 Pyarmor 8 的许可证
 
-.. important::
+            不是所有的老版本的许可证都可以升级到新版本，请参考 :doc:`../licenses` 里面的升级说明
 
-   Once initial registration successfully, :file:`pyarmor-regcode-xxxx.txt` may not work again. Using registration file :file:`pyarmor-regfile-xxxx.zip` for next registration instead.
+环境变量
+========
 
-   PLEASE BACKUP registration file :file:`pyarmor-regfile-xxxx.zip` carefully, Pyarmor doesn't provide lost-found service
-
-Using registration file :file:`pyarmor-regfile-xxxx.zip` to register Pyarmor in other machine.
-
-Copy it to target device, then run this command::
-
-    $ pyarmor reg pyarmor-regfile-xxxx.zip
-
-Environment Variables
-=====================
-
-The following environment variables only used in :term:`Build Machine` when generating the obfuscated scripts, not in :term:`Target Device`.
+下列环境变量是在 :term:`开发机器` 上加密脚本的时候会使用到
 
 .. envvar:: PYARMOR_HOME
 
-            Same as :option:`pyarmor --home`
+            设置方法和选项 :option:`pyarmor --home` 相同
 
-It mainly used in the shell scrits to change Pyarmor settings. If :option:`pyarmor --home` is set, this environment var is ignored.
+主要用来设置 :term:`根目录` ，如果使用了选项 :option:`pyarmor --home` ，这个环境变量会被忽略
 
 .. envvar:: PYARMOR_PLATFORM
 
-            Set the right :term:`Platform` to run :command:`pyarmor`
+            设置 Pyarmor 的 :term:`运行平台` 名称
 
-It's mainly used in some platforms Pyarmor could not tell right but still works.
+主要用来支持一些能够运行 Pyarmor 但是无法正确得到平台名称的系统
 
 .. envvar:: PYARMOR_CC
 
-            Specify C compiler for bccmode
+            设置 :term:`BCC 模式` 使用的 :term:`C` 编译器
 
 .. envvar:: PYARMOR_CLI
 
-            Only for compatible with old Pyarmor, ignore this if you don't use old command prior to 8.0
+            仅当需要和 Pyarmor 7.x 兼容的时候使用
 
-If you do not use new commands in Pyarmor 8.0, and prefer to only use old commands, set it to ``7``, for example::
+如果安装了 Pyarmor 8，但是又需要保持和 Pyarmor 7.x 的兼容性，例如不修改原来的构建环境的脚本等，那么需要输出设置环境变量为 ``7`` 。
 
-    # In Linux
+例如，在 Linux 或者 Apple 下面::
+
     export PYARMOR_CLI=7
     pyarmor -h
 
-    # Or
     PYARMOR_CLI=7 pyarmor -h
 
-    # In Windows
+
+在 Windows 下面，使用下面的命令::
+
     set PYARMOR_CLI=7
     pyarmor -h
 
-It forces command :command:`pyarmor` to use old cli directly.
-
-Without it, :command:`pyarmor` first try new cli, if the command line couldn't be parsed by new cli, fallback to old cli.
-
-This only works for command :command:`pyarmor`.
+另外一种选择是直接使用命令 `pyarmor-7` 来和 Pyarmor 7.x 保持兼容。
 
 .. include:: ../_common_definitions.txt

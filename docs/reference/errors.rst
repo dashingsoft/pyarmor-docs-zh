@@ -6,21 +6,18 @@
 
 .. program:: pyarmor gen
 
-Here list all the errors when running :command:`pyarmor` or obfuscated scripts.
+这里列出了加密时候和运行加密脚本的时候的错误信息列表，并且给出了导致错误发生的可能原因以及解决方案。
 
-If something is wrong, search error message here to find the reason.
+如果错误信息没有在这里找到，那么一般情况下这种错误不是 Pyarmor 引起的，可能是因为系统环境配置不正确，缺失系统包等原因造成的。这部分原因不需要 Pyarmor 进行任何修改，只要把环境配置正确，安装必要的包等就可以解决。对于这种类型的问题，请直接在百度或者其他任何搜索引擎，网站和论坛等查找解决方案。
 
-If no exact error message found, most likely it's not caused by Pyarmor, search it in google or any other search engine to find the solution.
+加密时候的错误消息
+==================
 
-====================
- 加密时候的错误消息
-====================
+表-1 列出的是运行命令 :command:`pyarmor` 时候常见的错误信息，部分可能的原因和解决方案
 
-这里列出的是运行命令 :command:`pyarmor` 时候常见的错误信息，部分可能的原因和解决方案
-
-.. list-table:: Table-1. Build Errors
+.. list-table:: 表-1. 加密时候错误信息表
    :name: pyarmor errors
-   :widths: 10 20
+   :width: 100
    :header-rows: 1
 
    * - 错误信息
@@ -30,67 +27,56 @@ If no exact error message found, most likely it's not caused by Pyarmor, search 
 
        解决方案请参考 :doc:`../licenses`
    * - not machine id
-     - This machine is not registered, or the hardware information is changed.
+     - 当前设备的硬件信息发生了改变可能会造成这个错误
 
-       Try to register Pyarmor again to fix it.
+       重现在当前设备注册 Pyarmor 可以解决这个问题
    * - query machine id failed
-     - Could not get hardware information in this machine
-
-       Pyarmor need query harddisk serial number, mac address etc.
-
-       If it could not get hardware information, it complains of this.
-
+     - 如果无法获取到当前设备的相关硬件信息，会报这个错误
    * - relative import "%s" overflow
-     - Obfuscating `.py` script which uses relative import
+     - 尝试直接加密一个脚本，但是脚本里面使用了相对导入的语句
 
-       Solution: obfuscating the whole package (path), instead of one module (file) separately
+       解决方案: 直接加密脚本所在的包 (目录)，而不是单独加密一个文件
 
-The following errors may occur when registering Pyarmor
+表-1.1 列出一般发生在注册 Pyarmor 时候发生的错误信息
 
-.. list-table:: Table-1.1 Register Errors
+.. list-table:: 表-1.1 注册时候错误信息表
    :name: register errors
-   :widths: 10 20
+   :width: 100
    :header-rows: 1
 
-   * - Error
-     - Reasons
-   * - HTTP Error 400: Bad Request
-     - 1. Running upgrading command `pyarmor -u` more than once
-
-          Try to register Pyarmor again with zip, for example::
-             pyarmor reg pyarmor-regfile-xxxxxx.zip
+   * - 错误信息
+     - 原因和解决方案
    * - HTTP Error 401: Unauthorized
-     - Using old pyarmor commands with new license
+     - 在新版本的许可证下使用 pyarmor-7 命令
 
-       Please using Pyarmor 8 commands to obfuscate the scripts
+       没有解决方案，pyarmor-7 只支持老版本的许可证
    * - HTTP Error 503: Service Temporarily Unavailable
-     - Invoking too many register command in 1 minute
+     - 在 1 分钟之内使用了多次注册命令
 
-       For security reason, the license server only allows 3 register request in 1 minute
+       许可证服务器一分钟之内至多允许同一个 IP 的三次请求，过多的请求将返回 503 错误
    * - unknown license type OLD
-     - Using old license in Pyarmor 8, the old license only works for Pyarmor 7.x
+     - 在 Pyarmor 8 中使用老版本的许可证
 
-       Here are :doc:`the latest licenses <../licenses>`
+       请参阅这里的升级说明 :doc:`../licenses`
 
-       Please use ``pyarmor-7`` or downgrade pyarmor to 7.7.4
+       解决方案：使用命令 ``pyarmor-7``
    * - This code has been used too many times
      -
 
-========================
- 运行加密脚本的错误信息
-========================
+运行加密脚本的错误信息
+======================
 
-这里列出的是运行加密脚本的时候常见的错误信息，部分可能的原因和解决方案
+这里列出的是运行加密脚本的时候常见的错误信息，部分可能的原因和解决方案。
 
-Here list error messages reported by pyarmor
+表-2 里面的错误信息都是 Pyarmor 报告的
 
-.. list-table:: Table-2. Runtime Errors of Obfuscated Scripts
+.. list-table:: 表-2. 运行加密脚本的错误信息表（Pyarmor）
    :name: runtime errors
-   :widths: 10 20
+   :width: 100
    :header-rows: 1
 
-   * - Error Message
-     - Reasons
+   * - 错误信息
+     - 原因和解决方案
    * - error code out of range
      -
    * - this license key is expired
@@ -113,60 +99,24 @@ Here list error messages reported by pyarmor
    * - the format of obfuscated function is incorrect
      -
    * - RuntimeError: Resource temporarily unavailable
-     - When using option ``-e`` to obfusate the script, the obfuscated script need connect to `NTP`_ server to check expire date. If network is not available, or something is wrong with network, it raises this error.
+     - 设置了加密脚本的有效期，但是无法访问时间服务器导致的问题
 
-       Solutions:
+       这个问题无法解决，要么使用本地时间，要么用户使用 :term:`运行插件` 自己进行校验
 
-       1. use local time if device is not connected to internet.
+表-2.1 中的错误信息都是 Python 解释器报告的，通常情况下，这种错误不是 Pyarmor 造成的。
 
-       2. try it again it may works.
+解决这里的问题只需要参考 Python 的文档，把加密脚本看作是普通脚本，就可以解决问题，也可以直接在百度或者 Python 相关的论坛网站找到答案。
 
-Here list error messages reported by Python interpreter, generelly they are not pyarmor issues. Please consult Python documentation or google error message to fix them.
-
-.. list-table:: Table-2.1 Other Errors of Obfuscated Scripts
+.. list-table:: 表-2.1 运行加密脚本的错误信息表（Python）
    :name: other runtime errors
-   :widths: 10 20
+   :width: 100
    :header-rows: 1
 
-   * - Error Message
-     - Reasons
+   * - 错误信息
+     - 原因和解决方案
    * - ImportError: attempted relative import with no known parent package
      - 1. ``from .pyarmor_runtime_000000 import __pyarmor__``
 
-           Do not use :option:`-i` or :option:`--prefix` if you don't know what they're doing.
-
-       For all the other relative import issue, please check Pythont documentation to learn about relative import knowledge, then check Pyarmor :doc:`man` to understand how to generate runtime packages in different locations.
-
-Outer Errors
-============
-
-Here list some outer errors. Most of them are caused by missing some system libraries, or unexpected configuration. It need nothing to do by Pyarmor, just install necessary libraries or change system configurations to fix the problem.
-
-By searching error message in google or any other search engine to find the solution.
-
-- **Operation did not complete successfully because the file contains a virus or is potentially unwanted software question**
-
-  It's caused by Windows Defender, not Pyarmor. I'm sure Pyarmor is safe, but it uses some technics which let anti-virtus tools make wrong decision. The solutions what I thought of
-
-  1. Check documentation of Windows Defender
-  2. Ask question in MSDN
-  3. Google this error message
-
-- **Library not loaded: '@rpath/Frameworks/Python.framework/Versions/3.9/Python'**
-
-  When Python is not installed in the standard path, or this Python is not Framework, pyarmor reports this error. The solution is using ``install_name_tool`` to change ``pytransform3.so``. For example, in `anaconda3` with Python 3.9, first search which CPython library is installed::
-
-    $ otool -L /Users/my_username/anaconda3/bin/python
-
-  Find any line includes ``Python.framework``, ``libpython3.9.dylib``, or ``libpython3.9.so``, the filename in this line is CPython library. Or find it in the path::
-
-    $ find /Users/my_username/anaconda3 -name "Python.framework/Versions/3.9/Python"
-    $ find /Users/my_username/anaconda3 -name "libpython3.9.dylib"
-    $ find /Users/my_username/anaconda3 -name "libpython3.9.so"
-
-  Once find CPython library, using ``install_name_tool`` to change and codesign it again::
-
-    $ install_name_tool -change @rpath/Frameworks/Python.framework/Versions/3.9/Python /Users/my_username/anaconda3/lib/libpython3.9.dylib /Users/my_username/anaconda3/lib/python3.9/site-packages/pyarmor/cli/core/pytransform3.so
-    $ codesign -f -s - /Users/my_username/anaconda3/lib/python3.9/site-packages/pyarmor/cli/core/pytransform3.so
+       解决方案：不要使用 :option:`-i` 或者 :option:`--prefix` 去加密脚本
 
 .. include:: ../_common_definitions.txt

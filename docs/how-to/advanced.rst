@@ -1,50 +1,24 @@
 .. highlight:: console
 
-====================
- Fix encoding error
-====================
+========================
+ 解决加密过程中编码错误
+========================
 
-Set script encoding::
+使用下面的命令可以设置加密脚本使用的编码为 ``utf-8``::
 
     $ pyarmor cfg encoding=utf-8
 
-When customize runtime error message, set encoding of ``messages.cfg``::
+使用下面的命令可以设置定制的错误消息文件使用的编码为 ``gbk``::
 
     $ pyarmor cfg messages=messages.cfg:gbk
 
-====================
- Removing docstring
-====================
+======================
+ 删除脚本中 Docstring
+======================
 
-It's easy to remove docstring from obfuscated scripts::
+使用下面的配置可以删除加密脚本中 DocString::
 
     $ pyarmor cfg optimize 2
-
-========================================
- Extending method to verify runtime key
-========================================
-
-.. versionadded:: 8.x
-                  This feature is still not implemented
-
-In obfuscated scripts, call function ``__pyarmor__`` to get user data stored in the runtime key.
-
-.. code-block:: python
-
-   user_data = __pyarmor__(None, None, b'keyinfo', 1)
-   if not verify_user_data(user_data):
-       sys.exit(1)
-
-===============================================
- Getting outer key information in plain script
-===============================================
-
-.. versionadded:: 8.x
-                  This feature is still not implemented
-
-When generate outer runtime key, use plugin to store informaion as comment in the key file
-
-Then read key file and parse comment lines.
 
 .. customize-obfuscated-script
 .. hidden-outer-runtime-key
