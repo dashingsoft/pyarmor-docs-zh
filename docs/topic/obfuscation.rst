@@ -22,11 +22,6 @@
     >>> import os
     >>> print(os.path.expanduser("~/.pyarmor"))
 
-这等价于在命令行直接运行下面的命令::
-
-    $ python -c'import os
-    print(os.path.expanduser("~/.pyarmor"))'
-
 .. note::
 
    在本文档的示例代码中，以 `$` 开头的命令都是 Shell 命令，而以 `>>>` 开头的都是在 Python 控制台运行的脚本语句。

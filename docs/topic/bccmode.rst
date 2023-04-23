@@ -6,32 +6,37 @@
 
 .. program:: pyarmor gen
 
-BCC mode could convert most of functions and methods in the scripts to equivalent C functions, those c functions will be comipled to machine instructions directly, then called by obfuscated scripts.
+BCC 模式会把部分函数直接转换成为二进制代码，在根本上避免被还原成为 Python 函数。
 
-It requires ``c`` compiler. In Linux and Darwin, ``gcc`` and ``clang`` is OK. In Windows, only ``clang.exe`` works. It could be configured by one of these ways:
+BCC 模式需要配置 :term:`C` 编译器，对于 `Linux` 和 `Darwin` 来说，一般不需要进行配置，只要默认的 ``gcc`` 和 ``clang`` 能工作就可以。在 `Windows` 环境下面，可以使用下面任意一种方式配置 ``clang.exe`` ，目前其它编译器还不支持:
 
-* If there is any ``clang.exe``, it's OK if it could be run in other path.
-* Download and install Windows version of `LLVM <https://releases.llvm.org>`_
-* Download `https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip`, it's about 26M bytes, there is only one file in it. Unzip it and save ``clang.exe`` to ``$HOME/.pyarmor/``. ``$HOME`` is home path of current logon user, check the environment variable ``HOME`` to get the real path.
+* 如果已经有 ``clang.exe`` ，只要在其它路径直接运行 ``clang.exe`` 不出错就可以。如果文件存在，但是无法在任意路径直接运行，可以配置环境变量 ``PYARMOR_CC`` 来指定这个文件，例如::
 
-Enable BCC mode
-===============
+      set PYARMOR_CC=C:\path\to\clang.exe
 
-After compiler works, using :option:`--enable-bcc` to enable BCC mode::
+* 从 `LLVM 官网 <https://releases.llvm.org>`_ 下载并安装预编译版本
+* 从 Pyarmor 官网下载 `clang-9.0.zip`__ ，压缩包大小约为 26M 左右，里面只有一个可执行文件，解压后存放在 :term:`根目录` 下面，默认是 ``%HOME%/.pyarmor``
+
+__ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
+
+启用 BCC 模式
+=============
+
+配置好编译器之后，使用选项 :option:`--enable-bcc` 启用 BCC 模式::
 
     $ pyarmor gen --enable-bcc foo.py
 
-All the source in module level is not converted to C function.
+模块级别的代码不会转换转换成为 :term:`C` 的函数，模块的任何函数如果使用了不被支持的特性，也不会转换成为 :term:`C` 函数，这么没有使用 BCC 模式加密的函数会根据选项使用其他方式进行加密。
 
-Trace bcc log
-=============
+查看被 BCC 模式加密的函数
+=========================
 
-To check which functions are converted to C function, enable trace mode before obfuscate the script::
+启用跟踪模式可以在跟踪日志文件 ``.pyarmor/pyarmor.trace.log`` 中记录那些函数被转换成为了 :term:`C` 函数。例如::
 
     $ pyarmor cfg enable_trace=1
     $ pyarmor gen --enable-bcc foo.py
 
-Then check the trace log::
+查看跟踪日志中使用 ``trace.bcc`` 记录的内容::
 
     $ ls .pyarmor/pyarmor.trace.log
     $ grep trace.bcc .pyarmor/pyarmor.trace.log
@@ -40,66 +45,70 @@ Then check the trace log::
     trace.bcc            foo:9:sum2
     trace.bcc            foo:12:main
 
-The first log means ``foo.py`` line 5 function ``hello`` is protected by bcc.
-The second log means ``foo.py`` line 9 function ``sum2`` is protected by bcc.
+第一条日志记录的是 ``foo.py`` 第5行的函数 ``hello`` 被转换成为 C 函数
+第二条日志记录的是 ``foo.py`` 第9行的函数 ``sum2`` 被转换成为 C 函数
 
-Ignore module or function
-=========================
+不转换特定的模块和函数
+======================
 
-When BCC scripts reports errors, a quick workaround is to ignore these problem modules or functions. Because BCC mode converts some functions to C code, these funtions are not compatiable with Python function object. They may not be called by outer Python scripts, and can't be fixed in Pyarmor side. In this case use configuration option ``bcc:excludes`` and ``bcc:disabled`` to ignore function or module, and make all the others work.
+使用 BCC 模式加密脚本并不是完全和原来的脚本兼容，如果运行 BCC 模式加密脚本出现了兼容性问题，那么解决方案就是不要转换特定的模块，或者模块中特定的函数。
 
-First enable debug mode by common option ``-d``::
+为了避免影响其他脚本，这里使用 :term:`模块私有配置` 来修改单独修改模块的设置。
 
-    $ pyarmor -d gen --enable-bcc foo.py
+让 BCC 模式忽略一个模块 ``pkgname.modname`` 使用下面的命令::
 
-Check trace log to find which functions are converted to c function. If there are problem functions, then tell BCC mode does not deal with it. For example, ignore function ``sum2`` in the module ``foo.py`` by this command::
+    $ pyarmor cfg -p pkgname.modname bcc:disabled=1
 
-    $ pyarmor cfg -p foo bcc:excludes="sum2"
+忽略模块中一个函数使用下面的命令::
 
-Use ``-p`` to specify module name and option ``bcc:excludes`` for function name. No ``-p``, same name function in the other scripts will be ignored too.
+    $ pyarmor cfg -p pkgname.modname bcc:excludes + "function name"
 
-Append more functions to exclude by this way::
+忽略更多的函数::
 
     $ pyarmor cfg -p foo bcc:excludes + "hello foo2"
 
-Then obfuscate the script again::
+我们可以启用跟踪日志，查看这些语句的效果，看看这些模块和函数是否没有被 BCC 模式处理。例如::
 
-    $ pyarmor gen --enable-bcc /path/to/pkg/joker
-    $ python dist/foo.py
+    $ pyarmor cfg enable_trace 1
+    $ pyarmor gen --enable-bcc foo.py
+    $ grep trace.bcc .pyarmor/pyarmor.trace.log
 
-When obfuscating package, it also could exclude one module separately. For example, in the following commands BCC mode ignores ``joker/card.py``, but handle all the other scripts in package ``joker``::
+另外一个例子，忽略 ``joker/card.py`` 但是使用 BCC 模式加密包 ``joker`` 的其他模块::
 
     $ pyarmor cfg -p joker.card bcc:disabled=1
     $ pyarmor gen --enable-bcc /path/to/pkg/joker
 
-By both of ``bcc:excludes`` and ``bcc:disable``, make all the problem code fallback to default obfuscation mode, and let others could be converted to c function and work fine.
+使用两个配置项 ``bcc:excludes`` 和 ``bcc:disabled`` 可以最小限度的排除不被 BCC 模式支持的代码，从而确保其他脚本能正常使用 BCC 模式加密运行。
 
-Changed features
-================
+改变的脚本特性
+==============
 
-Here are some changed features in the BCC mode:
+使用 BCC 模式加密后脚本和原来的脚本存在一些额外的不同
 
-* Calling `raise` without argument not in the exception handler will raise different exception.
+* 部分异常的提示信息和原来不一样
 
-.. code-block:: python
+* 如果不是在异常处理的过程中，直接调用没有参数的 `raise` 抛出的异常类型不同
 
-    >>> raise
-    RuntimeError: No active exception to reraise
+  没有加密前
 
-    # In BCC mode
-    >>> raise
-    UnboundlocalError: local variable referenced before assignment
+  .. code-block:: python
 
-* Some exception messages may different from the plain script.
+      >>> raise
+      RuntimeError: No active exception to reraise
 
-* Most of function attributes which starts with ``__`` doesn't exists, or the value is different from the original.
+  在 BCC 模式加密的脚本中
 
-Unsupport features
-==================
+  .. code-block:: python
 
-If a function uses any unsupoported features, it could not be converted into C code.
+      >>> raise
+      UnboundlocalError: local variable referenced before assignment
 
-Here list unsupport features for BCC mode:
+* 函数对象的属性，尤其是以双下划线开始的属性，例如 ``__qualname__`` 等等，在转换成为 C 函数之后都不存在，使用这些属性的函数加密后无法正常工作
+
+不支持的特性
+============
+
+使用了下列特性的函数无法转换成为 :term:`C` 函数
 
 .. code-block:: python
 
@@ -116,16 +125,17 @@ Here list unsupport features for BCC mode:
         ast.MatchAs, ast.MatchOr
     )
 
-And unsupport functions:
+如果调用了下列任意一个内置函数，那么该函数也无法转换成为 :term:`C` 函数:
 
-* exec
+* exec,
 * eval
 * super
 * locals
 * sys._getframe
 * sys.exc_info
 
-For example, the following functions are not obfuscated by BCC mode, because they use unsupported features or unsupported functions:
+例如，下面这些函数都不会使用终极模式加密，因为它们或者使用了不支持的特性，或者调
+用了不支持的函数:
 
 .. code-block:: python
 
