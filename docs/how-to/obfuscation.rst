@@ -13,21 +13,17 @@
 
   TODO:
 
-  ========================
-   Packing with outer key
-  ========================
+============================
+ 打包使用外部密钥的加密脚本
+============================
 
-  TODO:
+编写中...
 
-  ============================
-   Protecting system packages
-  ============================
+==========================
+ 打包脚本的时候保护系统库
+==========================
 
-  .. versionadded:: 8.x
-                    This feature is still not implemented
-
-  When packing the scripts, Pyarmor could also obfuscate system packages in the bundle.
-
-  TODO:
+.. versionadded:: 8.x
+                  这个功能尚未实现
 
 .. include:: ../_common_definitions.txt

@@ -45,7 +45,7 @@
 
 * :option:`--enable-rft`
 
-如果有敏感字符串，那么使用 :option:`mix-str` 同时设置过滤条件，仅仅加密这些敏感字符串。如果没有过滤条件，所有的字符串常量都会加密，可能对性能会造成一点影响
+如果有敏感字符串，那么使用 :option:`--mix-str` 同时设置过滤条件，仅仅加密这些敏感字符串。如果没有过滤条件，所有的字符串常量都会加密，可能对性能会造成一点影响
 
 * `pyarmor cfg mix.str:includes "/regular expression/"`
 * :option:`--mix-str`
@@ -75,7 +75,7 @@
    * :option:`--enable-rft`
    * :option:`--enable-bcc`
    * :option:`--mix-str` 和过滤条件
-   * :option:`assert-import`
+   * :option:`--assert-import`
 
    如果不可用，使用下面的选项
 
@@ -86,7 +86,7 @@
 
    如果需要避免注入攻击，使用下面的选项
 
-   * :option:`--assert-call` ，同时检查跟踪日志，确保关键函数被保护，必要的时候使用 :term:``运行插件` 对这些函数进行保护
+   * :option:`--assert-call` ，同时检查跟踪日志，确保关键函数被保护，必要的时候使用运行 :term:`脚本补丁` 对这些函数进行保护
 
    如果性能允许的话，启用选项 :option:`--enable-themida` ，这个选项还是能很大程度的防止调试器的攻击，但就是对性能影响大一些
 
