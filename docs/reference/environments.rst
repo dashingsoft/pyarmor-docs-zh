@@ -43,9 +43,9 @@
    Arch                  x86/x86_64    x86_64    arm64    x86/x86_64    aarch64    armv7    armv6
    ===================  ============  ========  =======  ============  =========  =======  =======
    Themida 保护              Y           No        No         No          No       No        No
-   RFT 模式                  Y           Y         Y          Y           Y        Y         N/y
+   RFT 模式                  Y           Y         Y          Y           Y        Y         No
    BCC 模式                  Y           Y         Y          Y           Y        N/y       No
-   pyarmor 8 基础功能         Y           Y         Y          Y           Y        Y         Y
+   pyarmor 8 基础功能         Y           Y         Y          Y           Y        Y         No
    pyarmor-7 [#]_           Y           Y         Y          Y           Y        Y         Y
    ===================  ============  ========  =======  ============  =========  =======  =======
 
