@@ -61,7 +61,7 @@ e. 不可以使用本软件提供任何形式的加密服务，不管是通过�
 
 Pyarmor 是一种产品，它所包含的 Pyarmor 基础版，专家版和集团版 都属于 Pyarmor 这一种产品，另外为 Pyarmor 提供图形界面的工具 pyarmor-webui 也属于 Pyarmor 这一种产品， Pyarmor 的后台订单系统是用 django 开发的一个程序，这也属于 Pyarmor 这一种产品。开发 Pyarmor 所使用的笔记本电脑，测试 Pyarmor 使用的台式机，以及运行后台订单系统的云服务器都属于 Pyarmor 这一种产品。
 
-Microsoft Office 产品系列不是一种产品，它包括的各个产品，例如 Microsoft Word 和 Microsoft Excel 是功能完全不同的两个产品，所以 Microsoft Office 不是一种产品。而 Microsoft Word 是一种产品，它的各个版本系列 Micorsoft Word 2003，Work 2007 等也都属于 Microsoft word 这一种产品。
+Microsoft Office 产品系列不是一种产品，它包括的各个产品，例如 Microsoft Word 和 Microsoft Excel 是功能完全不同的两个产品，所以 Microsoft Office 不是一种产品。而 Microsoft Word 是一种产品，它的各个版本系列 Micorsoft Word 2003，Word 2007 等也都属于 Microsoft word 这一种产品。
 
 不同许可证的功能列表
 --------------------
