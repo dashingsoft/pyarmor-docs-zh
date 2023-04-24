@@ -90,11 +90,11 @@
       * :mod:`pyarmor.cli.core`
       * :mod:`pyarmor.cli.runtime`
 
-  Pyarmor 基础版许可证
+  Pyarmor 基础版
 
       一种 :term:`Pyarmor 许可证` 类型
 
-  Pyarmor 集团版许可证
+  Pyarmor 集团版
 
       一种 :term:`Pyarmor 许可证` 类型
 
@@ -114,7 +114,7 @@
 
       请参考 :doc:`Pyarmor 许可模式和许可证 <../licenses>`
 
-  Pyarmor 专家版许可证
+  Pyarmor 专家版
 
       一种 :term:`Pyarmor 许可证` 类型
 

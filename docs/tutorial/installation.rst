@@ -1,8 +1,8 @@
-==========
- 安装教程
-==========
+==============
+ 完整安装教程
+==============
 
-.. contents:: Contents
+.. contents:: 内容
    :depth: 2
    :local:
    :backlinks: top
@@ -11,77 +11,62 @@
 
 .. _install-pypi:
 
-Installation from PyPI
-======================
+从 PyPI 直接安装
+================
 
-Pyarmor_ packages are published on the PyPI_. The preferred tool for installing packages from PyPI_ is :command:`pip`. This tool is provided with all modern versions of Python.
+Pyarmor_ 发布在 PyPI_ 上面，最方便的方式就是使用命令 :command:`pip` 直接安装。
 
-On Linux or MacOS, you should open your terminal and run the following command::
+在 Linux 和 MacOS，直接打开命令终端并运行下面的命令::
 
     $ pip install -U pyarmor
 
-On Windows, you should open Command Prompt (:kbd:`Win-r` and type :command:`cmd`) and run the same command:
+在 Windows 环境下，需要使用 :kbd:`Win-r` 打开命令输入框，然后输入 :command:`cmd` 打开命令窗口，并运行下面的命令:
 
 .. code-block:: doscon
 
     C:\> pip install -U pyarmor
 
-After installation, type :command:`pyarmor --version` on the command prompt. If everything worked fine, you will see the version number for the Pyarmor_ package you just installed.
+安装完成之后，输入命令 :command:`pyarmor --version` 并回车。如果安装成功，会显示安装的 Pyarmor 的版本信息。
 
-Installation from PyPI_ also allows you to install the latest development release.  You will not generally need (or want) to do this, but it can be useful if you see a possible bug in the latest stable release.  To do this, use the ``--pre`` flag::
-
-    $ pip install -U --pre pyarmor
-
-If you need generate obfuscated scripts to run in other platforms, install :mod:`pyarmor.cli.runtime`::
+如果需要跨平台发布加密脚本，还需要安装另外一个包 :mod:`pyarmor.cli.runtime`::
 
     $ pip install pyarmor.cli.runtime
 
-Not all the platforms are supported, more information check :doc:`../reference/environments`
+并不是所有的平台都支持 Pyarmor，所有支持的运行平台请查看 :doc:`../reference/environments`
 
-Installed command
------------------
+安装的命令
+----------
 
-* :program:`pyarmor` is the main command to do everything. See :doc:`../reference/man`.
-* :program:`pyarmor-7` is used to call old commands, it equals bug fixed Pyarmor 7.x
+* :program:`pyarmor` 是最重要的一个，所有的工作基本都由它来完成，详细使用方法请参考 :doc:`../reference/man`
+* :program:`pyarmor-7` 是为了和老版本兼容的命令，它等价于 Pyarmor 7.x 的修正版本。
 
-Start Pyarmor by Python interpreter
------------------------------------
+使用 Python 解释器直接运行 Pyarmor
+----------------------------------
 
-:program:`pyarmor` is same as the following command::
+:program:`pyarmor` 等价于下面的命令::
 
     $ python -m pyarmor.cli
 
-Using virtual environments
-==========================
+从 Github 上面进行安装
+======================
 
-When installing Pyarmor_ using :command:`pip`, use *virtual environments* which could isolate the installed packages from the system packages, thus removing the need to use administrator privileges.  To create a virtual environment in the ``.venv`` directory, use the following command::
-
-    $ python -m venv .venv
-
-You can read more about them in the `Python Packaging User Guide`_.
-
-.. _Python Packaging User Guide: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
-
-Installation from source
-========================
-
-You can install Pyarmor_ directly from a clone of the `Git repository`__.  This can be done either by cloning the repo and installing from the local clone, on simply installing directly via :command:`git`::
+也可以直接从 `Pyarmor Github`__ 安装 Pyarmor。下载库到本地，然后使用 pip 进行安装::
 
     $ git clone https://github.com/dashingsoft/pyarmor
     $ cd pyarmor
     $ pip install .
 
-You can also download a snapshot of the Git repo in either `tar.gz`__ or `zip`__ format.  Once downloaded and extracted, these can be installed with :command:`pip` as above.
+你可以直接下载一个库的压缩文件 `tar.gz`__ 或者 `zip`__ ，解压之后在使用 pip 进行安装。
 
 __ https://github.com/dashingsoft/pyarmor
 __ https://github.com/dashingsoft/pyarmor/archive/master.tar.gz
 __ https://github.com/dashingsoft/pyarmor/archive/master.zip
 
 
-Run Pyarmor from Python script
-==============================
+在 Python 脚本中调用 Pyarmor
+============================
 
-Create a script :file:`tool.py`, pass arguments by yourself
+首先创建一个任意的脚本，例如 :file:`tool.py`
 
 .. code-block:: python
 
@@ -90,31 +75,21 @@ Create a script :file:`tool.py`, pass arguments by yourself
     args = ['gen', 'foo.py']
     main(args)
 
-Run it by Python interpreter::
+然后运行这个脚本::
 
     $ python tool.py
 
-Clean uninstallation
-====================
+以上只是一个示例说明，具体使用的加密选项和参数可以通过各种方式进行传递。
 
-Run the following commands to make a clean uninstallation::
+完全卸载
+========
+
+使用下面的命令可以完全卸载 Pyarmor::
 
     $ pip uninstall pyarmor
+    $ pip uninstall pyarmor.cli.core
+    $ pip uninstall pyarmor.cli.runtime
     $ rm -rf ~/.pyarmor
     $ rm -rf ./.pyarmor
-
-.. note::
-
-   The path ``~`` may be different when logging by different user. ``$HOME`` is home path of current logon user, check the environment variable ``HOME`` to get the real path.
-
-.. highlight:: default
-
-.. Most Windows users do not have Python installed by default, so we begin with the installation of Python itself.  To check if you already have Python installed, open the *Command Prompt* (:kbd:`Win-r` and type :command:`cmd`). Once the command prompt is open, type :command:`python --version` and press Enter.  If Python is installed, you will see the version of Python printed to the screen.  If you do not have Python installed, refer to the `Hitchhikers Guide to Python's`__ Python on Windows installation guides. You must install `Python 3`__.
-
-   Once Python is installed, you can install Sphinx using :command:`pip`.  Refer to the :ref:`pip installation instructions <install-pypi>` below for more information.
-
-   __ https://docs.python-guide.org/
-   __ https://docs.python-guide.org/starting/install3/win/
-
 
 .. include:: ../_common_definitions.txt

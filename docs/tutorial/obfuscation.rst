@@ -2,7 +2,7 @@
  基础教程
 ==========
 
-.. contents:: Contents
+.. contents:: 内容
    :depth: 2
    :local:
    :backlinks: top
@@ -11,15 +11,13 @@
 
 .. program:: pyarmor gen
 
-We'll assume you have Pyarmor 8.0+ installed already. You can tell Pyarmor is installed and which version by running the following command in a shell prompt (indicated by the $ prefix)::
+本教程仅适用于 Pyarmor 8.0+，使用下面的命令来查看版本信息::
 
     $ pyarmor --version
 
-If Pyarmor is installed, you should see the version of your installation. If it isn't, you'll get an error.
+如果 Pyarmor 的版本小于 8，那么请选择相应版本的文档（在页面的左下角可以选择版本），或者升级 Pyarmor 到正确版本。
 
-This tutorial is written for Pyarmor 8.0+, which supports Python 3.7 and later. If the Pyarmor version doesn't match, you can refer to the tutorial for your version of Pyarmor by using the version switcher at the bottom right corner of this page, or update Pyarmor to the newest version.
-
-Throughout this tutorial, assume run :command:`pyarmor` in project path which includes::
+在整个教程中，使用的例子结构如下::
 
     project/
         ├── foo.py
@@ -29,22 +27,22 @@ Throughout this tutorial, assume run :command:`pyarmor` in project path which in
             ├── queens.py
             └── config.json
 
-Pyarmor uses :ref:`pyarmor gen` with rich options to obfuscate scripts to meet the needs of different applications.
+Pyarmor 使用 :ref:`pyarmor gen` 加密不同的脚本，它提供了丰富的选项，以满足不同应用关于性能和安全方面的各种需求。
 
-Here only introduces common options in a short, using any combination of them as needed. About usage of each option in details please refer to :ref:`pyarmor gen`
+这里仅仅介绍的是常用的一些功能，关于完整的命令选项请查阅 :doc:`../reference/man`
 
-Debug mode and trace log
-========================
+调试模式和跟踪日志
+==================
 
-When someting is wrong, check console log to find what Pyarmor does, and use :option:`-d` to enable debug mode to print more information::
+当加密过程出现问题的时候，检查控制台的输出日志可以帮助发现问题所在，而使用选项 ``-d`` 启用调试模式会打印更多的信息帮助发现错误::
 
     $ pyarmor -d gen foo.py
 
-Trace log is useful to check what're protected by Pyarmor, enable it by this command::
+跟踪日志用来记录那些函数被 Pyarmor 使用什么方式进行了保护，它通过下面的方式启用::
 
     $ pyarmor cfg enable_trace=1
 
-After that, :ref:`pyarmor gen` will generate a logfile :file:`.pyarmor/pyarmor.trace.log`. For example::
+启用之后，每一次执行命令 :ref:`pyarmor gen` 都会生成一个跟踪日志文件 :file:`.pyarmor/pyarmor.trace.log` 记录相关的保护信息。例如::
 
     $ pyarmor gen foo.py
     $ cat .pyarmor/pyarmor.trace.log
@@ -54,39 +52,35 @@ After that, :ref:`pyarmor gen` will generate a logfile :file:`.pyarmor/pyarmor.t
     trace.co             foo:9:sum2
     trace.co             foo:12:main
 
-Each line starts with ``trace.co`` is reported by code object protector. The first log says ``foo.py`` module level code is obfuscated, second says function ``hello`` at line 5 is obfuscated, and so on.
+每一行开头的 ``trace.co`` 表示是默认的加密模式，后面的函数名称表示该函数使用默认的方式进行加密。
 
-Enable both debug and trace mode could show much more information::
-
-    $ pyarmor -d gen foo.py
-
-Disable trace log by this command::
+使用下面的方式禁用跟踪日志::
 
     $ pyarmor cfg enable_trace=0
 
 .. program:: pyarmor gen
 
-More options to protect script
-==============================
+使用更多的选项加密脚本
+======================
 
-For scripts, use these options to get more security::
+对于脚本，可以使用这些选项来增加安全性::
 
     $ pyarmor gen --enable-jit --mix-str --assert-call --private foo.py
 
-Using :option:`--enable-jit` tells Pyarmor processes some sentensive data by ``c`` function generated in runtime.
+选项 :option:`--enable-jit` 通过使用动态指令生成技术处理某些敏感数据来增加安全性。
 
-Using :option:`--mix-str` [#]_ could mix the string constant (length > 4) in the scripts.
+选项 :option:`--mix-str` [#]_ 能够加密脚本中所有长度大于 8 的字符串。
 
-Using :option:`--assert-call` makes sure function is obfuscated, to prevent called function from being replaced by special ways
+选项 :option:`--assert-call` 能够确保加密脚本中的函数不会被替换。
 
-Using :option:`--private` makes the script could not be imported by plain scripts
+选项 :option:`--private` 能够确保加密脚本的属性不能直接被 Python 解释器直接导入查看。
 
-For example,
+例如，
 
 .. code-block:: python
     :emphasize-lines: 1,10
 
-    data = "abcxyz"
+    data = "abcdefgxyz"
 
     def fib(n):
         a, b = 0, 1
@@ -97,7 +91,7 @@ For example,
     if __name__ == '__main__':
         fib(n)
 
-String constant ``abcxyz`` and function ``fib`` will be protected like this
+字符串常量 ``abcdefgxyz`` 和函数 ``fib`` 会被以如下方式进行保护
 
 .. code-block:: python
     :emphasize-lines: 1,10
@@ -113,9 +107,9 @@ String constant ``abcxyz`` and function ``fib`` will be protected like this
     if __name__ == '__main__':
         __assert_call__(fib)(n)
 
-If function ``fib`` is obfuscated, ``__assert_call__(fib)`` returns original function ``fib``. Otherwise it will raise protection exception.
+如果函数 ``fib`` 是加密函数，那么 ``__assert_call__(fib)`` 返回原来的函数，否则抛出保护异常。
 
-To check which function or which string are protected, enable trace log and check trace logfile::
+为了查看那些函数和字符串被保护，可以启用并检查跟踪日志::
 
     $ pyarmor cfg enable_trace=1
     $ pyarmor gen --mix-str --assert-call fib.py
@@ -127,20 +121,20 @@ To check which function or which string are protected, enable trace log and chec
     trace.co             fib:1:<module>
     trace.co             fib:3:fib
 
-.. [#] :option:`--mix-str` is not available in trial version
+.. [#] :option:`--mix-str` 在试用版中不可用
 
-More options to protect package
-===============================
+使用更多的选项加密包
+====================
 
-For package, remove :option:`--private` and append 2 extra options::
+如果是加密 :term:`Python 包` ，不要使用选项 :option:`--private` 而是使用其他两个选项::
 
     $ pyarmor gen --enable-jit --mix-str --assert-call --assert-import --restrict joker/
 
-Using :option:`--assert-import` prevents obfsucated modules from being replaced with plain script. It checks each import statement to make sure the modules are obfuscated.
+选项 :option:`--assert-import` 可以检查导入的模块，确保是没有被替换的加密模块。
 
-Using :option:`--restrict` makes sure the obfuscated module is only available inside package. It couldn't be imported from any plain script, also not be run by Python interpreter.
+选项 :option:`--restrict` 可以确保加密模块只能在加密脚本内部使用，而不能被外部脚本导入。
 
-By default ``__init__.py`` is not restricted, all the other modules are invisible from outside. Let's check this, first create a script :file:`dist/a.py`
+默认情况下 ``__init__.py`` 中定义的函数和名称是可以被外部脚本使用的，其他模块定义的函数和名称是不能被外部脚本使用。让我们创建一个测试脚本 :file:`dist/a.py` 来验证一下
 
 .. code-block:: python
 
@@ -149,59 +143,59 @@ By default ``__init__.py`` is not restricted, all the other modules are invisibl
     from joker import queens
     print('import joker.queens OK')
 
-Then run it::
+运行这个测试脚本::
 
     $ cd dist
     $ python a.py
     ... import joker OK
     ... RuntimeError: unauthorized use of script
 
-In order to export ``joker.queens``, config this module is not restrict::
+如果需要导出包中的其他模块，要么不使用选项 :option:`--restrict` ，要么单独配置模块 ``joker.queens`` 不使用约束模式::
 
     $ pyarmor cfg -p joker.queens restrict_module=0
 
-Then obfuscate this package with restrict mode::
+再次加密和测试一下，这次应该可以正常运行::
 
     $ pyarmor gen --restrict joker/
-
-Now do above test again, it should work::
 
     $ cd dist/
     $ python a.py
     ... import joker OK
     ... import joker.queens
 
-Copying package data files
-==========================
+拷贝数据文件
+============
 
-Many packages have data files, but they're not copied to output path.
+很多包都有数据文件，并且运行的时候需要这些数据文件，但是默认情况下不会被 Pyarmor 拷贝到输出路径。
 
-There are 2 ways to solve this problem:
+但是 Pyarmor 提供了三种方法可以解决这个问题
 
-1. Before generating the obfuscated scripts, copy the whole package to output path, then run :ref:`pyarmor gen` to overwite all the ``.py`` files::
+1. 在加密之前先把整个包全部拷贝到输出目录，然后加密脚本，这样加密脚本仅仅覆盖原来的 ``.py`` 文件，而数据文件保留不变::
 
      $ mkdir dist/joker
      $ cp -a joker/* dist/joker
      $ pyarmor gen -O dist -r joker/
 
-2. Changing default configuration let Pyarmor copy data files::
+2. 通过配置选项，让 Pyarmor 自动拷贝数据文件::
 
      $ pyarmor cfg data_files=*
      $ pyarmor gen -O dist -r joker/
 
-Checking runtime key periodically
-=================================
+3. 自己编写 :term:`加密插件` 来拷贝需要的数据文件
 
-Checking runtime key every hour::
+周期性检查运行密钥
+==================
+
+使用下面的命令生成的加密脚本，运行的时候会每隔一个小时对运行密钥进行一次检查::
 
     $ pyarmor gen --period 1 foo.py
 
-Binding to many machines
-========================
+绑定加密脚本到多个设备
+======================
 
-Using :option:`-b` many times to bind obfuscated scripts to many machines.
+使用选项 :option:`-b` 多次可以绑定加密脚本到多个设备。
 
-For example, machine A and B, the ethernet addresses are ``66:77:88:9a:cc:fa`` and ``f8:ff:c2:27:00:7f`` respectively. The obfuscated script could run in both of machine A and B by this command ::
+例如，两台设备 A 和 B，以太网地址分别是 ``66:77:88:9a:cc:fa`` 和 ``f8:ff:c2:27:00:7f`` ，使用下面的命令绑定加密脚本到这两台设备::
 
     $ pyarmor gen -b "66:77:88:9a:cc:fa" -b "f8:ff:c2:27:00:7f" foo.py
 
@@ -294,45 +288,49 @@ For example, machine A and B, the ethernet addresses are ``66:77:88:9a:cc:fa`` a
 
 然后重新加密脚本使之生效。
 
-Packing obfuscated scripts
-==========================
+生成可独立运行的加密脚本
+========================
 
-Pyarmor need PyInstaller to pack scripts first, then replace plain scripts with obfuscated ones in bundle.
+这里的打包是指生成可以在没有 Python 环境独立运行的可执行文件。
 
-Packing to one file
--------------------
+Pyarmor 需要使用 `PyInstaller`_ 打包好的可执行文件，然后替换其中的脚本为加密后的脚本。
 
-First packing script to one file by PyInstaller with option ``-F``::
+单个可执行文件模式
+------------------
+
+首先使用 PyInstaller_ 的选项 ``-F`` 生成一个单独的可执行文件::
 
     $ pyinstaller -F foo.py
 
-It generates one bundle file ``dist/foo``, pass this to pyarmor::
+然后把上一步生成的可执行文件文件 ``dist/foo`` 传递给 Pyarmor 进行处理::
 
     $ pyarmor gen -O obfdist --pack dist/foo foo.py
 
-This command will obfuscate ``foo.py`` first, then repack ``dist/foo``, replace the original ``foo.py`` with ``obfdist/foo.py``, and append all the runtime files to bundle.
+这个命令会加密 ``foo.py`` ，并使用加密后的脚本替换 ``dist/foo`` 原来的脚本，处理完成替换原来的 ``dist/foo`` 。
 
-The final output is still ``dist/foo``::
+最终输出的依旧是 ``dist/foo``::
 
     $ dist/foo
 
-Packing to one folder
----------------------
+单个目录模式
+------------
 
-First packing script to one foler by PyInstaller::
+首先使用 PyInstaller_ 生成单目录模式的包::
 
     $ pyinstaller foo.py
 
-It generates one bundle folder ``dist/foo``, and an executable file ``dist/foo/foo``, pass this executable to pyarmor::
+所有需要的文件都存放在一个目录  ``dist/foo`` ，其中保护一个可执行文件 ``dist/foo/foo`` 。
+
+把这个可执行文件传递给 Pyarmor 进行处理::
 
     $ pyarmor gen -O obfdist --pack dist/foo/foo foo.py
 
-Like above section, ``dist/foo/foo`` will be repacked with obfuscated scripts.
+和上面一样，加密脚本替换原来的脚本，并输出替换后的可执行文件 ``dist/foo/foo``
 
-Now run it::
+运行一下最后生成的可执行文件::
 
     $ dist/foo/foo
 
-More information about pack feature, refer to :doc:`../topic/repack`
+如果打包出现问题，或者想对打包有更多的了解，请参阅 :doc:`../topic/repack`
 
 .. include:: ../_common_definitions.txt

@@ -1,12 +1,12 @@
-==================
- 加密脚本打包详解
-==================
+==========================
+ 详解可独立运行的加密脚本
+==========================
 
 .. highlight:: console
 
 .. program:: pyarmor gen
 
-使用 Pyarmor 8.0 打包，必须首先调用 PyInstaller_ 将脚本打包成为单独的可执行文件或者打包到一个目录，然后把打包生成的可执行文件通过选项 :option:`--pack` 传递给 :ref:`pyarmor gen` 来实现::
+使用 Pyarmor 8.0 生成可以独立运行的加密脚本，必须首先调用 PyInstaller_ 将脚本打包成为单独的可执行文件或者打包到一个目录，然后把打包生成的可执行文件通过选项 :option:`--pack` 传递给 :ref:`pyarmor gen` 来实现::
 
   pyinstaller foo.py
   pyarmor gen --pack dist/foo/foo foo.py

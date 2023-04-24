@@ -56,48 +56,48 @@ Pyarmor_ 是一个发布在 PyPI_ 的 Python 包，最方便的方式就是直�
     $ pyarmor g foo.py
     $ pyarmor generate foo.py
 
-This command generates an obfuscated script :file:`dist/foo.py`, which is a valid Python script, run it by Python interpreter::
+这个命令会生成一个加密脚本 :file:`dist/foo.py` ，这也是一个正常的 Python 脚本，可以直接使用 Python 解释器执行::
 
     $ python dist/foo.py
 
-Check all generated files in the default output path::
+查看所有生成的文件::
 
     $ ls dist/
     ...    foo.py
     ...    pyarmor_runtime_000000
 
-There is an extra Python package :file:`pyarmor_runtime_000000`, which is required to run the obfuscated script.
+除了加密脚本之外，可以看到还有另外一个目录 :file:`pyarmor_runtime_000000` ，这是运行加密脚本所依赖的一个 :term:`Python 包` 。
 
-Distributing the obfuscated script
-----------------------------------
+发布加密脚本
+============
 
-Only copy :file:`dist/foo.py` to another machine doesn't work, instead copy all the files in the :file:`dist/`.
+只拷贝加密脚本 :file:`dist/foo.py` 本身到 :term:`客户设备` 是无法运行的，必须把输出目录下面的 :term:`运行辅助包` 一起拷贝过去才可以。
 
-Why? It's clear after checking the content of :file:`dist/foo.py`:
+为什么呢？看一下加密脚本 :file:`dist/foo.py` 的内容就明白了:
 
 .. code-block:: python
 
     from pyarmor_runtime_000000 import __pyarmor__
     __pyarmor__(__name__, __file__, ...)
 
-Actually the obfuscaetd script can be taken as normal Python script with dependent package :mod:`pyarmor_runtime_000000`, use it as it's not obfuscated.
+加密脚本需要从 ``pyarmor_runtime_000000`` 导入函数 ``__pyarmor__`` ，这个包也是加密脚本的依赖包，加密脚本可以被当作一个正常脚本和依赖包 :mod:`pyarmor_runtime_000000` 来使用。
 
 .. important::
 
-   Please run this obfuscated in the machine with same Python version and same platform, otherwise it doesn't work. Because :mod:`pyarmor_runtime_000000` has an :term:`extension module`, it's platform-dependent and bind to Python version.
+   因为依赖包 :mod:`pyarmor_runtime_000000` 包含使 :term:`扩展模块` ，所以加密脚本只能在相同系统，使用相同版本的 Python 才能运行。如果 :term:`客户设备` 的运行环境不一样，需要使用其他跨平台加密选项。
 
 .. note::
 
-   DO NOT install Pyarmor in the :term:`Target Device`, Python interpreter could run the obfuscated scripts without Pyarmor.
+   不需要安装 Pyarmor 到 :term:`客户设备` ，运行加密脚本不需要 Pyarmor
 
-Obfuscating one package
-=======================
+加密包
+======
 
-Now let's do a package. :option:`-O` is used to set output path :file:`dist2` different from the default::
+现在来加密一个包，使用选项 :option:`-O` 设置另外一个输出目录 :file:`dist2`::
 
     $ pyarmor gen -O dist2 src/mypkg
 
-Check the output::
+查看加密结果::
 
     $ ls dist2/
     ...    mypkg
@@ -106,23 +106,23 @@ Check the output::
     $ ls dist2/mypkg/
     ...          __init__.py
 
-All the obfuscated scripts in the :file:`dist2/mypkg`, test it::
+测试一下导入加密后的包 :file:`dist2/mypkg`::
 
     $ cd dist2/
     $ python -C 'import mypkg'
 
-If there are sub-packages, using :option:`-r` to enable recursive mode::
+如果包里面还有其他子目录需要加密，那么使用选项 :option:`-r` 来启用递归搜索模式::
 
     $ pyarmor gen -O dist2 -r src/mypkg
 
-Distributing the obfuscated package
------------------------------------
+发布加密包
+==========
 
-Also it works to copy the whole path :file:`dist2` to another machine. But it's not convience, the better way is using :option:`-i` to generate all the required files inside package path::
+虽然可以把整个目录 :file:`dist2` 直接拷贝到 :term:`客户设备` ，但是还有一种更好的方式，使用选项 :option:`-i` 把运行辅助包保存到包目录内部::
 
     $ pyarmor gen -O dist3 -r -i src/mypkg
 
-Check the output::
+查看输出目录::
 
     $ ls dist3/
     ...    mypkg
@@ -131,76 +131,18 @@ Check the output::
     ...          __init__.py
     ...          pyarmor_runtime_000000
 
-Now everything is in the package path :file:`dist3/mypkg`, just copy the whole path to any target machine.
+现在所有需要拷贝的文件都在加密包 :file:`dist3/mypkg` 内部，只需要整个包目录拷贝到 :term:`客户设备` 上面就可以了。
 
 .. note::
 
-   Comparing current :file:`dist3/mypkg/__init__.py` with above section :file:`dist2/mypkg/__init__.py` to understand more about obfuscated scripts
+   可以比较一下 :file:`dist3/mypkg/__init__.py` 和上一节生成到的加密文件 :file:`dist2/mypkg/__init__.py` 的内容更多的了解这个选项的作用。
 
-Expiring obfuscated scripts
-===========================
+封装加密包
+------------
 
-It's easy to set expire date for obfuscated scripts by :option:`-e`. For example, generate obfuscated script with the expire date to 30 days::
+再说一次，加密脚本就是正常的 Python 脚本，所以其他用来封装 Python 脚本的工具，例如 distutils， setuptools，以及 wheel 都可以用来封装加密脚本。
 
-    $ pyarmor gen -O dist4 -e 30 foo.py
-
-Run the obfuscated scripts :file:`dist4/foo.py` to verify it::
-
-    $ python dist4/foo.py
-
-It checks network time, make sure your machine is connected to internet.
-
-Let's use another form to set past date ``2020-12-31``::
-
-    $ pyarmor gen -O dist4 -e 2020-12-31 foo.py
-
-Now :file:`dist4/foo.py` should not work::
-
-    $ python dist4/foo.py
-
-If expire date has a leading ``.``, it will check local time other than NTP_ server. For examples::
-
-    $ pyarmor gen -O dist4 -e .30 foo.py
-    $ pyarmor gen -O dist4 -e .2020-12-31 foo.py
-
-For this form internet connection is not required in target machine.
-
-Distributing the expired script is same as above, copy the whole directory :file:`dist4/` to target machine.
-
-Binding obfuscated scripts to device
-====================================
-
-Suppose got target machine hardware informations::
-
-    IPv4:                        128.16.4.10
-    Enternet Addr:               00:16:3e:35:19:3d
-    Hard Disk Serial Number:     HXS2000CN2A
-
-Using :option:`-e` to bind hardware information to obfuscated scripts. For example, bind :file:`dist5/foo.py` to enternet address::
-
-    $ pyarmor gen -O dist5 -b 00:16:3e:35:19:3d foo.py
-
-So :file:`dist5/foo.py` only could run in target machine.
-
-It's same to bind IPv4 and serial number of hard disk::
-
-    $ pyarmor gen -O dist5 -b 128.16.4.10 foo.py
-    $ pyarmor gen -O dist5 -b HXS2000CN2A foo.py
-
-It's possible to combine some of them. For example::
-
-    $ pyarmor gen -O dist5 -b "00:16:3e:35:19:3d HXS2000CN2A" foo.py
-
-Only both enternet address and hard disk are matched machine could run this obfuscated script.
-
-Distributing scripts bind to device is same as above, copy the whole directory :file:`dist5/` to target machine.
-
-Packaging obfuscated scripts
-============================
-
-Remeber again, the obfuscated script is normal Python script, use it as it's not obfuscated.
-
-Suppose package ``mypkg`` structure like this::
+假设包 ``mypkg`` 的目录结构如下::
 
     projects/
     └── src/
@@ -209,20 +151,20 @@ Suppose package ``mypkg`` structure like this::
             ├── utils.py
             └── config.json
 
-First make output path :file:`projects/dist6` for obfuscated package::
+首先创建一个输出目录 :file:`projects/dist6` 用来保存加密包::
 
     $ cd projects
     $ mkdir dist6
 
-Then copy package data files to output path::
+然后把所有数据文件到拷贝过去::
 
     $ cp -a src/mypkg dist6/
 
-Next obfuscate scripts to overwrite all the ``.py`` files in :file:`dist6/mypkg`::
+接下来生成加密包，把所有加密后的 ``.py`` 文件保存到输出目录 ``.py``::
 
     $ pyarmor gen -O dist6 -i src/mypkg
 
-The final output::
+最终的输出如下::
 
     projects/
     ├── README.md
@@ -238,55 +180,109 @@ The final output::
             ├── config.json
             └── pyarmor_runtime_000000/__init__.py
 
-Comparing with :file:`src/mypkg`, the only difference is :file:`dist6/mypkg` has an extra sub-package ``pyarmor_runtime_000000``. The last thing is packaging :file:`dist6/mypkg` as your prefer way.
+比较一下 :file:`src/mypkg` 和 :file:`dist6/mypkg` ，唯一的区别是后者多了一个目录 ``pyarmor_runtime_000000`` ，最后要做的就是使用你熟悉的方式封装 :file:`dist6/mypkg`
 
-New to Python packaging? Refer to `Python Packaging User Guide`_
+还不了解如何封装 Python 包？请参考这里学习 `Python Packaging User Guide`_
 
 .. _Python Packaging User Guide: https://packaging.python.org
 
-Something need to know
+设置加密脚本有效期
+==================
+
+使用选项 :option:`-e` 可以方便的设置加密脚本的有效期。例如，设置加密脚本有效期为30天::
+
+    $ pyarmor gen -O dist4 -e 30 foo.py
+
+运行一下加密脚本 :file:`dist4/foo.py` 来验证一下::
+
+    $ python dist4/foo.py
+
+加密脚本使用 NTP_ 服务器来验证是否过期，如果当前设备不能访问网络，会报错退出。
+
+也可以使用另外一种格式 ``YYYY-MM-DD`` 来设置有效期，例如::
+
+    $ pyarmor gen -O dist4 -e 2020-12-31 foo.py
+
+运行一下 :file:`dist4/foo.py` 要进行验证::
+
+    $ python dist4/foo.py
+
+如果不需要验证网络时间，可以在有效期前面增加前缀 ``.`` 表示检查本地时间。例如::
+
+    $ pyarmor gen -O dist4 -e .30 foo.py
+    $ pyarmor gen -O dist4 -e .2020-12-31 foo.py
+
+发布有时间限制的加密脚本和上面的方法是一样的，直接拷贝整个输出目录 :file:`dist4/` 到 :term:`客户设备`
+
+绑定加密脚本到指定设备
 ======================
 
-There is binary `extension module`_ :mod:`pyarmor_runtime` in extra sub-package ``pyarmor_runtime_000000``, here it's package content::
+假设 :term:`客户设备` 的硬件信息如下::
+
+    IPv4:                        128.16.4.10
+    Enternet Addr:               00:16:3e:35:19:3d
+    Hard Disk Serial Number:     HXS2000CN2A
+
+使用选项 :option:`-b` 来绑定硬件信息到加密角本。例如，绑定 :file:`dist5/foo.py` 到网卡以太网地址::
+
+    $ pyarmor gen -O dist5 -b 00:16:3e:35:19:3d foo.py
+
+使用相同的选项来绑定 IPv4 地址和硬盘序列号::
+
+    $ pyarmor gen -O dist5 -b 128.16.4.10 foo.py
+    $ pyarmor gen -O dist5 -b HXS2000CN2A foo.py
+
+组合多种硬件信息使用下面的格式::
+
+    $ pyarmor gen -O dist5 -b "00:16:3e:35:19:3d HXS2000CN2A" foo.py
+
+只有设备的硬件信息都符合绑定的信息，加密脚本才能运行，否则报错退出。
+
+发布绑定到设备的加密脚本和上面的方法是一样的，直接拷贝整个输出目录 :file:`dist4/` 到 :term:`客户设备`
+
+关于加密脚本必须要知道的
+========================
+
+运行加密脚本需要一个 :term:`扩展模块` :mod:`pyarmor_runtime` ，它在运行辅助包 ``pyarmor_runtime_000000`` 目录下面::
 
     $ ls dist6/mypkg/pyarmor_runtime_000000
     ...    __init__.py
     ...    pyarmor_runtime.so
 
-Generally using binary extensions means the obfuscated scripts require :mod:`pyarmor_runtime` be created for different platforms, so they
+使用二进制的扩展模块意味着加密脚本需要有为各个平台的预编译的扩展模块 :mod:`pyarmor_runtime` ，所以加密脚本
 
-* only works for platforms which provides pre-built binaries
-* may not be compatible with different builds of CPython interpreter
-* often will not work correctly with alternative interpreters such as PyPy, IronPython or Jython
+* 只能运行在那些已经有预编译扩展模块的平台，所有支持的平台请参考 :doc:`../reference/environments`
+* 只能使用相同版本 CPython interpreter 解释器来运行，例如使用 Python 3.8 加密的脚本，无法被 Python 3.9 运行
+* 一般不能被第三方解释器，例如 PyPy， IronPython 或者 Jython 等来运行
 
-For example, when obfuscating scripts by Python 3.8, they can't be run by Python 3.7, 3.9 etc.
+还有，在 Android 系统下面， ``.py`` 脚本可以在任意目录下面运行，但是扩展模块是动态库，就必须在系统特定的目录下面才能运行。
 
-Another disadvantage of relying on binary extensions is that alternative import mechanisms (such as the ability to import modules directly from zipfiles) often won't work for extension modules (as the dynamic loading mechanisms on most platforms can only load libraries from disk).
+下一步的教程
+============
 
-What to read next
-=================
+根据你的需要进行选择下一步的教程
 
-There is a complete :doc:`installation <installation>` guide that covers all the possibilities:
+这里有完整的 :doc:`安装教程 <installation>` 包含如下内容:
 
-* install pyarmor by source
-* call pyarmor from Python script
-* clean uninstallation
+* 从 Github 库直接安装 Pyarmor
+* 如何从 Python 脚本中调用 Pyarmor
+* 完整卸载
 
-Next is :doc:`obfuscation`. It covers
+接下来是 :doc:`obfuscation` 包含的内容有:
 
-* using more option to obfuscate script and package
-* using outer file to store runtime key
-* localizing runtime error messages
-* packing obfuscated scripts and protect system packages
+* 使用更多选项加密脚本和包
+* 使用外部密钥文件限制加密脚本的运行
+* 本地化错误信息
+* 生成不需要 Python 环境就可以独立运行的加密脚本
 
-And then :doc:`advanced`, some of them are not available in trial pyarmor
+还有 :doc:`advanced` ，有些功能在试用版中无法使用
 
-* 2 irreversible obfuscation: RFT mode, BCC mode :sup:`pyarmor-pro`
-* Customization error handler
-* runtime error internationalization
-* cross platform, multiple platforms and multiple Python version
+* 如何使用两种不可逆的加密模式: RFT 模式和 BCC 模式 :sup:`pro`
+* 定制错误退出方式
+* 国际化错误消息
+* 加密跨平台的加密脚本
 
-Also you may be instersting in this guide :doc:`../how-to/security`
+很多用户可能对这里的内容感兴趣 :doc:`../how-to/security`
 
 如何阅读本手册
 ==============
