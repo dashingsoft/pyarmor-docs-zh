@@ -74,4 +74,52 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 **只允许在开发设备上安装和注册 Pyarmor。如果 Docker 镜像需要发送给客户，那么不允许在上面安装和注册 Pyarmor**
 
+.. _using group license:
+
+使用集团版许可证
+================
+
+.. versionadded:: 8.2
+
+**初始登记**
+
+购买集团版许可证之后，一个 :file:`pyarmor-regcode-xxxx.txt` 的 :term:`激活文件` 会发送到注册邮箱中，这个文件用于第一次的注册登记。
+
+集团版许可证的第一次注册登记需要在有网络的设备上进行，首先安装 Pyarmor 8.2 以上版本，然后运行下面的命令进行初始登记，初始登记必须指定许可证绑定的产品名称，不允许使用 "TBD"，这里假设产品名称是 ``Robot``::
+
+    $ pyarmor reg -p Robot pyarmor-regcode-xxxx.txt
+
+登记成功之后会生成相应的注册文件 ``pyarmor-regfile-xxxx.zip`` ，这个注册文件可用于后续的注册命令。
+
+**离线设备组信息**
+
+每一个集团版许可证组最多可以有 100 个离线设备，每一个设备有一个 ID，依次从 1 到 100。
+
+在需要离线使用 Pyarmor 的设备上面安装 Pyarmor 8.2 以上版本，然后首先运行下面的命令设定该设备的组信息::
+
+    $ pyarmor reg -g 1
+
+这个命令会生成相应的组信息文件 ``pyarmor-group-file.1`` ，这个组信息文件需要拷贝到初始登记的机器上，以生成该设备的离线注册文件。
+
+**离线设备注册文件**
+
+生成离线设备需要的注册文件，需要把离线设备的组信息文件 ``pyarmor-group-file.1`` 拷贝到初始登记的机器上，并且必须存放在指定目录 ``.pyarmor/group/`` ，然后运行下面的命令::
+
+    $ pyarmor reg -g 1 /path/to/pyarmor-regfile-xxxx.zip
+
+这条命令执行成功之后会生成离线设备 1 的注册文件 ``pyarmor-group-regfile-xxxx.1.zip``
+
+**离线设备注册**
+
+一旦生成离线设备注册文件之后，就可以拷贝到离线设备上面，运行下面的命令进行注册::
+
+    $ pyarmor reg pyarmor-group-regfile-xxxx.1.zip
+
+如果有其他需要注册的离线设备，请依次使用组编号 2，3... 按照上面的步骤进行。
+
+升级老版本许可证
+================
+
+升级老版本的许可证请参考 :ref:`upgrading old license`
+
 .. include:: ../_common_definitions.txt
