@@ -602,8 +602,8 @@ pyarmor reg
 -h, --help            显示可用选项和帮助信息然后退出
 -p NAME, --product NAME
                       指定许可证绑定的产品名称
--u, --upgrade         升级 Pyarmor 许可证
--g ID, --group ID     指定组内设备编号，仅用于集团版许可证注册
+-u, --upgrade         升级老版本的 Pyarmor 许可证
+-g ID, --device ID    指定组内设备编号，仅用于集团版许可证注册
 
 .. describe:: 参数
 
@@ -640,22 +640,24 @@ pyarmor reg
 
 **集团版许可证**
 
-集团版许可证也需要在有网络的机器上进行初始登记，并生成相应的 :term:`注册文件`
+集团版许可证也需要在有网络的机器上进行初始登记，并生成相应的 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
 
 一个集团版许可证最多使用 100 个离线设备，每一个设备都有一个编号，从 1 到 100。
 
-需要使用 Pyarmor 的离线设备，首先要生成一个设备组信息文件。例如在第一台设备上，使用下面的命令生成组信息文件 ``pyarmor-group-file.1``::
+为了在离线设备上注册 Pyarmor，需要为每一台设备分别生成相应的离线注册文件。
+
+例如，为第一台设备生成离线注册文件，首先在第一台设备运行下面的命令，生成一个组内的设备文件 ``pyarmor-group-device.1``::
 
     $ pyarmor reg -g 1
 
-然后把这个组信息文件拷贝到有网络的机器上面，并存放在指定目录 ``.pyarmor/group/`` ，然后使用 :term:`注册文件` 和组信息文件生成该设备对应的离线注册文件。例如，为第一台设备生成离线注册文件 ``pyarmor-group-regfile-xxxx.1.zip``::
+然后把这个文件拷贝到进行初始登记的机器上面，并存放在指定目录 ``.pyarmor/group/`` 下面，再使用下面的命令生成离线注册文件 ``pyarmor-group-regfile-xxxx.1.zip``::
 
     $ mkdir -p .pyarmor/group
-    $ cp pyarmor-group-file.1 .pyarmor/group/
+    $ cp pyarmor-group-device.1 .pyarmor/group/
 
     $ pyarmor reg -g 1 pyarmor-regfile-xxxx.zip
 
-拷贝离线注册文件到第一台设备，然后运行下面的命令进行离线注册，并离线使用 Pyarmor::
+拷贝这个离线注册文件到第一台设备，运行下面的命令进行离线注册::
 
     $ pyarmor reg pyarmor-group-regfile-xxxx.1.zip
 
