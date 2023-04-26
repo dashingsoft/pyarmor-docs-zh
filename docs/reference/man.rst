@@ -650,7 +650,7 @@ pyarmor reg
 
     $ pyarmor reg -g 1
 
-然后把这个文件拷贝到进行初始登记的机器上面，并存放在指定目录 ``.pyarmor/group/`` 下面，再使用下面的命令生成离线注册文件 ``pyarmor-group-regfile-xxxx.1.zip``::
+然后把这个文件拷贝到进行初始登记的机器上面，并存放在指定目录 ``.pyarmor/group/`` 下面，再使用下面的命令生成离线注册文件 ``pyarmor-device-regfile-xxxx.1.zip``::
 
     $ mkdir -p .pyarmor/group
     $ cp pyarmor-group-device.1 .pyarmor/group/
@@ -659,7 +659,7 @@ pyarmor reg
 
 拷贝这个离线注册文件到第一台设备，运行下面的命令进行离线注册::
 
-    $ pyarmor reg pyarmor-group-regfile-xxxx.1.zip
+    $ pyarmor reg pyarmor-device-regfile-xxxx.1.zip
 
 对于第二台，第三台等设备，也需要进行相应的操作，设备的序号必须依次增加。
 

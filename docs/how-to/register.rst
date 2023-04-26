@@ -100,20 +100,20 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
     $ pyarmor reg -g 1
 
-然后把这个文件拷贝到进行初始登记的机器上面，并存放在指定目录 ``.pyarmor/group/`` 下面，再使用下面的命令生成离线注册文件 ``pyarmor-group-regfile-xxxx.1.zip``::
+然后把这个文件拷贝到进行初始登记的机器上面，并存放在指定目录 ``.pyarmor/group/`` 下面，再使用下面的命令生成离线注册文件 ``pyarmor-device-regfile-xxxx.1.zip``::
 
     $ mkdir -p .pyarmor/group
     $ cp pyarmor-group-file.1 .pyarmor/group/
 
     $ pyarmor reg -g 1 /path/to/pyarmor-regfile-xxxx.zip
 
-这条命令执行成功之后会生成第一台设备的离线注册文件 ``pyarmor-group-regfile-xxxx.1.zip``
+这条命令执行成功之后会生成第一台设备的离线注册文件 ``pyarmor-device-regfile-xxxx.1.zip``
 
 **离线设备注册**
 
 一旦生成离线设备注册文件之后，就可以拷贝到离线设备上面，运行下面的命令进行注册::
 
-    $ pyarmor reg pyarmor-group-regfile-xxxx.1.zip
+    $ pyarmor reg pyarmor-device-regfile-xxxx.1.zip
 
 查看注册信息::
 
