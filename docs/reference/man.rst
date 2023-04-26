@@ -603,6 +603,7 @@ pyarmor reg
 -p NAME, --product NAME
                       指定许可证绑定的产品名称
 -u, --upgrade         升级 Pyarmor 许可证
+-g ID, --group ID     指定组内设备编号，仅用于集团版许可证注册
 
 .. describe:: 参数
 
@@ -616,29 +617,77 @@ pyarmor reg
 检查当前设备的注册信息::
 
     $ pyarmor -v
-    $ pyarmor reg
+
+**初始登记**
+
+初始登记使用下面的命令，产品名称必须输入，使用实际产品名称替换 ``NAME`` ，用于非商业化产品的使用名称 ``non-profits``::
+
+    $ pyarmor reg -p NAME pyarmor-regcode-xxxx.txt
+
+初始登记完成之后会生成相应的 :term:`注册文件` ``pyarmor-regfile-xxxx.zip`` ，在其他设备以及后续的注册均使用这个文件，并且不需要输入产品名称::
+
+    $ pyarmor reg pyarmor-regfile-xxxx.zip
+
+**升级许可证**
+
+升级使用下面的命令，其中产品名称必须和原来的许可证绑定名称一致，如果不一致的话会被忽略::
+
+    $ pyarmor reg -p NAME pyarmor-regcode-xxxx.txt
+
+升级完成之后会生成相应的 :term:`注册文件` ``pyarmor-regfile-xxxx.zip`` ，在其他设备以及后续的注册均使用这个文件，并且不需要输入产品名称::
+
+    $ pyarmor reg pyarmor-regfile-xxxx.zip
+
+**集团版许可证**
+
+集团版许可证也需要在有网络的机器上进行初始登记，并生成相应的 :term:`注册文件`
+
+一个集团版许可证最多使用 100 个离线设备，每一个设备都有一个编号，从 1 到 100。
+
+需要使用 Pyarmor 的离线设备，首先要生成一个设备组信息文件。例如在第一台设备上，使用下面的命令生成组信息文件 ``pyarmor-group-file.1``::
+
+    $ pyarmor reg -g 1
+
+然后把这个组信息文件拷贝到有网络的机器上面，并存放在指定目录 ``.pyarmor/group/`` ，然后使用 :term:`注册文件` 和组信息文件生成该设备对应的离线注册文件。例如，为第一台设备生成离线注册文件 ``pyarmor-group-regfile-xxxx.1.zip``::
+
+    $ mkdir -p .pyarmor/group
+    $ cp pyarmor-group-file.1 .pyarmor/group/
+
+    $ pyarmor reg -g 1 pyarmor-regfile-xxxx.zip
+
+拷贝离线注册文件到第一台设备，然后运行下面的命令进行离线注册，并离线使用 Pyarmor::
+
+    $ pyarmor reg pyarmor-group-regfile-xxxx.1.zip
+
+对于第二台，第三台等设备，也需要进行相应的操作，设备的序号必须依次增加。
 
 .. option:: -p NAME, --product NAME
 
-            指定许可证绑定的产品名称
+            使用 ``.txt`` 文件注册时候指定许可证绑定的产品名称
 
-第一次注册的时候指定许可证绑定的产品名称
+            使用 ``.zip`` 文件注册的时候不需要使用这个选项
 
-没有这个选项，产品名称会被设定为 ``non-profits``
+            非商业化产品中使用请设置名称为 ``non-profits``
 
-之后的注册不需要使用该选项，使用该选项可能会报错。
+第一次注册或者升级的时候指定许可证绑定的产品名称
 
 绑定的产品名称一旦设定之后就无法更改，除了一个特殊名称 ``TBD``
 
 如果产品名称设置为 ``TBD`` ，那么可以在随后修改一次。这个主要用于产品还在开发阶段，尚未确定名称的时候使用，在产品正式销售之前需要修改为正确的产品名称。
 
-如果是升级许可证，产品的名称不可以被设定为 ``TBD``
+只有基础版和专家版许可证的产品名称可以被设定为 ``TBD`` ，升级许可证，以及集团版许可证的必须指定实际使用的产品名称。
 
 .. option:: -u, --upgrade
 
             升级老版本的许可证为 Pyarmor 8 的许可证
 
-            不是所有的老版本的许可证都可以升级到新版本，请参考 :doc:`../licenses` 里面的升级说明
+不是所有的老版本的许可证都可以升级到新版本，请参考 :doc:`../licenses` 里面的升级说明
+
+.. option:: -g ID, --group ID
+
+            指定离线设备的组内编号，仅适用于集团版许可证
+
+            有效值为 1 到 100
 
 环境变量
 ========
