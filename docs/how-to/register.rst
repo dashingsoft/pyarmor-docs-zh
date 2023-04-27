@@ -49,9 +49,11 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
     $ pyarmor reg -p "TBD" pyarmor-regcode-xxxx.txt
 
-绑定的产品名称为 ``TBD`` 的许可证，必须在产品销售之前，使用下面的命令设置为正确的产品名称::
+绑定的产品名称为 ``TBD`` 的许可证，必须在六个月之内，使用下面的命令设置为正确的产品名称::
 
     $ pyarmor reg -p "Robot Studio" pyarmor-regcode-xxxx.txt
+
+如果六个月之内还没有进行修改，那么产品名称会被自动设定为 ``non-profits`` ，并且不能在被修改。
 
 在其他设备上面注册
 ==================
