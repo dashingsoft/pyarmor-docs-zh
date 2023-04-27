@@ -17,7 +17,7 @@
 下面的选项都可以用来增加安全性
 
 * :option:`--enable-rft` 几乎不影响性能，是推荐选项
-* :option:`--enable-bcc` 可能会显著增加模块导入时间
+* :option:`--enable-bcc` 能增加函数执行速度，但是可能需要的内存会多一些
 * :option:`--enable-jit` 可以防止静态反编译
 * :option:`--enable-themida` 可以防止动态调试器，但是对性能影响比较大，并且仅在 Windwos 可用
 * :option:`--mix-str` 保护脚本的所有字符串常量
