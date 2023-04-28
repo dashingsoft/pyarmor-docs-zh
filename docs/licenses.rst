@@ -196,9 +196,9 @@ Microsoft Office 产品系列不是一种产品，它包括的各个产品，例
 
 按照新的 `Pyarmor 最终用户许可协议`_ ，需要为每一个许可证指定产品名称。这也意味着，如果老的许可证是被用于多种产品的话，升级之后就只能用于其中的一个，其他产品还需要购买新的许可证。
 
-假定使用许可证的产品名称是 ``Robot Studio`` ，那么使用下面的命令进行升级::
+假定使用许可证的产品名称是 ``XXX`` ，那么使用下面的命令进行升级::
 
-    $ pyarmor reg -u -p "Robot Studio" pyarmor-regcode-xxxx.txt
+    $ pyarmor reg -u -p "XXX" pyarmor-regcode-xxxx.txt
 
 运行下面的命令检查升级后的许可证::
 

@@ -30,9 +30,9 @@
 在商用产品中使用的注册方式
 --------------------------
 
-假设许可证将被用来保护产品 ``Robot Studio`` ，那么使用下面的命令进行初始登记注册::
+假设许可证将被用来保护产品 ``XXX`` ，那么使用下面的命令进行初始登记注册::
 
-    $ pyarmor reg -p "Robot Studio" pyarmor-regcode-xxxx.txt
+    $ pyarmor reg -p "XXX" pyarmor-regcode-xxxx.txt
 
 Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入 :kbd:`yes` 并 :kbd:`Enter` 继续下面的注册步骤，其他任何输入都会终止注册过程。
 
@@ -51,7 +51,7 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 绑定的产品名称为 ``TBD`` 的许可证，必须在六个月之内，使用下面的命令设置为正确的产品名称::
 
-    $ pyarmor reg -p "Robot Studio" pyarmor-regcode-xxxx.txt
+    $ pyarmor reg -p "XXX" pyarmor-regcode-xxxx.txt
 
 如果六个月之内还没有进行修改，那么产品名称会被自动设定为 ``non-profits`` ，并且不能在被修改。
 
@@ -86,9 +86,9 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 购买集团版许可证之后，一个 :file:`pyarmor-regcode-xxxx.txt` 的 :term:`激活文件` 会发送到注册邮箱中，这个文件用于第一次的注册登记。
 
-集团版许可证的第一次注册登记需要在有网络的设备上进行，首先安装 Pyarmor 8.2 以上版本，然后运行下面的命令进行初始登记，初始登记必须指定许可证绑定的产品名称，不允许使用 "TBD"，这里假设产品名称是 ``Robot``::
+集团版许可证的第一次注册登记需要在有网络的设备上进行，首先安装 Pyarmor 8.2 以上版本，然后运行下面的命令进行初始登记，初始登记必须指定许可证绑定的产品名称，不允许使用 "TBD"，这里假设产品名称是 ``XXX``::
 
-    $ pyarmor reg -p Robot pyarmor-regcode-xxxx.txt
+    $ pyarmor reg -p XXX pyarmor-regcode-xxxx.txt
 
 登记成功之后会生成相应的注册文件 ``pyarmor-regfile-xxxx.zip`` ，这个注册文件可用于后续的注册命令。
 
