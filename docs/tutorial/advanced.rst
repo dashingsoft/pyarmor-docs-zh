@@ -2,7 +2,7 @@
  高级教程
 ==========
 
-.. contents:: Contents
+.. contents:: 内容
    :depth: 2
    :local:
    :backlinks: top
