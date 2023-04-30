@@ -24,9 +24,9 @@ Pyarmor 使用下面的方式进行定制和扩展
 
 默认情况下运行辅助包的名称是 ``pyarmor_runtime_xxxxxx``
 
-如果需要自定义运行辅助包的名称，可以使用下面的命令进行设置。例如设定名称为 ``pyarmor_runtime``::
+这个名称可以被配置成为任何合法的包名称。例如设定名称为 ``my_runtime``::
 
-    pyarmor cfg package_name_format "pyarmor_runtime"
+    pyarmor cfg package_name_format "my_runtime"
 
 .. [#] 试用版本不可以修改运行辅助包的名称，修改后的加密脚本无法运行
 
