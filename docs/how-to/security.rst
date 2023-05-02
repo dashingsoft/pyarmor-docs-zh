@@ -21,8 +21,8 @@
 * :option:`--enable-jit` 可以防止静态反编译
 * :option:`--enable-themida` 可以防止动态调试器，但是对性能影响比较大，并且仅在 Windwos 可用
 * :option:`--mix-str` 保护脚本的所有字符串常量
-* `pyarmor cfg mix_argnames=1` 保护函数参数，但是可能导致 annotations 不可用
 * :option:`--obf-code` ``2`` 能够同时增加反编译 Bytecode 的难度
+* `pyarmor cfg mix_argnames=1` 保护函数参数，但是可能导致 annotations 不可用
 
 下面的选项可以隐藏加密模块的属性，外部脚本无法直接导入和使用加密脚本
 
@@ -42,7 +42,7 @@
 * :option:`--obf-module` ``0``
 * `pyarmor cfg restrict_module=0`
 
-如果需要提高安全性，但是对性能又不要影响太大，最后的选择是同时启用 :term:`RFT 模式`
+如果需要提高安全性，但是对性能又不要影响太大，最好的选择是同时启用 :term:`RFT 模式`
 
 * :option:`--enable-rft`
 
