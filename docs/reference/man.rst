@@ -133,7 +133,7 @@ pyarmor gen
 --prefix PREFIX                 设置导入运行辅助包的前缀名称 :option:`... <--prefix>`
 
 --obf-module <0,1>              指定模块加密模式，默认是 1 :option:`... <--obf-module>`
---obf-code <0,1>                指定代码加密模式，默认是 1 :option:`... <--obf-code>`
+--obf-code <0,1,2>              指定代码加密模式，默认是 1 :option:`... <--obf-code>`
 --no-wrap                       禁用包裹加密模式 :option:`... <--no-wrap>`
 --enable <jit,rft,bcc,themida>  启用不同的保护特征 :option:`... <--enable>`
 --mix-str                       混淆字符串常量 :option:`... <--mix-str>`
@@ -370,9 +370,11 @@ pyarmor gen
 
             加密模块对应 ``.pyc`` ，默认是 1
 
-.. option:: --obf-code <0,1>
+.. option:: --obf-code <0,1,2>
 
             加密模块中的每一个函数（二次加密），默认是 1
+
+模式 ``2`` 是 Pyarmor 8.2 中新增加的，它能增加从 Bytecode 进行反编译的难度，同时会降低一点性能。
 
 .. option:: --no-wrap
 

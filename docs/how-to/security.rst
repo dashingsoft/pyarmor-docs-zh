@@ -22,6 +22,7 @@
 * :option:`--enable-themida` 可以防止动态调试器，但是对性能影响比较大，并且仅在 Windwos 可用
 * :option:`--mix-str` 保护脚本的所有字符串常量
 * `pyarmor cfg mix_argnames=1` 保护函数参数，但是可能导致 annotations 不可用
+* :option:`--obf-code` ``2`` 能够同时增加反编译 Bytecode 的难度
 
 下面的选项可以隐藏加密模块的属性，外部脚本无法直接导入和使用加密脚本
 
