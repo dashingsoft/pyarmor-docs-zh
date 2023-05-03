@@ -161,7 +161,7 @@ Pyarmor 按照顺序依次搜索同名的脚本:
 
 禁用插件使用下面的方式::
 
-    $ pyarmor cfg plgins - "fooplugin"
+    $ pyarmor cfg plugins - "fooplugin"
 
 .. _hooks:
 
