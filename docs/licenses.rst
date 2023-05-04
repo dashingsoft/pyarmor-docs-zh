@@ -68,6 +68,7 @@
 不用于销售的所有的 Python 脚本都属于一种特殊的产品 ``non-profits``
 
 Pyarmor 是一种产品，它所包含
+
 - Pyarmor 基础版，专家版和集团版 都属于 Pyarmor 这一种产品
 - pyarmor-webui，为 Pyarmor 提供图形界面的工具，也属于 Pyarmor 这一种产品
 - Pyarmor 的后台订单系统是用 django 开发的一个程序，这也属于 Pyarmor 这一种产品

@@ -13,11 +13,12 @@
 加密时候的错误消息
 ==================
 
-表-1 列出的是运行命令 :command:`pyarmor` 时候常见的错误信息，部分可能的原因和解决方案
+**加密常见错误信息**
+
+下表列出的是运行命令 :command:`pyarmor` 时候常见的错误信息，部分可能的原因和解决方案
 
 .. list-table:: 表-1. 加密时候错误信息表
    :name: pyarmor errors
-   :width: 100
    :header-rows: 1
 
    * - 错误信息
@@ -37,15 +38,18 @@
 
        解决方案: 直接加密脚本所在的包 (目录)，而不是单独加密一个文件
 
-表-1.1 列出一般发生在注册 Pyarmor 时候发生的错误信息
+**注册错误信息**
+
+下表列出一般发生在注册 Pyarmor 时候的错误信息
 
 .. list-table:: 表-1.1 注册时候错误信息表
    :name: register errors
-   :width: 100
    :header-rows: 1
 
    * - 错误信息
      - 原因和解决方案
+   * - HTTP Error 400: Bad Request
+     - 请升级到 Pyarmor 8.2+，以显示正确的错误信息，然后采取相应的解决方案
    * - HTTP Error 401: Unauthorized
      - 在新版本的许可证下使用 pyarmor-7 命令
 
@@ -61,55 +65,68 @@
 
        解决方案：使用命令 ``pyarmor-7``
    * - This code has been used too many times
-     -
+     - 如果是在 CI/Docker 中使用 Pyarmor，请通过该订单的注册邮箱发送订单信息到 pyarmor@163.com 以解锁该订单
 
 运行加密脚本的错误信息
 ======================
 
-这里列出的是运行加密脚本的时候常见的错误信息，部分可能的原因和解决方案。
+**Pyarmor 报告的错误信息**
 
-表-2 里面的错误信息都是 Pyarmor 报告的
+这里列出的是运行加密脚本的时候 Pyarmor 报出的错误信息，部分可能的原因和解决方案。
+
+如果该消息有错误代码，那么用户可以使用消息代码对这个消息进行国际化和本地化处理。没有错误代码的消息无法进行定制。
 
 .. list-table:: 表-2. 运行加密脚本的错误信息表（Pyarmor）
    :name: runtime errors
-   :width: 100
    :header-rows: 1
 
-   * - 错误信息
+   * - 错误代码
+     - 错误信息
      - 原因和解决方案
-   * - error code out of range
+   * -
+     - error code out of range
+     - Internal error
+   * - error_1
+     - this license key is expired
      -
-   * - this license key is expired
+   * - error_2
+     - this license key is not for this machine
      -
-   * - this license key is not for this machine
+   * - error_3
+     - missing license key to run the script
      -
-   * - missing license key to run the script
+   * - error_4
+     - unauthorized use of script
      -
-   * - unauthorized use of script
+   * - error_5
+     - this Python version is not supported
      -
-   * - this Python version is not supported
+   * - error_6
+     - the script doesn't work in this system
      -
-   * - the script doesn't work in this system
-     -
-   * - the format of obfuscated script is incorrect
+   * - error_7
+     - the format of obfuscated script is incorrect
      - 可能的原因:
 
        1. 加密脚本是由其他不兼容的 Pyarmor 生成的，请使用最新的 Pyarmor 进行加密
        2. 无法获得运行辅助包所在的路径，也会报这个错误
-   * - the format of obfuscated function is incorrect
+   * - error_8
+     - the format of obfuscated function is incorrect
      -
-   * - RuntimeError: Resource temporarily unavailable
+   * -
+     - RuntimeError: Resource temporarily unavailable
      - 设置了加密脚本的有效期，但是无法访问时间服务器导致的问题
 
        这个问题无法解决，要么使用本地时间，要么用户使用 :term:`脚本补丁` 自己进行校验
 
-表-2.1 中的错误信息都是 Python 解释器报告的，通常情况下，这种错误不是 Pyarmor 造成的。
+**Python 报告的错误信息**
+
+通常情况下，这种错误不是 Pyarmor 造成的。
 
 解决这里的问题只需要参考 Python 的文档，把加密脚本看作是普通脚本，就可以解决问题，也可以直接在百度或者 Python 相关的论坛网站找到答案。
 
 .. list-table:: 表-2.1 运行加密脚本的错误信息表（Python）
    :name: other runtime errors
-   :width: 100
    :header-rows: 1
 
    * - 错误信息

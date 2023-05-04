@@ -30,6 +30,27 @@ Pyarmor 使用下面的方式进行定制和扩展
 
 .. [#] 试用版本不可以修改运行辅助包的名称，修改后的加密脚本无法运行
 
+自定义需要保护的函数和模块
+==========================
+
+.. versionadded:: 8.2
+
+Pyarmor 8.2 新增加一个配置项 ``auto_mode`` 用来实现自定义需要保护的函数和模块，它的默认值为 ``and`` ，这时候过滤方式和以前的版本是一样的。 ``and`` 的含义是所有的操作对象除了是自动识别之外，还必须满足 ``includes`` 和 ``excludes`` 条件。
+
+如果修改其值为 ``or`` ，则表示除了自动识别的函数和模块之外，还需要保护 ``includes`` 里面的函数。例如，下面的命令，，除了保护自动识别的函数之外，还额外保护函数 ``foo`` 和 ``koo``::
+
+    $ pyarmor cfg ast.call:auto_mode "or"
+    $ pyarmor cfg ast.call:includes "foo koo"
+
+    $ pyarmor gen --assert-call foo.py
+
+下面的命令可以用来保护没有使用 ``import`` 语句直接导入的加密模块 ``joker.card``::
+
+    $ pyarmor cfg ast.import:auto_mode "or"
+    $ pyarmor cfg ast.import:includes "joker.card"
+
+    $ pyarmor gen --assert-import joker/
+
 使用加密插件修正运行辅助包的依赖项
 ==================================
 

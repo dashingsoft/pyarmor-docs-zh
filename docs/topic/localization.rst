@@ -14,23 +14,7 @@
 
     $ pyarmor cfg messages=messages.cfg:gbk
 
-所有支持的错误代码
-
-.. code-block:: ini
-
-  [runtime.message]
-
-    error_1 = 脚本许可证已经过期
-    error_2 = 脚本许可证不可用于当前设备
-    error_3 = 非法使用脚本
-
-    error_4 = 缺少运行许可文件
-    error_5 = 脚本不支持当前 Python 版本
-    error_6 = 脚本不支持当前系统
-    error_7 = 加密模块的数据格式不正确
-
-    error_8 = 加密函数的数据格式不正确
-
+.. seealso:: :ref:`runtime errors`
 
 运行加密脚本的过程
 ==================

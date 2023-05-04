@@ -611,8 +611,8 @@ pyarmor reg
 
 参数 ``FILENAME`` 必须是下面任意一种文件
 
-* ``pyarmor-regcode-xxxx.txt``
-* ``pyarmor-regfile-xxxx.zip``
+* ``pyarmor-regcode-xxxx.txt`` 激活文件，一般在购买许可证之后会发送到注册邮箱
+* ``pyarmor-regfile-xxxx.zip`` 注册文件，初始登记之后自动生成
 
 .. describe:: 描述
 
