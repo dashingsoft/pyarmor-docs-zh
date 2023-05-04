@@ -34,4 +34,6 @@ Pyarmor 对使用 PyInstaller 打包进行发布的方式提供了特别的保�
 
 其他选项可以根据需要进行配置。
 
+.. seealso:: :doc:`protection`
+
 .. include:: ../_common_definitions.txt
