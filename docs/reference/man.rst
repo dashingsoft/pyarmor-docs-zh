@@ -467,6 +467,18 @@ pyarmor gen key
     $ pyarmor gen key -e 30
     $ ls dist/sky.lic
 
+外部密钥文件也可以存放在其他位置，在运行的时候会依次查找下面的路径:
+
+- 运行辅助包的目录
+- 环境变量 :env:`PYARMOR_RKEY` 指定的路径，路径名称中不能包含 ``..`` ，尾部不能是路径分隔符，一般用来指定一个绝对路径，例如 ``/var/data``
+- 当前目录
+
+如果在以上目录下找不到 ``pyarmor.rkey`` ，会查看是否存在文件
+
+- 当前可执行文件的全路径名称 + ``.pyarmor.rkey`` ，例如 ``dist/foo/foo.exe.pyarmor.rkey``
+
+如果不存在，那么报错缺失运行密钥。
+
 .. _pyarmor cfg:
 
 pyarmor cfg

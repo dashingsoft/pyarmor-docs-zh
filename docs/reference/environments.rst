@@ -198,17 +198,7 @@ Pyarmor 按照顺序依次搜索同名的脚本:
 环境变量
 ========
 
-部分系统模块 :mod:`sys` 的属性和环境变量会被加密脚本使用来决定一些运行设置。
-
-:attr:`sys._MEIPASS`
-
-      借用 PyInstaller_ 的设置，加密脚本会在这里指定的路径下面搜索 :term:`外部密钥`
-
-:attr:`sys._PARLANG`
-
-      用来设置运行时刻使用的语言设置。
-
-      如果这个属性存在，那么环境变量 :envvar:`LANG` 会被忽略
+这里的环境变量会被加密脚本使用来决定一些运行设置
 
 .. envvar:: LANG
 
@@ -218,7 +208,7 @@ Pyarmor 按照顺序依次搜索同名的脚本:
 
       用来设置运行时刻使用的语言设置。
 
-      如果这个变量存在，那么 :envvar:`LANG` 和 :attr:`sys._PARLANG` 都会被忽略
+      如果这个变量存在，那么 :envvar:`LANG` 会被忽略
 
 .. envvar:: PYARMOR_RKEY
 
@@ -238,6 +228,8 @@ Pyarmor 按照顺序依次搜索同名的脚本:
 * Boost::python，默认装载 Python 动态库是没有设置 `RTLD_GLOAL` 的，运行加密脚本的时候会报错 "No PyCode_Type found" 。解决方法就是在初始化的调用方法 `sys.setdlopenflags(os.RTLD_GLOBAL)` ，这样就可以共享动态库输出的函数和变量。
 
 * 模块 `ctypes` 必须存在并且 `ctypes.pythonapi._handle` 必须被设置为 Python 动态库的句柄，PyArmor 会通过该句柄获取 Python C API 的地址。
+
+* WASM 目前不支持，因为这需要把运行库的代码也编译成为 WASM，但是 WASM 是很容易就被反编译成为原来的 C 代码，为了安全性，所以目前没有支持 WASM 的计划。如果有更多的用户提出这个需求，会考虑实现一个轻量级的运行库，只支持能够运行 RFT 模式的加密脚本，但是目前还没有开发计划。
 
 .. _specialized builtin functions:
 

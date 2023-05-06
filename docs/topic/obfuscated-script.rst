@@ -145,4 +145,6 @@ Pyarmor 加密后的脚本输出的是同名的 ``.py`` 文件和一个 :term:`�
 
 * 模块 `ctypes` 必须存在并且 `ctypes.pythonapi._handle` 必须被设置为 Python 动态库的句柄，PyArmor 会通过该句柄获取 Python C API 的地址。
 
+* WASM 目前不支持，因为这需要把运行库的代码也编译成为 WASM，但是 WASM 是很容易就被反编译成为原来的 C 代码，为了安全性，所以目前没有支持 WASM 的计划。如果有更多的用户提出这个需求，会考虑实现一个轻量级的运行库，只支持能够运行 RFT 模式的加密脚本，但是目前还没有开发计划。
+
 .. include:: ../_common_definitions.txt

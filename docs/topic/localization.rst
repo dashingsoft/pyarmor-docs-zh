@@ -22,8 +22,7 @@
 确定默认语言
 
 * 首先查看 :envvar:`PYARMOR_LANG`
-* 其次查看 :attr:`sys._PARLANG`
-* 最后查看 :envvar:`LANG`
+* 其次查看 :envvar:`LANG`
 
 查找定制的错误信息，首先匹配语言，然后匹配错误代码
 
