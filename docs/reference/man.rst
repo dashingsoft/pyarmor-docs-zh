@@ -584,9 +584,17 @@ pyarmor cfg
 
             指定 :term:`模块私有配置` 的模块名称
 
+            使用这个选项来处理特殊的模块，这些特殊模块需要使用不同的加密配置
+
 所有的配置操作都是在该模块中，不影响其他模块。
 
 对于包里面的模块，需要使用全路径名称来指定，例如 ``pkgname.modname.submodule``
+
+例如，这两个模块 ``joker/__init__.py`` 和 ``joker/card.py`` 不使用任何约束，包里面的其他模块都使用约束模式::
+
+    $ pyarmor cfg -p joker.__init__ restrict_module = 0
+    $ pyarmor cfg -p joker.card restrict_module = 0
+    $ pyarmor gen -r --restrict joker
 
 .. option:: -g, --global
 
