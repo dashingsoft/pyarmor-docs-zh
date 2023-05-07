@@ -39,7 +39,7 @@
 
     $ dist/myapp/myapp
 
-如果是打包成为单个可执行文件，一般把外部密钥存放为 ``可执行文件.密钥名称`` 。例如::
+如果是打包成为单个可执行文件，一般把外部密钥和可执行文件存放在相同目录下面，并且重命名为 ``可执行文件名称.密钥名称`` 。例如::
 
     $ pyinstaller --onefile myapp.py
     $ pyarmor gen --outer --pack dist/myapp myapp.py
@@ -53,7 +53,8 @@
 还有一种情况是把运行密钥存放在一个固定目录下面，然后使用环境变量来指定这个目录。例如::
 
     $ export PYARMOR_RKEY=/opt/pyarmor/runtime_data
-    $ cp keylist/pyarmor.rkey /opt/pyarmor/runtime_data
+    $ mkdir -p /opt/pyarmor/runtime_data
+    $ cp keylist/pyarmor.rkey /opt/pyarmor/runtime_data/
     $ dist/foo
 
 ==========================
