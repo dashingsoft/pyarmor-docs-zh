@@ -195,7 +195,7 @@ Pyarmor 8.2 新增加一个配置项 ``auto_mode`` 用来实现自定义需要�
 
 .. code-block:: python
 
-    # Plugin sript: .pyarmor/myplugin.py
+    # Plugin script: .pyarmor/myplugin.py
 
     __all__ = ['RuntimePlugin', 'CondaPlugin']
 
