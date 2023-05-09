@@ -48,13 +48,75 @@ Pyarmor 可以确保各种使用 Python 自身提供的机制无法非法获取�
 
 .. [#] 不要在 Intel i686 系列的平台上使用配置项 ``check_interp`` ，这个选项无法在这些平台工作。
 
-**自定义补丁**
+**脚本补丁**
+
+为了进一步提高安全性，还可以使用脚本补丁来检查 PyInstaller 的装载代码，确保其没有被替换。
+
+下面的例子只是演示如何实现，请不要直接在项目中使用，并且在不同 PyInstaller 版本中可能会出错，请根据自己的具体情况，参考这个示例编写自己的私有补丁。
+
+.. code-block:: python
+    :linenos:
+    :emphasize-lines: 12-14
+
+    # Hook script ".pyarmor/hooks/foo.py"
+
+    def protect_self():
+        from sys import modules
+
+        def check_module(name, checklist):
+            m = modules[name]
+            for attr, value in checklist.items():
+                if value != sum(getattr(m, attr).__code__.co_code):
+                    raise RuntimeError('unexpected %s' % m)
+
+        checklist__frozen_importlib = {}
+        checklist__frozen_importlib_external = {}
+        checklist_pyimod03_importers = {}
+
+        check_module('_frozen_importlib', checklist__frozen_importlib)
+        check_module('_frozen_importlib_external', checklist__frozen_importlib_external)
+        check_module('pyimod03_importers', checklist_pyimod03_importers)
+
+    protect_self()
+
+目前脚本里面的检查点为空（高亮的行），为了得到真正的检查点，需要先使用下面的一个假函数替换真正的 ``check_module``
+
+.. code-block:: python
+
+        def check_module(name, checklist):
+            m = modules[name]
+            refs = {}
+            for attr in dir(m):
+                value = getattr(m, attr)
+                if hasattr(value, '__code__'):
+                    refs[attr] = sum(value.__code__.co_code)
+            print('    checklist_%s = %s' % (name, refs))
+
+
+运行下面的命令以得到真正的检查点，代码行会打印在控制台::
+
+    $ pyinstaller foo.py
+    $ pyarmor gen --pack dist/foo/foo foo.py
+
+    ...
+    checklist__frozen_importlib = {'__import__': 9800, ...}
+    checklist__frozen_importlib_external = {'_calc_mode': 2511, ...}
+    checklist_pyimod03_importers = {'imp_lock': 183, 'imp_unlock': 183, ...}
+
+编辑脚本补丁，恢复原来的函数 ``check_module`` 并使用生成的代码替换空的检查点。
+
+最后使用真正的补丁脚本来生成最终的包::
+
+    $ pyinstaller foo.py
+    $ pyarmor gen --pack dist/foo/foo foo.py
+
+**启动补丁**
 
 .. versionadded:: 8.x
 
                   该功能尚未实现
 
-用户可以编写自己的代码去检查调试器和其他任何反调试代码，代码可以使用 Python 和 C 实现，在扩展模块 pyarmor_runtime 被装载的时候自动调用。
+用户还可以编写自己的代码去检查调试器和其他任何反调试代码，代码可以使用 Python 和 C 实现，在扩展模块 pyarmor_runtime 被装载的时候自动调用。
 
 基本配置方式是创建一个脚本  :file:`.pyarmor/hooks/pyarmor_runtime.py` 或者文件 :file:`.pyarmor/hooks/pyarmor_runtime.c` ，这个脚本会被嵌入到运行密钥中，并且在扩展模块 pyarmor_runtime 初始化的时候运行。
 

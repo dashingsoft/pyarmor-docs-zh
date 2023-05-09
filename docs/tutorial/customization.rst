@@ -170,4 +170,62 @@ Pyarmor 8.2 新增加一个配置项 ``auto_mode`` 用来实现自定义需要�
 
 .. seealso:: :ref:`hooks` :func:`__pyarmor__`
 
+保护运行辅助模块
+================
+
+.. versionadded:: 8.2
+
+下面的例子说明如何检查运行辅助模块 ``pyarmor_runtime.so`` 的文件内容来确保其没有被修改
+
+首先创建一个补丁脚本 :file:`.pyarmor/hooks/foo.py`:
+
+.. code-block:: python
+    :linenos:
+    :emphasize-lines: 7
+
+    def check_pyarmor_runtime(value):
+        from pyarmor_runtime_000000 import pyarmor_runtime
+        with open(pyarmor_runtime.__file__, 'rb') as f:
+            if sum(bytearray(f.read())) != value:
+                raise RuntimeError('unexpected %s' % filename)
+
+    check_pyarmor_runtime(EXCEPTED_VALUE)
+
+第 7 行的 ``EXCEPTED_VALUE`` 需要被替换成为实际值，但是这里存在一个问题。每一次加密之后运行辅助模块 ``pyarmor_runtime.so`` 是不同的，所以必须在生成运行辅助模块的同时得到其文件字节总和。这个我们可以通过加密插件来实现，在生成辅助文件之后，自动计算字节总和，然后修改补丁脚本
+
+.. code-block:: python
+
+    # Plugin sript: .pyarmor/myplugin.py
+
+    __all__ = ['RuntimePlugin', 'CondaPlugin']
+
+    class RuntimePlugin:
+
+        @staticmethod
+        def post_runtime(ctx, source, target, platform):
+            with open(target, 'rb') as f:
+                value = sum(bytearray(f.read()))
+            with open('.pyarmor/hooks/foo.py', 'r') as f:
+                source = f.read()
+            source = source.replace('EXPECTED_VALUE', str(value))
+            with open('.pyarmor/hooks/foo.py', 'r') as f:
+                f.write(source)
+
+    class CondaPlugin:
+        ...
+
+
+然后启用这个插件::
+
+    $ pyarmor cfg plugins + "myplugin"
+
+最后生成加密脚本，并进行验证::
+
+    $ pyarmor gen foo.py
+    $ python dist/foo.py
+
+这个例子只是演示如何去做，并不能在实际项目中使用。任何公开源码的检查方式一般都可以找到相应的方法绕过，所以请编写自己私有的检查脚本，这样才能真正的提高安全性。
+
+.. seealso:: :ref:`hooks` :func:`__pyarmor__`
+
 .. include:: ../_common_definitions.txt
