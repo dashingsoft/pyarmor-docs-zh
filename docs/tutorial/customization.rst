@@ -214,7 +214,6 @@ Pyarmor 8.2 新增加一个配置项 ``auto_mode`` 用来实现自定义需要�
     class CondaPlugin:
         ...
 
-
 然后启用这个插件::
 
     $ pyarmor cfg plugins + "myplugin"
@@ -226,6 +225,53 @@ Pyarmor 8.2 新增加一个配置项 ``auto_mode`` 用来实现自定义需要�
 
 这个例子只是演示如何去做，并不能在实际项目中使用。任何公开源码的检查方式一般都可以找到相应的方法绕过，所以请编写自己私有的检查脚本，这样才能真正的提高安全性。
 
-.. seealso:: :ref:`hooks` :func:`__pyarmor__`
+.. seealso:: :ref:`hooks`
+
+在外部密钥中增加注释
+====================
+
+.. versionadded:: 8.2
+
+加密脚本检查 :term:`外部密钥` 文件的时候会忽略头部的任何可打印的字符，所以可以在外部密钥文件的开始增加注释，来对这个密钥进行备注说明。
+
+Pyarmor 也提供了加密插件可以用来对外部密钥添加注释
+
+.. code-block:: python
+
+    # Plugin script: .pyarmor/myplugin.py
+
+    from datetime import datetime
+
+    __all__ = ['CommentPlugin']
+
+    class CommentPlugin:
+
+        @staticmethod
+        def post_key(ctx, keyfile, **keyinfo):
+            expired = None
+            for name, value in keyinfo.items():
+                print(name, value)
+                if name == 'expired':
+                   expired = datetime.fromtimestamp(value).isoformat()
+
+            if expired:
+                print('patching runtime key')
+                comment = '# expired date: %s\n' % expired
+                with open(keyfile, 'rb') as f:
+                    keydata = f.read()
+                with open(keyfile, 'wb') as f:
+                    f.write(comment.encode())
+                    f.write(keydata)
+
+启用这个插件，然后生成一个外部密钥::
+
+    $ pyarmor cfg plugins + "myplugin"
+    $ pyarmor gen key -e 2023-05-06
+
+查看外部密钥中的注释::
+
+    $ head -n 1 dist/pyarmor.rkey
+
+.. seealso:: :ref:`plugins`
 
 .. include:: ../_common_definitions.txt

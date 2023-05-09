@@ -105,16 +105,20 @@ __ https://pyarmor.readthedocs.io/zh/v7.x/platforms.html
        :param list outputs: 输出目录
        :param str pack: 要么是 None，要么是选项 :option:`--pack` 指定的文件名称
 
-    .. py:staticmethod:: post_key(ctx, keyfile, expired=None, devices=None, data=None, period=None)
+    .. py:staticmethod:: post_key(ctx, keyfile,**keyinfo)
 
        如果该方法存在，那么当 :term:`外部密钥` 文件生成之后会被 :ref:`pyarmor gen key` 调用
 
        :param Context ctx: 加密环境
        :param str keyfile: 输出的外部密钥文件
-       :param long expired: None 或者有效期（epoch）
-       :param list devices: None 或者设备信息列表
-       :param str data: None 或者是绑定的私有数据
-       :param int period: None 或者是定时检查运行密钥的周期（秒）
+       :param dict keyinfo: 外部密钥绑定的信息
+
+       参数 ``keyinfo`` 中可能的项目有
+
+       :key expired: None 或者有效期（epoch）
+       :key devices: None 或者设备信息列表
+       :key data: None 或者是绑定的私有数据（Bytes）
+       :key period: None 或者是定时检查运行密钥的周期（秒）
 
     .. py:staticmethod:: post_runtime(ctx, source, dest, platform)
 
