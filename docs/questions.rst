@@ -123,8 +123,4 @@ Pyarmor 是一个工具产品，不额外签订其他合同， `Pyarmor 最终�
 
   具体使用方法请参考 :doc:`how-to/register` 里面的注册许可证中的说明
 
-**我们采购流程需要双方签一个合同，请问是否支持呢?**
-
-  Pyarmor 是一个产品工具，不额外签订其他合同， `Pyarmor 最终用户许可协议`_ 就是制式合同文件。
-
 .. include:: _common_definitions.txt
