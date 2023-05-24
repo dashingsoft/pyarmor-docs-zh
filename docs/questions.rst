@@ -111,7 +111,9 @@ Apple M1 上的 Segment fault
 
     $ codesign -s - -f dist/pyarmor_runtime_000000/pyarmor_runtime.so
 
-请参阅 https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format/
+请参阅 `Using the latest code signature format`__
+
+__ https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format/
 
 使用许可相关问题
 ================

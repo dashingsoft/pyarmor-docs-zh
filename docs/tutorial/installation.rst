@@ -18,7 +18,7 @@ Pyarmor_ 需要 Python 运行动态库以及 C 库，缺少它们 Pyarmor 无法
 
     $ apt install libpython3.10
 
-在 Darwin 平台，确保文件 ``@rpath/lib/libpythonX.Y.dylib`` 存放，这里 ``X.Y`` 表示 Python 的版本。例如::
+在 Darwin 平台，确保文件 ``@rpath/lib/libpythonX.Y.dylib`` 存在，这里 ``X.Y`` 表示 Python 的版本。例如::
 
     @rpath/lib/libpython3.10.dylib
 
