@@ -9,6 +9,28 @@
 
 .. highlight:: console
 
+前提条件
+========
+
+Pyarmor_ 需要 Python 运行动态库以及 C 库，缺少它们 Pyarmor 无法正常启动运行。
+
+在 Linux 平台，如有必要请安装 Python 运行动态库。例如，使用下面的命令安装 Python 3.10 的运行动态库::
+
+    $ apt install libpython3.10
+
+在 Darwin 平台，确保文件 ``@rpath/lib/libpythonX.Y.dylib`` 存放，这里 ``X.Y`` 表示 Python 的版本。例如::
+
+    @rpath/lib/libpython3.10.dylib
+
+``@rpath`` 是下列路径之一:
+
+- @executable_path/..
+- @loader_path/..
+- /System/Library/Frameworks/Python.framework/Versions/3.10
+- /Library/Frameworks/Python.framework/Versions/3.10
+
+如果没有这个文件，请安装必要的包或者使用必要的选项重新编译 Python。
+
 .. _install-pypi:
 
 从 PyPI 直接安装

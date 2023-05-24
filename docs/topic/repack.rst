@@ -115,4 +115,22 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 .. [#] 这一步的目的只是为了方便让 `PyInstaller` 能够找到运行辅助包而不需要增加额外路径
 .. [#] 其他 `PyInstaller`_ 的选项也可以在这里使用
 
+Apple M1 的 segment fault
+=========================
+
+在 Apple M1 上打包，如果生产的加密脚本运行时候发生崩溃，请首先检查运行辅助包的签名::
+
+    $ codesign -v dist/foo/pyarmor_runtime_000000/pyarmor_runtime.so
+
+如果签名非法，请重新进行签名::
+
+    $ codesign -f -s dist/foo/pyarmor_runtime_000000/pyarmor_runtime.so
+
+如果使用了 :option:`--enable-bcc` 或者 :option:`--enable-jit` 进行加密，那么还需要启用 `Allow Execution of JIT-compiled Code Entitlement`__
+
+.. seealso:: `Using the latest code signature format`__
+
+__ https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_cs_allow-jit
+__ https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format/
+
 .. include:: ../_common_definitions.txt
