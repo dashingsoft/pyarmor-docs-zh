@@ -36,7 +36,7 @@ Pyarmor 可以确保各种使用 Python 自身提供的机制无法非法获取�
 接着使用下面的命令加密脚本 [#]_::
 
     $ pyarmor cfg check_debugger=1 check_interp=1
-    $ pyarmor gen --mix-str --assert-call --assert-import --pack dist/foo/foo foo.py
+    $ pyarmor gen --mix-str --assert-call --assert-import --private --pack dist/foo/foo foo.py
 
 然后使用其他方式来保护 :file:`dist/foo/` 目录下面所有的可执行文件和动态库，外部工具要确保动态库不能被替换以及在运行时候的内存代码不能被修改。
 
