@@ -146,6 +146,32 @@ pyarmor gen
 
 .. describe:: 描述
 
+该命令用来加密脚本和包，例如::
+
+    pyarmor gen foo.py
+    pyarmor gen foo.py goo.py koo.py
+    pyarmor gen src/mypkg
+    pyarmor gen src/pkg1 src/pkg2 libs/dbpkg
+    pyarmor gen -r src/mypkg
+    pyarmor gen -r main.py src/*.py libs/utils.py libs/dbpkg
+
+所有在命令行列出的文件都会被作为 Python 脚本进行加密，即便它的扩展名不是 ``.py`` 。
+
+所有命令行列出的目录都会被作为包来进行加密，在该目录下面的所有 ``.py`` 文件会被加密，如果包含子目录需要加密，使用选项 :option:`-r` 来递归处理所有子目录。
+
+不要使用 ``pyarmor gen src/*`` 来加密一个包，这样会加密目录下面的任何文件。
+
+从 8.2.2 开始，支持使用文件列出所有需要加密的脚本和包, 然后使用前缀 ``@`` 来引用选项文件，例如::
+
+    pyarmor gen -r @filelist
+
+文件 :file:`filelist` 列出了需要加密的两个脚本和两个包::
+
+    src/foo.py
+    src/utils.py
+    libs/dbpkg
+    libs/config
+
 .. option:: -O PATH, --output PATH
 
 设置加密脚本的输出路径，默认值是 ``dist``
