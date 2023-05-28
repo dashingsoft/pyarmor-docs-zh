@@ -5,11 +5,13 @@
 ==========================
 
 .. versionadded:: 8.2
+.. versionchanged:: 8.2.2
+                    不在支持使用选项 ``--restrict`` 加密脚本来保护系统库，直接使用配置项。
 
 Pyarmor 对使用 PyInstaller 打包进行发布的方式提供了特别的保护，这种模式下面可以对系统库进行加密和保护，确保其不能被替换。下面是必须使用的选项::
 
     $ pyinstaller foo.py
-    $ pyarmor gen --assert-call --assert-import --restrict --pack dist/foo/foo foo.py
+    $ pyarmor gen --assert-call --assert-import --pack dist/foo/foo foo.py
 
 其他选项可以根据需要进行配置。
 
