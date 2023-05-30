@@ -124,7 +124,7 @@ Apple 上的 Segment fault
 	@rpath/lib/libpython3.9.dylib (compatibility version 3.9.0, current version 3.9.0)
         ...
 
-除了系统库之外，就是一个依赖库 ``@rpath/lib/libpython3.9.dylib`` ，其中默认配置的 ``rpath`` 为::
+除了系统库之外，主要就是 Python 动态库 ``@rpath/lib/libpython3.9.dylib`` ，其中默认配置的 ``rpath`` 为::
 
     $ install_name_tool -id pytrnsform3.so \
             -change $deplib @rpath/lib/libpython$ver.dylib \
@@ -138,12 +138,12 @@ Apple 上的 Segment fault
 
     $ otool -l /path/to/lib/pythonX.Y/site-packages/pyarmor/cli/core/pytransform3.so
 
-确保存在 ``@rpath/lib/libpython3.9.dylib`` ，如果不存在这个文件的话，需要使用 ``install_name_tool`` 适配当前的 Python 安装环境，假设 Python 动态库在路径 ``/usr/local/Python.framework/Versions/3.9/Python``::
+检查当前系统是否存在 ``@rpath/lib/libpython3.9.dylib`` ，如果不存在这个文件的话，需要使用 ``install_name_tool`` 适配当前的 Python 安装环境，假设 Python 动态库是 ``/usr/local/Python.framework/Versions/3.9/Python``::
 
     $ install_name_tool -change @rpath/lib/libpython3.9.dylib /usr/local/Python.framework/Versions/3.9/Python \
             /path/to/lib/pythonX.Y/site-packages/pyarmor/cli/core/pytransform3.so
 
-对于 ``dist/pyarmor_runtime_000000/pyarmor_runtime.so`` 也是同样的，必须保证依赖库都存在，否则需要修改。
+对于 ``dist/pyarmor_runtime_000000/pyarmor_runtime.so`` 也是同样的，必须保证依赖库都存在，否则需要进行适配运行环境。
 
 如何找到当前 Python 解释器对应的动态库，请自行搜索答案。注意有些预编译的 Python 没有使用动态库，那么是无法运行加密脚本的，需要重新编译支持动态库的版本。
 
@@ -164,6 +164,7 @@ Pyarmor 使用了 JIT 技术来提高安全性，在 Apple M1，这可能需要�
 __ https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format/
 __ https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/RunpathDependentLibraries.html
 __ https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_cs_allow-jit
+
 使用许可相关问题
 ================
 
