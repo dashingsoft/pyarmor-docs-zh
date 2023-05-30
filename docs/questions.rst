@@ -98,10 +98,10 @@ Pyarmor Team 欢迎真正的 Bug 报告，并且会尽快解决这些 Bug。报�
 
   Pyarmor 的核心功能是防止加密脚本被还原，对使用各种逆向工程方法的内存拷贝，直接修改内存绕过加密脚本的约束设置并没有特别的保护。关于如何对运行数据进行保护的解决方案，请参考 :doc:`how-to/protection`
 
-Apple M1 上的 Segment fault
-===========================
+Apple 上的 Segment fault
+========================
 
-通常情况下，这是因为不正确的 code signature
+1. 通常情况下，这是因为不正确的 code signature
 
 如果是加密或者注册的时候发生了崩溃，请尝试对扩展模块 ``pytransform3.so`` 重新签名::
 
@@ -111,10 +111,59 @@ Apple M1 上的 Segment fault
 
     $ codesign -s - -f dist/pyarmor_runtime_000000/pyarmor_runtime.so
 
-请参阅 `Using the latest code signature format`__
+请参阅 Apple 官方文档 `Using the latest code signature format`__
+
+2. 使用 otool 和 install_name_tool 解决依赖库问题
+
+因为预编译的扩展模块需要一些依赖库，如果依赖库的位置不对，就可能直接崩溃。使用 ``otool -L`` 可以查看依赖库::
+
+    $ otool -L /path/to/lib/pythonX.Y/site-packages/pyarmor/cli/core/pytransform3.so
+
+    /path/to/lib/pythonX.Y/site-packages/pyarmor/cli/core/pytransform3.so:
+	pytransform3.so (compatibility version 0.0.0, current version 1.0.0)
+	@rpath/lib/libpython3.9.dylib (compatibility version 3.9.0, current version 3.9.0)
+        ...
+
+除了系统库之外，就是一个依赖库 ``@rpath/lib/libpython3.9.dylib`` ，其中默认配置的 ``rpath`` 为::
+
+    $ install_name_tool -id pytrnsform3.so \
+            -change $deplib @rpath/lib/libpython$ver.dylib \
+            -add_rpath @executable_path/.. \
+            -add_rpath @loader_path/.. \
+            -add_rpath /System/Library/Frameworks/Python.framework/Versions/$ver \
+            -add_rpath /Library/Frameworks/Python.framework/Versions/$ver \
+            build/$host/libs/cp$ver/$name.so
+
+也可以使用下面的命令查看 ``rpath``::
+
+    $ otool -l /path/to/lib/pythonX.Y/site-packages/pyarmor/cli/core/pytransform3.so
+
+确保存在 ``@rpath/lib/libpython3.9.dylib`` ，如果不存在这个文件的话，需要使用 ``install_name_tool`` 适配当前的 Python 安装环境，假设 Python 动态库在路径 ``/usr/local/Python.framework/Versions/3.9/Python``::
+
+    $ install_name_tool -change @rpath/lib/libpython3.9.dylib /usr/local/Python.framework/Versions/3.9/Python \
+            /path/to/lib/pythonX.Y/site-packages/pyarmor/cli/core/pytransform3.so
+
+对于 ``dist/pyarmor_runtime_000000/pyarmor_runtime.so`` 也是同样的，必须保证依赖库都存在，否则需要修改。
+
+如何找到当前 Python 解释器对应的动态库，请自行搜索答案。注意有些预编译的 Python 没有使用动态库，那么是无法运行加密脚本的，需要重新编译支持动态库的版本。
+
+请参阅 Apple 官方文档 `Run-Path Dependent Libraries`__
+
+3. 如果系统安装了多个 Python，确保链接到正确的动态库
+
+4. 权限设置问题
+
+Pyarmor 使用了 JIT 技术来提高安全性，在 Apple M1，这可能需要对 Python 进行某些设置。使用下面的命令检查 Python 的 entitlements 并进行必要的设置::
+
+    $ codesign -d --entitlements - $(which python)
+
+请参阅 Apple 官方文档 `Allow Execution of JIT-compiled Code Entitlement`__
+
+5. 最后看一下 Apple 的 segment fault 日志，根据提示的错误信息搜索网络找解决方案
 
 __ https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format/
-
+__ https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/RunpathDependentLibraries.html
+__ https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_cs_allow-jit
 使用许可相关问题
 ================
 
