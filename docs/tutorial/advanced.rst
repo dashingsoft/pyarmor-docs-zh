@@ -399,9 +399,35 @@ Python 包 :mod:`pyarmor.cli.runtime` 提供了其他平台的预编译扩展模
 支持多个 Python 版本的加密脚本
 ==============================
 
-.. versionadded:: 8.x
-                  该功能尚未实现
+.. versionadded:: 8.3
 
-.. Use helper script `merge.py`
+下面是加密一个脚本 `foo.py` 同时支持 Python 3.8 和 3.9 的基本步骤
+
+首先要为每一个 Python 版本安装 Pyarmor::
+
+    $ python3.8 -m pip install pyarmor
+    $ python3.9 -m pip install pyarmor
+
+如果已经购买了 Pyarmor 的许可证，使用任意一个 Python 版本进行注册::
+
+    $ python3.8 -m pyarmor.cli reg pyarmor-regfile-xxxx.zip
+
+同时需要启用内置插件 ``MultiPythonPlugin``::
+
+    $ python3.8 -m pyarmor.cli cfg plugins + "MultiPythonPlugin"
+
+使用每一个 Python 版本分别加密脚本，保存在不同的目录::
+
+    $ python3.8 -m pyarmor.cli gen -O dist1 foo.py
+    $ python3.9 -m pyarmor.cli gen -O dist2 foo.py
+
+最后使用辅助脚本 ``merge.py`` 来合并两个输出目录::
+
+    $ python3.8 -m pyarmor.cli.merge -O dist dist1 dist2
+
+最终输出的脚本在 ``dist``::
+
+    $ python3.8 dist/foo.py
+    $ python3.9 dist/foo.py
 
 .. include:: ../_common_definitions.txt
