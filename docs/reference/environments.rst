@@ -184,9 +184,61 @@ Pyarmor 按照顺序依次搜索同名的脚本:
 
 需要注意的是补丁是直接插入到脚本的模块级别的代码中，所以要避免名称冲突，影响了原来脚本的执行。
 
-.. There is a special hook script ``.pyarmor/hooks/pyarmor_runtime.py`` will be embedded into extension `pyarmor_runtime` init function.
-
 .. seealso:: :func:`__pyarmor__`  :func:`__assert_armorred__`
+
+特殊脚本补丁
+------------
+
+.. versionadded:: 8.3
+
+一般的脚本补丁是嵌入到了加密脚本中，如果需要在运行加密脚本之前就进行一些定制或者额外的检查，那么就需要使用到特殊的脚本补丁 ``.pyarmor/hooks/pyarmor_runtime.py`` ，这个脚本补丁可以定义在加密脚本执行之前就被调用的函数。
+
+首先创建脚本 ``.pyarmor/hooks/pyarmor_runtime.py`` ，然后定义一个函数 :func:`bootstrap` ，这个函数在扩展模块 `pyarmor_runtime` 初始化的过程中被调用，其他代码都会被忽略。
+
+.. function:: bootstrap(user_data)
+
+   :param bytes user_data: 运行密钥里面的用户自定义数据
+   :return: 如果返回 False ，那么扩展模块 pyarmor_runtime 初始化失败，并且抛出保护异常
+   :raises SystemExit: 直接退出，不显示调用堆栈
+   :raises ohter Exception: 退出并且显示调用堆栈
+
+An example script:
+
+.. code-block:: python
+
+    def bootstrap(user_data):
+        # 必须在函数内容导入需要的名称，不要在模块级别导入
+        import sys
+        import time
+        from struct import calcsize
+
+        print('user data is', user_data)
+
+        # 检查平台，不支持 32 位
+        if sys.platform == 'win32' and calcsize('P'.encode()) * 8 == 32:
+            raise SystemExit('no support for 32-bit windows')
+
+        # 在 Windows 平台下面检查是否有调试器存在
+        if sys.platform == 'win32':
+            from ctypes import windll
+            if windll.kernel32.IsDebuggerPresent():
+                print('found debugger')
+                return False
+
+        # 在这个例子中，传入的自定义数据是时间戳
+        if time.time() > int(user_data.decode()):
+            return False
+
+验证一下这个脚本，首先拷贝这个脚本到 ``.pyarmor/hooks/pyarmor_runtime.py`` ，然后执行下面的命令::
+
+    $ pyarmor gen --bind-data 12345 foo.py
+    $ python dist/foo.py
+
+    user data is b'12345'
+    Traceback (most recent call last):
+      File "dist/foo.py", line 2, in <module>
+      ...
+    RuntimeError: unauthorized use of script (1:10325)
 
 ====================
  运行加密脚本的环境
