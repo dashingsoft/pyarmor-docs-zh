@@ -400,7 +400,12 @@ pyarmor gen
 
             加密模块中的每一个函数（二次加密），默认是 1
 
-模式 ``2`` 是 Pyarmor 8.2 中新增加的，它能增加从 Bytecode 进行反编译的难度，同时会降低一点性能。
+模式 ``2`` 是 Pyarmor 8.2 中新增加的，它能增加从 Bytecode 进行反编译的难度，同时会降低一点性能。它可以把部分表达式中的属性名称混淆，例如::
+
+    obj.attr          ==> getattr(obj, 'xxxx')
+    obj.attr = value  ==> setattr(obj, 'xxxx', value)
+
+通常情况下，如果 RFT 模块可用的话，不需要使用这个选项。
 
 .. option:: --no-wrap
 
