@@ -215,6 +215,7 @@ Pyarmor 按照顺序依次搜索同名的脚本:
 
    :param bytes user_data: 运行密钥里面的用户自定义数据
    :return: 如果返回 False ，那么扩展模块 pyarmor_runtime 初始化失败，并且抛出保护异常
+            返回其他任何值，继续执行加密脚本
    :raises SystemExit: 直接退出，不显示调用堆栈
    :raises ohter Exception: 退出并且显示调用堆栈
 
