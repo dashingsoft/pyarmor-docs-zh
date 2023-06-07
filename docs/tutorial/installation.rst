@@ -84,6 +84,28 @@ __ https://github.com/dashingsoft/pyarmor
 __ https://github.com/dashingsoft/pyarmor/archive/master.tar.gz
 __ https://github.com/dashingsoft/pyarmor/archive/master.zip
 
+在离线设备上安装
+================
+
+所有的 Pyarmor 需要的包发布在 PyPI_ ，需要从上面下载必要的包，然后拷贝到离线设备。
+
+首先安装 :mod:`pyarmor.cli.core`
+
+其次安装 :mod:`pyarmor`
+
+如果需要跨平台加密，安装 :mod:`pyarmor.cli.runtime`
+
+例如，在 64位 Linxu 平台下面为 Python 3.10 安装 Pyarmor::
+
+    $ pip install pyarmor.cli.core-3.2.4-cp310-none-manylinux1_x86_64.whl
+    $ pip install pyarmor-8.2.4.zip
+    $ pip install pyarmor.cli.runtime-3.2.5-cp310-none-any.whl
+
+在 Android 或者 FreeBSD 系统，因为在包 :mod:`pyarmor.cli.core` 没有预编译的 wheel ，所以需要下载额外的包 :mod:`pyarmor.cli.core.android` 或者 :mod:`pyarmor.cli.core.freebsd` 。例如，在 Android 系统，运行下面的命令离线安装 Pyarmor::
+
+    $ pip install pyarmor.cli.core-3.2.4.zip
+    $ pip install pyarmor.cli.core.android-3.2.4-cp310-none-any.whl
+    $ pip install pyarmor-8.2.4.zip
 
 在 Python 脚本中调用 Pyarmor
 ============================
