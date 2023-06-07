@@ -90,6 +90,16 @@
       * :mod:`pyarmor.cli.core`
       * :mod:`pyarmor.cli.runtime`
 
+    在 Pyarmor 8.3 之后， :mod:`pyarmor.cli.runtime` 因为太大而被分为下列包：
+
+      - :mod:`pyarmor.cli.core.freebsd`
+      - :mod:`pyarmor.cli.core.android`
+      - :mod:`pyarmor.cli.core.windows`
+      - :mod:`pyarmor.cli.core.themida`
+      - :mod:`pyarmor.cli.core.linux`
+      - :mod:`pyarmor.cli.core.alpine`
+      - :mod:`pyarmor.cli.core.darwin`
+
   Pyarmor 基础版
 
       一种 :term:`Pyarmor 许可证` 类型
@@ -212,13 +222,36 @@
 
 
 .. module:: pyarmor
-    :synopsis: 一个用来加密 Python 脚本的命令行工具
+    :synopsis: 一个用来加密 Python 脚本的命令行工具，提供 Pyarmor 7 和 Pyarmor 8 命令行接口。如果只需要使用 Pyarmor 8，可以直接安装 :mod:`pyarmor.cli`
 
 .. module:: pyarmor.cli
+    :synopsis: 一个用来加密 Python 脚本的命令行工具，仅提供 Pyarmor 8 命令行接口
+
 .. module:: pyarmor.cli.core
-    :synopsis: 一个平台相关的二进制 Wheel 包，提供 Pyarmor 需要的核心扩展模块
+    :synopsis: 一个平台相关的二进制 Wheel 包，提供运行 Pyarmor 需要的预编译扩展模块 `pyansform3`
 
 .. module:: pyarmor.cli.runtime
-    :synopsis: 支持 Pyarmor 跨平台加密的包，提供跨平台所需要的预编译动态库
+    :synopsis: 支持 Pyarmor 跨平台加密的包，提供所有平台运行加密脚本需要的预编译动态库 `pyarmor_runtime`
+
+.. module:: pyarmor.cli.core.android
+    :synopsis: 在 Android 系统使用 Pyarmor 的依赖包，提供运行 Pyarmor 和加密脚本需要的预编译动态库
+
+.. module:: pyarmor.cli.core.freebsd
+    :synopsis: 在 FreeBSD 系统使用 Pyarmor 的依赖包，提供运行 Pyarmor 和加密脚本需要的预编译动态库
+
+.. module:: pyarmor.cli.core.windows
+    :synopsis: 支持跨平台加密的包，仅提供所有 Windows 平台运行加密脚本需要的预编译动态库
+
+.. module:: pyarmor.cli.core.themida
+    :synopsis: 支持跨平台加密的包，仅提供 Windows 平台下使用 Themida 保护的运行加密脚本需要的预编译动态库
+
+.. module:: pyarmor.cli.core.linux
+    :synopsis: 支持跨平台加密的包，仅提供所有 Linux + glibc 平台运行加密脚本需要的预编译动态库
+
+.. module:: pyarmor.cli.core.alpine
+    :synopsis: 支持跨平台加密的包，仅提供所有 Alpine Linux (musl-c) 平台运行加密脚本需要的预编译动态库
+
+.. module:: pyarmor.cli.core.darwin
+    :synopsis: 支持跨平台加密的包，仅提供所有 Darwin 平台运行加密脚本需要的预编译动态库
 
 .. include:: ../_common_definitions.txt
