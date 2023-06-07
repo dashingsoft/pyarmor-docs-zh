@@ -93,19 +93,34 @@ __ https://github.com/dashingsoft/pyarmor/archive/master.zip
 
 其次安装 :mod:`pyarmor`
 
-如果需要跨平台加密，安装 :mod:`pyarmor.cli.runtime`
-
 例如，在 64位 Linxu 平台下面为 Python 3.10 安装 Pyarmor::
 
-    $ pip install pyarmor.cli.core-3.2.4-cp310-none-manylinux1_x86_64.whl
-    $ pip install pyarmor-8.2.4.zip
-    $ pip install pyarmor.cli.runtime-3.2.5-cp310-none-any.whl
+    $ pip install pyarmor.cli.core-3.2.5-cp310-none-manylinux1_x86_64.whl
+    $ pip install pyarmor-8.2.5.zip
 
 在 Android 或者 FreeBSD 系统，因为在包 :mod:`pyarmor.cli.core` 没有预编译的 wheel ，所以需要下载额外的包 :mod:`pyarmor.cli.core.android` 或者 :mod:`pyarmor.cli.core.freebsd` 。例如，在 Android 系统，运行下面的命令离线安装 Pyarmor::
 
-    $ pip install pyarmor.cli.core-3.2.4.zip
-    $ pip install pyarmor.cli.core.android-3.2.4-cp310-none-any.whl
-    $ pip install pyarmor-8.2.4.zip
+    $ pip install pyarmor.cli.core-3.2.5.zip
+    $ pip install pyarmor.cli.core.android-3.2.5-cp310-none-any.whl
+    $ pip install pyarmor-8.2.5.zip
+
+如果需要跨平台加密，还需要安装相应的包 `pyarmor.cli.core.NAME`
+
+- :mod:`pyarmor.cli.core.freebsd`
+- :mod:`pyarmor.cli.core.android`
+- :mod:`pyarmor.cli.core.windows`
+- :mod:`pyarmor.cli.core.themida`
+- :mod:`pyarmor.cli.core.linux`
+- :mod:`pyarmor.cli.core.alpine`
+- :mod:`pyarmor.cli.core.darwin`
+
+例如，需要使用 Themida 保护的运行包，就需要安装::
+
+    $ pip install pyarmor.cli.themida-3.2.5-cp310-none-any.whl
+
+在 Linux 平台加密运行在 Windows 平台的包，需要安装::
+
+    $ pip install pyarmor.cli.windows-3.2.5-cp310-none-any.whl
 
 在 Python 脚本中调用 Pyarmor
 ============================
