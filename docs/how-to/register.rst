@@ -160,9 +160,9 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 集团版许可证支持运行不受限制的 Docker 容器，每一个 Docker 容器都使用当前离线设备的注册文件。这些容器需要使用默认的 Bridge 网络接口，并且没有进行高度定制而导致 Pyarmor 无法识别。
 
-首先启动 `pyarmor-docker` 来侦听来自 Docker 容器的认证请求::
+首先启动 `pyarmor-auth` 来侦听来自 Docker 容器的认证请求::
 
-    $ pyarmor-docker pyarmor-device-regfile-xxxx.1.zip
+    $ pyarmor-auth pyarmor-device-regfile-xxxx.1.zip
 
 运行 Linux 系统的容器时候需要使用额外参数 ``--add-host=host.docker.internal:host-gateway`` （运行 Windows 和 Darwin 容器不需要）::
 
