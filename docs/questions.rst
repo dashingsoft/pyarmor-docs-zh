@@ -151,6 +151,12 @@ Apple 上的 Segment fault
 
 3. 如果系统安装了多个 Python，确保链接到正确的动态库
 
+例如，除了系统 Python3.9 之外，还使用 anaconda3 安装了 Python 3.9 在 ``/Users/my_username/anaconda3/bin/python``
+
+当使用 ``/Users/my_username/anaconda3/bin/python`` 运行加密脚本的时候，首先会装载动态库 ``dist/pyarmor_runtime_000000/pyarmor_runtime.so`` ，这个动态库依赖 Python 系统库，按照配置会首先查找 ``/Users/my_username/anaconda3/bin/python/../lib/libpython3.9.dylib`` ，如果这个文件不存在，那么会继续查找 ``/Library/Frameworks/Python.framework/Versions/3.9/lib/libpython3.9.dylib`` ，如果这个文件存在，那么会使用系统的 Python 动态库文件，这样可能就会造成崩溃问题。
+
+这种情况下就需要使用 install_name_tool 修改 ``dist/pyarmor_runtime_000000/pyarmor_runtime.so`` 适配当前的运行环境，使之能够装载 anaconda3 对应的 Python 动态库。Pyarmor 默认适配的是系统 Python ，并且不可能自动适配所有的运行环境，需要用户根据部署环境进行适配。
+
 4. 权限设置问题
 
 Pyarmor 使用了 JIT 技术来提高安全性，在 Apple M1，这可能需要对 Python 进行某些设置。使用下面的命令检查 Python 的 entitlements 并进行必要的设置::
