@@ -1,6 +1,6 @@
-==================
- 注册和使用许可证
-==================
+============
+ 使用许可证
+============
 
 .. contents:: 内容
    :depth: 2
@@ -78,7 +78,7 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 在 Docker 或者 CI pipeline 中注册
 ---------------------------------
 
-在 Docker 或者 CI pipeline 中注册 Pyarmor 的基本方法同上，但是同时运行的 Pyarmor 的 Docker 数量有限制，不能超过 100 个。
+在 Docker 或者 CI pipeline 中注册 Pyarmor 的基本方法同上，但是同时运行的 Pyarmor 的 Docker 数量有限制，不能超过 100 个。如果需要同时运行超过 100 个的 Docker 容器，请使用集团版许可证。
 
 **只允许在开发设备上安装和注册 Pyarmor。如果 Docker 镜像需要发送给客户，那么不允许在上面安装和注册 Pyarmor**
 
@@ -152,6 +152,29 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
     $ pyarmor -v
 
 注册成功之后所有的加密操作自动应用集团版许可证，注册和加密都不需要联网验证。
+
+运行不受限制的 Docker 容器
+--------------------------
+
+.. versionadded:: 8.3
+
+集团版许可证支持运行不受限制的 Docker 容器，每一个 Docker 容器都使用当前离线设备的注册文件。这些容器需要使用默认的 Bridge 网络接口，并且没有进行高度定制而导致 Pyarmor 无法识别。
+
+首先启动 `pyarmor-docker` 来侦听来自 Docker 容器的认证请求::
+
+    $ pyarmor-docker pyarmor-device-regfile-xxxx.1.zip
+
+运行 Linux 系统的容器时候需要使用额外参数 ``--add-host=host.docker.internal:host-gateway`` （运行 Windows 和 Darwin 容器不需要）::
+
+    $ docker run --add-host=host.docker.internal:host-gateway ...
+
+在 Docker 容器内部，使用和主机相同的离线设备注册文件进行注册，例如::
+
+    # Install Pyarmor first, then register it
+    RUN pyarmor reg pyarmor-device-regfile-xxxx.1.zip
+    RUN pyarmor gen foo.py
+
+当需要验证许可证的时候，Docker 容器会发送请求到主机，然后验证返回的结果。
 
 支持多设备的离线注册文件
 ------------------------
