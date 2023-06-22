@@ -160,9 +160,21 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 集团版许可证支持运行不受限制的 Docker 容器，每一个 Docker 容器都使用当前离线设备的注册文件。这些容器需要使用默认的 Bridge 网络接口，并且没有进行高度定制而导致 Pyarmor 无法识别。
 
-首先启动 `pyarmor-auth` 来侦听来自 Docker 容器的认证请求::
+为了运行不受限制的容器，Docker 主机需要
 
-    $ pyarmor-auth pyarmor-device-regfile-xxxx.1.zip
+- 离线设备注册文件 ``pyarmor-device-regfile-xxxx.1.zip`` ，参考上面的方法生成
+- 安装 Pyarmor 8.2.8+
+- 安装 Python 包 ``docker``
+
+在 Docker 主机上运行下面的命令安装 ``docker``::
+
+    $ pip install docker
+
+然后启动辅助脚本 ``docker.py`` 来侦听来自 Docker 容器的认证请求::
+
+    $ python -m pyarmor.cli.docker pyarmor-device-regfile-xxxx.1.zip
+
+不要关闭这个命令窗口，另外打开一个命令窗口运行容器。
 
 运行 Linux 系统的容器时候需要使用额外参数 ``--add-host=host.docker.internal:host-gateway`` （运行 Windows 和 Darwin 容器不需要）::
 
@@ -174,7 +186,7 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
     RUN pyarmor reg pyarmor-device-regfile-xxxx.1.zip
     RUN pyarmor gen foo.py
 
-当需要验证许可证的时候，Docker 容器会发送请求到主机，然后验证返回的结果。
+当需要验证许可证的时候，Docker 容器会发送请求到主机。
 
 支持多设备的离线注册文件
 ------------------------
