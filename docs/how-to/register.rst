@@ -163,28 +163,59 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 为了运行不受限制的容器，Docker 主机需要
 
 - 离线设备注册文件 ``pyarmor-device-regfile-xxxx.1.zip`` ，参考上面的方法生成
-- 安装 Pyarmor 8.2.8+
-- 安装 Python 包 ``docker``
+- 安装 Pyarmor 8.2.9+
 
-在 Docker 主机上运行下面的命令安装 ``docker``::
+下面是使用集团版许可证的实践
 
-    $ pip install docker
+- Docker 主机, Ubuntu x86_64, Python 3.8
+- Docker 容器, Ubuntu x86_64, Python 3.11
 
-然后启动辅助脚本 ``docker.py`` 来侦听来自 Docker 容器的认证请求::
+首先拷贝下面的文件到 Docker 主机:
 
-    $ python -m pyarmor.cli.docker pyarmor-device-regfile-xxxx.1.zip
+- pyarmor-8.2.9.tar.gz
+- pyarmor.cli.core-3.2.9-cp38-none-manylinux1_x86_64.whl
+- pyarmor.cli.core-3.2.9-cp311-none-manylinux1_x86_64.whl
+- pyarmor-device-regfile-6000.1.zip
+
+然后在 Docker 主机上运行下面的命令::
+
+    $ python3 --version
+    Python 3.8.10
+
+    $ pip install pyarmor.cli.core-3.2.9-cp38-none-manylinux1_x86_64.whl
+    $ pip install pyarmor-8.2.9.tar.bgz
+
+接着启动 ``pyarmor-auth`` 来侦听来自 Docker 容器的认证请求::
+
+    $ pyarmor-auth pyarmor-device-regfile-6000.1.zip
+
+    2023-06-24 09:43:14,939: work path: /root/.pyarmor/docker
+    2023-06-24 09:43:14,940: register "pyarmor-device-regfile-6000.1.zip"
+    2023-06-24 09:43:15,016: listen container auth request on 0.0.0.0:29092
 
 不要关闭这个命令窗口，另外打开一个命令窗口运行容器。
 
 运行 Linux 系统的容器时候需要使用额外参数 ``--add-host=host.docker.internal:host-gateway`` （运行 Windows 和 Darwin 容器不需要）::
 
-    $ docker run --add-host=host.docker.internal:host-gateway ...
+    $ docker run --add-host=host.docker.internal:host-gateway python bash
 
-在 Docker 容器内部，使用和主机相同的离线设备注册文件进行注册，例如::
+    root@86b180b28a50:/# python --version
+    Python 3.11.4
+    root@86b180b28a50:/#
 
-    # Install Pyarmor first, then register it
-    RUN pyarmor reg pyarmor-device-regfile-xxxx.1.zip
-    RUN pyarmor gen foo.py
+在 Docker 主机上打开第三个控制台拷贝文件到容器::
+
+    $ docker cp pyarmor-8.2.9.tar.gz 86b180b28a50:/
+    $ docker cp pyarmor.cli.core-3.2.9-cp311-none-manylinux1_x86_64.whl 86b180b28a50:/
+    $ docker cp pyarmor-device-regfile-6000.1.zip 86b180b28a50:/
+
+最后在 Docker 容器中，注册 Pyarmor 并进行加密脚本::
+
+    root@86b180b28a50:/# pip install pyarmor.cli.core-3.2.9-cp311-none-manylinux1_x86_64.whl
+    root@86b180b28a50:/# pip install pyarmor-8.2.9.tar.gz
+    root@86b180b28a50:/# pyarmor reg pyarmor-device-regfile-6000.1.zip
+    root@86b180b28a50:/# echo "print('hello world')" > foo.py
+    root@86b180b28a50:/# pyarmor gen --enable-rft foo.py
 
 当需要验证许可证的时候，Docker 容器会发送请求到主机。
 
