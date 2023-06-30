@@ -124,7 +124,7 @@
 
    * -
      - Protection Exception
-     - 如果使用了选项 :option:`--assert-call` 或者 :option:`assert-import` ，那么参考 :doc:`../tutorial/advanced` 中的 `过滤需要保护的函数和模块` ，根据错误堆栈的信息，忽律出错的函数或者模块。
+     - 如果使用了选项 :option:`--assert-call` 或者 :option:`assert-import` ，那么参考 :doc:`../tutorial/advanced` 中的 `过滤需要保护的函数和模块` ，根据错误堆栈的信息，忽略出错的函数或者模块。
 
 
 **Python 报告的错误信息**
