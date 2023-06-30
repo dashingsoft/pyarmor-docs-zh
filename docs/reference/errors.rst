@@ -66,6 +66,9 @@
        解决方案：使用命令 ``pyarmor-7``
    * - This code has been used too many times
      - 如果是在 CI/Docker 中使用 Pyarmor，请通过该订单的注册邮箱发送订单信息到 pyarmor@163.com 以解锁该订单
+   * - update license token failed
+     - 请确认防火墙的设置，或者在完全没有防火墙的环境进行测试。
+
 
 运行加密脚本的错误信息
 ======================
