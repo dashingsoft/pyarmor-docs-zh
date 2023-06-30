@@ -121,6 +121,7 @@ pyarmor gen
 -h, --help                      显示选项列表并退出
 -O PATH, --output PATH          设置输出目录 :option:`... <-O>`
 -r, --recursive                 递归搜索目录中的脚本 :option:`... <-r>`
+--exclude PATTERN               排除脚本或者子目录 :option:`... <--exclude>`
 
 -e DATE, --expired DATE         设置脚本有效期 :option:`... <-e>`
 -b DEV, --bind-device DEV       绑定脚本到设备 :option:`... <-b>`
@@ -179,6 +180,30 @@ pyarmor gen
 .. option:: -r, --recursive
 
 递归搜索目录下面的 Python 脚本，否则只搜索当前目录下面的脚本
+
+.. option:: --exclude PATTERN
+
+            排除脚本或者子目录，这个选项可以使用多次
+
+匹配的规则和 Python 标准库 `fnmatch`__ 的方式是一样的。
+
+排除一个指定的脚本::
+
+    $ pyarmor gen --exclude "src/test.py" src
+
+排除一个指定的目录::
+
+    $ pyarmor gen -r --exclude "./test" .
+
+排除在任何目录下面的脚本 ``test.py``::
+
+    $ pyarmor gen -r --exclude "*/test.py" src
+
+排除所有的 ``test`` 目录::
+
+    $ pyarmor gen -r --exclude "*/test" src
+
+__ https://docs.python.org/3.11/library/fnmatch.html
 
 .. option:: -i
 
