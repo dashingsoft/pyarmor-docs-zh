@@ -196,4 +196,14 @@ Pyarmor 是一个工具产品，不额外签订其他合同， `Pyarmor 最终�
 
   具体使用方法请参考 :doc:`how-to/register` 里面的注册许可证中的说明
 
+**我们之前是使用的Pyarmor 6.8.1版本进行的前期测试和验证，现在想要正式购买授权，但目前最新版本已经是8.0+，那这个之前的6.8.1版本的授权该如何购买**
+
+  如果确定是使用 Pyarmor 8 之前的版本，在 `购买页面`__ 可以选择购买老版本许可证。
+
+  直接支持老版本的许可证的最终版本是 Pyarmor 7.7.4
+
+  如果要在 Pyarmor 8.0+ 中使用老版本的许可证，需要使用命令 pyarmor-7
+
+  __ https://pyarmor.dashingsoft.com/cart/order.html
+
 .. include:: _common_definitions.txt
