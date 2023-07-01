@@ -29,7 +29,7 @@ Pyarmor_ 需要 Python 运行动态库以及 C 库，缺少它们 Pyarmor 无法
 - /System/Library/Frameworks/Python.framework/Versions/3.10
 - /Library/Frameworks/Python.framework/Versions/3.10
 
-如果没有这个文件，请安装必要的包或者使用必要的选项重新编译 Python。
+如果没有这个文件，请安装必要的包或者使用必要的选项重新编译 Python ，或者使用 `install_name_tool` 适配当前的 Python 环境，参阅 :doc:`../question` 中如何解决 Apple 下面的奔溃问题。
 
 .. _install-pypi:
 
@@ -40,27 +40,39 @@ Pyarmor_ 发布在 PyPI_ 上面，最方便的方式就是使用命令 :command:
 
 在 Linux 和 MacOS，直接打开命令终端并运行下面的命令::
 
-    $ pip install -U pyarmor
+    $ pip install pyarmor
 
 在 Windows 环境下，需要使用 :kbd:`Win-r` 打开命令输入框，然后输入 :command:`cmd` 打开命令窗口，并运行下面的命令:
 
 .. code-block:: doscon
 
-    C:\> pip install -U pyarmor
+    C:\> pip install pyarmor
 
 安装完成之后，输入命令 :command:`pyarmor --version` 并回车。如果安装成功，会显示安装的 Pyarmor 的版本信息。
 
-如果需要跨平台发布加密脚本，还需要安装另外一个包 :mod:`pyarmor.cli.runtime`::
+如果需要跨平台发布加密脚本，根据需要安装相应平台的辅助运行包::
 
-    $ pip install pyarmor.cli.runtime
+    $ pip install pyarmor.cli.core.windows
+    $ pip install pyarmor.cli.core.themida
+    $ pip install pyarmor.cli.core.linux
+    $ pip install pyarmor.cli.core.darwin
+    $ pip install pyarmor.cli.core.freebsd
+    $ pip install pyarmor.cli.core.android
 
 并不是所有的平台都支持 Pyarmor，所有支持的运行平台请查看 :doc:`../reference/environments`
+
+.. note::
+
+   如果无需使用老版本 Pyarmor 7 的功能，直接安装 :mod:`pyarmor.cli` 而不是安装 :mod:`pyarmor` 可以显著减少下载时间。例如::
+
+       $ pip install pyarmor.cli
 
 安装的命令
 ----------
 
 * :program:`pyarmor` 是最重要的一个，所有的工作基本都由它来完成，详细使用方法请参考 :doc:`../reference/man`
 * :program:`pyarmor-7` 是为了和老版本兼容的命令，它等价于 Pyarmor 7.x 的修正版本。
+* :program:`pyarmor-auth` 是集团版许可证支持运行不受限制 Docker 容器的辅助命令。
 
 使用 Python 解释器直接运行 Pyarmor
 ----------------------------------
@@ -72,6 +84,8 @@ Pyarmor_ 发布在 PyPI_ 上面，最方便的方式就是使用命令 :command:
 从 Github 上面进行安装
 ======================
 
+.. deprecated:: 8.2.9
+
 也可以直接从 `Pyarmor Github`__ 安装 Pyarmor。下载库到本地，然后使用 pip 进行安装::
 
     $ git clone https://github.com/dashingsoft/pyarmor
@@ -79,6 +93,10 @@ Pyarmor_ 发布在 PyPI_ 上面，最方便的方式就是使用命令 :command:
     $ pip install .
 
 你可以直接下载一个库的压缩文件 `tar.gz`__ 或者 `zip`__ ，解压之后在使用 pip 进行安装。
+
+.. note::
+
+   从 8.2.9 开始不推荐使用这种方式进行安装，这种方式可能因为无法正常运行。
 
 __ https://github.com/dashingsoft/pyarmor
 __ https://github.com/dashingsoft/pyarmor/archive/master.tar.gz
@@ -91,7 +109,7 @@ __ https://github.com/dashingsoft/pyarmor/archive/master.zip
 
 首先安装 :mod:`pyarmor.cli.core`
 
-其次安装 :mod:`pyarmor`
+其次安装 :mod:`pyarmor` 或者 :mod:`pyarmor.cli`
 
 例如，在 64位 Linxu 平台下面为 Python 3.10 安装 Pyarmor::
 
@@ -122,6 +140,10 @@ __ https://github.com/dashingsoft/pyarmor/archive/master.zip
 
     $ pip install pyarmor.cli.windows-3.2.5-cp310-none-any.whl
 
+如果不需要使用老版本的命令 `pyarmor-7` ，推荐安装 :mod:`pyarmor.cli` 而不是 :mod:`pyarmor` ，前者需要下载的文件显著小于后者。例如::
+
+    $ pip install pyarmor.cli-8.2.5-py3-none-any.whl
+
 在 Python 脚本中调用 Pyarmor
 ============================
 
@@ -147,8 +169,22 @@ __ https://github.com/dashingsoft/pyarmor/archive/master.zip
 
     $ pip uninstall pyarmor
     $ pip uninstall pyarmor.cli.core
+
+    # 下面的包不一定都安装，根据安装情况卸载相应的包
+
     $ pip uninstall pyarmor.cli.runtime
+    $ pip uninstall pyarmor.cli.core.windows
+    $ pip uninstall pyarmor.cli.core.themida
+    $ pip uninstall pyarmor.cli.core.linux
+    $ pip uninstall pyarmor.cli.core.darwin
+    $ pip uninstall pyarmor.cli.core.freebsd
+    $ pip uninstall pyarmor.cli.core.android
+
     $ rm -rf ~/.pyarmor
     $ rm -rf ./.pyarmor
+
+.. note::
+
+   ``~`` 是当前登录用户的个人目录，可以通过查看环境变量 ``HOME`` 得到具体位置。使用不同用户登陆，路径 ``~`` 可能不一样。
 
 .. include:: ../_common_definitions.txt
