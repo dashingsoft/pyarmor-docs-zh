@@ -200,6 +200,91 @@ Pyarmor 使用内置的自动规则和人工配置的规则来分析脚本，并
 
 如果模块属性 ``__all__`` 没有定义，那么模块的所有属性中不是以 ``_`` 开头的名称都会被导入进来。
 
+自定义重命名规则
+================
+
+自定义规则可用于重命名无法自动识别的类型的属性名称，自定义规则仅适用于 **rft-auto-include**::
+
+    $ pyarmor cfg rft_auto_exclude=0
+
+定义全局重命名规则::
+
+  pyarmor cfg rft_rulers ^ "self.task.x self.task.?"
+
+定义模块私有重命名规则::
+
+  pyarmor cfg -p joker.card rft_rulers "self.task.x self.task.?"
+
+重命名规则格式::
+
+  属性链模式 对应属性重命名方式
+
+属性链模式是以 ``.`` 分开的 ``fnmatch`` 的模式字符串，然后使用此模式和属性链进行匹配
+
+满足匹配的属性链按照后面的重命名方式进行处理
+
+- ``?``: 总是进行重命名
+- 其他值: 保留原来的名称
+
+人工规则只用来修改属性名称，而忽略第一个名称
+
+例如，下面的规则::
+
+    self.task.x self.task.?
+
+应用于下面的脚本
+
+.. code-block:: python
+    :linenos:
+    :emphasize-lines: 8,9
+
+    class Sdipmk:
+
+        def __init__(self):
+            self.width = 100
+            self.height = 200
+
+        def move(self, x, y, absolute=False):
+            self.task.x = int(abs(x*65536/self.width)) if absolute else int(x)
+            self.task.y = int(abs(y*65536/self.height)) if absolute else int(y)
+            return Mouse(MS_MOVE, x, y)
+
+使用下面的命令配置重命名规则::
+
+    $ pyarmor cfg rft_rulers "self.task.x self.task.?"
+
+然后检查结果::
+
+    $ pyarmor gen --enable-rft foo.py
+    $ grep trace.rft .pyarmor/pyarmor.trace.log
+
+    trace.rft            foo:8 (self.task.x->self.task.pyarmor__2)
+
+第 8 行的 ``self.task.x`` 被重命名为 ``self.task.pyarmor__2``
+
+让我们修改一下重命名规则，然后在看看结果::
+
+    $ pyarmor cfg rft_rulers "self.task.x self.?.?"
+    $ grep trace.rft .pyarmor/pyarmor.trace.log
+
+    trace.rft            foo:8 (self.task.x->self.pyarmor__1.pyarmor__2)
+
+接下来增加一条新规则重命名 ``self.task.y`` ，注意使用 ``^`` 来增加规则::
+
+    $ pyarmor cfg rft_rulers ^"self.task.y self.?.?"
+    $ grep trace.rft .pyarmor/pyarmor.trace.log
+
+    trace.rft            foo:8 (self.task.x->self.pyarmor__1.pyarmor__2)
+    trace.rft            foo:9 (self.task.y->self.pyarmor__1.pyarmor__3)
+
+这两条规则可以合并成为一条，这里使用 ``=`` 进行配置，会自动删除原来的所有规则::
+
+    $ pyarmor cfg rft_rulers = "self.task.* self.?.?"
+    $ grep trace.rft .pyarmor/pyarmor.trace.log
+
+    trace.rft            foo:8 (self.task.x->self.pyarmor__1.pyarmor__2)
+    trace.rft            foo:9 (self.task.y->self.pyarmor__1.pyarmor__3)
+
 ..
   类型字典和变量类型
   ==================
@@ -287,29 +372,5 @@ Pyarmor 使用内置的自动规则和人工配置的规则来分析脚本，并
     trace.rft            t1090:17 (exclude attrs "wintypes.DWORD")
     trace.rft            t1090:32 (! self.dwFlags)
     trace.rft            t1090:37 (wintypes.DWORD->pyarmor__27.DWORD)
-
-  人工规则
-  --------
-
-  定义全局规则::
-
-    pyarmor cfg rft_ruler="a.b.c *.?.*"
-
-  定义模块私有规则::
-
-    pyarmor cfg -p joker.card rft_ruler="a.b.c *.?.*"
-
-  规则格式::
-
-    属性链模式:对应属性重命名方式
-
-  属性链模式是以 ``.`` 分开的支持 fnmatch 的模式，然后使用此模式和属性链进行匹配
-
-  满足匹配的属性链按照后面的重命名方式进行处理
-
-  ``?``: 总是进行重命名
-  其他值: 保留原来的名称
-
-  人工规则只用来修改属性名称，而忽略第一个名称
 
 .. include:: ../_common_definitions.txt
