@@ -101,6 +101,8 @@ Pyarmor Team 欢迎真正的 Bug 报告，并且会尽快解决这些 Bug。报�
 Apple 上的 Segment fault
 ========================
 
+一般情况下，主要有下面的三种原因
+
 1. 通常情况下，这是因为不正确的 code signature
 
 如果是加密或者注册的时候发生了崩溃，请尝试对扩展模块 ``pytransform3.so`` 重新签名::
@@ -113,7 +115,9 @@ Apple 上的 Segment fault
 
 请参阅 Apple 官方文档 `Using the latest code signature format`__
 
-2. 使用 otool 和 install_name_tool 解决依赖库问题
+2. 另外一种原因是 Python 的依赖库无法找到
+
+使用非标准方式安装的 Python 也可能会导致崩溃，需要使用 otool 和 install_name_tool 解决依赖库问题
 
 因为预编译的扩展模块需要一些依赖库，如果依赖库的位置不对，就可能直接崩溃。使用 ``otool -L`` 可以查看依赖库::
 
@@ -173,6 +177,14 @@ __ https://developer.apple.com/documentation/bundleresources/entitlements/com_ap
 
 使用许可相关问题
 ================
+
+**如果现在购买基础版后续是否可以补差价升级专家版或者集团版本?**
+
+目前还不支持各种版本的补差价升级。
+
+**购买时为不含税,后续是否可以通过补齐同版本差价进行开发票?**
+
+目前不支持补齐差价开发票。
 
 **我们采购流程需要双方签一个合同，请问是否支持呢？**
 
