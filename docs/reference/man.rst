@@ -535,6 +535,22 @@ pyarmor gen key
 
 如果不存在，那么报错缺失运行密钥。
 
+.. describe:: 特殊输出路径 **pipe**
+
+如果需要通过 Web API 的方式直接处理外部密钥，那么，可以设置输出路径为特殊值 ``pipe`` ，这样生成的外部密钥就不会被存放到文件中，而是直接返回数据（bytes），然后脚本可以根据需要自由处理这些数据。
+
+例如，
+
+.. code-block:: python
+
+    from pyarmor.cli.__main__ import main_entry
+
+    args = ['gen', 'key', '-O', 'pipe', '-e', '2023-10-21']
+    data = main_entry(args)
+
+    with open('pyarmor.rkey', 'wb') as f:
+        f.write(data)
+
 .. _pyarmor cfg:
 
 pyarmor cfg
