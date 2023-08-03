@@ -20,6 +20,14 @@
 * 把加密脚本的 :term:`运行辅助文件` 增加到临时目录中
 * 根据把临时目录中所有内容重新生成可执行文件，并替换原来的可执行文件
 
+需要注意的是只有命令行列出的脚本会被加密，如果需要加密其他脚本或者子目录，在命令行列出它们。例如::
+
+  pyarmor gen --pack dist/foo/foo -r *.py dir1 dir2 ...
+
+在 Darwin 平台，如果需要生成支持 Intel 和 Apple Silicon 的加密脚本，使用额外选项 ``--platform darwin.x86_64,darwin.arm64`::
+
+  pyarmor gen --pack dist/foo/foo --platform darwin.x86_64,darwin.arm64 foo.py
+
 **自己动手打包加密脚本**
 
 如果使用上面的方式出现问题，或者打包好的可执行文件出现执行错误，那么请使用下面的方式自己打包加密脚本。
