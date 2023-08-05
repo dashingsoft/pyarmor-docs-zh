@@ -66,8 +66,10 @@
        解决方案：使用命令 ``pyarmor-7``
    * - This code has been used too many times
      - 如果是在 CI/Docker 中使用 Pyarmor，请通过该订单的注册邮箱发送订单信息到 pyarmor@163.com 以解锁该订单
-   * - update license token failed
-     - 请确认防火墙的设置，或者在完全没有防火墙的环境进行测试。
+   * - update license token failed (104)
+     - 首先请确认网络可用，其次检查防火墙设置，如果可能的话，暂时关闭防火墙进行测试。
+
+       在 Windows 下面，防火墙要允许动态库 ``pytransform3.pyd`` 访问 `pyarmor.dashingsoft.com` ，在其他系统，防火墙要允许 ``pytransform3.so`` 访问 `pyarmor.dashingsoft.com` ，具体防火墙的规则设置请参阅防火墙的文档。
 
 
 运行加密脚本的错误信息
