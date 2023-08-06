@@ -20,7 +20,7 @@
 2. 安装 Pyarmor 8.2 以上的版本的设备，
 3. 当前设备需要能够访问互联网
 4. 确定许可证需要绑定的产品名称，如果是在非商业化产品中使用，产品名称使用 ``non-profits``
-5. 如果有防火墙，那么在 Windows 下面，防火墙要允许动态库 ``pytransform3.pyd`` 访问 `pyarmor.dashingsoft.com` ，在其他系统，防火墙要允许 ``pytransform3.so`` 访问 `pyarmor.dashingsoft.com` ，具体防火墙的规则设置请参阅防火墙的文档。
+5. 如果有防火墙，那么在 Windows 下面，防火墙要允许动态库 ``pytransform3.pyd`` 访问 `pyarmor.dashingsoft.com` 的端口 ``80`` ，在其他系统，防火墙要允许 ``pytransform3.so`` 访问 `pyarmor.dashingsoft.com` 的端口 ``80``，具体防火墙的规则设置请参阅防火墙的文档。
 
 使用基础版和专家版许可证
 ========================
