@@ -191,6 +191,23 @@ __ https://developer.apple.com/documentation/bundleresources/entitlements/com_ap
 
   在 Windows 下面，防火墙要允许动态库 ``pytransform3.pyd`` 访问 `pyarmor.dashingsoft.com` 的端口 ``80`` ，在其他系统，防火墙要允许 ``pytransform3.so`` 访问 `pyarmor.dashingsoft.com`  的端口 ``80`` ，具体防火墙的规则设置请参阅防火墙的文档。
 
+**集团版许可证报错： ERROR request license token failed**
+
+  首先升级 Pyarmor 到 8.3.3+
+
+  其次使用调试选项 ``-d`` 在离线机器上面运行注册命令，例如::
+
+      $ pyarmor -d reg pyarmor-device-regfile-6000.4.zip
+
+  检查控制台的输出日志，确保离线许可证的设备包含当前设备。例如::
+
+      DEBUG    group license for machines: ['tokens/gb04eb35da4f5378185c8663522e0a5e3']
+      DEBUG    got machine id: gb04eb35da4f5378185c8663522e0a5e3
+
+  如果设备不匹配，请重新为当前设备生成离线注册文件。
+
+  对于虚拟设备，请确保每次启动之后的设备 id 均保持一致。
+
 使用许可相关问题
 ================
 
