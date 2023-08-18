@@ -148,7 +148,7 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 
 .. versionadded:: 8.3.4
 
-   新增选项 `bcc:include`.
+   新增选项 `bcc:includes`.
 
 .. versionchanged:: 8.3.4
 
