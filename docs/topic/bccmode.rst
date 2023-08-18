@@ -59,13 +59,59 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 
     $ pyarmor cfg -p pkgname.modname bcc:disabled=1
 
-忽略模块中一个函数使用下面的命令::
+忽略模块中的函数或者方法使用下面的命令::
 
-    $ pyarmor cfg -p pkgname.modname bcc:excludes + "function name"
+    $ pyarmor cfg -p pkgname.modname bcc:excludes="name"
+    $ pyarmor cfg -p pkgname.modname bcc:excludes="name1 name2 name3"
 
-忽略更多的函数::
+    $ pyarmor cfg -p pkgname.modname bcc:excludes="Class.method_1"
+    $ pyarmor cfg -p pkgname.modname bcc:excludes="Class.*"
 
-    $ pyarmor cfg -p foo bcc:excludes + "hello foo2"
+如果没有选项 ``-p`` 的话，其他模块中同名函数和方法也会被忽略。
+
+下面是一个示例脚本 :file:`foo.py`
+
+.. code-block:: python
+
+    def hello_a():
+        pass
+
+    def hello_b():
+        pass
+
+    class Test(object):
+
+        def __init__(self):
+            pass
+
+        def hello_a():
+            pass
+
+使用下面的任意一种方式来忽略其中的函数和方法::
+
+    $ pyarmor cfg -p foo bcc:excludes = "hello_a"
+    $ pyarmor cfg -p foo bcc:excludes = "hello_a hello_b"
+    $ pyarmor cfg -p foo bcc:excludes = "hello_*"
+
+    $ pyarmor cfg -p foo bcc:excludes = "Test.hello_a"
+    $ pyarmor cfg -p foo bcc:excludes = "Test.*"
+    $ pyarmor cfg -p foo bcc:excludes = "Test.__*__"
+
+    $ pyarmor cfg -p foo bcc:excludes = "hello_a Test.hello_a"
+
+如果只需要 BCC 模式处理特定的函数，那么使用选项 `bcc:includes`::
+
+    # 恢复默认选项
+    $ pyarmor cfg bcc:excludes = ""
+
+    # BCC 模式只处理模块函数 "hello_a"
+    $ pyarmor cfg -p foo bcc:includes = "hello_a"
+
+    # BCC 模式还需要处理类方法 "Test.hello_a"
+    $ pyarmor cfg -p foo bcc:includes + "Test.hello_a"
+
+    # BCC 模式处理类 "Test" 的所有方法，除了 "__init__"
+    $ pyarmor cfg -p foo bcc:includes="Test.*" bcc:excludes="Test.__init__"
 
 我们可以启用跟踪日志，查看这些语句的效果，看看这些模块和函数是否没有被 BCC 模式处理。例如::
 
@@ -78,7 +124,49 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
     $ pyarmor cfg -p joker.card bcc:disabled=1
     $ pyarmor gen --enable-bcc /path/to/pkg/joker
 
-使用两个配置项 ``bcc:excludes`` 和 ``bcc:disabled`` 可以最小限度的排除不被 BCC 模式支持的代码，从而确保其他脚本能正常使用 BCC 模式加密运行。
+选项 `bcc:includes` 和 `bcc:excludes` 只对模块基本的函数和类有效，它们不能处理子函数和子类。例如
+
+.. code-block:: python
+
+    def hello():
+
+        def wrap():
+            pass
+
+        class Test:
+
+            def __init__(self):
+                pass
+
+下面的命令无法忽略子函数 ``wrap`` 和子类 ``Test``::
+
+    pyarmor cfg bcc:excludes = "wrap hello.wrap Test.__init__ hello.Test.__init__"
+
+忽略子函数和子类的唯一方法是直接忽略其所在的顶层函数 ``hello``::
+
+    pyarmor cfg bcc:excludes = hello
+
+.. versionadded:: 8.3.4
+
+   新增选项 `bcc:include`.
+
+.. versionchanged:: 8.3.4
+
+   选项 `bcc:excludes` 的使用方法发生了变化。在之前的版本::
+
+       # 忽略模块函数和所有的类方法 "hello_a"
+       pyarmor cfg bcc:excludes="hello_a"
+
+       # 在方法前指定类名称的话，无法忽略任何方法
+       pyarmor cfg bcc:excludes="Myclass.hello_a"
+
+   在现在的版本中::
+
+       # 需要使用下面的形式来忽略模块函数和所有的类方法 "hello_a"
+       pyarmor cfg bcc:excludes="hello_a *.hello_a"
+
+       # 可以指定类名称来忽略单独的类方法
+       pyarmor cfg bcc:excludes="Myclass.hello_a"
 
 改变的脚本特性
 ==============
