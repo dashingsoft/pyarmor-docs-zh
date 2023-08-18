@@ -48,6 +48,10 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 第一条日志记录的是 ``foo.py`` 第5行的函数 ``hello`` 被转换成为 C 函数
 第二条日志记录的是 ``foo.py`` 第9行的函数 ``sum2`` 被转换成为 C 函数
 
+如果在 ``trace.bcc`` 之后的字符是 ``!`` ，那么意味着这个函数被 BCC 模式忽略。例如::
+
+    trace.bcc ! foo:29:Test.new (unsupported function "super")
+
 不转换特定的模块和函数
 ======================
 
