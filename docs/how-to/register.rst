@@ -174,8 +174,8 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 首先拷贝下面的文件到 Docker 主机:
 
 - pyarmor-8.3.5.tar.gz
-- pyarmor.cli.core-4.3.2-cp38-none-manylinux1_x86_64.whl
-- pyarmor.cli.core-4.3.2-cp311-none-manylinux1_x86_64.whl
+- pyarmor.cli.core-4.3.3-cp38-none-manylinux1_x86_64.whl
+- pyarmor.cli.core-4.3.3-cp311-none-manylinux1_x86_64.whl
 - pyarmor-device-regfile-6000.1.zip
 
 然后在 Docker 主机上运行下面的命令::
@@ -183,7 +183,7 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
     $ python3 --version
     Python 3.8.10
 
-    $ pip install pyarmor.cli.core-4.3.2-cp38-none-manylinux1_x86_64.whl
+    $ pip install pyarmor.cli.core-4.3.3-cp38-none-manylinux1_x86_64.whl
     $ pip install pyarmor-8.3.5.tar.bgz
 
 接着启动 ``pyarmor-auth`` 来侦听来自 Docker 容器的认证请求::
@@ -207,12 +207,12 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 在 Docker 主机上打开第三个控制台拷贝文件到容器::
 
     $ docker cp pyarmor-8.3.5.tar.gz 86b180b28a50:/
-    $ docker cp pyarmor.cli.core-4.3.2-cp311-none-manylinux1_x86_64.whl 86b180b28a50:/
+    $ docker cp pyarmor.cli.core-4.3.3-cp311-none-manylinux1_x86_64.whl 86b180b28a50:/
     $ docker cp pyarmor-device-regfile-6000.1.zip 86b180b28a50:/
 
 最后在 Docker 容器中，注册 Pyarmor 并进行加密脚本::
 
-    root@86b180b28a50:/# pip install pyarmor.cli.core-4.3.2-cp311-none-manylinux1_x86_64.whl
+    root@86b180b28a50:/# pip install pyarmor.cli.core-4.3.3-cp311-none-manylinux1_x86_64.whl
     root@86b180b28a50:/# pip install pyarmor-8.3.5.tar.gz
     root@86b180b28a50:/# pyarmor reg pyarmor-device-regfile-6000.1.zip
     root@86b180b28a50:/# echo "print('hello world')" > foo.py
