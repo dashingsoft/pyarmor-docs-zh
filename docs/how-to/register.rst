@@ -198,7 +198,7 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 运行 Linux 系统的容器时候需要使用额外参数 ``--add-host=host.docker.internal:host-gateway`` （运行 Windows 和 Darwin 容器不需要）::
 
-    $ docker run --add-host=host.docker.internal:host-gateway python bash
+    $ docker run -it --add-host=host.docker.internal:host-gateway python bash
 
     root@86b180b28a50:/# python --version
     Python 3.11.4
