@@ -91,9 +91,9 @@ Microsoft Office 产品系列不是一种产品，它包括的各个产品，例
 * 在设备上安装 Pyarmor 8.3.5+ 的试用版本
 * 运行下面的命令得到机器标识符::
 
-    $ pyarmor reg -g 1
-    $ cat .pyarmor/group/pyarmor-group-device.1 | grep ^machine
-    machine: kb04eb35da4f5378185c8663522e0a5e3
+    $ python -c"from pyarmor.cli.core.pytransform3 import get_hd_info
+      print(get_hd_info(20))"
+    b'kb04eb35da4f5378185c8663522e0a5e3'
 
 * 重新启动设备，重复上面的命令查看机器标示符
 * 如果每一次重启之后机器标识符都保持不变，那么该设备可以使用集团版许可证，否则无法使用基本版许可证
