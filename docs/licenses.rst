@@ -88,7 +88,7 @@ Microsoft Office 产品系列不是一种产品，它包括的各个产品，例
 
 集团版许可证只能用于设备硬件信息保持不变的系统，使用下面的方法检查一个设备是否适用集团版许可证
 
-* 在设备上安装 Pyarmor 8.3.6+ 的试用版本
+* 在设备上安装 Pyarmor 8.3.7+ 的试用版本
 * 运行下面的命令得到机器标识符::
 
     $ python -c"from pyarmor.cli.core.pytransform3 import get_hd_info
