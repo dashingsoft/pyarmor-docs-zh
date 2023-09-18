@@ -193,7 +193,7 @@ __ https://developer.apple.com/documentation/bundleresources/entitlements/com_ap
 
 **集团版许可证报错： ERROR request license token failed**
 
-  首先升级 Pyarmor 到 8.3.5+
+  首先升级 Pyarmor 到 8.3.7+
 
   其次使用调试选项 ``-d`` 在离线机器上面运行注册命令，例如::
 
@@ -201,10 +201,10 @@ __ https://developer.apple.com/documentation/bundleresources/entitlements/com_ap
 
   检查控制台的输出日志，确保离线许可证的设备包含当前设备。例如::
 
-      DEBUG    group license for machines: ['tokens/gb04eb35da4f5378185c8663522e0a5e3']
-      DEBUG    got machine id: gb04eb35da4f5378185c8663522e0a5e3
+      DEBUG    group license for machines: ['tokens/ib04eb35da4f5378185c8663522e0a5e3']
+      DEBUG    got machine id: ib04eb35da4f5378185c8663522e0a5e3
 
-  如果设备不匹配，请使用 Pyarmor 8.3.5 以后的版本重新为当前设备生成离线注册文件。
+  如果设备不匹配，请使用 Pyarmor 8.3.7 以后的版本重新为当前设备生成离线注册文件。
 
   对于虚拟设备，请确保每次启动之后的设备 id 均保持一致。
 

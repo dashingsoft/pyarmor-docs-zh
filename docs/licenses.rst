@@ -102,6 +102,10 @@ Microsoft Office 产品系列不是一种产品，它包括的各个产品，例
 
 **如果 Docker Host 的机器标识符每次重启都会发生变化，那么集团版许可证无法运行任何 Docker 容器**
 
+大多数的物理设备，云服务器以及使用相同磁盘映像的虚拟机（qemu，virtualbox，vmware）可以使用集团版许可证，如果是在 CI 服务器的工作流中使用，默认的 runner 可能无法工作，类似 Github 上面的 `self-host runner`__ 应该可以工作，请参阅相应的 CI 服务器文档，并使用上面的方法进行验证。
+
+__ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners
+
 不同许可证的功能列表
 --------------------
 
