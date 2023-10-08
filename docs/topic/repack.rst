@@ -70,39 +70,46 @@ __ https://pyinstaller.org/en/stable/spec-files.html
         ...
     )
 
-    # Patched by PyArmor
-    _src = r'/path/to/src'
-    _obf = r'/path/to/src/obfdist'
+    # Pyarmor patch start:
 
-    _count = 0
-    for i in range(len(a.scripts)):
-        if a.scripts[i][1].startswith(_src):
-            x = a.scripts[i][1].replace(_src, _obf)
-            if os.path.exists(x):
-                a.scripts[i] = a.scripts[i][0], x, a.scripts[i][2]
-                _count += 1
-    if _count == 0:
-        raise RuntimeError('No obfuscated script found')
+    def pyarmor_patcher(src, obfdist):
 
-    for i in range(len(a.pure)):
-        if a.pure[i][1].startswith(_src):
-            x = a.pure[i][1].replace(_src, _obf)
-            if os.path.exists(x):
-                if hasattr(a.pure, '_code_cache'):
-                    with open(x) as f:
-                        a.pure._code_cache[a.pure[i][0]] = compile(f.read(), a.pure[i][1], 'exec')
-                a.pure[i] = a.pure[i][0], x, a.pure[i][2]
-    # Patch end.
+        # Make sure both of them are absolute paths
+        src = os.path.abspath(src)
+        obfdist = os.path.abspath(obfdist)
+
+        count = 0
+        for i in range(len(a.scripts)):
+            if a.scripts[i][1].startswith(src):
+                x = a.scripts[i][1].replace(src, obfdist)
+                if os.path.exists(x):
+                    a.scripts[i] = a.scripts[i][0], x, a.scripts[i][2]
+                    count += 1
+        if count == 0:
+            raise RuntimeError('No obfuscated script found')
+
+        for i in range(len(a.pure)):
+            if a.pure[i][1].startswith(src):
+                x = a.pure[i][1].replace(src, obfdist)
+                if os.path.exists(x):
+                    if hasattr(a.pure, '_code_cache'):
+                        with open(x) as f:
+                            a.pure._code_cache[a.pure[i][0]] = compile(f.read(), a.pure[i][1], 'exec')
+                    a.pure[i] = a.pure[i][0], x, a.pure[i][2]
+
+    pyarmor_patcher(r'/path/to/src', r'/path/to/obfdist')
+
+    # Pyarmor patch end.
 
     pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
-* 最后直接使用打过补丁的 ``foo.spec`` 来打包::
+* 最后直接使用打过补丁的 ``foo.spec`` 来打包，同时使用选项 `--clean` 避免补丁因为缓存的文件而失效::
 
-    pyinstaller foo.spec
+    pyinstaller --clean foo.spec
 
 请根据你的具体情况，做如下修改
 
-* 使用实际目录替换 ``/path/to/src``
+* 使用实际目录替换 ``/path/to/src`` 和 ``/path/to/obfdist``
 * 使用实际名称替换 ``pyarmor_runtime_000000``
 
 **如何验证打包进去的是加密脚本**
