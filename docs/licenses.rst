@@ -199,6 +199,12 @@ __ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hos
      - 158
      -
 
+.. important::
+
+   许可费用仅为解锁相应的功能，不包含技术支持。
+
+   关于技术支持，请查看 :ref:`asking questions`
+
 .. _upgrading old license:
 
 升级老版本许可证
