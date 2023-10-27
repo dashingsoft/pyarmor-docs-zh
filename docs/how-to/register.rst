@@ -123,6 +123,29 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
     $ pyarmor reg -g 1
 
+    INFO     Python 3.12.0
+    INFO     Pyarmor 8.4.2 (group), 006000, btarmor
+    INFO     Platform darwin.x86_64
+    INFO     generating device file ".pyarmor/group/pyarmor-group-device.1"
+    INFO     current machine id is "mc92c9f22c732b482fb485aad31d789f1"
+    INFO     device file has been generated successfully
+
+日志中的这一行显示的就是这台设备的标识符::
+
+    INFO     current machine id is "mc92c9f22c732b482fb485aad31d789f1"
+
+检查离线设备是否可以使用集团版许可证，可以重新启动系统，然后再次运行该命令，比较一下设备的标识符是否发生改变::
+
+    $ pyarmor reg -g 1
+
+    ...
+    INFO     current machine id is "mc92c9f22c732b482fb485aad31d789f1"
+    ...
+
+因为集团版许可证是绑定到设备的，所有只用当设备标识符没有改变，那么这台离线设备才可以使用集团版许可证，否则无法使用集团版许可证。
+
+对于虚拟机，WSL（Windows Subsystem Linux）以及其他任何系统，如果其设备标识符重启之后发生变化，请参考相应的文档配置系统网络的 Mac 地址以及硬盘的设备序列号保持不变，然后在检查设备标识符是否能够保持不变。如果设备标识符始终发生变化，那么集团版许可证无法在该系统使用。
+
 生成离线设备注册文件
 --------------------
 
@@ -139,20 +162,51 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
     $ pyarmor reg -g 1 /path/to/pyarmor-regfile-xxxx.zip
 
-这条命令生成的离线注册文件只可以在第一台设备上使用。
+这条命令生成的离线注册文件只可以在第一台设备上使用，因为离线设备注册文件 ``pyarmor-device-regfile-xxxx.1.zip`` 包含设备标识符的信息。
 
 离线设备注册
 ------------
 
 一旦生成离线设备注册文件之后，就可以拷贝到离线设备上面进行注册。例如，在第一台离线设备上，运行下面的命令::
 
-    $ pyarmor reg pyarmor-device-regfile-xxxx.1.zip
+    $ pyarmor reg /path/to/pyarmor-device-regfile-xxxx.1.zip
+
+    INFO     Python 3.12.0
+    INFO     Pyarmor 8.4.2 (group), 006000, btarmor
+    INFO     Platform darwin.x86_64
+    INFO     register "/path/to/pyarmor-device-regfile-xxxx.1.zip"
+    INFO     machine id in group license: mc92c9f22c732b482fb485aad31d789f1
+    INFO     got machine id: mc92c9f22c732b482fb485aad31d789f1
+    INFO     this machine id matchs group license
+    INFO     This license registration information:
+
+    License Type    : pyarmor-group
+    License No.     : pyarmor-vax-006000
+    License To      : Tester
+    License Product : btarmor
+
+    BCC Mode        : Yes
+    RFT Mode        : Yes
+
+    Notes
+    * Offline obfuscation
+
+注意查看这两行日志::
+
+    INFO     machine id in group license: mc92c9f22c732b482fb485aad31d789f1
+    INFO     got machine id: mc92c9f22c732b482fb485aad31d789f1
+
+其中第一行显示的是注册文件中的设备标识符，下面显示的当前设备的标识符，两者只有匹配才能注册成功，如果不匹配，那么需要重新为当前设备生成设备标识符文件和离线注册文件。
 
 查看注册信息::
 
     $ pyarmor -v
 
 注册成功之后所有的加密操作自动应用集团版许可证，注册和加密都不需要联网验证。
+
+.. important::
+
+   如果需要重新为当前设备生成注册文件，必须使用下一个设备编号，原来的设备编号已经被占用而无法使用。例如，应该使用 `pyarmor reg -g 2` ，而不能还依旧使用  `pyarmor reg -g 1`
 
 运行不受限制的 Docker 容器
 --------------------------
@@ -161,21 +215,33 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 集团版许可证支持运行不受限制的 Docker 容器，每一个 Docker 容器都使用当前离线设备的注册文件。这些容器需要使用默认的 Bridge 网络接口，并且没有进行高度定制而导致 Pyarmor 无法识别。
 
-为了运行不受限制的容器，Docker 主机需要
+**基本使用方法**
 
-- 离线设备注册文件 ``pyarmor-device-regfile-xxxx.1.zip`` ，参考上面的方法生成
-- 安装 Pyarmor 8.4.0+
+1. 每一个 Docker 主机被当作一个离线设备，并且必须能够注册集团版许可证
+
+2. 然后在 Docker 主机上启动一个认证服务，来接受 Docker 容器的认证请求
+
+3. 在 Docker 容器中运行 Pyarmor 的时候，会发送认证请求到 Docker 主机，并验证返回的结果
+
+4. Docker 主机和 Docker 容器必须在同一个网段，否则 Docker 主机无法接受到 Docker 容器的认证请求。
+
+**Linux Docker Host**
 
 下面是使用集团版许可证的实践
 
 - Docker 主机, Ubuntu x86_64, Python 3.8
 - Docker 容器, Ubuntu x86_64, Python 3.11
 
+为了运行不受限制的容器，Docker 主机需要
+
+- 离线设备注册文件 ``pyarmor-device-regfile-xxxx.1.zip`` ，参考上面的方法生成
+- 安装 Pyarmor 8.4.1+
+
 首先拷贝下面的文件到 Docker 主机:
 
-- pyarmor-8.4.0.tar.gz
-- pyarmor.cli.core-5.4.0-cp38-none-manylinux1_x86_64.whl
-- pyarmor.cli.core-5.4.0-cp311-none-manylinux1_x86_64.whl
+- pyarmor-8.4.1.tar.gz
+- pyarmor.cli.core-5.4.1-cp38-none-manylinux1_x86_64.whl
+- pyarmor.cli.core-5.4.1-cp311-none-manylinux1_x86_64.whl
 - pyarmor-device-regfile-6000.1.zip
 
 然后在 Docker 主机上运行下面的命令::
@@ -183,8 +249,8 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
     $ python3 --version
     Python 3.8.10
 
-    $ pip install pyarmor.cli.core-5.4.0-cp38-none-manylinux1_x86_64.whl
-    $ pip install pyarmor-8.4.0.tar.bgz
+    $ pip install pyarmor.cli.core-5.4.1-cp38-none-manylinux1_x86_64.whl
+    $ pip install pyarmor-8.4.1.tar.bgz
 
 接着启动 ``pyarmor-auth`` 来侦听来自 Docker 容器的认证请求::
 
@@ -206,30 +272,61 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 在 Docker 主机上打开第三个控制台拷贝文件到容器::
 
-    $ docker cp pyarmor-8.4.0.tar.gz 86b180b28a50:/
-    $ docker cp pyarmor.cli.core-5.4.0-cp311-none-manylinux1_x86_64.whl 86b180b28a50:/
+    $ docker cp pyarmor-8.4.1.tar.gz 86b180b28a50:/
+    $ docker cp pyarmor.cli.core-5.4.1-cp311-none-manylinux1_x86_64.whl 86b180b28a50:/
     $ docker cp pyarmor-device-regfile-6000.1.zip 86b180b28a50:/
 
 最后在 Docker 容器中，注册 Pyarmor 并进行加密脚本::
 
-    root@86b180b28a50:/# pip install pyarmor.cli.core-5.4.0-cp311-none-manylinux1_x86_64.whl
-    root@86b180b28a50:/# pip install pyarmor-8.4.0.tar.gz
+    root@86b180b28a50:/# pip install pyarmor.cli.core-5.4.1-cp311-none-manylinux1_x86_64.whl
+    root@86b180b28a50:/# pip install pyarmor-8.4.1.tar.gz
     root@86b180b28a50:/# pyarmor reg pyarmor-device-regfile-6000.1.zip
     root@86b180b28a50:/# pyarmor -v
+
+如果配置正确，应该显示许可证的相关信息。
+
+下面进行简单的测试::
+
     root@86b180b28a50:/# echo "print('hello world')" > foo.py
     root@86b180b28a50:/# pyarmor gen --enable-rft foo.py
 
-当需要验证许可证的时候，Docker 容器会发送请求到主机。
+当需要验证许可证的时候，Docker 容器会发送请求到主机。如果 Docker 主机的 `pyarmor-auth` 对应的控制台没有收到任何请求，请检查 Docker 网络配置，确保主机和容器的 IPv4 地址在同一个网段。
 
-.. important::
+**MacOS Docker Host**
 
-   如果 Docker 主机是 MacOS 或者 Windows 的时候，可能需要在 Docker 容器中对 `host.docker.internal` 进行额外配置，要确保它的地址和 Docker 容器在同一个网段。
+如果 Docker 主机是 MacOS 的时候，和 Linux 主机稍微有一些不同。因为 Docker 容器是运行在 Linux 虚拟机中，而不是直接运行在 MacOS 上面。
 
-   例如，Docker 容器通常的地址是 ``172.17.0.2`` ，如果 `host.docker.internal` 解析的是 `192.168.x.x` ，而不是 `172.17.x.x` ，那么就需要启动 Docker 容器的时候使用额外参数 `docker run --add-host=host.docker.internal:172.17.0.1 ...`
+一个解决方案是直接在 Linux VM 上运行 `pyarmor-auth` ，在这种情况下，必须把 Linux VM 作为一个离线设备进行注册，而不是把 MacOS 作为离线设备进行注册，然后使用下面的额外参数启动 Docker 容器::
 
-   在 Docker 主机端，同时要确保 `pyarmor-auth` 能够侦听在 `172.17.0.1` ，详细内容请参考 `issue 1542`__
+    $ docker run --add-host=host.docker.internal:172.17.0.1 ...
+
+在这种情况下，也许需要对 Linux VM 进行额外的配置以确保其设备标识符重启之后保持不变。
+
+参考 `issue 1542`__ 了解更多信息。
 
 __ https://github.com/dashingsoft/pyarmor/issues/1542
+
+**Windows Docker Host**
+
+对于 Windows Docker 主机，首先检查网络配置::
+
+  C:> ipconfig
+
+  Ethernet adapter vEthernet (WSL):
+
+       Connection-specific DNS Suffix  . :
+       Link-local IPv6 Address . . . . . : fe80::8984:457:2335:588e%28
+       IPv4 Address. . . . . . . . . . . : 172.22.32.1
+       Subnet Mask . . . . . . . . . . . : 255.255.240.0
+       Default Gateway . . . . . . . . . :
+
+如果它有一个 IPv4 地址，例如 ``172.22.32.1`` 是和 Docker 容器在同一个网段，那么事情就简单了。只需要把 Windows 作为离线设备进行注册，然后在上面运行 `pyarmor-auth` ，并且使用下面的额外选项启动 Docker 容器::
+
+    $ docker run --add-host=host.docker.internal:172.22.32.1 ...
+
+总之， `pyarmor-auth` 侦听的 IPv4 地址必须和 Docker 容器的 IPv4 地址在同一个网段，只要能达到这个目的，怎么进行配置都可以。
+
+如果 Windows 没有任何 IPv4 地址和 Docker 容器在同一个网段，那么另外一种解决方案就是把 WSL (Windows Subsystem Linux）作为离线设备进行注册，然后运行 `pyarmor-auth` 在 WSL 里面。在这种情况下，也需要对 WSL 进行额外的配置以确保其设备标识符保持不变，配置方式请参考 WSL 的文档。
 
 使用集团版许可证在 CI 服务器
 ----------------------------
