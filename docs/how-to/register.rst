@@ -225,11 +225,9 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
    如果 Docker 主机是 MacOS 或者 Windows 的时候，可能需要在 Docker 容器中对 `host.docker.internal` 进行额外配置，要确保它的地址和 Docker 容器在同一个网段。
 
-   例如，Docker 容器通常的地址是 ``172.17.0.2`` ，如果 `host.docker.internal` 解析的是 `192.168.x.x` ，而不是 `172.17.x.x` ，那么就需要在 Docker 容器的 `/etc/hosts` 增加一行::
+   例如，Docker 容器通常的地址是 ``172.17.0.2`` ，如果 `host.docker.internal` 解析的是 `192.168.x.x` ，而不是 `172.17.x.x` ，那么就需要启动 Docker 容器的时候使用额外参数 `docker run --add-host=host.docker.internal:172.17.0.1 ...`
 
-       host.docker.internal 172.17.0.1
-
-    在 Docker 主机端，同时要确保 `pyarmor-auth` 能够侦听在 `172.17.0.1` ，详细内容请参考 `issue 1542`__
+   在 Docker 主机端，同时要确保 `pyarmor-auth` 能够侦听在 `172.17.0.1` ，详细内容请参考 `issue 1542`__
 
 __ https://github.com/dashingsoft/pyarmor/issues/1542
 
