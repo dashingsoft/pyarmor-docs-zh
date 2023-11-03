@@ -145,6 +145,8 @@ pyarmor gen
 
 --pack BUNDLE                   使用加密后的脚本替换打包成为可执行文件里面的原来脚本 :option:`... <--pack>`
 
+--use-runtime PATH              指定预先生成的运行辅助包的路径 :option:`... <--use-runtime>`
+
 .. describe:: 描述
 
 该命令用来加密脚本和包，例如::
@@ -480,6 +482,16 @@ __ https://docs.python.org/3.11/library/fnmatch.html
 
 Pyarmor 首先加密脚本，接着使用加密后的脚本替换 BUNDLE 里面的同名 Python 脚本，最后使用修改后的可执行文件覆盖原文件。
 
+.. option:: --use-runtime PATH
+
+            使用预先生成的运行辅助包。
+
+使用该选项则当前命令直接使用预先生成的运行辅助包，而不是重新生成运行辅助包。
+
+运行辅助包必须使用命令 :ref:`pyarmor gen runtime` 生成。
+
+如果需要使用 :term:`外部密钥` ，那么生成运行辅助包和加密脚本的时候都必须指定选项 :option:`--outer`
+
 .. _pyarmor gen key:
 
 pyarmor gen key
@@ -550,6 +562,57 @@ pyarmor gen key
 
     with open('pyarmor.rkey', 'wb') as f:
         f.write(data)
+
+.. _pyarmor gen runtime:
+
+pyarmor gen runtime
+===================
+
+单独生成可以共用的 :term:`运行辅助包`.
+
+.. program:: pyarmor gen runtime
+
+.. describe:: Syntax
+
+    pyarmor gen runtime <options>
+
+.. describe:: Options
+
+-O PATH, --output PATH      保存运行辅助包的输出路径
+--outer                     使用外部密钥文件
+
+-e DATE, --expired DATE     设置有效期
+--period N                  定时检查运行密钥
+-b DEV, --bind-device DEV   绑定加密脚本到指定设备
+--bind-data DATA            存储自定义数据到运行密钥
+
+.. describe:: Description
+
+该命令用来生成共用的 :term:`运行辅助包` ，这里所有的选项用法和 :ref:`pyarmor gen` 是一样的。
+
+例如，生成一个最简单的运行辅助包::
+
+    $ pyarmor gen runtime -O build/my_runtime1
+    $ ls build/my_runtime1/
+
+    $ pyarmor gen --use-runtime build/my_runtime1 foo.py
+    $ cp -a build/my_runime1/pyarmor_runtime_000000 dist/
+
+也可以使用其他选项::
+
+    $ pyarmor gen runtime -e .10 --bind-device 10:52:fa:2d:26 -O build/my_runtime2
+    $ pyarmor gen runtime --platform windows.x86_64 -e .10 -O build/my_runtime3
+
+如果使用 :term:`外部密钥` ，那么生成共享运行辅助包和加密脚本都需要使用选项 :option:`--outer` 。例如::
+
+    $ pyarmor gen runtime --outer -O build/my_outer_runtime
+    $ pyarmor gen --outer --use-runtime build/my_outer_runtime foo.py
+
+    $ cp -a build/my_outer_runtime/pyarmor_runtime_000000 dist/
+    $ pyarmor gen key -e .10
+    $ mv dist/pyarmor.rkey dist/pyarmor_runtime_000000
+
+请使用正确的名称替换示例命令中 ``pyarmor_runtime_000000``
 
 .. _pyarmor cfg:
 

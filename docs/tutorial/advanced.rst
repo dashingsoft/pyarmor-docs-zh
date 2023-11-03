@@ -430,4 +430,40 @@ Python 包 :mod:`pyarmor.cli.runtime` 提供了其他平台的预编译扩展模
     $ python3.8 dist/foo.py
     $ python3.9 dist/foo.py
 
+使用公共的运行辅助包
+====================
+
+:term:`运行辅助包` 可以单独生成，并且在加密脚本的时候直接引用，这样就不需要在每次加密脚本的时候都生成 :term:`运行辅助包` 。
+
+首先是使用命令 :ref:`pyarmor gen runtime` 生成共用的运行辅助包::
+
+    $ pyarmor gen runtime -O build/my_runtime1
+    $ ls build/my_runtime1
+
+然后在加密脚本的时候使用 :option:`--use-runtime` 引用这个运行辅助包::
+
+    $ pyarmor gen --use-runtime build/my_runtime1 foo.py
+
+发布加密脚本的时候需要把 :term:`运行辅助包` 拷贝到加密脚本的输出路径 `dist`::
+
+    # 请把 pyarmor_runtime_000000 替换成为实际的名称
+    $ ls build/my_runtime1/
+    $ cp -a build/my_runime1/pyarmor_runtime_000000 dist/
+
+如果需要生成支持多个平台的运行辅助包，使用下面的选项::
+
+    $ pyarmor gen --platform windows.x86_64,linux.x86_64 build/my_runtime3
+
+如果使用 :term:`外部密钥` ，那么生成加密脚本和运行辅助包的时候都需要使用选项 :option:`--outer` 。例如::
+
+    $ pyarmor gen runtime --outer -O build/my_outer_runtime
+    $ pyarmor gen --outer --use-runtime build/my_outer_runtime foo.py
+
+    # 拷贝运行辅助包到加密脚本输出目录
+    $ cp -a build/my_outer_runtime/pyarmor_runtime_000000 dist/
+
+    # 生成外部密钥
+    $ pyarmor gen key -e .10
+    $ mv dist/pyarmor.rkey dist/pyarmor_runtime_000000
+
 .. include:: ../_common_definitions.txt
