@@ -375,7 +375,7 @@ An example script:
 
 .. function:: __assert_armored__(arg)
 
-   :param object arg:  模块或者函数
+   :param object arg:  模块，函数或者方法
    :returns: 如果 ``arg`` 指定的对象是被加密过的，那么返回 ``arg`` 自身，否则抛出保护异常
 
    例如
