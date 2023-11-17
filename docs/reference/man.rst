@@ -547,7 +547,9 @@ pyarmor gen key
 
 如果不存在，那么报错缺失运行密钥。
 
-.. [#] 如果运行辅助包支持多平台并且还支持多个 Python 版本，那么需要把 ``.pyarmor.rkey`` 拷贝到运行辅助包的每一个子目录 `pyXY` ，或者在 `pyXY` 里面建立一个链接。例如 `cd py310 && ln -s ../pyarmor.rkey`
+.. [#] 如果运行辅助包支持多平台并且还支持多个 Python 版本，那么需要把 ``.pyarmor.rkey`` 拷贝到运行辅助包的每一个子目录 `pyXY` ，或者配置 `outer_keyname` ，在其前面增加 `../` ，例如 `pyarmor cfg outer_keyname=../pyarmor.rkey` 。请参阅 `问题报告 1599`__
+
+__ https://github.com/dashingsoft/pyarmor/issues/1599
 
 .. describe:: 特殊输出路径 **pipe**
 
