@@ -537,7 +537,7 @@ pyarmor gen key
 
 外部密钥文件也可以存放在其他位置，在运行的时候会依次查找下面的路径:
 
-- 运行辅助包的目录
+- 运行辅助包的目录 [#]_
 - 环境变量 :envvar:`PYARMOR_RKEY` 指定的路径，路径名称中不能包含 ``..`` ，尾部不能是路径分隔符，一般用来指定一个绝对路径，例如 ``/var/data``
 - 当前目录
 
@@ -546,6 +546,8 @@ pyarmor gen key
 - 当前可执行文件的全路径名称 + ``.pyarmor.rkey`` ，例如 ``dist/foo/foo.exe.pyarmor.rkey``
 
 如果不存在，那么报错缺失运行密钥。
+
+.. [#] 如果运行辅助包支持多平台并且还支持多个 Python 版本，那么需要把 ``.pyarmor.rkey`` 拷贝到运行辅助包的每一个子目录 `pyXY` ，或者在 `pyXY` 里面建立一个链接。例如 `cd py310 && ln -s ../pyarmor.rkey`
 
 .. describe:: 特殊输出路径 **pipe**
 
