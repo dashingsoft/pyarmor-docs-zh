@@ -265,12 +265,30 @@ __ https://docs.python.org/3.11/library/fnmatch.html
   pyarmor gen -e 30 foo.py
   pyarmor gen -e 2022-12-31 foo.py
 
-判断是否过期会读取 NTP 服务器的时间，所以在没有联网的机器上无法运行。
-
 而下面的格式则使用本地时间验证有效期，例如::
 
   pyarmor gen -e .30 foo.py
   pyarmor gen -e .2022-12-31 foo.py
+
+判断是否过期会读取服务器的时间，所以在没有联网的机器上无法运行。使用下面的命令查看默认的服务器::
+
+    $ pyarmor cfg nts
+
+在 v8.8.4 版本之前，只支持使用 NTP 协议的服务器进行校验，并且只能指定一个服务器，但是可以根据需要改变默认的 NTP 服务器。例如::
+
+    $ pyarmor cfg nts=108.59.2.24
+
+从 v8.8.4 版本开始，支持通过 HTTP 协议进行校验，并且也支持配置多个服务器来进行校验。如果第一个服务器没有反应的话，就使用第二个服务器，直到找到可用的服务器。使用 HTTP 进行校验，只要输入合法的 URL 地址就可以。例如::
+
+    $ pyarmor cfg nts=http://worldtimeapi.org/api
+
+下面的这个例子使用多个服务器，并且混合 NTP 服务器和 HTTP 服务器::
+
+    $ pyarmor cfg nts=pool.ntp.org,http://worldtimeapi.org/api
+
+还可以使用特殊的名称 `local` 用来得到本地时间，例如::
+
+    $ pyarmor cfg nts="pool.ntp.org,http://worldtimeapi.org/api,local"
 
 .. option:: -b DEV, --bind-device DEV
 

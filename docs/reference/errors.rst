@@ -122,8 +122,11 @@
      - RuntimeError: Resource temporarily unavailable
      - 设置了加密脚本的有效期，但是无法访问时间服务器导致的问题
 
-       这个问题无法解决，要么使用本地时间，要么用户使用 :term:`脚本补丁` 自己进行校验
+       解决方案：
 
+       1. 使用本地时间
+       2. 用户使用 :term:`脚本补丁` 自己进行校验
+       3. 升级到 Pyarmor 8.4.4+ ，并使用 HTTP 服务器进行检验，需要通过命令设置一个有效的 HTTP 服务器。例如 `pyarmor cfg nts=http://your.http-server.com/api/v2/`
    * -
      - Protection Exception
      - 如果使用了选项 :option:`--assert-call` 或者 :option:`assert-import` ，那么参考 :doc:`../tutorial/advanced` 中的 `过滤需要保护的函数和模块` ，根据错误堆栈的信息，忽略出错的函数或者模块。
