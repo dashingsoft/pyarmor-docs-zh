@@ -144,6 +144,20 @@ __ https://github.com/dashingsoft/pyarmor/archive/master.zip
 
     $ pip install pyarmor.cli-8.2.9.zip
 
+Termux 平台的额外补丁
+=====================
+
+在 Termux 平台，安装完成之后还需要额外对扩展模块打补丁。例如::
+
+    $ patchelf --add-needed /data/data/com.termux/files/usr/lib/python3.11/site-packages/pyarmor/cli/core/android/aarch64/pytransform3.so
+    $ patchelf --add-needed /data/data/com.termux/files/usr/lib/python3.11/site-packages/pyarmor/cli/core/android/aarch64/pyarmor_runtime.so
+
+有时候可以还需要额外的配置。例如::
+
+    $ patchelf --set-rpath /data/data/com.termux/files/usr/lib /path/to/{pytransform3,pyarmor_runtime}.so
+
+否则，运行 `pyarmor` 会报错 `dlopen failed: cannot locate symbol "PyFloat_Type"`
+
 在 Python 脚本中调用 Pyarmor
 ============================
 
