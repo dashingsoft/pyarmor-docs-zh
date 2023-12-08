@@ -79,7 +79,7 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 在 Docker 或者 CI pipeline 中注册
 ---------------------------------
 
-在 Docker 或者 CI pipeline 中注册 Pyarmor 的基本方法同上，但是同时运行的 Pyarmor 的 Docker 数量有限制，不能超过 100 个。如果需要同时运行超过 100 个的 Docker 容器，请使用集团版许可证。
+在 Docker 或者 CI pipeline 中注册 Pyarmor 基础版/专家版许可证的基本方法同上，但是在一天之内运行的 Pyarmor 的 Docker 数量有限制，不能超过 100 个。如果需要在一天之内运行超过 100 个的 Docker 容器，请使用集团版许可证。并且同时运行的 Docker 容器或者 Runner 的数量不能超过 3 个，如果超过这个数量，最好每隔半分钟之后启动一个 Docker 容器或者 Runner，同时运行太多的 `pyarmor reg` 命令会导致许可证服务器返回 HTTP 500 的错误并导致注册失败。
 
 **只允许在开发设备上安装和注册 Pyarmor。如果 Docker 镜像需要发送给客户，那么不允许在上面安装和注册 Pyarmor**
 
