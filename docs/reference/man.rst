@@ -292,8 +292,17 @@ __ https://docs.python.org/3.11/library/fnmatch.html
 
 .. option:: -b DEV, --bind-device DEV
 
-绑定加密脚本到指定的机器，目前支持的硬件信息包括硬盘序列号，网卡 Mac 地址和 IPv4
-地址。例如::
+            绑定加密脚本到指定的机器。
+
+使用 Pyarmor 8.4.6+ 可以通过命令 `python -m pyarmor.cli.hdinfo` 直接得到:term:`客户设备` 的硬件信息如下::
+
+    Default Harddisk Serial Number: 'HXS2000CN2A'
+    Default Mac address: '00:16:3e:35:19:3d'
+    Default IPv4 address: '128.16.4.10'
+
+Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件信息。
+
+目前支持绑定的硬件信息包括硬盘序列号，网卡 Mac 地址和 IPv4地址。例如::
 
   pyarmor gen -b 128.16.4.10 foo.py
   pyarmor gen -b 52:38:6a:f2:c2:ff foo.py
@@ -331,6 +340,7 @@ __ https://docs.python.org/3.11/library/fnmatch.html
 
     # 适用于 Linux，绑定到硬盘设备名称 "/dev/vda2"
     pyarmor gen -b "/dev/vda2:KDX3298FS6P5AX380" foo.py
+
 
 .. option:: --bind-data DATA
 
