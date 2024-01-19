@@ -49,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Pyarmor'
-copyright = '2018 - 2023 德新科技.'
+copyright = '2018 - 2024 德新科技.'
 author = '赵俊德'
 
 # The version info for the project you're documenting, acts as replacement for
