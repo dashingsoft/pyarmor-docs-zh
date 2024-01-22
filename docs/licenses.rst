@@ -93,7 +93,7 @@ Microsoft Office 产品系列不是一种产品，它包括的各个产品，例
 * 在设备上安装 Pyarmor 8.4.0+ 的试用版本
 * 运行下面的命令得到机器标识符::
 
-    $ pyarmor reg -g 101
+    $ pyarmor reg -g 1
     ...
     INFO     current machine id is "mc92c9f22c732b482fb485aad31d789f1"
     INFO     device file has been generated successfully
