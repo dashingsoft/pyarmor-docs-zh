@@ -112,6 +112,16 @@ __ https://pyarmor.readthedocs.io/zh/v7.x/platforms.html
 
 .. py:class:: PluginName
 
+    .. py:staticmethod:: post_script(ctx, res, source)
+
+       如果该方法存在，那么它会在加密脚本生成之后被调用
+
+       这个方法主要用来对生成的加密脚本进行修改定制，通过修改 `source` 并返回修改后的脚本内容
+
+       :param Context ctx: 加密环境
+       :param FileResource res: 实例 `pyarmor.cli.resource.FileResource`
+       :param str source: 加密后的脚本内容
+
     .. py:staticmethod:: post_build(ctx, inputs, outputs, pack=None)
 
        如果该方法存在，那么当所有加密文件都生成之后会被 :ref:`pyarmor gen` 调用
