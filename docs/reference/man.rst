@@ -258,21 +258,22 @@ __ https://docs.python.org/3.11/library/fnmatch.html
 * 数字，表示从现在开始的天数
 * YYYY-MM-DD，直接指定有效期
 
-如果前面有字符 "."，那么表示使用本地时间判断，否则使用网络时间
-
 例如::
 
   pyarmor gen -e 30 foo.py
   pyarmor gen -e 2022-12-31 foo.py
 
-而下面的格式则使用本地时间验证有效期，例如::
-
-  pyarmor gen -e .30 foo.py
-  pyarmor gen -e .2022-12-31 foo.py
-
-判断是否过期会读取服务器的时间，所以在没有联网的机器上无法运行。使用下面的命令查看默认的服务器::
+默认情况是检查本地时间，使用下面的命令查看默认的时间服务器::
 
     $ pyarmor cfg nts
+    ...
+    Current settings
+      nts = local
+    ...
+
+如果需要检查网络时间，那么需要指定 NTP 服务器。例如::
+
+    $ pyarmor cfg nts=pool.ntp.org
 
 在 v8.8.4 版本之前，只支持使用 NTP 协议的服务器进行校验，并且只能指定一个服务器，但是可以根据需要改变默认的 NTP 服务器。例如::
 

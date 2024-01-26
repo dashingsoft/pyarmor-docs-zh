@@ -197,22 +197,23 @@ Pyarmor_ 是一个发布在 PyPI_ 的 Python 包，最方便的方式就是直�
 
     $ python dist4/foo.py
 
-加密脚本使用 NTP_ 服务器来验证是否过期，如果当前设备不能访问网络，会报错退出。
-
 也可以使用另外一种格式 ``YYYY-MM-DD`` 来设置有效期，例如::
 
     $ pyarmor gen -O dist4 -e 2020-12-31 foo.py
 
-运行一下 :file:`dist4/foo.py` 要进行验证::
+运行一下 :file:`dist4/foo.py` 进行验证::
 
     $ python dist4/foo.py
 
-如果不需要验证网络时间，可以在有效期前面增加前缀 ``.`` 表示检查本地时间。例如::
-
-    $ pyarmor gen -O dist4 -e .30 foo.py
-    $ pyarmor gen -O dist4 -e .2020-12-31 foo.py
-
 发布有时间限制的加密脚本和上面的方法是一样的，直接拷贝整个输出目录 :file:`dist4/` 到 :term:`客户设备`
+
+从 v8.5.0 开始，默认是检查本地时间。如果需要检查网络时间，需要指定远程服务器。例如::
+
+   $ pyarmor cfg nts=pool.ntp.org
+
+实际上，这就是以前的版本的默认配置，不过这种配置有时候会报错 `RuntimeError: Resource temporarily unavailable` ，解决方案就是使用 HTTP 服务器来验证时间。例如::
+
+   $ pyarmor cfg nts=http://worldtimeapi.org/api
 
 绑定加密脚本到指定设备
 ======================
