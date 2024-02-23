@@ -301,6 +301,7 @@ __ https://docs.python.org/3.11/library/fnmatch.html
     Default Harddisk Serial Number: 'HXS2000CN2A'
     Default Mac address: '00:16:3e:35:19:3d'
     Default IPv4 address: '128.16.4.10'
+    Domain: 'dashingsoft.com'
 
 Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件信息。
 
@@ -310,9 +311,10 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
   pyarmor gen -b 52:38:6a:f2:c2:ff foo.py
   pyarmor gen -b HXS2000CN2A foo.py
 
-在 Pyarmor 8.5.0 之后，也支持使用 `python -m pyarmor.cli.hdinfo` 获取的机器标识符。例如::
+在 Pyarmor 8.5.0 之后，也支持使用 `python -m pyarmor.cli.hdinfo` 获取的机器标识符和绑定到域名。例如::
 
     $ pyarmor gen -b mc92c9f22c732b482fb485aad31d789f1 foo.py
+    $ pyarmor gen -b "{dashingsoft.com}" foo.py
 
 也可以和有效期组合使用::
 
