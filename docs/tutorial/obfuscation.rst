@@ -176,10 +176,14 @@ Pyarmor 使用 :ref:`pyarmor gen` 加密不同的脚本，它提供了丰富的�
      $ cp -a joker/* dist/joker
      $ pyarmor gen -O dist -r joker/
 
-2. 通过配置选项，让 Pyarmor 自动拷贝数据文件::
+2. 通过配置选项，让 Pyarmor 自动拷贝所有数据文件::
 
      $ pyarmor cfg data_files=*
      $ pyarmor gen -O dist -r joker/
+
+如果只需要拷贝 ``*.yaml`` 和 ``*.json`` 文件，使用下面的配置命令::
+
+     $ pyarmor cfg data_files="*.yaml *.json"
 
 3. 自己编写 :term:`加密插件` 来拷贝需要的数据文件
 
