@@ -231,7 +231,7 @@ __ https://developer.apple.com/documentation/bundleresources/entitlements/com_ap
 
 **专家版许可证联网验证是否需要上传用户脚本到服务器？**
 
-不需要。基础版和专家版许可证需要收集设备信息并发送到服务器进行验证，除了许可证文件之外，不会上传任何用户脚本到服务器。
+不需要。基础版和专家版许可证需要收集设备相关硬件信息并发送到服务器进行验证，除了许可证文件之外，不会上传任何用户脚本到服务器。
 
 **我的软件每年大概能分发1W+，一个集团版许可证能绑定1万个离线设备吗? 这些设备到期后，许可证的数量能回收吗**
 
@@ -240,7 +240,7 @@ __ https://developer.apple.com/documentation/bundleresources/entitlements/com_ap
 - 运行加密脚本的机器不需要安装 Pyarmor，也不需要 Pyarmor 许可证
 - Pyarmor 许可证主要应用于加密脚本的机器
 - 集团版许可证只供企业用户使用，最多允许 100 个离线设备使用该许可证
-- 关于 Pyarmor 许可证的详细说明文档，请参阅 :doc:`licenses`
+- 关于 Pyarmor 许可证的详细说明和使用文档，请参阅 :doc:`licenses` 和 :doc:`how-to/register`
 
 **购买后能够多设备使用吗？ 如果可以多设备使用，最大的设备数上限是多少?**
 
@@ -288,6 +288,8 @@ Pyarmor 是一个工具产品，不额外签订其他合同， `Pyarmor 最终�
 
   激活文件 yarmor-regcode-xxxx.txt 一般只用于第一次的注册登记，在 CICD 中新镜像使用的时候需要注册，但是不能使用这个文件，可以使用第一次注册登记时候生成的一个 .zip 格式的注册文件。
 
+  另外，同一个 IP 在 1 分钟之内最多运行 `pyarmor reg` 命令三次，超过限制服务器会返回 `HTTP 500` 等错误。如果同一台机器同时运行太多的 Docker 容器进行注册的话，可能会导致问题。
+
   具体使用方法请参考 :doc:`how-to/register` 里面的注册许可证中的说明
 
 **我们之前是使用的Pyarmor 6.8.1版本进行的前期测试和验证，现在想要正式购买授权，但目前最新版本已经是8.0+，那这个之前的6.8.1版本的授权该如何购买**
@@ -299,5 +301,9 @@ Pyarmor 是一个工具产品，不额外签订其他合同， `Pyarmor 最终�
   如果要在 Pyarmor 8.0+ 中使用老版本的许可证，需要使用命令 pyarmor-7
 
   __ https://pyarmor.dashingsoft.com/cart/order.html
+
+**Pyarmor 的许可证是否限制加密次数**
+
+  任何许可证都没有加密次数的限制，但是 基础版和专家版许可证 有对同时使用的设备数量的限制。
 
 .. include:: _common_definitions.txt
