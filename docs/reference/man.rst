@@ -423,6 +423,10 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
 选项 :option:`--restrict` 隐含启用私有模式。
 
+.. versionchanged:: 8.5.3
+
+   在之前的版本中，外部脚本无法导入使用 :option:`--private` 加密的模块，现在加密脚本可以导入加密模块，但是不能访问其属性
+
 .. option:: --restrict
 
             主要应用于保护加密包，保护包里面的模块，只能在包内部使用，不能被外部模块调用
