@@ -126,7 +126,7 @@ Pyarmor 使用 :ref:`pyarmor gen` 加密不同的脚本，它提供了丰富的�
 使用更多的选项加密包
 ====================
 
-如果是加密 :term:`Python 包` ，不要使用选项 :option:`--private` 而是使用其他两个选项::
+如果是加密 :term:`Python 包` ，使用其他两个选项::
 
     $ pyarmor gen --enable-jit --mix-str --assert-call --assert-import --restrict joker/
 

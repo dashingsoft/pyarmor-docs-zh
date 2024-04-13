@@ -24,9 +24,10 @@
 * :option:`--obf-code` ``2`` 能够同时增加反编译 Bytecode 的难度
 * ``pyarmor cfg mix_argnames=1`` 保护函数参数，但是可能导致 annotations 不可用
 
-下面的选项可以隐藏加密模块的属性，外部脚本无法直接导入和使用加密脚本
+下面的选项可以隐藏加密模块的属性
 
-* 加密脚本使用 :option:`--private` ，加密包使用 :option:`--restrict`
+* :option:`--private`
+* :option:`--restrict` 甚至不允许外部脚本直接导入和使用加密脚本
 
 下面的选项可以防止加密脚本和加密脚本中函数被其他人替换成为自己的函数
 
@@ -81,7 +82,7 @@
    如果 :term:`RFT 模式` 和 :term:`BCC 模式` 不可用，使用下面的选项
 
    * :option:`--enable-jit`
-   * :option:`--private` （加密脚本），或者 :option:`--restrict` （加密包）
+   * :option:`--private` 或者 :option:`--restrict` 限制外部脚本访问加密脚本
    * :option:`--mix-str` 和过滤条件
    * :option:`--assert-import`
    * :option:`--obf-code` ``2``
