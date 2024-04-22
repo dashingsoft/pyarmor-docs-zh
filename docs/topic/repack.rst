@@ -6,19 +6,19 @@
 
 .. program:: pyarmor gen
 
-Pyarmor 8.0 没有像之前的版本使用 `pack` 生成可以独立运行的加密脚本，而是直接通过一个选项 :option:`--pack` 来告诉 Pyarmor 需要在加密之后自动进行打包。
+Pyarmor 8.0 没有像之前的版本提供命令 `pack` 来生成可以独立运行的加密脚本，而是直接通过一个选项 :option:`--pack` 来告诉 Pyarmor 需要在加密之后自动进行打包。
 
 自动打包模式
 ============
 
 .. versionadded:: 8.5.4
 
-选项 :option:`--pack` 接受两个选项
+选项 :option:`--pack` 接受两个值
 
 - onefile
 - onedir
 
-这是 PyInstaller_ 提供的两种打包模式，单文件和单目录。实际上 Pyarmor 主要还是加密，加密完成之后生成独立可以运行的包的时候完全是调用 PyInstaller_ 的相关功能。如果没有安装 PyInstaller_ 必须首先安装::
+这是 PyInstaller_ 提供的两种打包模式，单文件和单目录。实际上 Pyarmor 主要功能还是加密，加密完成之后生成可以独立运行的包完全是调用 PyInstaller_ 的相关功能。如果没有安装 PyInstaller_ 必须首先安装::
 
     $ pip install pyinstaller
 
@@ -39,10 +39,10 @@ Pyarmor 8.0 没有像之前的版本使用 `pack` 生成可以独立运行的加
 
 那么，Pyarmor 是如何生成一个包含加密脚本的可执行包呢？
 
-1. 首先 Pyarmor 会编译没有加密的脚本 `foo.py` ，发现它需要导入模块 `queens.py` 和包 `joker`
+1. 首先 Pyarmor 会分析没有加密的脚本 `foo.py` 的代码，发现它需要导入模块 `queens.py` 和包 `joker`
 2. 接下来 Pyarmor 会加密这三项到一个临时目录 `.pyarmor/pack/dist`
 3. 然后 Pyarmor 调用 PyInstaller_ ，让它分析没有加密脚本的 `foo.py` 依赖关系，把 `foo.py` 使用到的所有系统包都记录保存下来
-4. 最后 Pyarmor 再次调用 PyInstaller_ ，直接打包存放在临时目录 `.pyarmor/pack/dist` 下面的加密脚本，把上一个步骤中发现的系统包也统统打到包里面去，不过系统包都没有进行加密，最后输出一个可执行文件 `dist/foo` 。
+4. 最后 Pyarmor 再次调用 PyInstaller_ ，把临时目录 `.pyarmor/pack/dist` 下面的加密脚本，以及上一个步骤中发现的系统包 [#]_ 统统打包到一个文件里面，最后输出一个可执行文件 `dist/foo` 。
 
 现在，让我们运行一下最终打好的包 `dist/foo` 或者 `dist/foo.exe`::
 
@@ -55,6 +55,8 @@ Pyarmor 8.0 没有像之前的版本使用 `pack` 生成可以独立运行的加
     $ ls dist/foo
     $ dist/foo/foo
 
+.. [#] 系统包没有进行加密
+
 检查打包的脚本是否被加密
 ------------------------
 
@@ -64,7 +66,7 @@ Pyarmor 8.0 没有像之前的版本使用 `pack` 生成可以独立运行的加
 
     print('this is __pyarmor__', __pyarmor__)
 
-如果被加密了，那么可以正确打印出来。如果没有加密，那么会抛出异常，因为只有加密脚本中才有内置名称 ``__pyarmor__`` 的定义。
+如果被加密了，那么可以正确打印出来。如果没有加密，就会抛出异常，因为只有加密脚本中才有内置名称 ``__pyarmor__`` 的定义。
 
 使用其他 PyInstaller 选项
 -------------------------
