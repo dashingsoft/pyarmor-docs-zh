@@ -211,18 +211,14 @@ __ https://pyinstaller.org/en/stable/spec-files.html
     $ pyinstaller foo.py
     $ pyarmor gen --pack dist/foo/foo foo.py
 
-如果没有选项 :option:`--pack` ，只是把脚本进行加密。至于那些脚本被加密，请参考 :ref:`pyarmor gen` 中说明，这里不会自动加密依赖项。
-
-如果有选项 :option:`--pack` ，那么默认输出目录是 :file:`.pyarmor/pack/dist` ，在加密完成之后，还进行下面的额外处理:
+Pyarmor 首先加密脚本，并把它们被存放到 :file:`.pyarmor/pack/dist` ，然后进行下面的额外处理:
 
 * 提取可执行文件中内容到一个临时目录 :file:`.pyarmor/pack/`
 * 使用加密脚本替换临时目录中同名的未加密脚本
 * 把加密脚本的 :term:`运行辅助文件` 增加到临时目录中
 * 根据把临时目录中所有内容重新生成可执行文件，并替换原来的可执行文件
 
-在 Darwin 平台，如果需要生成支持 Intel 和 Apple Silicon 的加密脚本，使用额外选项 ``--platform darwin.x86_64,darwin.arm64`::
-
-    $ pyarmor gen --pack dist/foo/foo --platform darwin.x86_64,darwin.arm64 foo.py
+需要注意的是，在这种方式下面，使用 PyInstaller 6.0+ 打包生成的可执行文件无法被正确处理，只能使用低版本 PyInstaller 进行打包。
 
 .. important::
 
