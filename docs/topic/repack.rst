@@ -6,31 +6,96 @@
 
 .. program:: pyarmor gen
 
-使用 Pyarmor 8.0 生成可以独立运行的加密脚本，必须首先调用 PyInstaller_ 将脚本打包成为单独的可执行文件或者打包到一个目录，然后把打包生成的可执行文件通过选项 :option:`--pack` 传递给 :ref:`pyarmor gen` 来实现::
+Pyarmor 8.0 没有像之前的版本使用 `pack` 生成可以独立运行的加密脚本，而是直接通过一个选项 :option:`--pack` 来告诉 Pyarmor 需要在加密之后自动进行打包。
 
-  pyinstaller foo.py
-  pyarmor gen --pack dist/foo/foo foo.py
+自动打包模式
+============
 
-如果没有选项 :option:`--pack` ，只是把脚本进行加密。至于那些脚本被加密，请参考 :ref:`pyarmor gen` 中说明，这里不会自动加密依赖项。
+.. versionadded:: 8.5.4
 
-如果有选项 :option:`--pack` ，那么默认输出目录是 :file:`.pyarmor/pack/dist` ，在加密完成之后，还进行下面的额外处理:
+选项 :option:`--pack` 接受两个选项
 
-* 提取可执行文件中内容到一个临时目录 :file:`.pyarmor/pack/`
-* 使用加密脚本替换临时目录中同名的未加密脚本
-* 把加密脚本的 :term:`运行辅助文件` 增加到临时目录中
-* 根据把临时目录中所有内容重新生成可执行文件，并替换原来的可执行文件
+- onefile
+- onedir
 
-在 Darwin 平台，如果需要生成支持 Intel 和 Apple Silicon 的加密脚本，使用额外选项 ``--platform darwin.x86_64,darwin.arm64`::
+这是 PyInstaller_ 提供的两种打包模式，单文件和单目录。实际上 Pyarmor 主要还是加密，加密完成之后生成独立可以运行的包的时候完全是调用 PyInstaller_ 的相关功能。如果没有安装 PyInstaller_ 必须首先安装::
 
-  pyarmor gen --pack dist/foo/foo --platform darwin.x86_64,darwin.arm64 foo.py
+    $ pip install pyinstaller
 
-.. important::
+假设有一个这样的项目，其目录结构如下::
 
-   只有命令行列出的脚本会被加密，如果需要加密其他脚本或者子目录，在命令行列出它们。例如::
+    project/
+        ├── foo.py
+        ├── queens.py
+        └── joker/
+            ├── __init__.py
+            ├── queens.py
+            └── config.json
 
-      pyarmor gen --pack dist/foo/foo -r *.py dir1 dir2 ...
+我们使用下面的命令进行打包::
 
-**自己动手打包加密脚本**
+    $ cd project
+    $ pyarmor gen --pack onefile foo.py
+
+那么，Pyarmor 是如何生成一个包含加密脚本的可执行包呢？
+
+1. 首先 Pyarmor 会编译没有加密的脚本 `foo.py` ，发现它需要导入模块 `queens.py` 和包 `joker`
+2. 接下来 Pyarmor 会加密这三项到一个临时目录 `.pyarmor/pack/dist`
+3. 然后 Pyarmor 调用 PyInstaller_ ，让它分析没有加密脚本的 `foo.py` 依赖关系，把 `foo.py` 使用到的所有系统包都记录保存下来
+4. 最后 Pyarmor 再次调用 PyInstaller_ ，直接打包存放在临时目录 `.pyarmor/pack/dist` 下面的加密脚本，把上一个步骤中发现的系统包也统统打到包里面去，不过系统包都没有进行加密，最后输出一个可执行文件 `dist/foo` 。
+
+现在，让我们运行一下最终打好的包 `dist/foo` 或者 `dist/foo.exe`::
+
+    $ ls dist/foo
+    $ dist/foo
+
+如果需要生成单个目录的包，只需要传递 `onedir` 给 :option:`--pack` 即可::
+
+    $ pyarmor gen --pack onedir foo.py
+    $ ls dist/foo
+    $ dist/foo/foo
+
+检查打包的脚本是否被加密
+------------------------
+
+在脚本 ``foo.py`` 或者 ``joker/__init__.py`` 增加一行
+
+.. code-block:: python
+
+    print('this is __pyarmor__', __pyarmor__)
+
+如果被加密了，那么可以正确打印出来。如果没有加密，那么会抛出异常，因为只有加密脚本中才有内置名称 ``__pyarmor__`` 的定义。
+
+使用其他 PyInstaller 选项
+-------------------------
+
+如果需要为应用程序增加图标，不显示控制台窗口等，只需要把 PyInstaller_ 的相关选项通过配置项 ``pack:pyi_options`` 传递给 Pyarmor 即可。
+
+例如，使用 PyInstaller_ 选项 ``-w`` 不显示控制台窗口::
+
+    $ pyarmor cfg pack:pyi_options = "-w"
+
+接下来我们添加另外一个选项 ``-i`` 设置图标，需要注意的是在选项 ``-i`` 和其值之间必须使用一个空格进行分隔，不要使用等号 ``=`` 。例如::
+
+    $ pyarmor cfg pack:pyi_options ^ "-i favion.ico"
+
+在添加另外一个选项 ``--add-data``::
+
+    $ pyarmor cfg pack:pyi_options ^ "--add-data joker/config.json:joker"
+
+.. seealso:: :ref:`pyarmor cfg`
+
+使用更多的加密选项
+------------------
+
+在 Darwin 系统，如果想让加密脚本能够同时工作在 Intel 和 Apple M1 框架下，需要传递额外的加密选项 ``--platform darwin.x86_64,darwin.arm64``::
+
+    $ pyarmor gen --pack onefile --platform darwin.x86_64,darwin.arm64 foo.py
+
+其他加密选项也都可以根据需要选用来增加安全性或者提高性能。但是有些选项可能无法使用，例如，:option:`--restrict` 就无法和 :option:`--pack` 一起使用。
+
+自己动手打包加密脚本
+====================
 
 如果使用上面的方式出现问题，或者打包好的可执行文件出现执行错误，那么请使用下面的方式自己打包加密脚本。
 
@@ -43,12 +108,12 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 * 首先使用 Pyarmor 加密这个脚本 [#]_::
 
-    cd /path/to/src
-    pyarmor gen -O obfdist -a foo.py
+    $ cd /path/to/src
+    $ pyarmor gen -O obfdist -a foo.py
 
 * 然后把 :term:`运行辅助包` 移到当前目录 [#]_::
 
-    mv obfdist/pyarmor_runtime_000000 ./
+    $ mv obfdist/pyarmor_runtime_000000 ./
 
 * 如果已经有 ``foo.spec`` ，需要把运行辅助包增加到 ``hiddenimports``
 
@@ -62,7 +127,7 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 * 如果还没有这个文件，使用下面的命令生成 ``foo.spec`` [#]_::
 
-    pyi-makespec --hidden-import pyarmor_runtime_000000 foo.py
+    $ pyi-makespec --hidden-import pyarmor_runtime_000000 foo.py
 
 * 修改 ``foo.spec`` ，插入补丁代码到 ``a = Analysis`` 之后，这一步是重点
 
@@ -107,7 +172,7 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 * 最后直接使用打过补丁的 ``foo.spec`` 来打包，同时使用选项 `--clean` 避免补丁因为缓存的文件而失效::
 
-    pyinstaller --clean foo.spec
+    $ pyinstaller --clean foo.spec
 
 请根据你的具体情况，做如下修改
 
@@ -131,6 +196,37 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 .. [#] 不要使用选项 :option:`-i` 和 :option:`--prefix` 加密脚本，其他选项可以尝试
 .. [#] 这一步的目的只是为了方便让 `PyInstaller` 能够找到运行辅助包而不需要增加额外路径
 .. [#] 其他 `PyInstaller`_ 的选项也可以在这里使用
+
+替换打包模式
+============
+
+.. deprecated:: 8.5.4
+
+    现在推荐使用选项 :option:`--pack` 的 ``onefile`` 或者 ``onedir`` 模式
+
+首先调用 PyInstaller_ 将脚本打包成为单独的可执行文件或者打包到一个目录，然后把打包生成的可执行文件通过选项 :option:`--pack` 传递给 :ref:`pyarmor gen` 来实现::
+
+    $ pyinstaller foo.py
+    $ pyarmor gen --pack dist/foo/foo foo.py
+
+如果没有选项 :option:`--pack` ，只是把脚本进行加密。至于那些脚本被加密，请参考 :ref:`pyarmor gen` 中说明，这里不会自动加密依赖项。
+
+如果有选项 :option:`--pack` ，那么默认输出目录是 :file:`.pyarmor/pack/dist` ，在加密完成之后，还进行下面的额外处理:
+
+* 提取可执行文件中内容到一个临时目录 :file:`.pyarmor/pack/`
+* 使用加密脚本替换临时目录中同名的未加密脚本
+* 把加密脚本的 :term:`运行辅助文件` 增加到临时目录中
+* 根据把临时目录中所有内容重新生成可执行文件，并替换原来的可执行文件
+
+在 Darwin 平台，如果需要生成支持 Intel 和 Apple Silicon 的加密脚本，使用额外选项 ``--platform darwin.x86_64,darwin.arm64`::
+
+    $ pyarmor gen --pack dist/foo/foo --platform darwin.x86_64,darwin.arm64 foo.py
+
+.. important::
+
+   只有命令行列出的脚本会被加密，如果需要加密其他脚本或者子目录，在命令行列出它们。例如::
+
+      $ pyarmor gen --pack dist/foo/foo -r *.py dir1 dir2 ...
 
 Apple M1 的 segment fault
 =========================

@@ -143,7 +143,7 @@ pyarmor gen
 --assert-import                 确保导入的脚本是经过加密的 :option:`... <--assert-import>`
 --assert-call                   确保调用的函数是经过加密的 :option:`... <--assert-call>`
 
---pack BUNDLE                   使用加密后的脚本替换打包成为可执行文件里面的原来脚本 :option:`... <--pack>`
+--pack <onefile,onedir>         加密脚本然后在打包成为单文件或者单目录 :option:`... <--pack>`
 
 --use-runtime PATH              指定预先生成的运行辅助包的路径 :option:`... <--use-runtime>`
 
@@ -514,13 +514,32 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
             启用自动检查模块功能，确保加密的模块没有被替换
 
-.. option:: --pack BUNDLE
+.. option:: --pack <onefile,onedir>
 
-            使用加密脚本替换 BUNDLE 里面的 Python 脚本
+            首先加密脚本，然后把加密脚本打包成为单文件或者单个目录
 
-参数中 ``BUNDLE`` 是使用 PyInstaller_ 生成的可执行文件。
+.. versionchanged:: 8.5.4
 
-Pyarmor 首先加密脚本，接着使用加密后的脚本替换 BUNDLE 里面的同名 Python 脚本，最后使用修改后的可执行文件覆盖原文件。
+   在 v8.5.4 之前，用户需要首先调用 PyInstaller_ 进行打包，然后打包好的可执行文件传过来
+
+   现在所有的一切都由 Pyarmor 来完成，用户只需要告诉 Pyarmor 是打包成为单个文件或者单个目录
+
+   原来的方式依旧支持，只是不在推荐使用，有可能在下一个主版本就不在支持
+
+这个选项一旦设置，Pyarmor 会分析输入脚本的源代码，找到其导入的所有模块和包。如果模块和包和输入脚本在相同的目录下面，那么也会自动的进行加密这些依赖包。但是对于所依赖的 Python 系统包，以及其他不在当前目录的第三方包，则不会进行加密，只是把这些引用的包记录下来。
+
+把所有的相关脚本加密之后，Pyarmor 接下来就会调用 PyInstaller_ 对所有加密脚本进行打包，没有加密的系统模块和第三方的包会被打进最后的包里面。
+
+例如，将没有加密的脚本 ``foo.py`` 打包成为单个文件使用下面的命令::
+
+    $ pyarmor gen --pack onefile foo.py
+    $ ls dist/
+
+如果当前目录下面的包有多级子包，还需要使用选项 :option:`-r` ，确保所有目录下面的脚本都被加密。例如，下面的命令把没有加密的脚本 ``foo.py`` 打包到单个目录，并且加密所有子包::
+
+    $ pyarmor gen --pack onefolder -r foo.py
+
+.. seealso:: :doc:`../topic/repack`
 
 .. option:: --use-runtime PATH
 
@@ -705,7 +724,7 @@ pyarmor cfg
     $ pyarmor cfg wrap_mode 0
     $ pyarmor cfg wrap_mode=1
 
-设置字符串配置项的值::
+设置字符串配置项的值（如果使用 ``=`` 的话，前后必须都有空格）::
 
     $ pyarmor cfg outer_keyname "sky.lic"
     $ pyarmor cfg outer_keyname = "sky.lic"

@@ -290,44 +290,44 @@ Pyarmor 使用 :ref:`pyarmor gen` 加密不同的脚本，它提供了丰富的�
 
 这里的打包是指生成可以在没有 Python 环境独立运行的可执行文件。
 
-Pyarmor 需要使用 `PyInstaller`_ 打包好的可执行文件，然后替换其中的脚本为加密后的脚本。
+Pyarmor 需要使用 PyInstaller_ 打包好的可执行文件，请首先安装 PyInstaller_::
+
+    $ pip install pyinstaller
 
 单个可执行文件模式
 ------------------
 
-首先使用 PyInstaller_ 的选项 ``-F`` 生成一个单独的可执行文件::
+.. versionchanged:: 8.5.4
 
-    $ pyinstaller -F foo.py
+   在 v8.5.4 之前，使用不同的方式进行打包，请参阅之前版本的文档 (v8.5.3)
 
-然后把上一步生成的可执行文件文件 ``dist/foo`` 传递给 Pyarmor 进行处理::
+生成一个单独的可执行文件直接使用下面的命令即可::
 
-    $ pyarmor gen -O obfdist --pack dist/foo foo.py
+    $ pyarmor gen --pack onefile foo.py
 
-这个命令会加密 ``foo.py`` ，并使用加密后的脚本替换 ``dist/foo`` 原来的脚本，处理完成替换原来的 ``dist/foo`` 。
+这个命令会加密 ``foo.py`` ，然后加密和 ``foo.py`` 同目录的，并且被引用到的其他模块或者包，最后调用 PyInstaller_ 把加密脚本打包成为一个单独的可执行文件 ``dist/foo``::
 
-最终输出的依旧是 ``dist/foo``::
-
+    $ ls dist/foo
     $ dist/foo
+
+需要注意的是对于脚本引用到系统模块，以及任何不在当前目录下的模块和包，都没有进行加密处理。
 
 单个目录模式
 ------------
 
-首先使用 PyInstaller_ 生成单目录模式的包::
+.. versionchanged:: 8.5.4
 
-    $ pyinstaller foo.py
+   在 v8.5.4 之前，使用不同的方式进行打包，请参阅之前版本的文档 (v8.5.3)
 
-所有需要的文件都存放在一个目录  ``dist/foo`` ，其中保护一个可执行文件 ``dist/foo/foo`` 。
+生成单个目录模式的包直接使用下面的命令即可::
 
-把这个可执行文件传递给 Pyarmor 进行处理::
+    $ pyarmor gen --pack onedir foo.py
 
-    $ pyarmor gen -O obfdist --pack dist/foo/foo foo.py
+这个命令基本和上面的命令类似，只是在最后调用 PyInstaller_ 的时候传入的是单个目录的模式。查看最后的输出目录::
 
-和上面一样，加密脚本替换原来的脚本，并输出替换后的可执行文件 ``dist/foo/foo``
-
-运行一下最后生成的可执行文件::
-
+    $ ls dist/foo
     $ dist/foo/foo
 
-如果打包出现问题，或者想对打包有更多的了解，请参阅 :doc:`../topic/repack`
+如果打包出现问题，或者需要使用更多打包方面的功能，请参阅 :doc:`../topic/repack`
 
 .. include:: ../_common_definitions.txt
