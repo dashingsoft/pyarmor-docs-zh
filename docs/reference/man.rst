@@ -143,7 +143,7 @@ pyarmor gen
 --assert-import                 确保导入的脚本是经过加密的 :option:`... <--assert-import>`
 --assert-call                   确保调用的函数是经过加密的 :option:`... <--assert-call>`
 
---pack <onefile,onedir>         加密脚本然后在打包成为单文件或者单目录 :option:`... <--pack>`
+--pack <onefile,onedir,FC,DC>   加密脚本然后在打包成为单文件或者单目录 :option:`... <--pack>`
 
 --use-runtime PATH              指定预先生成的运行辅助包的路径 :option:`... <--use-runtime>`
 
@@ -514,7 +514,7 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
             启用自动检查模块功能，确保加密的模块没有被替换
 
-.. option:: --pack <onefile,onedir>
+.. option:: --pack <onefile,onedir,FC,DC>
 
             首先加密脚本，然后把加密脚本打包成为单文件或者单个目录
 
@@ -539,6 +539,10 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 如果当前目录下面的包有多级子包，还需要使用选项 :option:`-r` ，确保所有目录下面的脚本都被加密。例如，下面的命令把没有加密的脚本 ``foo.py`` 打包到单个目录，并且加密所有子包::
 
     $ pyarmor gen --pack onefolder -r foo.py
+
+如果打包的时候发现输出目录已经存在，那么 PyInstaller_ 会请求用户确认删除，如果不需要确认，而是直接删除输出目录，可以使用 `FC` 或者 `DC` 进行打包， `F` 表示 onefile ， `D` 表示 onedir ， `C` 表示清空输出目录。例如::
+
+    $ pyarmor gen --pack FC foo.py
 
 .. seealso:: :doc:`../topic/repack`
 
