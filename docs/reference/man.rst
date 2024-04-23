@@ -538,7 +538,7 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
 如果当前目录下面的包有多级子包，还需要使用选项 :option:`-r` ，确保所有目录下面的脚本都被加密。例如，下面的命令把没有加密的脚本 ``foo.py`` 打包到单个目录，并且加密所有子包::
 
-    $ pyarmor gen --pack onefolder -r foo.py
+    $ pyarmor gen --pack onedir -r foo.py
 
 如果打包的时候发现输出目录已经存在，那么 PyInstaller_ 会请求用户确认删除，如果不需要确认，而是直接删除输出目录，可以使用 `FC` 或者 `DC` 进行打包， `F` 表示 onefile ， `D` 表示 onedir ， `C` 表示清空输出目录。例如::
 
