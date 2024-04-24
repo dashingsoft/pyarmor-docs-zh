@@ -85,6 +85,12 @@ Pyarmor 8.0 没有像之前的版本提供命令 `pack` 来生成可以独立运
 
     $ pyarmor cfg pack:pyi_options ^ "--add-data joker/config.json:joker"
 
+.. note::
+
+    在 Windows 的命令行，也许需要使用双引号把 ``^`` 包含起来。例如::
+
+        C:\Projects\build> pyarmor cfg pack:pyi_options "^" "-i favion.ico"
+
 .. seealso:: :ref:`pyarmor cfg`
 
 使用更多的加密选项
