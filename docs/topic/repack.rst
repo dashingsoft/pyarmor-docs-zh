@@ -41,14 +41,14 @@ Pyarmor 主要功能还是加密，加密完成之后生成可以独立运行的
     $ cd project
     $ pyarmor gen --pack onefile foo.py
 
-那么，Pyarmor 是如何生成一个包含加密脚本的可执行包呢？
+那么，Pyarmor 是如何生成一个包含加密脚本的可执行文件呢？
 
 1. 首先 Pyarmor 会分析没有加密的脚本 `foo.py` 的代码，发现它需要导入模块 `queens.py` 和包 `joker`
 2. 接下来 Pyarmor 会加密这三项到一个临时目录 `.pyarmor/pack/dist`
 3. 然后 Pyarmor 调用 PyInstaller_ ，让它分析没有加密脚本的 `foo.py` 依赖关系，把 `foo.py` 使用到的所有系统包都记录保存下来
 4. 最后 Pyarmor 再次调用 PyInstaller_ ，把临时目录 `.pyarmor/pack/dist` 下面的加密脚本，以及上一个步骤中发现的系统包 [#]_ 统统打包到一个文件里面，最后输出一个可执行文件 `dist/foo` 。
 
-现在，让我们运行一下最终打好的包 `dist/foo` 或者 `dist/foo.exe`::
+现在，让我们运行一下最终输出的可执行文件 `dist/foo` 或者 `dist/foo.exe`::
 
     $ ls dist/foo
     $ dist/foo
@@ -64,7 +64,7 @@ Pyarmor 主要功能还是加密，加密完成之后生成可以独立运行的
 使用 specfile 进行打包
 ----------------------
 
-在上面的示例项目中已经有一个 ``foo.spec`` 文件，是用来对没有加密的脚本直接加密的，例如::
+在上面的示例项目中已经有一个 ``foo.spec`` 文件，是用来对没有加密的脚本直接打包的，例如::
 
     $ pyinstaller foo.spec
     $ ls dist/
@@ -75,7 +75,7 @@ Pyarmor 主要功能还是加密，加密完成之后生成可以独立运行的
 
 Pyarmor 是首先根据加密选项对脚本进行加密，并保存到 `.pyarmor/pack/dist`
 
-然后读取 ``foo.spec`` 并创建一个补丁文件 ``foo.patched.spec`` ，这个打过补丁的 spec 文件用来打包加密脚本::
+然后读取 ``foo.spec`` 并创建一个补丁文件 ``foo.patched.spec`` 。然后调用 PyInstaller_ ，使用这个打过补丁的 spec 文件来打包加密脚本::
 
     $ pyinstaller --clean foo.patched.spec
 
@@ -141,25 +141,11 @@ __ https://pyinstaller.org/en/stable/spec-files.html
     $ cd /path/to/src
     $ pyarmor gen -O obfdist -a foo.py
 
-* 然后把 :term:`运行辅助包` 移到当前目录 [#]_::
-
-    $ mv obfdist/pyarmor_runtime_000000 ./
-
-* 如果已经有 ``foo.spec`` ，需要把运行辅助包增加到 ``hiddenimports``
-
-.. code-block:: python
-
-    a = Analysis(
-        ...
-        hiddenimports=['pyarmor_runtime_000000'],
-        ...
-    )
-
-* 如果还没有这个文件，使用下面的命令生成 ``foo.spec`` [#]_::
+* 如果还没有 ``foo.spec`` ，使用下面的命令生成 [#]_::
 
     $ pyi-makespec --hidden-import pyarmor_runtime_000000 foo.py
 
-* 修改 ``foo.spec`` ，插入补丁代码到 ``a = Analysis`` 之后，这一步是重点
+* 修改 ``foo.spec`` ，插入补丁代码到 ``pyz = PYZ`` 之前，这一步是重点
 
 .. code-block:: python
 
@@ -168,6 +154,11 @@ __ https://pyinstaller.org/en/stable/spec-files.html
     )
 
     # Pyarmor patch start:
+
+    obfpath = r'/path/to/obfdist'
+    srcpath = r'/path/to/src'
+    rtpkg = 'pyarmor_runtime_000000'
+    rtext = 'pyarmor_runtime.so'
 
     def pyarmor_patcher(src, obfdist):
 
@@ -191,10 +182,21 @@ __ https://pyinstaller.org/en/stable/spec-files.html
                 if os.path.exists(x):
                     if hasattr(a.pure, '_code_cache'):
                         with open(x) as f:
-                            a.pure._code_cache[a.pure[i][0]] = compile(f.read(), a.pure[i][1], 'exec')
+                            a.pure._code_cache[a.pure[i][0]] = compile(
+                                f.read(), a.pure[i][1], 'exec')
                     a.pure[i] = a.pure[i][0], x, a.pure[i][2]
 
-    pyarmor_patcher(r'/path/to/src', r'/path/to/obfdist')
+    a.pure.append((
+        rtpkg,
+        os.path.join(obfpath, rtpkg, '__init__.py'),
+        'PYMODULE'
+    ))
+    a.binaries.append((
+        os.path.join(rtpkg, rtext),
+        os.path.join(obfpath, rtpkg, rtext),
+        'EXTENSION'
+    ))
+    pyarmor_patcher(srcpath, obfpath)
 
     # Pyarmor patch end.
 
@@ -208,6 +210,7 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 * 使用实际目录替换 ``/path/to/src`` 和 ``/path/to/obfdist``
 * 使用实际名称替换 ``pyarmor_runtime_000000``
+* 如果是 Windows 系统，需要替换 ``pyarmor_runtime.so`` 为 ``pyarmor_runtime.pyd``
 
 **如何验证打包进去的是加密脚本**
 
@@ -224,7 +227,6 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 .. rubric:: 备注
 
 .. [#] 不要使用选项 :option:`-i` 和 :option:`--prefix` 加密脚本，其他选项可以尝试
-.. [#] 这一步的目的只是为了方便让 `PyInstaller` 能够找到运行辅助包而不需要增加额外路径
 .. [#] 其他 `PyInstaller`_ 的选项也可以在这里使用
 
 替换打包模式
