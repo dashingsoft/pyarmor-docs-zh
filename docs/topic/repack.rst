@@ -8,25 +8,29 @@
 
 Pyarmor 8.0 没有像之前的版本提供命令 `pack` 来生成可以独立运行的加密脚本，而是直接通过一个选项 :option:`--pack` 来告诉 Pyarmor 需要在加密之后自动进行打包。
 
-自动打包模式
-============
-
-.. versionadded:: 8.5.4
-
-选项 :option:`--pack` 接受两个值
-
-- onefile
-- onedir
-
-这是 PyInstaller_ 提供的两种打包模式，单文件和单目录。实际上 Pyarmor 主要功能还是加密，加密完成之后生成可以独立运行的包完全是调用 PyInstaller_ 的相关功能。如果没有安装 PyInstaller_ 必须首先安装::
+Pyarmor 主要功能还是加密，加密完成之后生成可以独立运行的包完全是调用 PyInstaller_ 的相关功能。如果没有安装 PyInstaller_ 必须首先安装::
 
     $ pip install pyinstaller
+
+选项 :option:`--pack` 接受三种类型的值
+
+- `onefile` 打包成为单个可执行文件
+- `onedir`  打包到一个目录
+- specfile  以 ``.spec`` 为后缀的文件名称
+
+其中前两者适用于对 PyInstaller_ 不太了解和熟悉的用户使用，这是 PyInstaller_ 提供的两种打包模式，单文件和单目录。
+
+后者则是针对已经能够使用 PyInstaller_ 的 specfile 进行打包的用户
+
+自动打包模式
+============
 
 假设有一个这样的项目，其目录结构如下::
 
     project/
         ├── foo.py
         ├── queens.py
+        ├── foo.spec
         └── joker/
             ├── __init__.py
             ├── queens.py
@@ -56,6 +60,24 @@ Pyarmor 8.0 没有像之前的版本提供命令 `pack` 来生成可以独立运
     $ dist/foo/foo
 
 .. [#] 系统包没有进行加密
+
+使用 specfile 进行打包
+----------------------
+
+在上面的示例项目中已经有一个 ``foo.spec`` 文件，是用来对没有加密的脚本直接加密的，例如::
+
+    $ pyinstaller foo.spec
+    $ ls dist/
+
+在这种情况下，可以直接把 specfile 传递给 :option:`--pack` ，例如::
+
+    $ pyarmor gen --pack foo.spec foo.py
+
+Pyarmor 是首先根据加密选项对脚本进行加密，并保存到 `.pyarmor/pack/dist`
+
+然后读取 ``foo.spec`` 并创建一个补丁文件 ``foo.patched.spec`` ，这个打过补丁的 spec 文件用来打包加密脚本::
+
+    $ pyinstaller --clean foo.patched.spec
 
 检查打包的脚本是否被加密
 ------------------------

@@ -143,7 +143,8 @@ pyarmor gen
 --assert-import                 确保导入的脚本是经过加密的 :option:`... <--assert-import>`
 --assert-call                   确保调用的函数是经过加密的 :option:`... <--assert-call>`
 
---pack <onefile,onedir,FC,DC>   加密脚本然后在打包成为单文件或者单目录 :option:`... <--pack>`
+--pack <onefile,onedir,FC,DC,NAME.spec>
+                                加密脚本然后在打包成为单文件或者单目录 :option:`... <--pack>`
 
 --use-runtime PATH              指定预先生成的运行辅助包的路径 :option:`... <--use-runtime>`
 
@@ -514,7 +515,7 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
             启用自动检查模块功能，确保加密的模块没有被替换
 
-.. option:: --pack <onefile,onedir,FC,DC>
+.. option:: --pack <onefile,onedir,FC,DC,NAME.spec>
 
             首先加密脚本，然后把加密脚本打包成为单文件或者单个目录
 
@@ -524,8 +525,8 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
             原来的方式依旧支持，只是不在推荐使用，有可能在下一个主版本就不在支持
 
-.. versionchanged:: 8.5.4
-
+.. versionadded:: 8.5.4 支持 onefile 和 onedir
+.. versionadded:: 8.5.8 支持 specfile
 
 这个选项一旦设置，Pyarmor 会分析输入脚本的源代码，找到其导入的所有模块和包。如果模块和包和输入脚本在相同的目录下面，那么也会自动的加密这些依赖包。但是对于所依赖的 Python 系统包，以及其他不在当前目录的第三方包，则不会进行加密，只是把这些引用的包记录下来。
 
@@ -543,6 +544,14 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 如果打包的时候发现输出目录已经存在，那么 PyInstaller_ 会请求用户确认删除，如果不需要确认，而是直接删除输出目录，可以使用 `FC` 或者 `DC` 进行打包， `F` 表示 onefile ， `D` 表示 onedir ， `C` 表示清空输出目录。例如::
 
     $ pyarmor gen --pack FC foo.py
+
+如果项目已经有 ``foo.spec`` 并且能够成功打包没有加密的脚本，那么可以把这个文件传递给 :option:`--pack`::
+
+    $ pyarmor gen --pack foo.spec foo.py
+
+这样 Pyarmor 除了加密脚本，还会读取 `foo.spec` 并创建一个补丁文件 `foo.patched.spec` ，这个打过补丁的 spec 文件可以使用下面的命令来打包加密脚本。例如::
+
+    $ pyinstaller --clean foo.patched.spec
 
 .. seealso:: :doc:`../topic/repack`
 
