@@ -66,10 +66,22 @@
        解决方案：使用命令 ``pyarmor-7``
    * - This code has been used too many times
      - 如果是在 CI/Docker 中使用 Pyarmor，请通过该订单的注册邮箱发送订单信息到 pyarmor@163.com 以解锁该订单
-   * - update license token failed (104)
-     - 首先请确认网络可用，其次检查防火墙设置，如果可能的话，暂时关闭防火墙进行测试。
+   * - update license token failed
+     - 如果在 1 分钟之内运行注册命令超过 3 次，请等上 5 分钟之后在进行测试
 
-       在 Windows 下面，防火墙要允许动态库 ``pytransform3.pyd`` 访问 `pyarmor.dashingsoft.com` 的端口 ``80`` ，在其他系统，防火墙要允许 ``pytransform3.so`` 访问 `pyarmor.dashingsoft.com` 的端口 ``80`` ，具体防火墙的规则设置请参阅防火墙的文档。
+       如何还存在问题，在浏览器打开网页 `http://pyarmor.dashingsoft.com//api/auth2/`
+
+       如果页面返回 `NO:missing parameters` ，这说明网络没有问题，Pyarmor 许可证服务器也没有问题
+
+       如果使用的是 v8.5.3 之前的版本，首先升级到 v8.5.3+，然后使用下面的命令检查 Python 是否可以访问服务器::
+
+         $ python
+         >>> from urllib.request import urlopen
+         >>> res = urlopen('http://pyarmor.dashingsoft.com//api/auth2/')
+         >>> print(res.read())
+         b'NO:missing parameter'
+
+       如果返回其他或者抛出异常，那么很有可能是防火墙设置问题，不允许 Python 访问网络，请参考防火墙文档正确进行配置
 
 
 运行加密脚本的错误信息
