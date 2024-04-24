@@ -756,6 +756,10 @@ pyarmor cfg
         rft_excludes = super
             /win.*/
 
+需要注意的是对于 Windows 用户，可以需要把连字符使用双引号包裹起来，例如::
+
+    $ pyarmor cfg rft_excludes "^" "/win.*/"
+
 恢复配置项的默认值，可以使用下面的任意一种格式::
 
     $ pyarmor cfg rft_excludes ""
