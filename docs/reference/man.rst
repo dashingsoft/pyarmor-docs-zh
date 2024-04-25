@@ -563,7 +563,7 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 .. versionadded:: 8.5.4 支持 onefile 和 onedir
 .. versionadded:: 8.5.8 支持 ``.spec`` 后缀文件
 
-这个选项一旦设置，Pyarmor 会分析输入脚本的源代码，找到其导入的所有模块和包。如果模块和包和输入脚本在相同的目录下面，那么也会自动的加密这些依赖包。但是对于所依赖的 Python 系统包，以及其他不在当前目录的第三方包，则不会进行加密，只是把这些引用的包记录下来。
+这个选项一旦设置为 `onefile` 或者 `onedir` ，Pyarmor 会分析输入脚本的源代码，找到其导入的所有模块和包。如果模块和包和输入脚本在相同的目录下面，那么也会自动的加密这些依赖包。但是对于所依赖的 Python 系统包，以及其他不在当前目录的第三方包，则不会进行加密，只是把这些引用的包记录下来。
 
 把所有的相关脚本加密之后，Pyarmor 接下来就会调用 PyInstaller_ 对所有加密脚本进行打包，没有加密的系统模块和第三方的包会被打进最后的包里面。
 
@@ -576,13 +576,13 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
     $ pyarmor gen --pack onedir -r foo.py
 
-如果打包的时候发现输出目录已经存在，那么 PyInstaller_ 会请求用户确认删除，如果不需要确认，而是直接删除输出目录，可以使用 `FC` 或者 `DC` 进行打包， `F` 表示 onefile ， `D` 表示 onedir ， `C` 表示清空输出目录。例如::
+如果打包的时候发现输出目录已经存在，那么 PyInstaller_ 会请求用户确认删除，如果不需要确认，而是直接删除输出目录，可以使用 `FC` 或者 `DC` 进行打包， `F` 表示 onefile ， `D` 表示 onedir ， `C` 表示无需确认清空输出目录。例如::
 
     $ pyarmor gen --pack FC foo.py
 
-如果项目已经有 ``foo.spec`` 并且能够成功打包没有加密的脚本，那么可以把这个文件传递给 :option:`--pack`::
+如果项目已经有 ``foo.spec`` 并且能够成功打包没有加密的脚本，那么可以把这个文件传递给 :option:`--pack` 来打包加密脚本。例如::
 
-    $ pyarmor gen --pack foo.spec -r foo.py joker/
+    $ pyarmor gen --pack foo.spec -r foo.py util.py joker/
     $ ls dist/
 
 这样 Pyarmor 会首先加密脚本，然后读取 `foo.spec` 并创建一个补丁文件 `foo.patched.spec` ，最后使用这个打过补丁的 spec 文件来打包加密脚本。需要注意的是这种方式 Pyarmor 不会自动加密其他脚本，所有需要加密的脚本必须在命令行列出。
