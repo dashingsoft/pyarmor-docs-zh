@@ -297,7 +297,7 @@ Pyarmor 需要使用 PyInstaller_ 打包好的可执行文件，请首先安装 
 单个可执行文件模式
 ------------------
 
-.. versionchanged:: 8.5.4
+.. versionadded:: 8.5.4
 
 生成一个单独的可执行文件直接使用下面的命令即可::
 
@@ -317,7 +317,7 @@ Pyarmor 需要使用 PyInstaller_ 打包好的可执行文件，请首先安装 
 单个目录模式
 ------------
 
-.. versionchanged:: 8.5.4
+.. versionadded:: 8.5.4
 
 生成单个目录模式的包直接使用下面的命令即可::
 
@@ -331,7 +331,7 @@ Pyarmor 需要使用 PyInstaller_ 打包好的可执行文件，请首先安装 
 使用 spec 文件打包加密脚本
 --------------------------
 
-.. versionchanged:: 8.5.8
+.. versionadded:: 8.5.8
 
 如果已经有现成的 spec 文件能够成功打包没有加密的脚本，例如::
 
