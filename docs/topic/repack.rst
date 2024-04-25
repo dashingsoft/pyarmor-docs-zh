@@ -148,10 +148,10 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 下面我们使用上面的例子来说明如何手动打包加密脚本
 
-* 首先使用 Pyarmor 加密这个脚本 [#]_::
+* 首先使用 Pyarmor 加密这个脚本，把需要加密的脚本和目录全部在主脚本后面列出来，也可以使用其他加密选项，但是不要使用 :option:`-i` 或者 :option:`--prefix` [#]_::
 
     $ cd project
-    $ pyarmor gen -O obfdist -r foo.py joker/
+    $ pyarmor gen -O obfdist -r foo.py util.py joker/
 
 * 然后使用下面的命令生成生成 ``foo.spec`` [#]_::
 
@@ -239,7 +239,7 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 .. rubric:: 备注
 
-.. [#] 不要使用选项 :option:`-i` 和 :option:`--prefix` 加密脚本，其他选项可以尝试
+.. [#] 选项 :option:`-i` 或者 :option:`--prefix` 会导致运行辅助包无法找到
 .. [#] 其他 `PyInstaller`_ 的选项也可以在这里使用
 
 替换打包模式
