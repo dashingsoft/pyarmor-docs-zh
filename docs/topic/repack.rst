@@ -216,7 +216,7 @@ __ https://pyinstaller.org/en/stable/spec-files.html
     # Before this line
     # pyz = PYZ(...)
 
-* 最后直接使用打过补丁的 ``foo.spec`` 来打包，使用选项 `--clean` 避免补丁因为缓存的文件而失效::
+* 最后直接使用打过补丁的 ``foo.spec`` 来打包，使用选项 ``--clean`` 避免补丁因为缓存的文件而失效::
 
     $ pyinstaller --clean foo.spec
 
@@ -224,7 +224,6 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 * 使用实际目录设置 ``srcpath`` ，相对路径即可，在这个例子，是当前路径，直接设置为空字符串
 * 使用实际目录设置 ``obfpath`` ，相对路径即可，在这个例子中，加密目录是 ``obfdist``
-* 使用实际名称替换 ``pyarmor_runtime_000000``
 
 **如何验证打包进去的是加密脚本**
 
