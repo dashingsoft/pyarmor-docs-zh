@@ -31,10 +31,11 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 
     project/
         ├── foo.py
-        ├── queens.py
         ├── foo.spec
+        ├── util.py
         └── joker/
             ├── __init__.py
+            ├── card.py
             ├── queens.py
             └── config.json
 
@@ -46,9 +47,9 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 那么，Pyarmor 是如何生成一个包含加密脚本的可执行文件呢？
 
 1. Pyarmor 首先调用 PyInstaller_ ，让它分析没有加密脚本的 `foo.py` 依赖关系，并检查所有发现的依赖项目
-2. Pyarmor 发现依赖模块 `queens` 和包 `joker` 和脚本 `foo.py` 在相同的目录。然后 Pyarmor 使用命令行提供的加密选项自动加密 `foo.py` 以及模块 `queens` 和包 `joker` ，并保存加密脚本到一个临时目录 `.pyarmor/pack/dist`
+2. Pyarmor 发现依赖模块 `util` 和包 `joker` 和脚本 `foo.py` 在相同的目录。然后 Pyarmor 使用命令行提供的加密选项自动加密 `foo.py` 以及 `util.py` 和包 `joker` ，并保存加密脚本到一个临时目录 `.pyarmor/pack/dist`
 3. 对于没有和 `foo.py` 在相同目录下面的其他依赖模块和包，则添加到隐藏导入列表，这些一般都是 Python 的系统模块和包，不会自动加密
-4. 最后 Pyarmor 再次调用 PyInstaller_ ，把临时目录 `.pyarmor/pack/dist` 下面的加密脚本，以及上一个步骤中发现的系统包 [#]_ 统统打包到一个可执行文件里面去
+4. 最后 Pyarmor 再次调用 PyInstaller_ ，把临时目录 `.pyarmor/pack/dist` 下面的加密脚本，以及隐藏导入列表中的所有模块和包统统打包到一个可执行文件里面
 
 现在，让我们运行一下最终输出的可执行文件 `dist/foo` 或者 `dist/foo.exe`::
 
@@ -73,9 +74,13 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 
     $ pyarmor gen --pack foo.spec -r foo.py joker/
 
+那么，Pyarmor 是如何使用 specfile 打包加密脚本呢？
+
 1. Pyarmor 首先根据命令行的加密选项对脚本进行加密，并保存到 `.pyarmor/pack/dist`
-2. 然后读取 ``foo.spec`` 并创建一个补丁文件 ``foo.patched.spec`` ，这个补丁可以在打包的过程中使用加密脚本替换原来的脚本
-3. 最后自动调用 PyInstaller_ ，使用这个打过补丁的 spec 文件来打包加密脚本
+2. 然后根据 ``foo.spec`` 创建一个补丁文件 ``foo.patched.spec``
+3. 最后自动调用 PyInstaller_ ，使用 ``foo.patched.spec`` 来打包加密脚本
+
+这个打过补丁的 specfile 可以在打包的过程中自动使用 `.pyarmor/pack/dist` 下面的加密脚本替换原来的脚本
 
 .. important::
 
@@ -120,13 +125,14 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 使用更多的加密选项
 ------------------
 
-在 Darwin 系统，如果想让加密脚本能够同时工作在 Intel 和 Apple M1 框架下，可以传递额外的加密选项 ``--platform darwin.x86_64,darwin.arm64``::
-
-    $ pyarmor gen --pack onefile --platform darwin.x86_64,darwin.arm64 foo.py
-
 其他加密选项也都可以根据需要选用来增加安全性或者提高性能，例如::
 
     $ pyarmor gen --pack onefile --private foo.py
+
+例如，在 Darwin 系统，如果想让加密脚本能够同时工作在 Intel 和 Apple M1 框架下，可以传递额外的加密选项 ``--platform darwin.x86_64,darwin.arm64``::
+
+    $ pyarmor cfg pack:pyi_options = "--target-architecture universal2"
+    $ pyarmor gen --pack onefile --platform darwin.x86_64,darwin.arm64 foo.py
 
 需要注意的是不是所有的选项都可以和 :option:`--pack` 一起使用，例如，使用 :option:`--restrict` 选项会导致加密的包出现保护异常。
 
@@ -157,27 +163,29 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
     # Pyarmor patch start:
 
-    obfpath = r'/path/to/obfdist'
-    srcpath = r'/path/to/src'
-    rtpkg = 'pyarmor_runtime_000000'
-    rtext = 'pyarmor_runtime.so'
+    srcpath = ''
+    obfpath = 'obfdist'
 
-    if hasattr(a.pure, '_code_cache'):
-        _code_cache = a.pure._code_cache
-    else:
-        from PyInstaller.config import CONF
-        _code_cache = CONF['code_cache'].get(id(a.pure))
+    def apply_pyarmor_patch(rtpkg='pyarmor_runtime_000000'):
 
-    def apply_patch(src, obfdist):
+        from PyInstaller.compat import is_win, is_cygwin
+        ext = '.pyd' if is_win or is_cygwin else '.so'
+        extpath = os.path.join(rtpkg, 'pyarmor_runtime' + ext)
+
+        if hasattr(a.pure, '_code_cache'):
+            code_cache = a.pure._code_cache
+        else:
+            from PyInstaller.config import CONF
+            code_cache = CONF['code_cache'].get(id(a.pure))
 
         # Make sure both of them are absolute paths
-        src = os.path.abspath(src)
-        obfdist = os.path.abspath(obfdist)
+        src = os.path.abspath(srcpath)
+        dest = os.path.abspath(obfpath)
 
         count = 0
         for i in range(len(a.scripts)):
             if a.scripts[i][1].startswith(src):
-                x = a.scripts[i][1].replace(src, obfdist)
+                x = a.scripts[i][1].replace(src, dest)
                 if os.path.exists(x):
                     a.scripts[i] = a.scripts[i][0], x, a.scripts[i][2]
                     count += 1
@@ -186,18 +194,19 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
         for i in range(len(a.pure)):
             if a.pure[i][1].startswith(src):
-                x = a.pure[i][1].replace(src, obfdist)
+                x = a.pure[i][1].replace(src, dest)
                 if os.path.exists(x):
-                    _code_cache.pop(a.pure[i][0], None)
+                    code_cache.pop(a.pure[i][0], None)
                     a.pure[i] = a.pure[i][0], x, a.pure[i][2]
 
-    apply_patch(srcpath, obfpath)
-    a.pure.append((rtpkg, os.path.join(obfpath, rtpkg, '__init__.py'), 'PYMODULE'))
-    a.binaries.append((os.path.join(rtpkg, rtext), os.path.join(obfpath, rtpkg, rtext), 'EXTENSION'))
+        a.pure.append((rtpkg, os.path.join(dest, rtpkg, '__init__.py'), 'PYMODULE'))
+        a.binaries.append((extpath, os.path.join(dest, extpath), 'EXTENSION'))
+
+    apply_pyarmor_patch()
 
     # Pyarmor patch end.
 
-    # 在下面这条语句之前
+    # Before this line
     # pyz = PYZ(...)
 
 * 最后直接使用打过补丁的 ``foo.spec`` 来打包，使用选项 `--clean` 避免补丁因为缓存的文件而失效::
@@ -206,10 +215,9 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 请根据你的具体情况，做如下修改
 
-* 使用实际目录替换 ``/path/to/src`` ，相对路径即可。例如当前路径，直接设置为空字符串
-* 使用实际目录替换 ``/path/to/obfdist`` ，相对路径即可
+* 使用实际目录设置 ``srcpath`` ，相对路径即可，在这个例子，是当前路径，直接设置为空字符串
+* 使用实际目录设置 ``obfpath`` ，相对路径即可，在这个例子中，加密目录是 ``obfdist``
 * 使用实际名称替换 ``pyarmor_runtime_000000``
-* 如果是 Windows 系统，需要替换 ``pyarmor_runtime.so`` 为 ``pyarmor_runtime.pyd``
 
 **如何验证打包进去的是加密脚本**
 
