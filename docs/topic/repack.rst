@@ -45,10 +45,10 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 
 那么，Pyarmor 是如何生成一个包含加密脚本的可执行文件呢？
 
-1. 首先 Pyarmor 会分析没有加密的脚本 `foo.py` 的代码，发现它需要导入模块 `queens.py` 和包 `joker`
-2. 接下来 Pyarmor 会加密这三项到一个临时目录 `.pyarmor/pack/dist`
-3. 然后 Pyarmor 调用 PyInstaller_ ，让它分析没有加密脚本的 `foo.py` 依赖关系，把 `foo.py` 使用到的所有系统包都记录保存下来
-4. 最后 Pyarmor 再次调用 PyInstaller_ ，把临时目录 `.pyarmor/pack/dist` 下面的加密脚本，以及上一个步骤中发现的系统包 [#]_ 统统打包到一个文件里面，最后输出一个可执行文件 `dist/foo` 。
+1. Pyarmor 首先调用 PyInstaller_ ，让它分析没有加密脚本的 `foo.py` 依赖关系，并检查所有发现的依赖项目
+2. Pyarmor 发现依赖模块 `queens` 和包 `joker` 和脚本 `foo.py` 在相同的目录。然后 Pyarmor 使用命令行提供的加密选项自动加密 `foo.py` 以及模块 `queens` 和包 `joker` ，并保存加密脚本到一个临时目录 `.pyarmor/pack/dist`
+3. 对于没有和 `foo.py` 在相同目录下面的其他依赖模块和包，则添加到隐藏导入列表，这些一般都是 Python 的系统模块和包，不会自动加密
+4. 最后 Pyarmor 再次调用 PyInstaller_ ，把临时目录 `.pyarmor/pack/dist` 下面的加密脚本，以及上一个步骤中发现的系统包 [#]_ 统统打包到一个可执行文件里面去
 
 现在，让我们运行一下最终输出的可执行文件 `dist/foo` 或者 `dist/foo.exe`::
 
@@ -60,8 +60,6 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
     $ pyarmor gen --pack onedir foo.py
     $ ls dist/foo
     $ dist/foo/foo
-
-.. [#] 系统包没有进行加密
 
 使用 specfile 进行打包
 ----------------------
@@ -75,7 +73,7 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 
     $ pyarmor gen --pack foo.spec -r foo.py joker/
 
-1. Pyarmor 首先根据加密选项对脚本进行加密，并保存到 `.pyarmor/pack/dist`
+1. Pyarmor 首先根据命令行的加密选项对脚本进行加密，并保存到 `.pyarmor/pack/dist`
 2. 然后读取 ``foo.spec`` 并创建一个补丁文件 ``foo.patched.spec`` ，这个补丁可以在打包的过程中使用加密脚本替换原来的脚本
 3. 最后自动调用 PyInstaller_ ，使用这个打过补丁的 spec 文件来打包加密脚本
 
