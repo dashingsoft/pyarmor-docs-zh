@@ -146,7 +146,7 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 __ https://pyinstaller.org/en/stable/usage.html
 __ https://pyinstaller.org/en/stable/spec-files.html
 
-下面我们使用一个例子来说明如何手动打包加密脚本 ``/path/to/src/foo.py``
+下面我们使用上面的例子来说明如何手动打包加密脚本
 
 * 首先使用 Pyarmor 加密这个脚本 [#]_::
 
@@ -187,12 +187,12 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
         # Make sure both of them are absolute paths
         src = os.path.abspath(srcpath)
-        dest = os.path.abspath(obfpath)
+        obf = os.path.abspath(obfpath)
 
         count = 0
         for i in range(len(a.scripts)):
             if a.scripts[i][1].startswith(src):
-                x = a.scripts[i][1].replace(src, dest)
+                x = a.scripts[i][1].replace(src, obf)
                 if os.path.exists(x):
                     a.scripts[i] = a.scripts[i][0], x, a.scripts[i][2]
                     count += 1
@@ -201,13 +201,13 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
         for i in range(len(a.pure)):
             if a.pure[i][1].startswith(src):
-                x = a.pure[i][1].replace(src, dest)
+                x = a.pure[i][1].replace(src, obf)
                 if os.path.exists(x):
                     code_cache.pop(a.pure[i][0], None)
                     a.pure[i] = a.pure[i][0], x, a.pure[i][2]
 
-        a.pure.append((rtpkg, os.path.join(dest, rtpkg, '__init__.py'), 'PYMODULE'))
-        a.binaries.append((extpath, os.path.join(dest, extpath), 'EXTENSION'))
+        a.pure.append((rtpkg, os.path.join(obf, rtpkg, '__init__.py'), 'PYMODULE'))
+        a.binaries.append((extpath, os.path.join(obf, extpath), 'EXTENSION'))
 
     apply_pyarmor_patch(srcpath, obfpath)
 
