@@ -66,24 +66,22 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 使用 specfile 进行打包
 ----------------------
 
-在上面的示例项目中已经有一个 ``foo.spec`` 文件，是用来对没有加密的脚本直接打包的，例如::
+在上面的示例项目中已经有一个 ``foo.spec`` 文件，可以打包没有加密的脚本为单个可执行文件，例如::
 
     $ pyinstaller foo.spec
-    $ ls dist/
+    $ dist/foo
 
 在这种情况下，可以直接把 ``foo.spec``  传递给 :option:`--pack` ，例如::
 
     $ pyarmor gen --pack foo.spec -r foo.py joker/
 
-Pyarmor 首先根据加密选项对脚本进行加密，并保存到 `.pyarmor/pack/dist`
+1. Pyarmor 首先根据加密选项对脚本进行加密，并保存到 `.pyarmor/pack/dist`
+2. 然后读取 ``foo.spec`` 并创建一个补丁文件 ``foo.patched.spec`` ，这个补丁可以在打包的过程中使用加密脚本替换原来的脚本
+3. 最后自动调用 PyInstaller_ ，使用这个打过补丁的 spec 文件来打包加密脚本
 
-然后读取 ``foo.spec`` 并创建一个补丁文件 ``foo.patched.spec``
+.. important::
 
-最后自动调用 PyInstaller_ ，使用这个打过补丁的 spec 文件来打包加密脚本::
-
-    $ pyinstaller --clean foo.patched.spec
-
-需要注意的是，在这种模式下，无法自动加密依赖的脚本，需要人工在命令行指出需要加密的所有脚本，否则不会被加密。
+   使用 specfile 打包的模式，无法自动加密依赖的脚本，需要人工在命令行指出需要加密的所有脚本，否则只有主脚本被加密。
 
 检查打包的脚本是否被加密
 ------------------------
@@ -148,14 +146,14 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 * 首先使用 Pyarmor 加密这个脚本 [#]_::
 
-    $ cd /path/to/src
-    $ pyarmor gen -O obfdist -a foo.py
+    $ cd project
+    $ pyarmor gen -O obfdist -r foo.py joker/
 
-* 如果还没有 ``foo.spec`` ，使用下面的命令生成 [#]_::
+* 然后使用下面的命令生成生成 ``foo.spec`` [#]_::
 
-    $ pyi-makespec foo.py
+    $ pyi-makespec --onefile foo.py
 
-* 修改 ``foo.spec`` ，插入下面的补丁代码到 ``pyz = PYZ`` 之前，这一步是重点
+* 接着修改 ``foo.spec`` ，插入下面的补丁代码到 ``pyz = PYZ`` 之前，这一步是重点
 
 .. code-block:: python
 
@@ -212,13 +210,14 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
     pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
-* 最后直接使用打过补丁的 ``foo.spec`` 来打包，同时使用选项 `--clean` 避免补丁因为缓存的文件而失效::
+* 最后直接使用打过补丁的 ``foo.spec`` 来打包，使用选项 `--clean` 避免补丁因为缓存的文件而失效::
 
     $ pyinstaller --clean foo.spec
 
 请根据你的具体情况，做如下修改
 
-* 使用实际目录替换 ``/path/to/src`` 和 ``/path/to/obfdist``
+* 使用实际目录替换 ``/path/to/src`` ，相对路径即可。例如当前路径，直接设置为空字符串
+* 使用实际目录替换 ``/path/to/obfdist`` ，相对路径即可
 * 使用实际名称替换 ``pyarmor_runtime_000000``
 * 如果是 Windows 系统，需要替换 ``pyarmor_runtime.so`` 为 ``pyarmor_runtime.pyd``
 
