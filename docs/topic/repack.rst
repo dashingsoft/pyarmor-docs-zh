@@ -166,11 +166,18 @@ __ https://pyinstaller.org/en/stable/spec-files.html
     srcpath = ''
     obfpath = 'obfdist'
 
-    def apply_pyarmor_patch(rtpkg='pyarmor_runtime_000000'):
+    def apply_pyarmor_patch(srcpath, obfpath):
 
         from PyInstaller.compat import is_win, is_cygwin
-        ext = '.pyd' if is_win or is_cygwin else '.so'
-        extpath = os.path.join(rtpkg, 'pyarmor_runtime' + ext)
+        extname = 'pyarmor_runtime' + ('.pyd' if is_win or is_cygwin else '.so')
+
+        from glob import glob
+        rtpkg = glob(os.path.join(obfpath, '*', extname))
+        if len(rtpkg) != 1:
+            raise RuntimeError('No runtime package found')
+        rtpkg = os.path.basename(os.path.dirname(rtpkg[0]))
+
+        extpath = os.path.join(rtpkg, extname)
 
         if hasattr(a.pure, '_code_cache'):
             code_cache = a.pure._code_cache
@@ -202,7 +209,7 @@ __ https://pyinstaller.org/en/stable/spec-files.html
         a.pure.append((rtpkg, os.path.join(dest, rtpkg, '__init__.py'), 'PYMODULE'))
         a.binaries.append((extpath, os.path.join(dest, extpath), 'EXTENSION'))
 
-    apply_pyarmor_patch()
+    apply_pyarmor_patch(srcpath, obfpath)
 
     # Pyarmor patch end.
 
