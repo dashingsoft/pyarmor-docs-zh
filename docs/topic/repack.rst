@@ -106,13 +106,19 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 
     $ pyarmor cfg pack:pyi_options = " -w"
 
-接下来我们添加另外一个选项 ``-i`` 设置图标，需要注意的是在选项 ``-i`` 和其值之间必须使用一个空格进行分隔，不要使用等号 ``=`` 。例如::
+请注意 ``" -w"`` 的头部需要有一个额外空格，否则 shell 可能会报错
+
+接下来我们添加另外一个选项 ``-i`` 设置图标，在选项 ``-i`` 和其值之间使用空格进行分隔，不要使用等号 ``=`` 。例如::
 
     $ pyarmor cfg pack:pyi_options + " -i favion.ico"
 
 在添加另外一个选项 ``--add-data``::
 
     $ pyarmor cfg pack:pyi_options + "--add-data joker/config.json:joker"
+
+上面的三个配置命令可以合并成为一条命令::
+
+    $ pyarmor cfg pack:pyi_options = " -w  -i favion.ico --add-data joker/config.json:joker"
 
 .. seealso:: :ref:`pyarmor cfg`
 
