@@ -153,13 +153,9 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
     $ pyi-makespec --onefile foo.py
 
-* 接着修改 ``foo.spec`` ，插入下面的补丁代码到 ``pyz = PYZ`` 之前，这一步是重点
+* 接着修改 ``foo.spec`` ，插入下面的补丁代码到 ``pyz = PYZ`` 所在的行之前，这一步是重点
 
 .. code-block:: python
-
-    a = Analysis(
-        ...
-    )
 
     # Pyarmor patch start:
 
@@ -174,7 +170,7 @@ __ https://pyinstaller.org/en/stable/spec-files.html
         from PyInstaller.config import CONF
         _code_cache = CONF['code_cache'].get(id(a.pure))
 
-    def pyarmor_patcher(src, obfdist):
+    def apply_patch(src, obfdist):
 
         # Make sure both of them are absolute paths
         src = os.path.abspath(src)
@@ -194,16 +190,17 @@ __ https://pyinstaller.org/en/stable/spec-files.html
             if a.pure[i][1].startswith(src):
                 x = a.pure[i][1].replace(src, obfdist)
                 if os.path.exists(x):
-                    _code_cache.pop(a.pure[i][0])
+                    _code_cache.pop(a.pure[i][0], None)
                     a.pure[i] = a.pure[i][0], x, a.pure[i][2]
 
+    apply_patch(srcpath, obfpath)
     a.pure.append((rtpkg, os.path.join(obfpath, rtpkg, '__init__.py'), 'PYMODULE'))
     a.binaries.append((os.path.join(rtpkg, rtext), os.path.join(obfpath, rtpkg, rtext), 'EXTENSION'))
-    pyarmor_patcher(srcpath, obfpath)
 
     # Pyarmor patch end.
 
-    pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+    # 在下面这条语句之前
+    # pyz = PYZ(...)
 
 * 最后直接使用打过补丁的 ``foo.spec`` 来打包，使用选项 `--clean` 避免补丁因为缓存的文件而失效::
 
