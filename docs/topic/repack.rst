@@ -104,21 +104,15 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 
 例如，使用 PyInstaller_ 选项 ``-w`` 不显示控制台窗口::
 
-    $ pyarmor cfg pack:pyi_options = "-w"
+    $ pyarmor cfg pack:pyi_options = " -w"
 
 接下来我们添加另外一个选项 ``-i`` 设置图标，需要注意的是在选项 ``-i`` 和其值之间必须使用一个空格进行分隔，不要使用等号 ``=`` 。例如::
 
-    $ pyarmor cfg pack:pyi_options ^ "-i favion.ico"
+    $ pyarmor cfg pack:pyi_options + " -i favion.ico"
 
 在添加另外一个选项 ``--add-data``::
 
-    $ pyarmor cfg pack:pyi_options ^ "--add-data joker/config.json:joker"
-
-.. note::
-
-    在 Windows 的命令行，也许需要使用双引号把 ``^`` 包含起来。例如::
-
-        C:\Projects\build> pyarmor cfg pack:pyi_options "^" "-i favion.ico"
+    $ pyarmor cfg pack:pyi_options + "--add-data joker/config.json:joker"
 
 .. seealso:: :ref:`pyarmor cfg`
 
