@@ -299,8 +299,6 @@ Pyarmor 需要使用 PyInstaller_ 打包好的可执行文件，请首先安装 
 
 .. versionchanged:: 8.5.4
 
-   在 v8.5.4 之前，使用不同的方式进行打包，请参阅之前版本的文档 (v8.5.3)
-
 生成一个单独的可执行文件直接使用下面的命令即可::
 
     $ pyarmor gen --pack onefile foo.py
@@ -321,8 +319,6 @@ Pyarmor 需要使用 PyInstaller_ 打包好的可执行文件，请首先安装 
 
 .. versionchanged:: 8.5.4
 
-   在 v8.5.4 之前，使用不同的方式进行打包，请参阅之前版本的文档 (v8.5.3)
-
 生成单个目录模式的包直接使用下面的命令即可::
 
     $ pyarmor gen --pack onedir foo.py
@@ -331,6 +327,23 @@ Pyarmor 需要使用 PyInstaller_ 打包好的可执行文件，请首先安装 
 
     $ ls dist/foo
     $ dist/foo/foo
+
+使用 spec 文件打包加密脚本
+--------------------------
+
+.. versionchanged:: 8.5.8
+
+如果已经有现成的 spec 文件能够成功打包没有加密的脚本，例如::
+
+    $ pyinstaller foo.spec
+    $ dist/foo
+
+可以直接把 ``foo.spec``  传递给 :option:`--pack` ，来自动打包加密脚本。例如::
+
+    $ pyarmor gen --pack foo.spec -r foo.py joker/
+    $ dist/foo
+
+在这种模式无法自动加密依赖的脚本，需要人工在命令行指出需要加密的所有脚本，否则不会被加密。
 
 如果打包出现问题，或者需要使用更多打包方面的功能，请参阅 :doc:`../topic/repack`
 

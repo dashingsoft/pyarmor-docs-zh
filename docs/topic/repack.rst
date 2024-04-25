@@ -6,11 +6,13 @@
 
 .. program:: pyarmor gen
 
-Pyarmor 8.0 没有像之前的版本提供命令 `pack` 来生成可以独立运行的加密脚本，而是直接通过一个选项 :option:`--pack` 来告诉 Pyarmor 需要在加密之后自动进行打包。
-
-Pyarmor 主要功能还是加密，加密完成之后生成可以独立运行的包完全是调用 PyInstaller_ 的相关功能。如果没有安装 PyInstaller_ 必须首先安装::
+Pyarmor 的核心功能是加密脚本，加密完成之后生成可以独立运行的包完全是调用 PyInstaller_ 的相关功能。如果没有安装 PyInstaller_ 必须首先安装::
 
     $ pip install pyinstaller
+
+PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包，并把这些依赖也自动的打到包里面。一旦加密之后， PyInstaller_ 就无法通过脚本找到依赖项目，所以直接打包加密脚本，执行的时候会导致模块找不到的问题。
+
+为了解决这个问题，Pyarmor 8.0 提供了一个选项 :option:`--pack` ，通过对 PyInstaller_ 的打包过程进行一些特殊的处理，帮助 PyInstaller_ 正确找到加密脚本的所有依赖项目。
 
 选项 :option:`--pack` 接受三种类型的值
 
@@ -69,15 +71,19 @@ Pyarmor 主要功能还是加密，加密完成之后生成可以独立运行的
     $ pyinstaller foo.spec
     $ ls dist/
 
-在这种情况下，可以直接把 specfile 传递给 :option:`--pack` ，例如::
+在这种情况下，可以直接把 ``foo.spec``  传递给 :option:`--pack` ，例如::
 
-    $ pyarmor gen --pack foo.spec foo.py
+    $ pyarmor gen --pack foo.spec -r foo.py joker/
 
-Pyarmor 是首先根据加密选项对脚本进行加密，并保存到 `.pyarmor/pack/dist`
+Pyarmor 首先根据加密选项对脚本进行加密，并保存到 `.pyarmor/pack/dist`
 
-然后读取 ``foo.spec`` 并创建一个补丁文件 ``foo.patched.spec`` 。然后调用 PyInstaller_ ，使用这个打过补丁的 spec 文件来打包加密脚本::
+然后读取 ``foo.spec`` 并创建一个补丁文件 ``foo.patched.spec``
+
+最后自动调用 PyInstaller_ ，使用这个打过补丁的 spec 文件来打包加密脚本::
 
     $ pyinstaller --clean foo.patched.spec
+
+需要注意的是，在这种模式下，无法自动加密依赖的脚本，需要人工在命令行指出需要加密的所有脚本，否则不会被加密。
 
 检查打包的脚本是否被加密
 ------------------------
@@ -118,11 +124,15 @@ Pyarmor 是首先根据加密选项对脚本进行加密，并保存到 `.pyarmo
 使用更多的加密选项
 ------------------
 
-在 Darwin 系统，如果想让加密脚本能够同时工作在 Intel 和 Apple M1 框架下，需要传递额外的加密选项 ``--platform darwin.x86_64,darwin.arm64``::
+在 Darwin 系统，如果想让加密脚本能够同时工作在 Intel 和 Apple M1 框架下，可以传递额外的加密选项 ``--platform darwin.x86_64,darwin.arm64``::
 
     $ pyarmor gen --pack onefile --platform darwin.x86_64,darwin.arm64 foo.py
 
-其他加密选项也都可以根据需要选用来增加安全性或者提高性能。但是有些选项可能无法使用，例如，:option:`--restrict` 就无法和 :option:`--pack` 一起使用。
+其他加密选项也都可以根据需要选用来增加安全性或者提高性能，例如::
+
+    $ pyarmor gen --pack onefile --private foo.py
+
+需要注意的是不是所有的选项都可以和 :option:`--pack` 一起使用，例如，使用 :option:`--restrict` 选项会导致加密的包出现保护异常。
 
 自己动手打包加密脚本
 ====================
@@ -143,9 +153,9 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 * 如果还没有 ``foo.spec`` ，使用下面的命令生成 [#]_::
 
-    $ pyi-makespec --hidden-import pyarmor_runtime_000000 foo.py
+    $ pyi-makespec foo.py
 
-* 修改 ``foo.spec`` ，插入补丁代码到 ``pyz = PYZ`` 之前，这一步是重点
+* 修改 ``foo.spec`` ，插入下面的补丁代码到 ``pyz = PYZ`` 之前，这一步是重点
 
 .. code-block:: python
 

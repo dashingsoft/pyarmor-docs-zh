@@ -507,13 +507,48 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
             混淆脚本中字符串常量 :sup:`basic`
 
+混淆所有的字符串可能会降低性能，因为每一次字符串的读取都需要进行解密和加密。如果使用了大量的字符串对性能产生了影响，变通的方法是通过过滤器设置仅仅加密一些特别重要的字符串。
+
+.. seealso:: :doc:`../tutorial/advanced` 中 `过滤加密字符串`
+
 .. option:: --assert-call
 
             启用自动检查函数功能，确保加密函数没有被替换
 
+如果指定这个选项，Pyarmor 会在加密之前生成需要被加密的模块名称列表，在加密脚本的过程中，如果发现调用的脚本属于加密模块，那么会修改调用语句为下列等价形式:
+
+.. code-block:: python
+
+   from obfuscated_module import abc
+
+   # 加密前
+   # abc('a', 1)
+
+   # 加密后，如果 abc 不是加密函数，会抛出保护异常
+   __assert_armorred__(abc)('a', 1)
+
+因为 Python 脚本的灵活性，有时候 :option:`--assert-call` 不能确定该函数是否属于加密模块，这时候可以人工增加检查语句，确保重要函数不会被替换。
+
+.. seealso:: :func:`__assert_armorred__`
+
 .. option:: --assert-import
 
             启用自动检查模块功能，确保加密的模块没有被替换
+
+如果指定这个选项，Pyarmor 会在加密之前生成需要被加密的模块名称列表，在加密脚本的过程中，如果发现脚本使用 `import` 语句导入的模块是加密模块，那么会修改导入语句为下列等价形式:
+
+.. code-block:: python
+
+   import xyz
+
+   # 如果 xyz 不是加密模块，会抛出保护异常
+   __assert_armorred__(xyz)
+
+使用特殊方式导入的加密模块， :option:`--assert-import` 可能无法自动保护，这时候可以人工修改脚本，检查模块是否加密。
+
+.. seealso:: :func:`__assert_armorred__`
+
+.. seealso:: :func:`__assert_armorred__`
 
 .. option:: --pack <onefile,onedir,FC,DC,NAME.spec>
 
@@ -526,7 +561,7 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
             原来的方式依旧支持，只是不在推荐使用，有可能在下一个主版本就不在支持
 
 .. versionadded:: 8.5.4 支持 onefile 和 onedir
-.. versionadded:: 8.5.8 支持 specfile
+.. versionadded:: 8.5.8 支持 ``.spec`` 后缀文件
 
 这个选项一旦设置，Pyarmor 会分析输入脚本的源代码，找到其导入的所有模块和包。如果模块和包和输入脚本在相同的目录下面，那么也会自动的加密这些依赖包。但是对于所依赖的 Python 系统包，以及其他不在当前目录的第三方包，则不会进行加密，只是把这些引用的包记录下来。
 
@@ -547,11 +582,10 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
 如果项目已经有 ``foo.spec`` 并且能够成功打包没有加密的脚本，那么可以把这个文件传递给 :option:`--pack`::
 
-    $ pyarmor gen --pack foo.spec foo.py
+    $ pyarmor gen --pack foo.spec -r foo.py joker/
+    $ ls dist/
 
-这样 Pyarmor 除了加密脚本，还会读取 `foo.spec` 并创建一个补丁文件 `foo.patched.spec` ，这个打过补丁的 spec 文件可以使用下面的命令来打包加密脚本。例如::
-
-    $ pyinstaller --clean foo.patched.spec
+这样 Pyarmor 会首先加密脚本，然后读取 `foo.spec` 并创建一个补丁文件 `foo.patched.spec` ，最后使用这个打过补丁的 spec 文件来打包加密脚本。需要注意的是这种方式 Pyarmor 不会自动加密其他脚本，所有需要加密的脚本必须在命令行列出。
 
 .. seealso:: :doc:`../topic/repack`
 
