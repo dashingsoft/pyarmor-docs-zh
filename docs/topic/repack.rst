@@ -153,9 +153,18 @@ __ https://pyinstaller.org/en/stable/spec-files.html
     $ cd project
     $ pyarmor gen -O obfdist -r foo.py util.py joker/
 
+  检查加密脚本执行是否正常::
+
+    $ python obfdist/foo.py
+
 * 然后使用下面的命令生成生成 ``foo.spec`` [#]_::
 
     $ pyi-makespec --onefile foo.py
+
+  检查是否可以正确打包::
+
+    $ pyinstaller foo.spec
+    $ dist/foo
 
 * 接着修改 ``foo.spec`` ，插入下面的补丁代码到 ``pyz = PYZ`` 所在的行之前，这一步是重点
 
