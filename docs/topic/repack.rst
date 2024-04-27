@@ -236,9 +236,7 @@ __ https://pyinstaller.org/en/stable/spec-files.html
 
 **如何验证打包进去的是加密脚本**
 
-方法一，可以在 ``foo.spec`` 的补丁代码增加一些 print 语句，验证加密脚本已经替换了原来的脚本
-
-方法二，可以在主脚本增加一些调试语句进行判断，例如
+在主脚本以及导入的其他包和模块增加一些调试语句进行判断，例如
 
 .. code-block:: python
 
