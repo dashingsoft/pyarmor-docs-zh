@@ -72,7 +72,7 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 
 在这种情况下，可以直接把 ``foo.spec``  传递给 :option:`--pack` ，例如::
 
-    $ pyarmor gen --pack foo.spec -r foo.py joker/
+    $ pyarmor gen --pack foo.spec -r foo.py util.py joker/
 
 那么，Pyarmor 是如何使用 specfile 打包加密脚本呢？
 
