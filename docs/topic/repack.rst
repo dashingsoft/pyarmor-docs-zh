@@ -116,6 +116,10 @@ PyInstaller_ 需要通过分析脚本源代码找到所有的依赖模块和包�
 
     $ pyarmor cfg pack:pyi_options + "--add-data joker/config.json:joker"
 
+在 Windows 系统下面，如果命令行出错，请使用 ``;`` 替换路径分隔符 ``:``::
+
+    C:/User/test> pyarmor cfg pack:pyi_options + "--add-data joker/config.json;joker"
+
 上面的三个配置命令可以合并成为一条命令::
 
     $ pyarmor cfg pack:pyi_options = " -w  -i favion.ico --add-data joker/config.json:joker"
