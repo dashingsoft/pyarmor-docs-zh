@@ -29,14 +29,13 @@ Pyarmor 可以确保各种使用 Python 自身提供的机制无法非法获取�
 
 能实现这一点的加密模式目前 Pyarmor 只提供使用选项 :option:`--pack` 的约束模式，然后使用外部工具保证生成的动态库不能被替换和修改，这样才能够确保无法直接通过 Python 自身的机制来获取运行时刻的数据。
 
-首先是使用 PyInstaller 打包 [#]_::
+首先配置下列选项 [#]_::
 
-    $ pyinstaller foo.py
+    $ pyarmor cfg check_debugger=1 check_interp=1
 
 接着使用下面的命令加密脚本 [#]_::
 
-    $ pyarmor cfg check_debugger=1 check_interp=1
-    $ pyarmor gen --mix-str --assert-call --assert-import --private --pack dist/foo/foo foo.py
+    $ pyarmor gen --mix-str --assert-call --assert-import --private --pack onedir foo.py
 
 然后使用其他方式来保护 :file:`dist/foo/` 目录下面所有的可执行文件和动态库，外部工具要确保动态库不能被替换以及在运行时候的内存代码不能被修改。
 
@@ -44,9 +43,9 @@ Pyarmor 可以确保各种使用 Python 自身提供的机制无法非法获取�
 
 .. rubric:: 备注
 
-.. [#] PyInstaller 如果使用选项 ``--onefile`` 打包成为单个可执行文件，这个文件在执行的时候会解压到一个临时目录下面执行，需要保证第三方工具或者签名工具对解压后的文件也能够提供保护，否则是没有保护效果的，因为真正的动态库等相关文件都在这个解压后的目录下面。
-
 .. [#] 不要在 Intel i686 系列的平台上使用配置项 ``check_interp`` ，这个选项无法在这些平台工作。
+
+.. [#] 如果使用选项 ``onefile`` 打包成为单个可执行文件，是不可能实现真正的保护效果呢。因为这个文件在执行的时候会解压到一个临时目录下面执行，真正的动态库等相关文件都在这个解压后的目录下面，需要保护的是这些解压后的动态库。
 
 **脚本补丁**
 
