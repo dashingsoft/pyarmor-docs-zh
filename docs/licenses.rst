@@ -124,7 +124,7 @@ __ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hos
    脚本有效期          有           有          有         有        [#]_
    绑定到设备          有           有          有         有        [#]_
    JIT 保护           有           有          有         有        [#]_
-   Themedia 保护      有           有          有         有        [#]_
+   Themida 保护       有           有          有         有        [#]_
    Assert 保护        有           有          有         有        [#]_
    大脚本文件          无           有          有         有         [#]_
    混淆字符串          无          有          有         有         [#]_
