@@ -166,7 +166,7 @@ __ https://pypi.org/project/pyarmor.cli.core.alpine/#files
 
     .. py:staticmethod:: post_runtime(ctx, source, dest, platform)
 
-       如果该方法存在，那么当每一个运行平台的扩展模块 ``pyarmor_runtime`` 被生活之后会被 :ref:`pyarmor gen` 调用，如果是生成多平台的脚本，它可能被调用多次。
+       如果该方法存在，那么当每一个运行平台的扩展模块 ``pyarmor_runtime`` 生成之后会被 :ref:`pyarmor gen` 调用，如果是生成多平台的脚本，它可能被调用多次。
 
        :param Context ctx: 加密环境
        :param str source: 预编译的扩展模块文件名称
