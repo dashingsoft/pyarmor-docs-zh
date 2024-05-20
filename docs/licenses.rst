@@ -210,6 +210,12 @@ __ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hos
 
    关于技术支持，请查看 :ref:`asking questions`
 
+.. important::
+
+   一旦许可证被激活之后，就不再接受退款请求。
+
+   仅当许可证没有被激活并且购买日期在三个月之内的订单，可以退款。
+
 .. _upgrading old license:
 
 升级老版本许可证
