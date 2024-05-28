@@ -12,24 +12,25 @@
 前提条件
 ========
 
-Pyarmor_ 需要 Python 运行动态库以及 C 库，缺少它们 Pyarmor 无法正常启动运行。
+Pyarmor_ 需要 Python 以及 C 库，缺少它们 Pyarmor 无法正常启动运行。
 
-在 Linux 平台，如有必要请安装 Python 运行动态库。例如，使用下面的命令安装 Python 3.10 的运行动态库::
+..
+  在 Linux 平台，如有必要请安装 Python 运行动态库。例如，使用下面的命令安装 Python 3.10 的运行动态库::
 
-    $ apt install libpython3.10
+      $ apt install libpython3.10
 
-在 Darwin 平台，确保文件 ``@rpath/lib/libpythonX.Y.dylib`` 存在，这里 ``X.Y`` 表示 Python 的版本。例如::
+  在 Darwin 平台，确保文件 ``@rpath/lib/libpythonX.Y.dylib`` 存在，这里 ``X.Y`` 表示 Python 的版本。例如::
 
-    @rpath/lib/libpython3.10.dylib
+      @rpath/lib/libpython3.10.dylib
 
-``@rpath`` 是下列路径之一:
+  ``@rpath`` 是下列路径之一:
 
-- @executable_path/..
-- @loader_path/..
-- /System/Library/Frameworks/Python.framework/Versions/3.10
-- /Library/Frameworks/Python.framework/Versions/3.10
+  - @executable_path/..
+  - @loader_path/..
+  - /System/Library/Frameworks/Python.framework/Versions/3.10
+  - /Library/Frameworks/Python.framework/Versions/3.10
 
-如果没有这个文件，请安装必要的包或者使用必要的选项重新编译 Python ，或者使用 `install_name_tool` 适配当前的 Python 环境，参阅 :doc:`../question` 中如何解决 Apple 下面的奔溃问题。
+  如果没有这个文件，请安装必要的包或者使用必要的选项重新编译 Python ，或者使用 `install_name_tool` 适配当前的 Python 环境，参阅 :doc:`../question` 中如何解决 Apple 下面的奔溃问题。
 
 .. _install-pypi:
 
@@ -121,6 +122,12 @@ __ https://github.com/dashingsoft/pyarmor/archive/master.zip
     $ pip install pyarmor.cli.core-3.2.9.zip
     $ pip install pyarmor.cli.core.android-3.2.9-cp310-none-any.whl
     $ pip install pyarmor-8.2.9.zip
+
+在一些特殊架构 `ppc64le`, `mips32el`, `mips64el`, `riscv64`, `loongarch64` 上，也没有 Wheel 直接可用，需要安装 `pyarmor.cli.core.linux` (glibc) 或者 `pyarmor.cli.core.alpine` (musl)。例如::
+
+    $ pip install pyarmor.cli.core-8.5.9.zip
+    $ pip install pyarmor.cli.core.linux-6.5.2-cp310-none-any.whl
+    $ pip install pyarmor.cli-8.5.9.zip
 
 如果需要跨平台加密，还需要安装相应的包 `pyarmor.cli.core.NAME`
 
