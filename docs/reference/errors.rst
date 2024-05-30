@@ -69,7 +69,11 @@
    * - update license token failed
      - 如果在 1 分钟之内运行注册命令超过 3 次，请等上 5 分钟之后在进行测试
 
-       如何还存在问题，在浏览器打开网页 `http://pyarmor.dashingsoft.com//api/auth2/`
+       如果在 24 小时之内，在超过 100 台不同设备或者Docker 容器上运行注册命令，请耐心等待直到有可用的 Token
+
+       如果当前设备的日期和时间不正确，请调整为当前时间
+
+       如果还存在问题，在浏览器打开网页 `http://pyarmor.dashingsoft.com//api/auth2/`
 
        如果页面返回 `NO:missing parameters` ，这说明网络没有问题，Pyarmor 许可证服务器也没有问题
 
