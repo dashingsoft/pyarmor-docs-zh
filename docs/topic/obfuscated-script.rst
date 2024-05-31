@@ -29,8 +29,11 @@ Pyarmor 加密后的脚本输出的是同名的 ``.py`` 文件和一个 :term:`�
     cd dist/
     python
     >>> import pyarmor_runtime
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    RuntimeError: the format of obfuscated script is incorrect
 
-如果不能正常导入，说明文件格式不正确，不适用于当前平台和 Python 版本。
+如果不是抛出这个异常，说明这个扩展模块文件不适用于当前平台和 Python 版本。
 
 扩展模块是二进制的动态库，有些没有加密的时候，脚本可以正常执行，加密之后无法运行。就是因为运行环境无法装载扩展模块而造成的。这种情况只要了解扩展模块的相关知识，设置运行环境允许加载扩展模块，都可以正常运行加密脚本。判断运行环境是否允许加载扩展模块的方法是把任何一个系统扩展模块拷贝到当前目录，看看能否导入。
 
