@@ -422,7 +422,28 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
 启用私有模式之后，模块的属性和方法不允许外部脚本或者 Python 解释器直接访问
 
-选项 :option:`--restrict` 隐含启用私有模式。
+需要注意的是主脚本永远不会是私有的，也就是说，即便使用 `--private` 加密了主脚本，执行的时候其属性也可以被外部模块访问，否则加密脚本就无法被 Python 解释器执行。如果需要包含主脚本的属性，需要把代码转移到另外一个模块中。例如，原来的脚本 `foo.py`:
+
+.. code-block:: python
+
+    def main():
+        print('This is main code')
+
+    if __name__ == '__main__':
+        main()
+
+那么把这个脚本改名为 `real_foo.py` ，然后创建一个新的 `foo.py`:
+
+.. code-block:: python
+
+    from real_foo import main
+
+    if __name__ == '__main__':
+        main()
+
+最后一起加密它们::
+
+    $ pyarmor gen --private foo.py real_foo.py
 
 .. versionchanged:: 8.5.3
 
