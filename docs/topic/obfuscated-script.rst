@@ -158,12 +158,15 @@ Pyarmor 加密后的脚本输出的是同名的 ``.py`` 文件和一个 :term:`�
 
 * ``pyarmor cfg mix_argname=1`` 会导致 annotations 无法使用
 
+* 直接使用 `importlib.util.spec_from_file_location` 导入加密模块需要额外处理，参考 `第846个问题报告`__
+
 .. seealso::
 
    :doc:`../how-to/third-party`
 
    :doc:`../tutorial/advanced` 中的 `生成跨平台加密脚本` 以及 `支持多个 Python 版本的加密脚本`
 
+__ https://github.com/dashingsoft/pyarmor/issues/846
 
 第三方解释器的支持
 ------------------
