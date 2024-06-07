@@ -2,6 +2,8 @@
  常见问题解决方案
 ==================
 
+.. program:: pyarmor gen
+
 如果是加密过程发生的错误，请查看章节 :ref:`build device` 并根据相应的条件查找解决方案
 
 如果是运行加密过程发生的错误，请查看章节 :ref:`target device` 根据相应的条件查找解决方案
@@ -134,7 +136,7 @@
 --------
 
 1. 直接使用 PyInstaller 打包没有加密的脚本，确保打包可以成功
-2. 查看 :doc:`topic/repack`
+2. 查看 :doc:`../topic/repack`
 
 .. _target device:
 
@@ -168,7 +170,7 @@
 
 **unauthorized use of script**
 
-1. 不要使用 `--private` ， `--restrict` ， `--assert-call` ， `--assert-import` 等约束选项
+1. 不要使用 :option:`--private` ， :option:`--restrict` ， :option:`--assert-call` ， :option:`--assert-import` 等约束选项
 2. 发现导致出现问题的选项
 
 运行加密脚本出现错误或者异常
