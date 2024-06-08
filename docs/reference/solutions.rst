@@ -49,11 +49,15 @@
        $ codesign -v /path/to/pytransform3.so
        $ otool -L /path/to/pytransform3.so
 
-   在 Windows 平台下面，使用 [cygcheck]_ 进行检查
+   在 Windows 平台下面，使用 [cygcheck]_ 进行检查::
 
-   .. code-block:: bash
+       C:\> cygcheck \path\to\pytransform3.pyd
 
-       $ cygcheck \path\to\pytransform3.pyd
+   或者::
+
+       C:\> dumpbin /dependents \path\to\pytransform3.pyd
+
+   根据报错信息安装相应的包看能否解决问题
 
 3. 如果上面的命令报错并且无法解决，查看 :doc:`environments` 是否支持当前平台
 
@@ -146,35 +150,65 @@
 导入运行辅助库装载失败
 ----------------------
 
-如果加密设备和目标设备不是同一台机器
-
-1. 确保运行加密脚本的 Python 版本和加密时候使用的 Python 大小版本（Major.Minor）一致
-
-2. 如果两者架构不同，请确保加密的时候使用了正确的跨平台加密选项 :option:`--platform`
-
-3. 检查 :ref:`运行辅助包` 是否存在
+1. 检查 :ref:`运行辅助包` 是否存在
 
    在加密脚本目录树中，搜索扩展模块 `pyarmor_runtime.pyd` 或者 `pyarmor_runtime.so` ，确保其存在
 
    :ref:`运行辅助包` 是一个正常的 Python 包，可以把它当作第三方的包来使用，但是必须能够被加密脚本导入
 
-4. 检查加密脚本的导入语句是否正确
+2. 检查加密脚本的导入语句是否正确
 
    直接打开加密脚本，应该可以看到加密脚本的第一条语句是一个标准的 `from ... import` 语句，请按照 Python 本身的导入机制确保能导入 :ref:`运行辅助包`
 
    可以通过移动运行辅助包的位置或者修改导入语句，以及使用选项 :option:`-i` 或者 :option:`--prefix` 重现生成加密脚本来解决这个问题
 
-5. 检查扩展模块 `pyarmor_runtime` 是否匹配目标设备的 Python 版本和平台架构
+**如果加密设备和目标设备不是同一台机器**
 
-   对于跨平台加密，尝试使用不同的平台，例如 `linux.aarch64`, `alpine.aarch64` 或者 `android.aarch64`
+1. 确保运行加密脚本的 Python 版本和加密时候使用的 Python 大小版本（Major.Minor）一致
+
+2. 如果两者架构不同，请确保加密的时候使用了正确的跨平台加密选项 :option:`--platform`
+
+3. 检查扩展模块 `pyarmor_runtime` 是否匹配目标设备的 Python 版本和平台架构
+
+   在 Linux 平台下面，使用 `ldd` 执行下面的命令
+
+   .. code-block:: bash
+
+       $ ldd /path/to/pyarmor_runtime.so
+
+   在 MacOS 平台下面，使用 `codesign` 和 `otool` 执行下面的命令
+
+   .. code-block:: bash
+
+       $ codesign -v /path/to/pyarmor_runtime.so
+       $ otool -L /path/to/pyarmor_runtime.so
+
+   在 Windows 平台下面，使用 [cygcheck]_ 进行检查::
+
+       C:\> cygcheck \path\to\pyarmor_runtime.pyd
+
+   或者::
+
+       C:\> dumpbin /dependents \path\to\pyarmor_runtime.pyd
+
+   根据报错信息安装相应的包看能否解决问题。
+
+如果无法解决问题，查看 :doc:`environments` 是否支持当前平台
+
+另外对于跨平台加密，尝试使用不同的目标平台，例如目标平台是 Android 的话，如果 `--platform android.aarch64` 加密的脚本无法运行，可以尝试 `--platform linux.aarch64` 或者 `--platform alpine.aarch64` ，因为它们的区别主要在于使用不同的 LIBC 库
 
 **unauthorized use of script**
 
 1. 不要使用 :option:`--private` ， :option:`--restrict` ， :option:`--assert-call` ， :option:`--assert-import` 等约束选项
-2. 发现导致出现问题的选项
+
+2. 发现导致出现问题的选项，并报告问题，至少包含以下内容
+
+   - 加密时候使用的完整选项
+   - 可以重现问题的简单脚本，不要使用第三方库，尤其是依赖很多，安装包很大的第三方库
+   - 运行加密脚本的完整命令和完整的异常信息堆栈
 
 运行加密脚本出现错误或者异常
---------------------
+----------------------------
 
 1. 尝试不要使用 RFT/BCC/约束选项等进行加密，看是否可以运行，可以运行的话说明问题是 RFT/BCC/约束选项 造成的，请参考下面的相应分支继续检查
 
@@ -190,14 +224,7 @@
 
 **使用了约束选项进行加密**
 
-1. 不要使用任何约束选项加密脚本，检查加密脚本是否可以正确运行
-2. 单独使用每一个约束选项加密脚本，确定真正导致问题出现的选项
-3. 简化脚本，尝试找到一个可以重现问题的最简单脚本，最好不需要使用第三方库
-4. 提交问题报告，至少包含下列内容
-
-   - 加密时候使用的完整选项
-   - 可以重现问题的简单脚本，不要使用第三方库，尤其是依赖很多，安装包很大的第三方库
-   - 运行加密脚本的完整命令和完整的异常信息堆栈
+参考上面的 **unauthorized use of script**
 
 **使用了 RFT 模式进行加密**
 
@@ -214,7 +241,7 @@
 
 1. 不要打包，只是使用相同选项加密脚本，然后运行加密后的脚本，检查是否运行正常，如果不正常，那么参考上面加密脚本运行失败的解决方案
 
-2. 不要加密脚本，直接使用 PyInstaller 打包没有加密的脚本，检查打包后的可执行文件是否运行正常，如果不正常，请参考 PyInstaller 文档解决问题
+2. 不要加密脚本，直接使用 PyInstaller_ 打包没有加密的脚本，检查打包后的可执行文件是否运行正常，如果不正常，请参考 PyInstaller_ 文档解决问题
 
 3. 如果以上都正常，尝试使用更少的加密选项，重复步骤 1 和 步骤 2，找到导致问题出现的选项，然后报告问题
 
