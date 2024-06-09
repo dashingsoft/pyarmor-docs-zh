@@ -69,7 +69,7 @@
        pyarmor/cli/core/linux/mips32el/pytransform3.so
        ...
 
-    依次使用 `ldd` 检查，如果某一个包中 `pytransfrom.so` 可以用，那么设置环境变量之后在运行 Pyarmor::
+   依次使用 `ldd` 检查，如果某一个包中 `pytransfrom.so` 可以用，那么设置环境变量之后在运行 Pyarmor::
 
        $ export PYARMOR_PLATFORM=linux.mips32el
        $ pyarmor gen foo.py
