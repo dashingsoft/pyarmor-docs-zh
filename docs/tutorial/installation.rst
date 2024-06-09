@@ -59,6 +59,7 @@ Pyarmor_ 发布在 PyPI_ 上面，最方便的方式就是使用命令 :command:
     $ pip install pyarmor.cli.core.darwin
     $ pip install pyarmor.cli.core.freebsd
     $ pip install pyarmor.cli.core.android
+    $ pip install pyarmor.cli.core.alpine
 
 并不是所有的平台都支持 Pyarmor，所有支持的运行平台请查看 :doc:`../reference/environments`
 
@@ -212,6 +213,7 @@ Cygwin 平台的额外处理
     $ pip uninstall pyarmor.cli.core.darwin
     $ pip uninstall pyarmor.cli.core.freebsd
     $ pip uninstall pyarmor.cli.core.android
+    $ pip uninstall pyarmor.cli.core.alpine
 
     $ rm -rf ~/.pyarmor
     $ rm -rf ./.pyarmor

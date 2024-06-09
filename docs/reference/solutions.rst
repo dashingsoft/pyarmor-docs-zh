@@ -61,6 +61,19 @@
 
 3. 如果上面的命令报错并且无法解决，查看 :doc:`environments` 是否支持当前平台
 
+   对于 Linux 的变体系统，可以查看包 `pyarmor.cli.core.linux` ， `pyarmor.cli.core.alpine` ，以及 `pyarmor.cli.core.android` 等的内容，每一个包里面都有多个 `pytransform.so` ，例如::
+
+       pyarmor/cli/core/linux/aarch64/pytransform3.so
+       pyarmor/cli/core/linux/armv7/pytransform3.so
+       pyarmor/cli/core/linux/loongarch64/pytransform3.so
+       pyarmor/cli/core/linux/mips32el/pytransform3.so
+       ...
+
+    依次使用 `ldd` 检查，如果某一个包中 `pytransfrom.so` 可以用，那么设置环境变量之后在运行 Pyarmor::
+
+       $ export PYARMOR_PLATFORM=linux.mips32el
+       $ pyarmor gen foo.py
+
 注册失败
 --------
 
