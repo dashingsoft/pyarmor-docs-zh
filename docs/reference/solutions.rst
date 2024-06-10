@@ -63,15 +63,29 @@
 
    对于 Linux 的变体系统，可以查看包 `pyarmor.cli.core.linux` ， `pyarmor.cli.core.alpine` ，以及 `pyarmor.cli.core.android` 等的内容，每一个包里面都有多个 `pytransform.so` ，例如::
 
-       pyarmor/cli/core/linux/aarch64/pytransform3.so
-       pyarmor/cli/core/linux/armv7/pytransform3.so
-       pyarmor/cli/core/linux/loongarch64/pytransform3.so
-       pyarmor/cli/core/linux/mips32el/pytransform3.so
-       ...
+       $ unzip ./pyarmor.cli.core.linux-6.5.3-cp310-none-any.whl
 
-   依次使用 `ldd` 检查，如果某一个包中 `pytransfrom.so` 可以用，那么设置环境变量之后在运行 Pyarmor::
+       Archive:  ./pyarmor.cli.core.linux-6.5.3-cp310-none-any.whl
+         inflating: pyarmor/cli/core/linux/__init__.py
+         inflating: pyarmor/cli/core/linux/aarch64/pyarmor_runtime.so
+         inflating: pyarmor/cli/core/linux/aarch64/pytransform3.so
+         inflating: pyarmor/cli/core/linux/armv7/pyarmor_runtime.so
+         inflating: pyarmor/cli/core/linux/armv7/pytransform3.so
+         inflating: pyarmor/cli/core/linux/loongarch64/pyarmor_runtime.so
+         inflating: pyarmor/cli/core/linux/loongarch64/pytransform3.so
+         inflating: pyarmor/cli/core/linux/mips32el/pyarmor_runtime.so
+         inflating: pyarmor/cli/core/linux/mips32el/pytransform3.so
+         ...
 
-       $ export PYARMOR_PLATFORM=linux.mips32el
+   依次使用 `ldd` 检查，如果某一个包中某一个目录下面的 `pytransfrom.so` 可以用，那么拷贝它们到包 `pyarmor.cli.core` 的安装目录，例如::
+
+       $ cp pyarmor/cli/core/linux/loongarch64/*.so /path/to/pyarmor/cli/core
+       $ pyarmor gen foo.py
+
+   或者安装这个包，同时设置环境变量::
+
+       $ pip install ./pyarmor.cli.core.linux-6.5.3-cp310-none-any.whl
+       $ export PYARMOR_PLATFORM=linux.loongarch64
        $ pyarmor gen foo.py
 
 注册失败
