@@ -324,7 +324,7 @@ Pyarmor 提供错误信息的多语言功能，可以根据 :term:`客户设备`
 为了支持多语言，首先创建 :file:`~/.pyarmor/messages.cfg`
 
     $ mkdir .pyarmor
-    $ vi .pyarmor/message.cfg
+    $ vi .pyarmor/messages.cfg
 
 这是一个 ``.ini`` 格式的文件，增加一个节 ``runtime.message`` 和选项 ``languages``:
 
