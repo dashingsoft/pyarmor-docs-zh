@@ -142,6 +142,10 @@
    - 操作系统类型
    - 对于类似 Linux 系统，提供 `uname -a` 的输出
 
+**使用集团版许可证运行多个 Docker 容器**
+
+确保 Docker 主机 和 Docker 容器在同一个网络中，使用 `ifconfig` 命令检查网路配置。
+
 加密失败
 --------
 
@@ -228,7 +232,9 @@
 
 1. 不要使用 :option:`--private` ， :option:`--restrict` ， :option:`--assert-call` ， :option:`--assert-import` 等约束选项
 
-2. 发现导致出现问题的选项，并报告问题，至少包含以下内容
+2. 使用 `pyarmor cfg assert.call:excludes "xxx"` 或者 `pyarmor cfg assert.import:excludes "xxx"` 排除出现问题的函数和模块
+
+3. 发现导致出现问题的选项，并报告问题，至少包含以下内容
 
    - 加密时候使用的完整选项
    - 可以重现问题的简单脚本，不要使用第三方库，尤其是依赖很多，安装包很大的第三方库
