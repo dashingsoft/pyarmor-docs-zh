@@ -162,4 +162,18 @@ nuitka
 
 然后在尝试使用更多选项，但是约束相关的这些选项，例如 :option:`--private` ， :option:`--restrict` ， :option:`--assert-call` ， :option:`--assert-import` 可能无法使用。
 
+streamlit
+---------
+
+需要禁用下列选项，然后在进行加密::
+
+    $ pyarmor cfg restrict_module=0
+    $ pyarmor cfg clear_module_co=0
+
+    $ pyarmor gen foo.py
+
+不禁用第一项可能会报错 `RuntimeError: unauthorized use of script (1:1102)`
+
+不禁用第二项可能会报错 `RuntimeError: the format of obfuscated script is incorrect (1:1082)`
+
 .. include:: ../_common_definitions.txt
