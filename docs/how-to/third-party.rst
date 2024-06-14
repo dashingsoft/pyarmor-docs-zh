@@ -107,6 +107,9 @@ Python 在各个领域得到广泛的应用，有很多包我甚至从来都没�
    * - `nuitka`_
      - 使用 restrict_module = 0 之后应该可以工作
      - 尚未验证
+   * - streamlit
+     - 使用 restrict_module = 0 以及 clear_module_co = 0 之后应该可以工作
+     - 尚未验证
 
 .. rubric:: 说明
 
