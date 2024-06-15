@@ -40,7 +40,7 @@ Pyarmor 推荐使用下面的方式在 CI/CD pipeline 加密脚本:
     $ pyarmor reg /path/to/pyarmor-regfile-5068.zip
 
     # 创建新分支
-    # git checkout -B master-obf
+    $ git checkout -B master-obf
 
     # 创建输出目录 dist ，链接到项目目录
     $ ln -s test-project dist
