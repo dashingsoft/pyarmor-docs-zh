@@ -107,9 +107,6 @@ Python 在各个领域得到广泛的应用，有很多包我甚至从来都没�
    * - `nuitka`_
      - 使用 restrict_module = 0 之后应该可以工作
      - 尚未验证
-   * - streamlit
-     - 使用 restrict_module = 0 以及 clear_module_co = 0 之后应该可以工作
-     - 尚未验证
 
 .. rubric:: 说明
 
@@ -175,5 +172,7 @@ streamlit
 不禁用第一项可能会报错 `RuntimeError: unauthorized use of script (1:1102)`
 
 不禁用第二项可能会报错 `RuntimeError: the format of obfuscated script is incorrect (1:1082)`
+
+**不过 Streamlit 依旧可能无法直接使用加密脚本，因为它是直接访问甚至修改 code object**
 
 .. include:: ../_common_definitions.txt
