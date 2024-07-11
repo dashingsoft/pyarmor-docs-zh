@@ -187,12 +187,16 @@ Cygwin 平台的额外处理
 
     from pyarmor.cli.__main__ import main_entry
 
-    args = ['gen', 'foo.py']
+    args = ['gen', '-O', 'dist', '--platform', 'linux.x86_64,windows.x86_64', 'foo.py']
     main(args)
 
 然后运行这个脚本::
 
     $ python tool.py
+
+上面的例子等价于执行下面的命令::
+
+    $ pyarmor gen -O dist --platform linux.x86_64,windows.x86_64 foo.py
 
 以上只是一个示例说明，具体使用的加密选项和参数可以通过各种方式进行传递。
 
