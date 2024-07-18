@@ -289,9 +289,7 @@
 平台相关问题
 ============
 
-Cygwin 需要创建链接
-
-Darwin Apple Silicon 需要正确签名
+Darwin Apple Silicon 如果刚运行就崩溃，那么需要对扩展模块 `pytransform3` 或者 `pyarmor_runtime` 进行签名
 
 .. rubric:: 注释
 

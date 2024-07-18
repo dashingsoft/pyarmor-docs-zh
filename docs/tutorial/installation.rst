@@ -166,18 +166,6 @@ Termux 平台的额外补丁
 
 否则，运行 `pyarmor` 会报错 `dlopen failed: cannot locate symbol "PyFloat_Type"`
 
-Cygwin 平台的额外处理
-=====================
-
-在 Cygwin，还需要创建一个额外的链接。例如，假设 Cygwin 里面装的是 Python 3.10::
-
-    $ cd /usr/bin
-    $ ln -s libpython3.10.dll python310.dll
-
-否则，无法装载扩展模块 `pytransform3`
-
-同样，在 Cygwin 中运行加密脚本也需要额外创建这个链接。
-
 在 Python 脚本中调用 Pyarmor
 ============================
 
