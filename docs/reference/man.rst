@@ -385,6 +385,20 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
    需要注意的是即便是设置了这个值，也必须是在运行加密函数的时候才进行检查。也就
    是说，如果一个无限循环没有调用任何加密函数，那么不会触发周期性检查事件。
 
+   这种情况下面，可以在循环体内增加一个调用空的函数，例如::
+
+     def pyarmor_check_license():
+         pass
+
+     def main():
+         while True:
+             check_pyarmor_license()
+             sleep(0.01)
+
+    此外，如果使用了 BCC 模式加密，还需要使用下面的额外配置不要转换这个函数，例如::
+
+      $ pyarmor cfg bcc:excludes = pyarmor_check_license
+
 .. option:: --outer
 
             启用外部密钥
