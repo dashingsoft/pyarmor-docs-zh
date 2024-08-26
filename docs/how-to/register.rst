@@ -361,6 +361,31 @@ __ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hos
 
     $ pyarmor reg -g 1 pyarmor-device-regfile-xxxx.zip
 
+同一台设备使用多个许可证
+========================
+
+使用默认选项的时候，注册文件都是保存在 Pyarmor 的 :term:`根目录` ，通常情况下，就是 :file:`~/.pyarmor` ，这也意味着
+
+- 不同的 Python 的虚拟环境会共享注册文件
+- 如果需要在同一台设备上使用不同的许可证，那么会存在问题
+
+当需要在一台设备上注册多个 :term:`Pyarmor 许可证` 的时候，可以为每一个许可证设置一个 :term:`根目录` 。例如::
+
+    $ pyarmor --home ~/.pyarmor1 reg pyarmor-regfile-2051.zip
+    $ pyarmor --home ~/.pyarmor2 reg pyarmor-regfile-2052.zip
+
+    $ pyarmor --home ~/.pyarmor1 gen project1/foo.py
+    $ pyarmor --home ~/.pyarmor2 gen project2/foo.py
+
+升级 Pyarmor 之后的注意事项
+===========================
+
+一般情况下，升级 Pyarmor 之后不需要重新注册，原来的注册信息依旧有效。
+
+但是可能在某一个版本之后，原来的许可证无法使用，或者需要重新生成 :term:`注册文件` 。所以如果升级之后出现注册信息无效的情况，请查看 Pyarmor 的 `变更日志`__ ，确保新版本中原来的许可证还依旧可以使用。如果不可以在继续使用，那么请使用老版本的 Pyarmor 而不要升级 Pyarmor。
+
+__ https://github.com/dashingsoft/pyarmor/releases
+
 升级老版本许可证
 ================
 
