@@ -389,10 +389,10 @@ __ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hos
   - 部分老版本许可证可以免费升级到基础版许可证，具体升级步骤请参考 :ref:`upgrading old license`
   - 老版本许可证无法升级为专家版或者集团版许可证
 
-- **Pyarmor 8.6** 集团版许可证需要重新为离线设备生成设备注册文件
+- **Pyarmor 8.6** 集团版许可证需要重新生成设备注册文件，Pyarmor 8.6 之前版本生成的设备注册无法在 Pyarmor 8.6+ 版本中使用。
 
   - 在联网设备上面安装升级 Pyarmor 到 8.6+
-  - 使用集团版注册文件为设备重新生成设备注册文件，例如，为编号为 1 的离线设备重新生成设备注册文件 ``pyarmor-device-regfile-6000.1.zip``::
+  - 使用集团版注册文件为设备重新生成注册文件，方法和第一次生成设备注册文件是一样的。例如，为编号为 1 的离线设备重新生成设备注册文件 ``pyarmor-device-regfile-6000.1.zip``::
 
       pyarmor reg -g 1 /path/to/pyarmor-regfile-6000.zip
 
