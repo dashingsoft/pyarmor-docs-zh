@@ -377,18 +377,25 @@ __ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hos
     $ pyarmor --home ~/.pyarmor1 gen project1/foo.py
     $ pyarmor --home ~/.pyarmor2 gen project2/foo.py
 
-升级 Pyarmor 之后的注意事项
-===========================
+升级 Pyarmor 之后的许可证兼容性
+===============================
 
 一般情况下，升级 Pyarmor 之后不需要重新注册，原来的注册信息依旧有效。
 
-但是可能在某一个版本之后，原来的许可证无法使用，或者需要重新生成 :term:`注册文件` 。所以如果升级之后出现注册信息无效的情况，请查看 Pyarmor 的 `变更日志`__ ，确保新版本中原来的许可证还依旧可以使用。如果不可以在继续使用，那么请使用老版本的 Pyarmor 而不要升级 Pyarmor。
+但是下面的列出的版本是例外
 
-__ https://github.com/dashingsoft/pyarmor/releases
+- **Pyarmor 8.0** 老版本许可证无法在 Pyarmor 8.0 之后的版本中直接使用
 
-升级老版本许可证
-================
+  - 部分老版本许可证可以免费升级到基础版许可证，具体升级步骤请参考 :ref:`upgrading old license`
+  - 老版本许可证无法升级为专家版或者集团版许可证
 
-升级老版本的许可证请参考 :ref:`upgrading old license`
+- **Pyarmor 8.6** 集团版许可证需要重新为离线设备生成设备注册文件
+
+  - 在联网设备上面安装升级 Pyarmor 到 8.6+
+  - 使用集团版注册文件为设备重新生成设备注册文件，例如，为编号为 1 的离线设备重新生成设备注册文件 ``pyarmor-device-regfile-6000.1.zip``::
+
+      pyarmor reg -g 1 /path/to/pyarmor-regfile-6000.zip
+
+  - 使用新生成的设备注册文件替换原来的设备注册文件
 
 .. include:: ../_common_definitions.txt
