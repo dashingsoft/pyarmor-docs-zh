@@ -242,4 +242,26 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
       frame = sys._getframe(2)
       print('parent frame is', frame)
 
+已知的一些问题
+==============
+
+* 当格式化字符串出现语法错误， BCC 模式抛出 `SystemError: NULL object passed to Py_BuildValue` 而不是 `SyntaxError` 或者 `ValueError`.
+
+  在测试 `lib/python3.12/test/test_fstring.py` 中下列用例时发现:
+  - test_invalid_syntax_error_message
+  - test_missing_variable
+  - test_syntax_error_for_starred_expressions
+  - test_with_a_commas_and_an_underscore_in_format_specifier
+  - test_with_an_underscore_and_a_comma_in_format_specifier
+  - test_with_two_commas_in_format_specifier
+  - test_with_two_underscore_in_format_specifier
+
+* 生成 BCC 代码时候，Pyarmor 有时候报错 `RuntimeError: link bcc code failed`
+
+  可以尝试增加额外的编译选项 `-DENABLE_BCC_MEMSET` 来解决这个问题。例如，在 32位 Windows 下面可以使用下面的命令增加额外的编译选项::
+
+      pyarmor cfg windows.x86.bcc:cflags += " -DENABLE_BCC_MEMSET"
+
+  或者直接修改配置文件 :file:`pyarmor/cli/default.cfg`
+
 .. include:: ../_common_definitions.txt
