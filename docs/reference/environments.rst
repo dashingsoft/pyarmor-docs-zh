@@ -350,12 +350,13 @@ An example script:
 
    当 ``name`` 等于 ``b'hdinfo'`` 时候，调用这个函数可以获取当前设备硬件信息
 
-   :param int arg: 获取不同类型的设备信息，有效值：0，1，2，3
+   :param int arg: 获取不同类型的设备信息，有效值：0，1，2，4
    :param str kwarg: None，或者设备名称
    :return: arg 为 0 返回硬盘序列号
    :return: arg 为 1 返回网卡以太网地址
    :return: arg 为 2 返回IPv4 地址
-   :return: arg 为 3 返回当前设备的名称
+   :return: arg 为 3 无效值
+   :return: arg 为 4 返回当前域名
    :rtype: 字符串
 
    例如，
