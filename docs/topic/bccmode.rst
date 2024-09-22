@@ -262,6 +262,10 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 
       pyarmor cfg windows.x86.bcc:cflags += " -DENABLE_BCC_MEMSET"
 
-  或者直接修改配置文件 :file:`pyarmor/cli/default.cfg`
+  或者直接修改配置文件 :file:`pyarmor/cli/default.cfg` ，这个选项的最终有效值应该是::
+
+      Section: windows.x86.bcc
+
+      cflags = --target=i686-elf-linux -O3 -Wno-unsequenced -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-stack-protector -fPIC -mno-sse -std=c99 -c -DENABLE_BCC_MEMSET
 
 .. include:: ../_common_definitions.txt
