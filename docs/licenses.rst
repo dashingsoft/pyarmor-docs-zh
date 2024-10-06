@@ -183,9 +183,8 @@ __ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hos
      - 918
      -
 
-如果需要使用信用卡或者 Paypal 进行支付，可以直接在 MyCommerce 官网进行购买，这里的价格单位是美元，并且不能开国内增值税发票，只提供国际通用的电子发票（订单，发票相关事宜全部由 MyCommerce 处理）
-
-    https://order.mycommerce.com/product?vendorid=200089125&productid=301044051
+..
+  如果需要使用信用卡或者 Paypal 进行支付，可以直接在 MyCommerce 官网进行购买，这里的价格单位是美元，并且不能开国内增值税发票，只提供国际通用的电子发票（订单，发票相关事宜全部由 MyCommerce 处理）
 
 .. list-table:: 表-3. 不同授权模式的价格列表（国外）
    :name: 授权模式价格表2
