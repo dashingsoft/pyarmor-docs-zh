@@ -15,7 +15,7 @@
 
    如果需要升级 Pyarmor 到 8.6+，那么需要按照新的方式进行使用，其中最重要的变化是专家版许可证不能在用于 CI/CD pipeline，而是需要使用新的专门 CI 许可证进行代替
 
-   __ https://pyarmor.readthedocs.io/zh/stable/
+   __ https://pyarmor.readthedocs.io/zh/8.5.12/
 
 从 Pyarmor 8.6.0 开始，Pyarmor 专家版和集团版许可证不可以应用于 CI/CD pipeline
 
