@@ -76,13 +76,6 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 注册成功之后所有的加密操作自动应用当前许可证，每一次加密操作需要联网验证许可证。
 
-在 Docker 或者 CI pipeline 中注册
----------------------------------
-
-在 Docker 或者 CI pipeline 中注册 Pyarmor 基础版/专家版许可证的基本方法同上，但是在一天之内运行的 Pyarmor 的 Docker 数量有限制，不能超过 100 个。如果需要在一天之内运行超过 100 个的 Docker 容器，请使用集团版许可证。并且同时运行的 Docker 容器或者 Runner 的数量不能超过 3 个，如果超过这个数量，最好每隔半分钟之后启动一个 Docker 容器或者 Runner，同时运行太多的 `pyarmor reg` 命令会导致许可证服务器返回 HTTP 500 的错误并导致注册失败。
-
-**只允许在开发设备上安装和注册 Pyarmor。如果 Docker 镜像需要发送给客户，那么不允许在上面安装和注册 Pyarmor**
-
 .. _using group license:
 
 使用集团版许可证
@@ -94,7 +87,7 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 必须依次为离线设备进行编号，例如第一台设备编号为 1 ，第二台设备为 2 等等。
 
-离线设备可以为物理机，虚拟机，云服务器等各种形式，只要其 设备ID 每次重新启动能保持一致即可。大多数的物理设备，云服务器以及使用相同磁盘映像的虚拟机（Qemu，VirtualBox，Vmware）可以使用集团版许可证，如果是在 CI 服务器的工作流中使用，默认的 runner 可能无法工作，类似 Github 上面的 `self-host runner`__ 应该可以工作，请参阅相应的 CI 服务器文档，并验证其设备ID是否发生变化。
+离线设备可以为物理机，虚拟机，云服务器等各种形式，只要其 设备ID 每次重新启动能保持一致即可。大多数的物理设备，云服务器以及使用相同磁盘映像的虚拟机（Qemu，VirtualBox，Vmware）可以使用集团版许可证。
 
 一旦设备注册，将永久占用该设备号。如果已经注册的设备重装系统，或者更换硬件系统，那么需要为其重新分配新的设备号。
 
@@ -104,8 +97,6 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 2. 在离线设备上生成相应的组设备文件
 3. 在联网设备上面使用 :term:`注册文件` 和组设备文件生成离线注册文件
 4. 在离线设备上使用离线注册文件进行注册，离线注册文件只能在绑定的设备上使用
-
-__ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners
 
 初始登记
 --------
@@ -334,17 +325,6 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 如果 Windows 没有任何 IPv4 地址和 Docker 容器在同一个网段，那么另外一种解决方案就是把 WSL (Windows Subsystem Linux）作为离线设备进行注册，然后运行 `pyarmor-auth` 在 WSL 里面。在这种情况下，也需要对 WSL 进行额外的配置以确保其设备标识符保持不变，配置方式请参考 WSL 的文档。
 
-使用集团版许可证在 CI 服务器
-----------------------------
-
-集团版许可证还不支持直接应用在 CI 服务器的默认 Runner，但是类似 Github 上面的 `self-host runner`__ 应该可以工作，具体使用请参考相应的 CI 服务器文档。
-
-另外一种变通的方法是在一台离线设备或者云服务器（例如阿里云的ECS）上先运行 相应 docker 容器进行加密脚本，然后把加密后脚本保存到源代码库的另外一个分支。
-
-CI 服务器可以从这个分支中读取加密脚本，然后和操作正常脚本一样进行下面的工作流。
-
-__ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners
-
 支持多设备的离线注册文件
 ------------------------
 
@@ -360,6 +340,44 @@ __ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hos
 然后拷贝到每一台离线设备，使用 :option:`-g` 指定设备编号进行注册::
 
     $ pyarmor reg -g 1 pyarmor-device-regfile-xxxx.zip
+
+.. _using pyarmor in ci pipeline:
+
+在 CI/CD 管线中使用 Pyarmor
+===========================
+
+.. versionchanged:: 9.0
+
+   专家版许可证不可用于 CI/CD 集成构建管线。
+
+对于Pyarmor 试用版，直接使用 `pip install pyarmor` 在 CI/CD 管线中即可。
+
+从 Pyarmor 9.0 开始，专家版和集团版许可证不可以应用于 CI/CD 管线
+
+基础版和专用的 CI 许可证可以使用下面的方式应用于 CI/CD 管线
+
+- 首先生成一个 CI/CD 管线专用的注册文件。例如下面的命令会生成文件 `pyarmor-CIxxxx-202410240512.zip`::
+
+    pyarmor reg -C pyarmor-regfile-xxxx.zip
+
+  需要注意的是这个命令 `pyarmor reg -C` 在 24 小时之内只能使用 3 次，超过之后将报错，需要等待 24 小时之后才可以使用
+
+- 然后使用这个专用文件在管线中注册 Pyarmor::
+
+    pyarmor reg pyarmor-CIxxxx-202410240512.zip
+
+  注册命令需要在线进行验证，所以离线环境或者私有网络无法工作
+
+这个管线专用注册文件超过三天就会过期，过期之后需要重新使用下面的命令生成新的文件::
+
+  pyarmor reg -C pyarmor-regfile-xxxx.zip
+
+.. important::
+
+   只允许在开发设备上安装和注册 Pyarmor，如果 Docker 镜像需要发送给客户，那么不允许在上面安装和注册 Pyarmor
+
+..
+  在 Docker 或者 CI 管线 中注册 Pyarmor 基础版/专家版许可证的基本方法同上，但是在一天之内运行的 Pyarmor 的 Docker 数量有限制，不能超过 100 个。如果需要在一天之内运行超过 100 个的 Docker 容器，请使用集团版许可证。并且同时运行的 Docker 容器或者 Runner 的数量不能超过 3 个，如果超过这个数量，最好每隔半分钟之后启动一个 Docker 容器或者 Runner，同时运行太多的 `pyarmor reg` 命令会导致许可证服务器返回 HTTP 500 的错误并导致注册失败。
 
 同一台设备使用多个许可证
 ========================
@@ -389,13 +407,80 @@ __ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hos
   - 部分老版本许可证可以免费升级到基础版许可证，具体升级步骤请参考 :ref:`upgrading old license`
   - 老版本许可证无法升级为专家版或者集团版许可证
 
-- **Pyarmor 8.6** 集团版许可证需要重新生成设备注册文件，使用 Pyarmor 8.6 之前版本生成的设备注册文件在 Pyarmor 8.6+ 版本中无效
+- **Pyarmor 9.0** 集团版许可证需要重新生成设备注册文件，使用 Pyarmor 9.0 之前版本生成的设备注册文件在 Pyarmor 9.0+ 版本中无效
 
-  - 在联网设备上面安装升级 Pyarmor 到 8.6+
+  - 在联网设备上面安装升级 Pyarmor 到 9.0+
   - 使用集团版注册文件为设备重新生成注册文件，方法和第一次生成设备注册文件是一样的。例如，为编号为 1 的离线设备重新生成设备注册文件 ``pyarmor-device-regfile-6000.1.zip``::
 
       pyarmor reg -g 1 /path/to/pyarmor-regfile-6000.zip
 
   - 使用新生成的设备注册文件替换原来的设备注册文件
+
+.. _check device for group license:
+
+适用集团版许可证的设备
+======================
+
+集团版许可证只能用于设备硬件信息保持不变的系统，使用下面的方法检查一个设备是否适用集团版许可证
+
+* 在设备上安装 Pyarmor 8.4.0+ 的试用版本
+* 运行下面的命令得到机器标识符::
+
+    $ pyarmor reg -g 1
+    ...
+    INFO     current machine id is "mc92c9f22c732b482fb485aad31d789f1"
+    INFO     device file has been generated successfully
+
+* 重新启动设备，重复上面的命令查看机器标示符
+* 如果每一次重启之后机器标识符都保持不变，那么该设备可以使用集团版许可证，否则无法使用基本版许可证
+
+对于 Docker 容器来说，只需要按照上面的方法检查 Docker Host。如果 Docker Host 可以使用集团版许可证，那么就可以在其上运行不受限制的 Docker 容器，具体使用方法请参考 :doc:`how-to/register` 中的 ``运行不受限制的 Docker 容器``
+
+**如果 Docker Host 的机器标识符每次重启都会发生变化，那么集团版许可证无法运行任何 Docker 容器**
+
+大多数的物理设备，云服务器以及使用相同磁盘映像的虚拟机（qemu，virtualbox，vmware）可以使用集团版许可证，集团版许可证不可用于 CI/CD 管线中
+
+.. _upgrading old license:
+
+升级老版本许可证
+================
+
+不是所有的老版本的许可证都可以升级为新的许可证。
+
+符合下列条件的老版本许可证可以免费升级到 Pyarmor 基础版许可证：
+
+* 遵循新的 `Pyarmor 最终用户许可协议`_
+* 原来的许可证编号是以 ``pyarmor-vax-`` 开头的
+* 原来许可证的注册文件 ``pyarmor-regcode-xxxx.txt`` 存在且不能被使用超过 100 次
+* 原来的许可证的购买日期在 2023年6月1日之前，原则上在 Pyarmor 8 发布之后依旧购买的老许可证不支持升级。
+
+如果无法免费升级，请购买新的许可证。
+
+老版本的许可证不支持升级到专家版和集团版。
+
+免费升级到基础版
+-----------------
+
+首先找到原来的许可证激活文件 ``pyarmor-regcode-xxxx.txt``
+
+然后安装 Pyarmor 8.2+
+
+按照新的 `Pyarmor 最终用户许可协议`_ ，需要为每一个许可证指定产品名称。这也意味着，如果老的许可证是被用于多种产品的话，升级之后就只能用于其中的一个，其他产品还需要购买新的许可证。
+
+假定使用许可证的产品名称是 ``XXX`` ，那么使用下面的命令进行升级::
+
+    $ pyarmor reg -u -p "XXX" pyarmor-regcode-xxxx.txt
+
+升级成功之后会生成新的 :term:`注册文件`
+
+在其他设备直接使用新的 :term:`注册文件` 进行注册::
+
+    $ pyarmor reg pyarmor-regfile-xxxx.zip
+
+运行下面的命令检查升级后的许可证::
+
+    $ pyarmor -v
+
+注册成功之后所有的加密操作自动应用当前许可证，每一次加密操作需要联网验证许可证。
 
 .. include:: ../_common_definitions.txt
