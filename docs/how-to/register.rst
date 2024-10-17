@@ -356,21 +356,23 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 基础版和专用的 CI 许可证可以使用下面的方式应用于 CI/CD 管线
 
-- 首先生成一个 CI/CD 管线专用的注册文件。例如下面的命令会生成文件 `pyarmor-CIxxxx-202410240512.zip`::
+首先要经过初始登记，得到 :term:`注册文件`
+
+1. 使用注册文件 pyarmor-regfile-xxxx.zip 在联网设备使用下面的命令向服务器发出请求
 
     pyarmor reg -C pyarmor-regfile-xxxx.zip
 
-  需要注意的是这个命令 `pyarmor reg -C` 在 24 小时之内只能使用 3 次，超过之后将报错，需要等待 24 小时之后才可以使用
+2. 请求成功之后，会生成 CI 注册文件 "pyarmor-ci-xxxx.zip"
 
-- 然后使用这个专用文件在管线中注册 Pyarmor::
+3. 使用 CI 注册文件 "pyarmor-ci-xxxx.zip" 在 CI/CD 中注册 Pyarmor
 
-    pyarmor reg pyarmor-CIxxxx-202410240512.zip
+    pyarmor reg pyarmor-ci-xxxx.zip
 
-  注册命令需要在线进行验证，所以离线环境或者私有网络无法工作
+4. 使用 CI 注册文件的注意事项
 
-这个管线专用注册文件超过三天就会过期，过期之后需要重新使用下面的命令生成新的文件::
-
-  pyarmor reg -C pyarmor-regfile-xxxx.zip
+   - 申请 CI 注册文件使用的 Pyarmor 的版本最好和 CI/CD 环境中版本保持一致
+   - CI 注册文件的最长有效期为 1 年，过期之后需要重新申请
+   - 请求 CI 注册文件的次数最多为 100 次，超过之后将无法申请新的 CI 注册文件
 
 .. important::
 
