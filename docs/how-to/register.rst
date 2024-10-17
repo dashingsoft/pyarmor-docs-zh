@@ -358,13 +358,13 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 首先要经过初始登记，得到 :term:`注册文件`
 
-1. 使用注册文件 pyarmor-regfile-xxxx.zip 在联网设备使用下面的命令向服务器发出请求
+1. 使用注册文件 pyarmor-regfile-xxxx.zip 在联网设备使用下面的命令向服务器发出请求::
 
     pyarmor reg -C pyarmor-regfile-xxxx.zip
 
 2. 请求成功之后，会生成 CI 注册文件 "pyarmor-ci-xxxx.zip"
 
-3. 使用 CI 注册文件 "pyarmor-ci-xxxx.zip" 在 CI/CD 中注册 Pyarmor
+3. 使用 CI 注册文件 "pyarmor-ci-xxxx.zip" 在 CI/CD 中注册 Pyarmor::
 
     pyarmor reg pyarmor-ci-xxxx.zip
 
