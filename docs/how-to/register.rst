@@ -458,7 +458,7 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 .. _upgrading old license:
 
 升级老版本许可证
-================
+----------------
 
 不是所有的老版本的许可证都可以升级为新的许可证。
 
@@ -473,8 +473,7 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 老版本的许可证不支持升级到专家版和集团版。
 
-免费升级到基础版
------------------
+**免费升级到基础版**
 
 首先找到原来的许可证激活文件 ``pyarmor-regcode-xxxx.txt``
 
@@ -525,7 +524,10 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
    使用 Pyarmor 9.0 之前版本生成的设备注册文件在 Pyarmor 9.0+ 版本中无效
 
-   - 在联网设备上面安装升级 Pyarmor 到 9.0+
+   - 在联网设备上面安装升级 Pyarmor 到 9.0+::
+
+         $ pip install -U pyarmor
+
    - 使用集团版注册文件为设备重新生成注册文件，方法和第一次生成设备注册文件是一样的
 
      例如，为编号为 1 的离线设备重新生成设备注册文件::
