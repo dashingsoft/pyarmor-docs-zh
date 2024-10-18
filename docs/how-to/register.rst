@@ -415,6 +415,8 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
     $ pyarmor --home ~/.pyarmor1 gen project1/foo.py
     $ pyarmor --home ~/.pyarmor2 gen project2/foo.py
 
+.. _what need to do after upgrading pyarmor:
+
 升级 Pyarmor 之后的许可证兼容性
 ===============================
 
