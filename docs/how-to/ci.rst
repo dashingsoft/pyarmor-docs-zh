@@ -27,6 +27,7 @@
       $ pyarmor reg -C pyarmor-regfile-xxxx.zip
 
   申请一次即可，该命令执行成功之后会在当前目录创建 :term:`管线注册文件` ``pyarmor-ci-xxxx.zip``
+
 - 在管线中增加如下命令（请替换 ``9.X.Y`` 为相应的 Pyarmor 版本号）::
 
       pip install pyarmor==9.X.Y
@@ -41,7 +42,7 @@
 - 管线注册文件有效期为一年，可以用于在 CI/CD 中注册 Pyarmor
 - 管线注册文件在当前 Pyarmor 的版本有效，但是不一定在升级之后的 Pyarmor 中有效
 - 每一个许可证最多可以申请 100 个管线注册文件，超过申请次数之后就无法在申请
-- 请勿在 CI/CD 管线中申请 CI 注册文件，因为请求次数有一定限制
+- 请勿在 CI/CD 管线中申请管线注册文件，因为请求次数有一定限制
 
 .. important::
 
