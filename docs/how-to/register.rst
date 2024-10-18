@@ -500,16 +500,25 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 升级到 Pyarmor 9
 ----------------
 
-1. 基础版和专家版许可证
+1. 基础版和专家版许可证的升级步骤
 
-   在 Pyarmor 8 购买的基础版和专家版许可证如果没有在 CI/CD 中使用，可以免费升级到 Pyarmor 9
+   - 首先升级到 Pyarmor 9::
 
-   在一台新设备上面，首先安装 Pyarmor 9，然后使用 :term:`激活文件` 使用下面的方式生成新的 :term:`注册文件`::
+         $ pip install -U pyarmor
 
-       # 请替换 XXX 为原来的绑定的产品名称
-       $ pyarmor reg -p XXX pyarmor-regcode-xxxx.txt
+   - 然后使用 :term:`激活文件` 重新生成许可证的 :term:`注册文件`::
 
-2. 集团版许可证
+         # 请替换 XXX 为原来的绑定的产品名称
+         $ pyarmor reg -p XXX pyarmor-regcode-xxxx.txt
+
+   - 保存新生成的 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
+
+   - 使用新的注册文件在其他设备注册 Pyarmor::
+
+         $ pyarmor reg pyarmor-regfile-xxxx.zip
+         $ pyarmor -v
+
+2. 集团版许可证的升级步骤
 
    使用 Pyarmor 9.0 之前版本生成的设备注册文件在 Pyarmor 9.0+ 版本中无效
 
