@@ -1,17 +1,54 @@
 .. highlight:: console
 
-==================================
- 在 CI/CD Pipeline 中使用 Pyarmor
-==================================
+=============================
+ 在 CI/CD 管线中使用 Pyarmor
+=============================
 
-.. deprecated:: 9.0
+:ref:`直接使用方式` 基本不改变原来 CI/CD 的管线流程，适用于
 
-                请参考 :ref:`Using Pyarmor in CI Pipeline`
+- 试用版
+- :term:`Pyarmor 基础版`
+- :term:`Pyarmor 管线版`
 
-Pyarmor 也可以使用下面的方式在 CI/CD pipeline 加密脚本:
+:ref:`间接使用方式` 需要改变原来的 CI/CD 管线流程，任何许可证都可以使用
 
-1. 首先使用少量 Runner 加密脚本，然后保存加密脚本到另外一个分支
-2. 然后其他 Runner 都基于这个加密分支，按照原来的方式进行构建工作
+直接使用方式
+============
+
+试用版可以直接在 CI/CD 管线中使用，只需要增加一个步骤::
+
+  pip install pyarmor
+
+使用 :term:`Pyarmor 基础版` 和 :term:`Pyarmor 管线版` 许可证，不需要改变原来的 CI/CD 构建流程，基本的使用步骤如下:
+
+- 使用的前提是许可证已经完成 :ref:`initial registration` ，并得到许可证 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
+- 使用该文件在本地联网设备上申请 :term:`管线注册文件` ``pyarmor-ci-xxxx.zip``::
+
+    pyarmor reg -C pyarmor-regfile-xxxx.zip
+
+- 上面的命令执行成功之后会在当前目录创建 :term:`管线注册文件` ``pyarmor-ci-xxxx.zip``
+- 在管线中增加如下命令，请替换 ``9.X.Y`` 为申请管线注册文件时候的 Pyarmor 版本::
+
+  pip install pyarmor==9.X.Y
+  parmor reg pyarmor-ci-xxxx.zip
+
+注意事项
+
+- 每次管线运行都会向 Pyarmor 许可证发送验证请求，过多的请求或者超过正常使用的请求可能会被拒绝
+- 管线注册文件有效期为一年，可以用于在 CI/CD 中注册 Pyarmor
+- 管线注册文件在当前 Pyarmor 的版本有效，但是不一定在升级之后的 Pyarmor 中有效
+- 每一个许可证最多可以申请 100 个管线注册文件，超过申请次数之后就无法在申请
+
+.. important::
+
+   只允许在开发设备上安装和注册 Pyarmor，如果 Docker 镜像需要发送给客户，那么不允许在上面安装和注册 Pyarmor
+
+间接使用方式
+============
+
+因为加密后的脚本等价于原来的脚本外加运行辅助包，所以可以首先在本地设备对脚本进行加密，然后把加密后的脚本保存到一个单独的分支，CI/CD 管线流程直接从加密分支中获取数据，这种方式适用于任何许可证
+
+下面我们用一个示例来进行简单说明
 
 假设我们的测试项目位于 `https://github.com/dashingsoft/test-project` ，其目录结构如下::
 
@@ -26,7 +63,7 @@ Pyarmor 也可以使用下面的方式在 CI/CD pipeline 加密脚本:
             │   └── __init__.py
             └── __init__.py
 
-可以首先使用一个 Runner 来加密脚本，并保存到分支 `master-obf` ，下面是示例脚本:
+可以首先在本地加密脚本，并保存到分支 `master-obf` ，下面是示例脚本:
 
 .. code-block:: bash
 
@@ -54,6 +91,6 @@ Pyarmor 也可以使用下面的方式在 CI/CD pipeline 加密脚本:
     # 创建远程分支
     $ git push -u origin master-obf
 
-对于其他 Runner，因为不需要注册 Pyarmor，所以只需要使用分支 `master-obf` 就基本可以和以前的方式一样不受限制的运行
+对于 CI/CD 管线来说，只需要使用分支 `master-obf` 就基本可以和以前的方式一样不受限制的运行
 
 .. include:: ../_common_definitions.txt

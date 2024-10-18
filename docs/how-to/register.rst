@@ -14,33 +14,25 @@
 前提条件
 ========
 
-在注册许可证之前，需要满足下列条件
+在注册任何许可证之前，需要满足下列条件
 
 1. 一个许可证的 :term:`激活文件` ，名称一般为 :file:`pyarmor-regcode-xxxx.txt` ，参考 :doc:`../licenses` 购买合适的许可证
-2. 安装 Pyarmor 8.2 以上的版本的设备，
+2. 安装 Pyarmor 9.0 以上的版本的设备
 3. 当前设备需要能够访问互联网
 4. 确定许可证需要绑定的产品名称，如果是在非商业化产品中使用，产品名称使用 ``non-profits``
-5. 如果有防火墙，那么在 Windows 下面，防火墙要允许动态库 ``pytransform3.pyd`` 访问 `pyarmor.dashingsoft.com` 的端口 ``80`` ，在其他系统，防火墙要允许 ``pytransform3.so`` 访问 `pyarmor.dashingsoft.com` 的端口 ``80``，具体防火墙的规则设置请参阅防火墙的文档。
 
-使用基础版和专家版许可证
-========================
-
-基本使用步骤：
-
-1. 使用 :term:`激活文件` 进行初始登记，设定许可证绑定的产品名称
-2. 初始登记完成之后会生成相应的 :term:`注册文件` ，后续相关的注册都将使用这个文件
-3. 在其他设备使用 :term:`注册文件` 进行注册
+.. _initial registration:
 
 初始登记
---------
+========
 
-在第一次注册的时候，需要使用 :option:`-p` 指定许可证绑定的产品名称，如果在非商业化产品中的使用 Pyarmor，那么产品名称设定为 ``non-profits`` ，该许可证不能被应用于商用产品中。
+任何许可证都必须进行初始登记，指定许可证绑定的产品名称，登记完成之后 Pyarmor 许可证服务器会返回该许可证的 :term:`注册文件` ，其后的所有注册都使用该 :term:`注册文件` 完成
 
-假设许可证绑定的产品名称为 ``XXX`` ，那么使用下面的命令进行初始登记注册::
+初始登记一般只执行一次，在第一次注册的时候，使用 :option:`-p` 指定许可证绑定的产品名称，如果在非商业化产品中的使用 Pyarmor，那么产品名称设定为 ``non-profits``
 
-    $ pyarmor reg -p "XXX" pyarmor-regcode-xxxx.txt
+假设许可证绑定的产品名称为 ``EkeCloud`` ，那么使用下面的命令进行初始登记注册::
 
-Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入 :kbd:`yes` 并 :kbd:`Enter` 继续下面的注册步骤，其他任何输入都会终止注册过程。
+    $ pyarmor reg -p "EkeCloud" pyarmor-regcode-xxxx.txt
 
 登记成功之后会同时生成一个相应的 :term:`注册文件` ``pyarmor-regfile-xxxx.zip`` ，这个文件被用来在其他设备上进行注册。
 
@@ -63,8 +55,13 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
 
 如果六个月之内还没有进行修改，那么产品名称会被自动设定为 ``non-profits`` ，并且不能在被修改。
 
-在其他设备上面注册
-------------------
+使用基础版和专家版许可证
+========================
+
+基本使用步骤：
+
+1. 使用 :term:`激活文件` 进行 :ref:`initial registration` ，生成相应的 :term:`注册文件`
+2. 在其他设备使用 :term:`注册文件` 进行注册
 
 拷贝 :term:`注册文件` ``pyarmor-regfile-xxxx.zip`` 到其他需要注册的设备，然后运行下面的命令进行注册::
 
@@ -75,6 +72,42 @@ Pyarmor 会首先显示注册信息并请求确认，如果确认无误，输入
     $ pyarmor -v
 
 注册成功之后所有的加密操作自动应用当前许可证，每一次加密操作需要联网验证许可证。
+
+最多可以在 100 台设备上注册使用 Pyarmor
+
+请勿在 Docker 容器或者 CI/CD 中直接使用该文件，每运行一次就相当于使用了一台新设备
+
+.. seealso:: :doc:`ci`
+
+使用管线版许可证
+================
+
+.. versionadded:: 9.0
+
+基本使用步骤：
+
+1. 使用 :term:`激活文件` 进行 :ref:`initial registration` ，生成相应的 :term:`注册文件`
+2. 使用 :term:`注册文件` ``pyarmor-regfile-xxxx.zip`` 在本地联网设备使用下面的命令向服务器请求管线注册文件 ``pyarmor-ci-xxxx.zip``::
+
+     pyarmor reg -C pyarmor-regfile-xxxx.zip
+
+2. 请求成功之后，会生成管线注册文件 ``pyarmor-ci-xxxx.zip``
+
+3. 使用管线注册文件在 CI/CD 管线中注册 Pyarmor::
+
+     # 注意: 请替换 9.X.Y 为当前使用的 Pyarmor 的版本
+     pip install pyarmor==9.X.Y
+     pyarmor reg pyarmor-ci-xxxx.zip
+
+使用 CI 注册文件的注意事项
+
+- 请勿在 CI/CD 管线中申请 CI 注册文件，因为请求次数有一定限制
+- 请求 CI 注册文件的次数最多为 100 次，超过之后将无法申请新的 CI 注册文件
+- CI 注册文件的最长有效期为 1 年，过期之后需要重新申请
+- CI 注册文件可能在升级后的 Pyarmor 中失效，失效之后也需要重新申请
+
+..
+  在 Docker 或者 CI 管线 中注册 Pyarmor 基础版/专家版许可证的基本方法同上，但是在一天之内运行的 Pyarmor 的 Docker 数量有限制，不能超过 100 个。如果需要在一天之内运行超过 100 个的 Docker 容器，请使用集团版许可证。并且同时运行的 Docker 容器或者 Runner 的数量不能超过 3 个，如果超过这个数量，最好每隔半分钟之后启动一个 Docker 容器或者 Runner，同时运行太多的 `pyarmor reg` 命令会导致许可证服务器返回 HTTP 500 的错误并导致注册失败。
 
 .. _using group license:
 
@@ -341,48 +374,6 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
     $ pyarmor reg -g 1 pyarmor-device-regfile-xxxx.zip
 
-.. _using pyarmor in ci pipeline:
-
-在 CI/CD 管线中使用 Pyarmor
-===========================
-
-.. versionchanged:: 9.0
-
-   专家版许可证不可用于 CI/CD 集成构建管线。
-
-对于Pyarmor 试用版，直接使用 `pip install pyarmor` 在 CI/CD 管线中即可。
-
-从 Pyarmor 9.0 开始，专家版和集团版许可证不可以应用于 CI/CD 管线
-
-基础版和专用的 CI 许可证可以使用下面的方式应用于 CI/CD 管线
-
-首先要经过初始登记，得到 :term:`注册文件`
-
-1. 使用注册文件 pyarmor-regfile-xxxx.zip 在联网设备使用下面的命令向服务器发出请求::
-
-      pyarmor reg -C pyarmor-regfile-xxxx.zip
-
-   请勿在 CI/CD 管线中申请 CI 注册文件，因为请求次数有一定限制
-
-2. 请求成功之后，会生成 CI 注册文件 "pyarmor-ci-xxxx.zip"
-
-3. 使用 CI 注册文件 "pyarmor-ci-xxxx.zip" 在 CI/CD 中注册 Pyarmor::
-
-    pyarmor reg pyarmor-ci-xxxx.zip
-
-使用 CI 注册文件的注意事项
-
-- 请求 CI 注册文件的次数最多为 100 次，超过之后将无法申请新的 CI 注册文件
-- CI 注册文件的最长有效期为 1 年，过期之后需要重新申请
-- CI 注册文件可能在升级后的 Pyarmor 中失效，失效之后也需要重新申请
-
-.. important::
-
-   只允许在开发设备上安装和注册 Pyarmor，如果 Docker 镜像需要发送给客户，那么不允许在上面安装和注册 Pyarmor
-
-..
-  在 Docker 或者 CI 管线 中注册 Pyarmor 基础版/专家版许可证的基本方法同上，但是在一天之内运行的 Pyarmor 的 Docker 数量有限制，不能超过 100 个。如果需要在一天之内运行超过 100 个的 Docker 容器，请使用集团版许可证。并且同时运行的 Docker 容器或者 Runner 的数量不能超过 3 个，如果超过这个数量，最好每隔半分钟之后启动一个 Docker 容器或者 Runner，同时运行太多的 `pyarmor reg` 命令会导致许可证服务器返回 HTTP 500 的错误并导致注册失败。
-
 同一台设备使用多个许可证
 ========================
 
@@ -417,12 +408,12 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
   - 基础版许可证
 
-    - 如果没有在 CI/CD 管线中使用，可以直接升级到 Pyarmor 9，无需额外操作
-    - 如果在 CI/CD 管线中使用，需要为管线生成专门的注册文件，请参考上文中的 :ref:`using pyarmor in ci pipeline`
+    - 可以直接升级到 Pyarmor 9
+    - 如果在 CI/CD 管线中使用，还需要为管线生成专门的注册文件，请参考 :doc:`ci`
 
   - 专家版许可证
 
-    - 如果没有在 CI/CD 管线中使用，可以直接升级到 Pyarmor 9，无需额外操作
+    - 如果没有在 CI/CD 管线中使用，可以直接升级到 Pyarmor 9
     - 如果需要使用在 CI/CD 管线中，那么两种方案
 
       - 按照原来的协议继续使用任意 Pyarmor 8.x 的版本
@@ -510,5 +501,15 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
     $ pyarmor -v
 
 注册成功之后所有的加密操作自动应用当前许可证，每一次加密操作需要联网验证许可证。
+
+升级到 Pyarmor 9
+----------------
+
+在 Pyarmor 8 购买的基础版和专家版许可证如果没有在 CI/CD 中使用，可以免费升级到 Pyarmor 9
+
+在一台新设备上面，首先安装 Pyarmor 9，然后使用 :term:`激活文件` 使用下面的方式生成新的 :term:`注册文件`::
+
+    # 请替换 XXX 为原来的绑定的产品名称
+    $ pyarmor reg -p XXX pyarmor-regcode-xxxx.txt
 
 .. include:: ../_common_definitions.txt

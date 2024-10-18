@@ -128,6 +128,10 @@
 
       一种 :term:`Pyarmor 许可证` 类型
 
+  Pyarmor 管线版
+
+      一种 :term:`Pyarmor 许可证` 类型，主要用于在 CI/CD 管线中使用 :term:`Pyarmor 专家版` 的功能
+
   Python
 
       一种编程语言，官网地址 Python_
