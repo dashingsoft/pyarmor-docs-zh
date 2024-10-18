@@ -16,10 +16,10 @@
 
 在注册任何许可证之前，需要满足下列条件
 
-1. 一个许可证的 :term:`激活文件` ，名称一般为 :file:`pyarmor-regcode-xxxx.txt` ，参考 :doc:`../licenses` 购买合适的许可证
+1. 一个许可证的 :term:`激活文件` ，参考 :doc:`../licenses` 购买合适的许可证
 2. 安装 Pyarmor 9.0 以上的版本的设备
 3. 当前设备需要能够访问互联网
-4. 确定许可证需要绑定的产品名称，如果是在非商业化产品中使用，产品名称使用 ``non-profits``
+4. 确定许可证需要绑定的产品名称
 
 .. _initial registration:
 
@@ -53,7 +53,7 @@
 
     $ pyarmor reg -p "XXX" pyarmor-regcode-xxxx.txt
 
-如果六个月之内还没有进行修改，那么产品名称会被自动设定为 ``non-profits`` ，并且不能在被修改。
+如果六个月之内还没有进行修改，那么产品名称会被自动设定为 ``non-profits`` ，并且不能被修改。
 
 使用基础版和专家版许可证
 ========================
@@ -87,7 +87,7 @@
 基本使用步骤：
 
 1. 使用 :term:`激活文件` 进行 :ref:`initial registration` ，生成相应的 :term:`注册文件`
-2. 使用 :term:`注册文件` ``pyarmor-regfile-xxxx.zip`` 在本地联网设备使用下面的命令向服务器请求管线注册文件 ``pyarmor-ci-xxxx.zip``::
+2. 使用 :term:`注册文件` ``pyarmor-regfile-xxxx.zip`` 在本地设备使用下面的命令向服务器请求管线注册文件::
 
      pyarmor reg -C pyarmor-regfile-xxxx.zip
 

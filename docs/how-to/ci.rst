@@ -17,31 +17,34 @@
 
 试用版可以直接在 CI/CD 管线中使用，只需要增加一个步骤::
 
-  pip install pyarmor
+    $ pip install pyarmor
 
-使用 :term:`Pyarmor 基础版` 和 :term:`Pyarmor 管线版` 许可证，不需要改变原来的 CI/CD 构建流程，基本的使用步骤如下:
+使用 :term:`Pyarmor 基础版` 和 :term:`Pyarmor 管线版` 许可证的前提是许可证已经完成 :ref:`initial registration` ，并得到许可证 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
 
-- 使用的前提是许可证已经完成 :ref:`initial registration` ，并得到许可证 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
-- 使用该文件在本地联网设备上申请 :term:`管线注册文件` ``pyarmor-ci-xxxx.zip``::
+基本的使用步骤如下:
 
-    pyarmor reg -C pyarmor-regfile-xxxx.zip
+- 在本地联网设备上申请 :term:`管线注册文件` ``pyarmor-ci-xxxx.zip``::
 
-- 上面的命令执行成功之后会在当前目录创建 :term:`管线注册文件` ``pyarmor-ci-xxxx.zip``
-- 在管线中增加如下命令，请替换 ``9.X.Y`` 为申请管线注册文件时候的 Pyarmor 版本::
+    $ pyarmor reg -C pyarmor-regfile-xxxx.zip
 
-  pip install pyarmor==9.X.Y
-  parmor reg pyarmor-ci-xxxx.zip
+  申请一次即可，该命令执行成功之后会在当前目录创建 :term:`管线注册文件` ``pyarmor-ci-xxxx.zip``
+- 在管线中增加如下命令，请替换 ``9.X.Y`` 为相应的 Pyarmor 版本号::
+
+    $ pip install pyarmor==9.X.Y
+    $ parmor reg pyarmor-ci-xxxx.zip
 
 注意事项
 
-- 每次管线运行都会向 Pyarmor 许可证发送验证请求，过多的请求或者超过正常使用的请求可能会被拒绝
 - 管线注册文件有效期为一年，可以用于在 CI/CD 中注册 Pyarmor
 - 管线注册文件在当前 Pyarmor 的版本有效，但是不一定在升级之后的 Pyarmor 中有效
 - 每一个许可证最多可以申请 100 个管线注册文件，超过申请次数之后就无法在申请
+- 请勿在 CI/CD 管线中申请 CI 注册文件，因为请求次数有一定限制
 
 .. important::
 
-   只允许在开发设备上安装和注册 Pyarmor，如果 Docker 镜像需要发送给客户，那么不允许在上面安装和注册 Pyarmor
+   每次管线运行都会向 Pyarmor 许可证发送验证请求，过多的请求或者超过正常使用的请求可能会被拒绝
+
+   只允许在开发设备上安装和注册 Pyarmor，不允许在需要发送给客户的 Docker 镜像中安装和注册 Pyarmor
 
 间接使用方式
 ============
