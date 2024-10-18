@@ -360,7 +360,9 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 1. 使用注册文件 pyarmor-regfile-xxxx.zip 在联网设备使用下面的命令向服务器发出请求::
 
-    pyarmor reg -C pyarmor-regfile-xxxx.zip
+      pyarmor reg -C pyarmor-regfile-xxxx.zip
+
+   请勿在 CI/CD 管线中申请 CI 注册文件，因为请求次数有一定限制
 
 2. 请求成功之后，会生成 CI 注册文件 "pyarmor-ci-xxxx.zip"
 
@@ -368,12 +370,11 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
     pyarmor reg pyarmor-ci-xxxx.zip
 
-4. 使用 CI 注册文件的注意事项
+使用 CI 注册文件的注意事项
 
-   - 请勿在 CI/CD 管线中申请 CI 注册文件
-   - 请求 CI 注册文件的次数最多为 100 次，超过之后将无法申请新的 CI 注册文件
-   - CI 注册文件的最长有效期为 1 年，过期之后需要重新申请
-   - CI 注册文件可能在升级后的 Pyarmor 中失效，失效之后也需要重新申请
+- 请求 CI 注册文件的次数最多为 100 次，超过之后将无法申请新的 CI 注册文件
+- CI 注册文件的最长有效期为 1 年，过期之后需要重新申请
+- CI 注册文件可能在升级后的 Pyarmor 中失效，失效之后也需要重新申请
 
 .. important::
 
