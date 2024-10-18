@@ -15,23 +15,26 @@
 直接使用方式
 ============
 
-试用版可以直接在 CI/CD 管线中使用，只需要增加一个步骤::
+**试用版** 可以直接在 CI/CD 管线中使用，只需要增加一个步骤::
 
-    $ pip install pyarmor
+      pip install pyarmor
 
-使用 :term:`Pyarmor 基础版` 和 :term:`Pyarmor 管线版` 许可证的前提是许可证已经完成 :ref:`initial registration` ，并得到许可证 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
+:term:`Pyarmor 基础版` 和 :term:`Pyarmor 管线版` 许可证
 
-基本的使用步骤如下:
+- 首先完成 :ref:`initial registration` ，得到许可证 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
+- 其次在本地联网设备上申请 :term:`管线注册文件`::
 
-- 在本地联网设备上申请 :term:`管线注册文件` ``pyarmor-ci-xxxx.zip``::
-
-    $ pyarmor reg -C pyarmor-regfile-xxxx.zip
+      $ pyarmor reg -C pyarmor-regfile-xxxx.zip
 
   申请一次即可，该命令执行成功之后会在当前目录创建 :term:`管线注册文件` ``pyarmor-ci-xxxx.zip``
-- 在管线中增加如下命令，请替换 ``9.X.Y`` 为相应的 Pyarmor 版本号::
+- 在管线中增加如下命令（请替换 ``9.X.Y`` 为相应的 Pyarmor 版本号）::
 
-    $ pip install pyarmor==9.X.Y
-    $ parmor reg pyarmor-ci-xxxx.zip
+      pip install pyarmor==9.X.Y
+      parmor reg pyarmor-ci-xxxx.zip
+
+- 在管线中查看注册信息::
+
+      pyarmor -v
 
 注意事项
 

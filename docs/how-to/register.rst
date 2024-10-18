@@ -421,7 +421,9 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 但是下面列出的版本是例外
 
-- **Pyarmor 8.0** 老版本许可证无法在 Pyarmor 8.0 之后的版本中直接使用
+- **Pyarmor 8.0**
+
+  老版本许可证无法在 Pyarmor 8.0 之后的版本中直接使用
 
   - 部分老版本许可证可以免费升级到基础版许可证，具体升级步骤请参考 :ref:`upgrading old license`
   - 老版本许可证无法升级为专家版或者集团版许可证
@@ -432,12 +434,12 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
   - 基础版许可证
 
-    - 可以直接升级到 Pyarmor 9
+    - 可以直接 :ref:`upgrade to pyarmor 9`
     - 如果在 CI/CD 管线中使用，还需要为管线生成专门的注册文件，请参考 :doc:`ci`
 
   - 专家版许可证
 
-    - 如果没有在 CI/CD 管线中使用，可以直接升级到 Pyarmor 9
+    - 如果没有在 CI/CD 管线中使用，可以直接 :ref:`upgrade to pyarmor 9`
     - 如果需要使用在 CI/CD 管线中，那么两种方案
 
       - 按照原来的协议继续使用任意 Pyarmor 8.x 的版本
@@ -448,16 +450,7 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
         - 专家版许可证购买时间没有超过一年的，免费升级到一年期满
         - 需要升级请联系 pyarmor@163.com
 
-  - 集团版许可证需要重新生成设备注册文件
-
-    使用 Pyarmor 9.0 之前版本生成的设备注册文件在 Pyarmor 9.0+ 版本中无效
-
-    - 在联网设备上面安装升级 Pyarmor 到 9.0+
-    - 使用集团版注册文件为设备重新生成注册文件，方法和第一次生成设备注册文件是一样的。例如，为编号为 1 的离线设备重新生成设备注册文件 ``pyarmor-device-regfile-6000.1.zip``::
-
-      pyarmor reg -g 1 /path/to/pyarmor-regfile-6000.zip
-
-    - 使用新生成的设备注册文件替换原来的设备注册文件
+  - 集团版许可证需要重新生成设备注册文件，参考 :ref:`upgrade to pyarmor 9`
 
 .. _upgrading old license:
 
@@ -502,14 +495,31 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 注册成功之后所有的加密操作自动应用当前许可证，每一次加密操作需要联网验证许可证。
 
+.. _upgrade to pyarmor 9:
+
 升级到 Pyarmor 9
 ----------------
 
-在 Pyarmor 8 购买的基础版和专家版许可证如果没有在 CI/CD 中使用，可以免费升级到 Pyarmor 9
+1. 基础版和专家版许可证
 
-在一台新设备上面，首先安装 Pyarmor 9，然后使用 :term:`激活文件` 使用下面的方式生成新的 :term:`注册文件`::
+   在 Pyarmor 8 购买的基础版和专家版许可证如果没有在 CI/CD 中使用，可以免费升级到 Pyarmor 9
 
-    # 请替换 XXX 为原来的绑定的产品名称
-    $ pyarmor reg -p XXX pyarmor-regcode-xxxx.txt
+   在一台新设备上面，首先安装 Pyarmor 9，然后使用 :term:`激活文件` 使用下面的方式生成新的 :term:`注册文件`::
+
+       # 请替换 XXX 为原来的绑定的产品名称
+       $ pyarmor reg -p XXX pyarmor-regcode-xxxx.txt
+
+2. 集团版许可证
+
+   使用 Pyarmor 9.0 之前版本生成的设备注册文件在 Pyarmor 9.0+ 版本中无效
+
+   - 在联网设备上面安装升级 Pyarmor 到 9.0+
+   - 使用集团版注册文件为设备重新生成注册文件，方法和第一次生成设备注册文件是一样的
+
+     例如，为编号为 1 的离线设备重新生成设备注册文件::
+
+         $ pyarmor reg -g 1 /path/to/pyarmor-regfile-6000.zip
+
+    - 使用新生成的设备注册文件替换原来的设备注册文件
 
 .. include:: ../_common_definitions.txt
