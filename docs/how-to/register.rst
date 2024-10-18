@@ -109,6 +109,30 @@
 ..
   在 Docker 或者 CI 管线 中注册 Pyarmor 基础版/专家版许可证的基本方法同上，但是在一天之内运行的 Pyarmor 的 Docker 数量有限制，不能超过 100 个。如果需要在一天之内运行超过 100 个的 Docker 容器，请使用集团版许可证。并且同时运行的 Docker 容器或者 Runner 的数量不能超过 3 个，如果超过这个数量，最好每隔半分钟之后启动一个 Docker 容器或者 Runner，同时运行太多的 `pyarmor reg` 命令会导致许可证服务器返回 HTTP 500 的错误并导致注册失败。
 
+.. _check device for group license:
+
+适用集团版许可证的设备
+======================
+
+集团版许可证只能用于设备硬件信息保持不变的系统，使用下面的方法检查一个设备是否适用集团版许可证
+
+* 在设备上安装 Pyarmor 8.4.0+ 的试用版本
+* 运行下面的命令得到机器标识符::
+
+    $ pyarmor reg -g 1
+    ...
+    INFO     current machine id is "mc92c9f22c732b482fb485aad31d789f1"
+    INFO     device file has been generated successfully
+
+* 重新启动设备，重复上面的命令查看机器标示符
+* 如果每一次重启之后机器标识符都保持不变，那么该设备可以使用集团版许可证，否则无法使用基本版许可证
+
+对于 Docker 容器来说，只需要按照上面的方法检查 Docker Host。如果 Docker Host 可以使用集团版许可证，那么就可以在其上运行不受限制的 Docker 容器，具体使用方法请参考 :doc:`how-to/register` 中的 ``运行不受限制的 Docker 容器``
+
+**如果 Docker Host 的机器标识符每次重启都会发生变化，那么集团版许可证无法运行任何 Docker 容器**
+
+大多数的物理设备，云服务器以及使用相同磁盘映像的虚拟机（qemu，virtualbox，vmware）可以使用集团版许可证，集团版许可证不可用于 CI/CD 管线中
+
 .. _using group license:
 
 使用集团版许可证
@@ -434,30 +458,6 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
       pyarmor reg -g 1 /path/to/pyarmor-regfile-6000.zip
 
     - 使用新生成的设备注册文件替换原来的设备注册文件
-
-.. _check device for group license:
-
-适用集团版许可证的设备
-======================
-
-集团版许可证只能用于设备硬件信息保持不变的系统，使用下面的方法检查一个设备是否适用集团版许可证
-
-* 在设备上安装 Pyarmor 8.4.0+ 的试用版本
-* 运行下面的命令得到机器标识符::
-
-    $ pyarmor reg -g 1
-    ...
-    INFO     current machine id is "mc92c9f22c732b482fb485aad31d789f1"
-    INFO     device file has been generated successfully
-
-* 重新启动设备，重复上面的命令查看机器标示符
-* 如果每一次重启之后机器标识符都保持不变，那么该设备可以使用集团版许可证，否则无法使用基本版许可证
-
-对于 Docker 容器来说，只需要按照上面的方法检查 Docker Host。如果 Docker Host 可以使用集团版许可证，那么就可以在其上运行不受限制的 Docker 容器，具体使用方法请参考 :doc:`how-to/register` 中的 ``运行不受限制的 Docker 容器``
-
-**如果 Docker Host 的机器标识符每次重启都会发生变化，那么集团版许可证无法运行任何 Docker 容器**
-
-大多数的物理设备，云服务器以及使用相同磁盘映像的虚拟机（qemu，virtualbox，vmware）可以使用集团版许可证，集团版许可证不可用于 CI/CD 管线中
 
 .. _upgrading old license:
 
