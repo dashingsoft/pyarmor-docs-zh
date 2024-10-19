@@ -520,21 +520,43 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 1. 基础版和专家版许可证的升级步骤
 
+   **如果当前设备已经注册 Pyarmor**
+
    - 首先升级到 Pyarmor 9::
 
          $ pip install -U pyarmor
 
-   - 然后使用 :term:`激活文件` 重新生成许可证的 :term:`注册文件`::
+   - 升级之后在第一次加密的时候会提示::
+
+         $ pyarmor gen foo.py
+
+         ...
+         Pyarmor 9 has big change on CI/CD pipeline
+         If not using Pyarmor License in CI/CD pipeline
+         Press "c" to continue
+         Otherwise press "h" to check Pyarmor 9.0 Upgrade Notes
+
+         Continue (c), Help (h), Quit (q):
+
+   - 直接按下 :kbd:`c` 并回车即可，第二次加密的时候就不会再提示了
+
+   **如果当前设备还没有注册 Pyarmor**
+
+   - 在 Pyarmor 9 使用 :term:`激活文件` 重新生成许可证的 :term:`注册文件`::
+
+         $ pip install -U pyarmor
 
          # 请替换 XXX 为原来的绑定的产品名称
          $ pyarmor reg -p XXX pyarmor-regcode-xxxx.txt
 
    - 保存新生成的 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
 
-   - 使用新的注册文件在其他设备注册 Pyarmor::
+   - 使用新的注册文件在其他新的设备注册 Pyarmor::
 
          $ pyarmor reg pyarmor-regfile-xxxx.zip
          $ pyarmor -v
+
+   如果 :term:`激活文件` 因为使用次数过多而不可用，请首先安装 Pyarmor 8，注册成功之后在升级到 Pyarmor 9
 
 2. 集团版许可证的升级步骤
 
@@ -550,6 +572,8 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
          $ pyarmor reg -g 1 /path/to/pyarmor-regfile-6000.zip
 
-    - 使用新生成的设备注册文件替换原来的设备注册文件
+    - 使用新生成的设备注册文件在离线设备注册 Pyarmor::
+
+         $ pyarmor reg pyarmor-device-regfile-6000.1.zip
 
 .. include:: ../_common_definitions.txt
