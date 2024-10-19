@@ -107,6 +107,12 @@
 - 管线注册文件可能在升级后的 Pyarmor 中失效，失效之后也需要重新申请
 - 请求管线注册文件的次数最多为 100 次，超过之后将无法申请新的管线注册文件
 
+.. important::
+
+   管线许可证只能用于管线中，不能在本地设备中使用
+
+.. seealso:: :doc:`ci`
+
 ..
   在 Docker 或者 CI 管线 中注册 Pyarmor 基础版/专家版许可证的基本方法同上，但是在一天之内运行的 Pyarmor 的 Docker 数量有限制，不能超过 100 个。如果需要在一天之内运行超过 100 个的 Docker 容器，请使用集团版许可证。并且同时运行的 Docker 容器或者 Runner 的数量不能超过 3 个，如果超过这个数量，最好每隔半分钟之后启动一个 Docker 容器或者 Runner，同时运行太多的 `pyarmor reg` 命令会导致许可证服务器返回 HTTP 500 的错误并导致注册失败。
 
@@ -415,7 +421,7 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
     $ pyarmor --home ~/.pyarmor1 gen project1/foo.py
     $ pyarmor --home ~/.pyarmor2 gen project2/foo.py
 
-.. _what need to do after upgrading pyarmor:
+.. _pyarmor:
 
 升级 Pyarmor 之后的许可证兼容性
 ===============================
