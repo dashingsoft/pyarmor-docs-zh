@@ -28,12 +28,17 @@
 
   申请一次即可，该命令执行成功之后会在当前目录创建 :term:`管线注册文件` ``pyarmor-ci-xxxx.zip``
 
-- 在管线中增加如下命令（请替换 ``9.X.Y`` 为相应的 Pyarmor 版本号）::
+  在本地设备上面查看管线许可证的相关信息::
 
+      $ pyarmor reg pyarmor-ci-xxxx.zip
+
+- 在管线中增加如下命令::
+
+      # 请替换 9.X.Y 为当前 Pyarmor 的版本
       pip install pyarmor==9.X.Y
       parmor reg pyarmor-ci-xxxx.zip
 
-- 在管线中查看注册信息::
+  在管线中查看注册信息::
 
       pyarmor -v
 

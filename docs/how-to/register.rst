@@ -79,6 +79,8 @@
 
 .. seealso:: :doc:`ci`
 
+.. _using ci license:
+
 使用管线版许可证
 ================
 
@@ -89,17 +91,25 @@
 1. 使用 :term:`激活文件` 进行 :ref:`initial registration` ，生成相应的 :term:`注册文件`
 2. 使用 :term:`注册文件` ``pyarmor-regfile-xxxx.zip`` 在本地设备使用下面的命令向服务器请求管线注册文件::
 
-     pyarmor reg -C pyarmor-regfile-xxxx.zip
+       $ pyarmor reg -C pyarmor-regfile-xxxx.zip
+
+   请求成功之后，会生成管线注册文件 ``pyarmor-ci-xxxx.zip``
+
+   在本地设备上面查看管线许可证的相关信息::
+
+       $ pyarmor reg pyarmor-ci-xxxx.zip
 
    请勿在 CI/CD 管线中申请管线注册文件，因为请求次数有一定限制
 
-2. 请求成功之后，会生成管线注册文件 ``pyarmor-ci-xxxx.zip``
+2. 使用管线注册文件在 CI/CD 管线中注册 Pyarmor::
 
-3. 使用管线注册文件在 CI/CD 管线中注册 Pyarmor::
+       # 请替换 "9.X.Y" 为当前使用的 Pyarmor 的版本
+       pip install pyarmor==9.X.Y
+       pyarmor reg pyarmor-ci-xxxx.zip
 
-     # 注意: 请替换 9.X.Y 为当前使用的 Pyarmor 的版本
-     pip install pyarmor==9.X.Y
-     pyarmor reg pyarmor-ci-xxxx.zip
+   在管线中查看注册信息::
+
+       pyarmor -v
 
 使用管线注册文件的注意事项
 
