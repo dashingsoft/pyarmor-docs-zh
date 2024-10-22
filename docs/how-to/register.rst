@@ -99,7 +99,7 @@
 
    在本地设备上面查看管线许可证的相关信息::
 
-       $ pyarmor reg pyarmor-ci-xxxx.zip
+       $ pyarmor --home temp reg pyarmor-ci-xxxx.zip
 
    请勿在 CI/CD 管线中申请管线注册文件，因为请求次数有一定限制
 
