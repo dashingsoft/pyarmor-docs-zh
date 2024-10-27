@@ -95,12 +95,7 @@ Pyarmor 的 Bug 一般分为下列类型：
     $ pyarmor -d gen ...
     $ pyarmor -d reg ...
 
-使用调试选项之后，会在当前目录生成一个文件 :file:`pyarmor.report.bug` 。例如::
-
-    [Bug] `FileNotFoundError: [Errno 2] No such file or directory: 'aa.zip'`
-
-    ### Full command options and console output
-    pyarmor -d reg aa.zip
+使用调试选项之后，会在当前目录生成一个文件 :file:`pyarmor.debug.bug` 。例如::
 
     2024-05-30 21:50:52,682 Python 3.7.10
     2024-05-30 21:50:52,684 Pyarmor 8.5.9 (pro), 005068, btarmor
@@ -110,15 +105,11 @@ Pyarmor 的 Bug 一般分为下列类型：
     2024-05-30 21:50:52,696 register "aa.zip"
     2024-05-30 21:50:52,698 unknown error, please check pyarmor.error.log
     2024-05-30 21:50:52,704 [Errno 2] No such file or directory: 'aa.zip'
+    2024-05-30 21:50:52,892 command line
 
+    pyarmor -d reg aa.zip
 
-    ### Traceback
-    Traceback (most recent call last):
-        ...
-        self.fp = io.open(file, filemode)
-    FileNotFoundError: [Errno 2] No such file or directory: 'aa.zip'
-
-请把第一行的内容 `[Bug] ...` 作为标题，剩下的作为 Bug 的内容提交到 `问题报告`_ ，并根据实际情况对 Bug 的内容进行必要补充和说明
+请把这个文件的内容作为 Bug 报告的内容提交到 `问题报告`_ ，并根据实际情况对 Bug 的内容进行必要补充和说明
 
 打包的相关问题
 --------------

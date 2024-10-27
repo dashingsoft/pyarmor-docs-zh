@@ -25,7 +25,7 @@ pyarmor
 -h, --help            显示所有可用的子命令并退出
 -v, --version         显示版本信息并退出
 -q, --silent          在控制台不显示日志 :option:`... <-q>`
--d, --debug           打印更多的信息用于发现命令执行过程中问题 :option:`... <-d>`
+-d, --debug           生成调试日志文件 :file:`pyarmor.debug.log` :option:`... <-d>`
 --home PATH           设置 :term:`根目录` :option:`... <--home>`
 
 这些选项可以在命令 :program:`pyarmor` 之后和下列子命令之前使用:
@@ -51,11 +51,12 @@ pyarmor
 
 .. option:: -d, --debug
 
-            在控制台打印更多的信息用于发现命令执行过程中问题
+            生成调试日志文件 :file:`pyarmor.debug.log` ，显示更多的信息用于发现命令执行过程中问题
 
-加密脚本出现问题，或者想更多的了解加密过程，可以使用该选项打开调试模式。例如::
+加密脚本出现问题，或者想更多的了解加密过程，可以使用该选项打开调试模式，生成调试文件。例如::
 
     pyarmor -d gen foo.py
+    cat pyarmor.debug.log
 
 .. option:: --home PATH[,GLOBAL[,LOCAL[,REG]]]
 
