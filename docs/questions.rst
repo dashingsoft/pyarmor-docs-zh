@@ -90,24 +90,18 @@ Pyarmor 的 Bug 一般分为下列类型：
 
 如果有错误信息提示，请首先查看 :doc:`常见错误信息 <reference/errors>` 里面的错误信息和解决方案，请确认造成问题的原因不是使用方法的问题
 
-报告问题请使用调试选项 :option:`pyarmor -d` 运行加密命令或者注册命令，例如::
+报告问题请参考当前目录下面的文件 :file:`pyarmor.bug.log` ，这个文件在 Pyarmor 出错之后自动生成。例如::
 
-    $ pyarmor -d gen ...
-    $ pyarmor -d reg ...
+    [BUG]: no found input "fooxxx.py"
 
-使用调试选项之后，会在当前目录生成一个文件 :file:`pyarmor.debug.bug` 。例如::
+    ## Command Line
+    pyarmor gen fooxxx.py
 
-    2024-05-30 21:50:52,682 Python 3.7.10
-    2024-05-30 21:50:52,684 Pyarmor 8.5.9 (pro), 005068, btarmor
-    2024-05-30 21:50:52,696 Platform darwin.x86_64
-    2024-05-30 21:50:52,696 native platform darwin.x86_64
-    2024-05-30 21:50:52,696 home path: /Users/jondy/.pyarmor
-    2024-05-30 21:50:52,696 register "aa.zip"
-    2024-05-30 21:50:52,698 unknown error, please check pyarmor.error.log
-    2024-05-30 21:50:52,704 [Errno 2] No such file or directory: 'aa.zip'
-    2024-05-30 21:50:52,892 command line
-
-    pyarmor -d reg aa.zip
+    ## Environments
+    Home /Users/jondy/.pyarmor
+    Platform darwin.x86_64 (darwin.x86_64)
+    Python 3.12.0
+    Pyarmor 9.0.4 (group), 006000, btarmor
 
 请把这个文件的内容作为 Bug 报告的内容提交到 `问题报告`_ ，并根据实际情况对 Bug 的内容进行必要补充和说明
 
