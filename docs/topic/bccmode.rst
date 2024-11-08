@@ -31,15 +31,15 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 查看被 BCC 模式加密的函数
 =========================
 
-启用跟踪模式可以在跟踪日志文件 ``.pyarmor/pyarmor.trace.log`` 中记录那些函数被转换成为了 :term:`C` 函数。例如::
+启用跟踪模式可以在跟踪日志文件 ``pyarmor.trace.log`` 中记录那些函数被转换成为了 :term:`C` 函数。例如::
 
     $ pyarmor cfg enable_trace=1
     $ pyarmor gen --enable-bcc foo.py
 
 查看跟踪日志中使用 ``trace.bcc`` 记录的内容::
 
-    $ ls .pyarmor/pyarmor.trace.log
-    $ grep trace.bcc .pyarmor/pyarmor.trace.log
+    $ ls pyarmor.trace.log
+    $ grep trace.bcc pyarmor.trace.log
 
     trace.bcc            foo:5:hello
     trace.bcc            foo:9:sum2
@@ -121,7 +121,7 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 
     $ pyarmor cfg enable_trace 1
     $ pyarmor gen --enable-bcc foo.py
-    $ grep trace.bcc .pyarmor/pyarmor.trace.log
+    $ grep trace.bcc pyarmor.trace.log
 
 另外一个例子，忽略 ``joker/card.py`` 但是使用 BCC 模式加密包 ``joker`` 的其他模块::
 

@@ -43,10 +43,10 @@ Pyarmor 使用 :ref:`pyarmor gen` 加密不同的脚本，它提供了丰富的�
 
     $ pyarmor cfg enable_trace=1
 
-启用之后，每一次执行命令 :ref:`pyarmor gen` 都会生成一个跟踪日志文件 :file:`.pyarmor/pyarmor.trace.log` 记录相关的保护信息。例如::
+启用之后，每一次执行命令 :ref:`pyarmor gen` 都会生成一个跟踪日志文件 :file:`pyarmor.trace.log` 记录相关的保护信息。例如::
 
     $ pyarmor gen foo.py
-    $ cat .pyarmor/pyarmor.trace.log
+    $ cat pyarmor.trace.log
 
     trace.co             foo:1:<module>
     trace.co             foo:5:hello
@@ -114,7 +114,7 @@ Pyarmor 使用 :ref:`pyarmor gen` 加密不同的脚本，它提供了丰富的�
 
     $ pyarmor cfg enable_trace=1
     $ pyarmor gen --mix-str --assert-call fib.py
-    $ cat .pyarmor/pyarmor.trace.log
+    $ cat pyarmor.trace.log
 
     trace.assert.call    fib:10:'fib'
     trace.mix.str        fib:1:'abcxyz'

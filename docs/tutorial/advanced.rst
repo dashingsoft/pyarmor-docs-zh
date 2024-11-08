@@ -144,8 +144,8 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 
 然后查看跟踪日志，日志中会显示那些转换的函数所在的脚本和行号::
 
-    $ ls .pyarmor/pyarmor.trace.log
-    $ grep trace.bcc .pyarmor/pyarmor.trace.log
+    $ ls pyarmor.trace.log
+    $ grep trace.bcc pyarmor.trace.log
 
     trace.bcc            foo:5:hello
     trace.bcc            foo:9:sum2

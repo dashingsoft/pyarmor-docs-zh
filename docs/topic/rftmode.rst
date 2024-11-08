@@ -132,11 +132,11 @@ Pyarmor 使用内置的自动规则和人工配置的规则来分析脚本，并
 查看重命名的名称
 ================
 
-如果需要跟踪那些名称被重命名，可以同时启用日志跟踪和RFT 跟踪选项，这时候会生成跟踪日志 ``.pyarmor/pyarmor.trace.log`` ，里面有所有的重命名日志::
+如果需要跟踪那些名称被重命名，可以同时启用日志跟踪和RFT 跟踪选项，这时候会生成跟踪日志 ``pyarmor.trace.log`` ，里面有所有的重命名日志::
 
     $ pyarmor cfg enable_trace=1 trace_rft=1
     $ pyarmor gen --enable-rft foo.py
-    $ grep trace.rft .pyarmor/pyarmor.trace.log
+    $ grep trace.rft pyarmor.trace.log
 
     trace.rft            foo:1 (import sys as pyarmor__1)
     trace.rft            foo:12 (self.wScan->self.pyarmor__4)
@@ -155,7 +155,7 @@ Pyarmor 使用内置的自动规则和人工配置的规则来分析脚本，并
 
 如果错误显示的名称是像 ``pyarmor__22`` 这样的格式，那么首先通过跟踪日志反向查找出原来的名称::
 
-    $ grep pyarmor__22 .pyarmor/pyarmor.trace.log
+    $ grep pyarmor__22 pyarmor.trace.log
 
     trace.rft            foo:65 (self.height->self.pyarmor__22)
     trace.rft            foo:81 (self.height->self.pyarmor__22)
@@ -258,7 +258,7 @@ Pyarmor 使用内置的自动规则和人工配置的规则来分析脚本，并
 然后检查结果::
 
     $ pyarmor gen --enable-rft foo.py
-    $ grep trace.rft .pyarmor/pyarmor.trace.log
+    $ grep trace.rft pyarmor.trace.log
 
     trace.rft            foo:8 (self.task.x->self.task.pyarmor__2)
 
@@ -267,14 +267,14 @@ Pyarmor 使用内置的自动规则和人工配置的规则来分析脚本，并
 让我们修改一下重命名规则，然后在看看结果::
 
     $ pyarmor cfg rft_rulers "self.task.x self.?.?"
-    $ grep trace.rft .pyarmor/pyarmor.trace.log
+    $ grep trace.rft pyarmor.trace.log
 
     trace.rft            foo:8 (self.task.x->self.pyarmor__1.pyarmor__2)
 
 接下来增加一条新规则重命名 ``self.task.y`` ，注意使用 ``^`` 来增加规则::
 
     $ pyarmor cfg rft_rulers ^"self.task.y self.?.?"
-    $ grep trace.rft .pyarmor/pyarmor.trace.log
+    $ grep trace.rft pyarmor.trace.log
 
     trace.rft            foo:8 (self.task.x->self.pyarmor__1.pyarmor__2)
     trace.rft            foo:9 (self.task.y->self.pyarmor__1.pyarmor__3)
@@ -282,7 +282,7 @@ Pyarmor 使用内置的自动规则和人工配置的规则来分析脚本，并
 这两条规则可以合并成为一条，这里使用 ``=`` 进行配置，会自动删除原来的所有规则::
 
     $ pyarmor cfg rft_rulers = "self.task.* self.?.?"
-    $ grep trace.rft .pyarmor/pyarmor.trace.log
+    $ grep trace.rft pyarmor.trace.log
 
     trace.rft            foo:8 (self.task.x->self.pyarmor__1.pyarmor__2)
     trace.rft            foo:9 (self.task.y->self.pyarmor__1.pyarmor__3)
@@ -369,7 +369,7 @@ Pyarmor 使用内置的自动规则和人工配置的规则来分析脚本，并
 
     pyarmor cfg enable_trace=1 trace_rft=1
 
-  查看 ``.pyarmor/pyarmor.trace.log``::
+  查看 ``pyarmor.trace.log``::
 
     trace.rft            t1090:17 (exclude attrs "wintypes.DWORD")
     trace.rft            t1090:32 (! self.dwFlags)
