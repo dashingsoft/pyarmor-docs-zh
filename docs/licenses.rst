@@ -124,6 +124,8 @@ Pyarmor 发布在 `PyPI`_ ，可以直接使用下面的命令进行安装试用
 
    :term:`Pyarmor 专家版` 许可证可以少量的使用于 CI/CD 管线中，每月不超过 100 次
 
+   :term:`Pyarmor 管线版` 许可证在 CI/CD 管线中有请求速率的限制
+
 完整使用条款请参阅 `Pyarmor 最终用户许可协议`_
 
 .. seealso:: :doc:`how-to/register`
