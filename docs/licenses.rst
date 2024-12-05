@@ -236,7 +236,7 @@ Microsoft Office 产品系列不是一种产品，它包括的各个产品，例
 
 .. _select-license-type:
 
-如果选择许可证类型
+如何选择许可证类型
 ----------------------------------
 
 下面列出的许可证都只能用于 Python 3.7+
@@ -314,20 +314,20 @@ Microsoft Office 产品系列不是一种产品，它包括的各个产品，例
 
       - B 是针对 A 产品的功能补充
 
-      例如 A 是 CAD，B 是 CAD Viewer
+      例如 A 是 CAD，B 是 CAD 转换器，用于将 CAD 文件转换成为 PDF 格式
 
-   c. 第三种情况，下列情况需要为 B 和 A 单独购买许可证
-
-      - B 和 A 的功能完全独立
-
-      例如，Micorsoft Office Suite 包括 Microsoft Word (A) 和 Micorsoft Excel (B)
-
-   d. 第四种情况，下列情况需要为 A 和 B 单独购买许可证
+   c. 第三种情况，下列情况需要为 A 和 B 单独购买许可证
 
       - B 完全包含 A 的功能
       - A 的功能在 B 的功能占比很少
 
       例如，A 是一个面部识别产品，B 是使用面部识别功能的一个考勤管理系统
+
+   d. 第四种情况，下列情况需要为 B 和 A 单独购买许可证
+
+      - B 和 A 的功能完全独立
+
+      例如，Micorsoft Office Suite 包括 Microsoft Word (A) 和 Micorsoft Excel (B)
 
 3. 关于共享后台产品的选择方式
 
