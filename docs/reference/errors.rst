@@ -66,6 +66,8 @@
        解决方案：使用命令 ``pyarmor-7``
    * - This code has been used too many times
      - 如果是在 CI/Docker 中使用 Pyarmor，请通过该订单的注册邮箱发送订单信息到 pyarmor@163.com 以解锁该订单
+   * - no registration code found in pyarmor-regcode-xxxx.txt
+     - 重新下载邮件附件 `pyarmor-regcode-xxxx.txt` ，检查其内容，应该和邮件正文一样
    * - update license token failed
      - 如果在 1 分钟之内运行注册命令超过 3 次，请等上 5 分钟之后在进行测试
 
