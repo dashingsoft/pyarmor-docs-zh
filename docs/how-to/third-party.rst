@@ -153,11 +153,19 @@ nuitka
 
 如果不禁用约束模式，会导致校验错误 ``RuntimeError: unauthorized use of script``
 
-首先使用默认选项进行加密::
+使用默认选项进行加密::
 
     $ pyarmor gen foo.py
 
 然后在尝试使用更多选项，但是约束相关的这些选项，例如 :option:`--private` ， :option:`--restrict` ， :option:`--assert-call` ， :option:`--assert-import` 可能无法使用。
+
+需要注意的是扩展模块 `pyarmor_runtime.so` 必须在包目录下面，例如::
+
+    $ ls dist/pyarmor_runtime_000000
+    ...    __init__.py
+    ...    pyarmor_runtime.so
+
+如果 Nuitka 把 `__init__.py` 转换成为 `pyarmor_runtime_000000_init_.py` ，并且拷贝 `pyarmor_runtime.so` 到相同目录下面，运行时候通用会报错 ``RuntimeError: unauthorized use of script``
 
 streamlit
 ---------
