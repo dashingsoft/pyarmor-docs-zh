@@ -157,8 +157,8 @@ Termux 平台的额外补丁
 
 在 Termux 平台，安装完成之后还需要额外对扩展模块打补丁。例如::
 
-    $ patchelf --add-needed /data/data/com.termux/files/usr/lib/python3.11/site-packages/pyarmor/cli/core/android/aarch64/pytransform3.so
-    $ patchelf --add-needed /data/data/com.termux/files/usr/lib/python3.11/site-packages/pyarmor/cli/core/android/aarch64/pyarmor_runtime.so
+    $ patchelf --add-needed libpython3.11.so.0.1 /data/data/com.termux/files/usr/lib/python3.11/site-packages/pyarmor/cli/core/android/aarch64/pytransform3.so
+    $ patchelf --add-needed libpython3.11.so.0.1 /data/data/com.termux/files/usr/lib/python3.11/site-packages/pyarmor/cli/core/android/aarch64/pyarmor_runtime.so
 
 有时候可以还需要额外的配置。例如::
 
