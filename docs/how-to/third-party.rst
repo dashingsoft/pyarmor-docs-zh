@@ -161,13 +161,7 @@ nuitka
 
 .. note::
 
-  在 v9.1.0 之前的版本中，扩展模块 `pyarmor_runtime.so` 必须在包目录下面，例如::
-
-      $ ls dist/pyarmor_runtime_000000
-      ...    __init__.py
-      ...    pyarmor_runtime.so
-
-  如果 Nuitka 把 `__init__.py` 转换成为 `pyarmor_runtime_000000_init_.py` ，并且拷贝 `pyarmor_runtime.so` 到相同目录下面，运行时候通用会报错 ``RuntimeError: unauthorized use of script``
+  需要升级到 v9.1.0 之后的版本。在 v9.1.0 之前的版本中，因为 Nuitka 会把包 `pyarmor_runtime_000000/__init__.py` 转换成为模块 `pyarmor_runtime_000000_init_.py` ，运行时候通用会报错 ``RuntimeError: unauthorized use of script``
 
 streamlit
 ---------
