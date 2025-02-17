@@ -161,7 +161,7 @@ nuitka
 
 .. note::
 
-  需要升级到 v9.1.0 之后的版本。因为 Nuitka 会把包 `pyarmor_runtime_000000/__init__.py` 转换成为模块 `pyarmor_runtime_000000_init_.py` ，运行时候通用会报错 ``RuntimeError: unauthorized use of script`` ，在 v9.1.0 （非试用版）中解决了这个问题
+  可能需要升级到 v9.0.8 之后的非试用版本。因为 Nuitka 会把包 `pyarmor_runtime_000000/__init__.py` 转换成为模块 `pyarmor_runtime_000000_init_.py` ，运行时候通用会报错 ``RuntimeError: unauthorized use of script`` ，在 v9.0.8 中解决了这个问题
 
 streamlit
 ---------
