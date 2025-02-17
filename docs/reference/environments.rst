@@ -286,6 +286,15 @@ An example script:
       ...
     RuntimeError: unauthorized use of script (1:10325)
 
+如果需要提取获取设备的硬件信息，可以编写自己的代码，也可以直接使用 Pyarmor 的扩展模块 `pytransform3` 。例如，在 Windows 平台，首先把扩展模块 `pytransform3.pyd` 也拷贝到运行环境，然后使用下面的代码获取硬件信息
+
+.. code-block:: python
+
+    def bootstrap(user_data):
+        from pytransform3 import get_hd_info
+        # 请参考 pyarmor/cli/get_hd_info.py 中的代码
+        print('Machine ID: %s' % get_hd_info(22).decode())
+
 ====================
  运行加密脚本的环境
 ====================
