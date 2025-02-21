@@ -22,6 +22,16 @@
 
 * :doc:`第五部分: 许可模式和许可证类型 <licenses>` 描述了 |Pyarmor| 的最终用户许可协议， |Pyarmor| 的许可模式，不同的许可类型，以及如何购买 |Pyarmor| 许可证。
 
+.. important::
+
+   Pyarmor 9.1.0 中新增功能的文档目前发布在新的 Pyarmor 学习系统
+
+   https:://eke.dashingsoft.com/pyarmor/docs/zh/index.html
+
+   包括三个新命令: `pyarmor init`, `pyarmor env`, `pyarmor build`
+
+   以及新的加密脚本类型: `rft`, `mini`, `vmc`, `ecc`
+
 获取帮助
 ========
 

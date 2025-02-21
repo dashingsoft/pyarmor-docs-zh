@@ -999,6 +999,33 @@ pyarmor reg
 
             有效值为 1 到 100
 
+.. _pyarmor init:
+
+pyarmor init
+============
+
+.. versionadded:: 9.1
+
+请参考 https://eke.dashingsoft.com/pyarmor/docs/zh/user/man.html
+
+.. _pyarmor env:
+
+pyarmor env
+===========
+
+.. versionadded:: 9.1
+
+请参考 https://eke.dashingsoft.com/pyarmor/docs/zh/user/man.html
+
+.. _pyarmor build:
+
+pyarmor build
+=============
+
+.. versionadded:: 9.1
+
+请参考 https://eke.dashingsoft.com/pyarmor/docs/zh/user/man.html
+
 环境变量
 ========
 
