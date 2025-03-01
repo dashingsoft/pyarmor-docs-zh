@@ -376,6 +376,8 @@ Pyarmor 提供错误信息的多语言功能，可以根据 :term:`客户设备`
     export PYARMOR_LANG=zh_TW
     python dist/foo.py
 
+.. _generating cross platform scripts:
+
 生成跨平台加密脚本
 ==================
 
@@ -395,6 +397,8 @@ Python 包 :mod:`pyarmor.cli.runtime` 提供了其他平台的预编译扩展模
                   --platform linux.x86_64 \
                   --platform darwin.x86_64 \
                   foo.py
+
+.. _support-multiple-python-versions:
 
 支持多个 Python 版本的加密脚本
 ==============================
