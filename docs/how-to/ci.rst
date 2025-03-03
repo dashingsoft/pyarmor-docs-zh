@@ -55,6 +55,10 @@
 
    只允许在开发设备上安装和注册 Pyarmor，不允许在需要发送给客户的 Docker 镜像中安装和注册 Pyarmor
 
+.. note::
+
+   在 GitHub Action 中，可能需要额外的步骤，请参考这里的解决方案 `Error when using CI license in CI pipeline <https://github.com/dashingsoft/pyarmor/discussions/2004>`_
+
 间接使用方式
 ============
 
