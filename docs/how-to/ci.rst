@@ -57,7 +57,17 @@
 
 .. note::
 
-   在 GitHub Action 中，可能需要额外的步骤，请参考这里的解决方案 `Error when using CI license in CI pipeline <https://github.com/dashingsoft/pyarmor/discussions/2004>`_
+   在 GitHub Action 中需要额外的一个操作步骤，否则会报错 `CI license only works in CI/CD pipeline`
+
+   1. 对于 ubuntu ，增加操作步骤::
+
+        - run: sudo mv /dev/disk /dev/disk-none
+
+   2. 对于 darwin ，增加操作步骤::
+
+        - run: sudo mv /dev/rdisk0 /dev/rdisk0-none
+
+   请参考这里 `Error when using CI license in CI pipeline <https://github.com/dashingsoft/pyarmor/discussions/2004>`_
 
 间接使用方式
 ============
