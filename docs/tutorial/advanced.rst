@@ -214,7 +214,7 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 过滤加密字符串
 ==============
 
-默认情况下选项 :option:`--mix-str` 会加密脚本中所有长度大于 8 的字符串。
+默认情况下选项 :option:`--mix-str` 会加密脚本中所有长度大于 8 的字符串（但是不会加密任何 docstring）。
 
 但是这样有时候可能会影响性能，如果需要的话，可以通过定制，只加密指定的敏感字符串。
 
