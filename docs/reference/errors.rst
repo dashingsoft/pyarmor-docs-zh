@@ -167,4 +167,27 @@
 
        解决方案：不要使用 :option:`-i` 或者 :option:`--prefix` 去加密脚本
 
+外部错误信息
+============
+
+这里列出的错误信息主要是外部环境引起的，和 Pyarmor 本身无关，只有进行正确配置或者安装缺少的组件，就可以解决这里的问题
+
+请通过 google 或者其它搜索引擎搜索相应的错误信息去找到解决方案
+
+**No such file or directory: 'nul'**
+
+这个通常是 Windows 操作系统的问题，例如没有及时更新 Windows 系统，或者使用的是盗版的 Windows 等等原因造成的
+
+解决方案包括全部更新 Widnows 系统，或者
+
+在命令行执行下面的命令重新创建 NULL::
+
+    sc create null binpath=C:\Windows\System32\drivers\null.sys type=kernel start=auto error=normal
+
+然后重启 NULL 服务::
+
+    sc start null
+
+如果能够正常启动，那么应该可以解决这个问题
+
 .. include:: ../_common_definitions.txt
