@@ -7,6 +7,16 @@
 :邮箱: |Contact|
 :作者: |Author|
 
+.. important::
+
+   Pyarmor 9.1.0 中新增功能的文档目前发布在新的 Pyarmor 学习系统
+
+   https://eke.dashingsoft.com/pyarmor/docs/zh/index.html
+
+   包括三个新命令: `pyarmor init`, `pyarmor env`, `pyarmor build`
+
+   以及新的加密脚本类型: `rft`, `mini`, `vmc`, `ecc`
+
 如何阅读本手册
 ==============
 
@@ -21,16 +31,6 @@
 * :doc:`第四部分: 深入了解 <part-4>` 这部分针对 Pyarmor 提供的功能，从如何实现的层面进行了详细的解释。阅读这部分内容需要完全掌握了 Pyarmor 使用到的主要概念，以及对 Python 脚本的执行过程有相当了解。它适用于需要对 Pyarmor 进行扩展和定制，以满足更高一层需求的用户。
 
 * :doc:`第五部分: 许可模式和许可证类型 <licenses>` 描述了 |Pyarmor| 的最终用户许可协议， |Pyarmor| 的许可模式，不同的许可类型，以及如何购买 |Pyarmor| 许可证。
-
-.. important::
-
-   Pyarmor 9.1.0 中新增功能的文档目前发布在新的 Pyarmor 学习系统
-
-   https://eke.dashingsoft.com/pyarmor/docs/zh/index.html
-
-   包括三个新命令: `pyarmor init`, `pyarmor env`, `pyarmor build`
-
-   以及新的加密脚本类型: `rft`, `mini`, `vmc`, `ecc`
 
 获取帮助
 ========
