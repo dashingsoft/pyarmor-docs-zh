@@ -248,6 +248,7 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 * 当格式化字符串出现语法错误， BCC 模式抛出 `SystemError: NULL object passed to Py_BuildValue` 而不是 `SyntaxError` 或者 `ValueError`.
 
   在测试 `lib/python3.12/test/test_fstring.py` 中下列用例时发现:
+
   - test_invalid_syntax_error_message
   - test_missing_variable
   - test_syntax_error_for_starred_expressions
