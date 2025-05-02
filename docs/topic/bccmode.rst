@@ -197,7 +197,29 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 
 * 函数对象的属性，尤其是以双下划线开始的属性，例如 ``__qualname__`` 等等，在转换成为 C 函数之后都不存在，使用这些属性的函数加密后无法正常工作
 
-* 异常堆栈可能为空或者和原来的脚本不一样，不要在 BCC 的代码中依赖异常堆栈进行判断
+* 在异常处理语句中，`sys.exception()` 总是返回 None，依赖系统异常的相关功能都无法工作。例如
+
+.. code-block:: python
+
+    import traceback
+
+    def main():
+        try:
+            1 / 0
+        except Exception as e:
+
+            # 在使用 BCC 模式加密的脚本中，sys.exception() 总是返回 None
+            print(sys.exception())
+
+            # 在使用 BCC 模式加密的脚本中，下面的语句不会显示 traceback:
+            #    NoneType: None
+            traceback.print_exc()
+
+            # 在使用 BCC 模式加密的脚本中，可以使用下面的语句打印异常堆栈
+            # 但是异常堆栈中不包含行号和 Python 代码
+            traceback.print_exception(e)
+
+    main()
 
 不支持的特性
 ============
@@ -226,7 +248,6 @@ __ https://pyarmor.dashingsoft.com/downloads/tools/clang-9.0.zip
 * super
 * locals
 * sys._getframe
-* sys.exc_info
 
 例如，下面这些函数都不会使用终极模式加密，因为它们或者使用了不支持的特性，或者调
 用了不支持的函数:
