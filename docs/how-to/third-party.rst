@@ -107,6 +107,9 @@ Python 在各个领域得到广泛的应用，有很多包我甚至从来都没�
    * - `nuitka`_
      - 使用 restrict_module = 0 之后应该可以工作
      - 尚未验证
+   * - `Cython`_
+     - 使用 restrict_module = 0 之后可以工作
+     -
 
 .. rubric:: 说明
 
@@ -178,5 +181,35 @@ streamlit
 不禁用第二项可能会报错 `RuntimeError: the format of obfuscated script is incorrect (1:1082)`
 
 **不过 Streamlit 依旧可能无法直接使用加密脚本，因为它是直接访问甚至修改 code object**
+
+Cython
+------
+
+下面是一个简单的例子，来说明如何把一个脚本 :file:`foo.py` 加密之后在使用 Cython 把它转换成为扩展模块，脚本的内容如下::
+
+    print('Hello Cython')
+
+首先加密脚本，需要禁用下列选项，然后在进行加密::
+
+    $ pyarmor cfg restrict_module=0
+    $ pyarmor gen foo.py
+    $ ls dist/
+
+接下来使用 `cythonize` 把 `foo.py` 转换成为 `foo.c` 文件::
+
+    $ cd dist
+    $ cythonize -3 foo.py
+
+最后把 `foo.c` 编译成为扩展模块（有的平台需要把额外的编译选项 ``-fPIC`` 加入到命令行）。例如::
+
+    $ gcc -shared $(python-config --cflags) $(python-config --ldflags) \
+          -o foo$(python-config --extension-suffix) foo.c
+
+最后测试一下扩展模块，把 `dist/foo.py` 文件删除了，然后导入加密后的脚本::
+
+    $ rm foo.py
+    $ python -c 'import foo'
+
+像预想的那样会在控制台打印出 `Hello Cython`
 
 .. include:: ../_common_definitions.txt
