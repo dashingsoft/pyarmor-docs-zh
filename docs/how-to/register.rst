@@ -468,12 +468,7 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
     - 如果需要使用在 CI/CD 管线中，那么两种方案
 
       - 按照原来的协议继续使用任意 Pyarmor 8.x 的版本
-      - 升级到 Pyarmor 9，同时需要升级专家版许可证为 CI 许可证
-
-        - CI 许可证是按照年度收费
-        - 专家版许可证购买时间超过一年的，需要重新付费升级
-        - 专家版许可证购买时间没有超过一年的，免费升级到一年期满
-        - 需要升级请联系 pyarmor@163.com
+      - 升级到 Pyarmor 9，同时需要购买新的 CI 许可证
 
   - 集团版许可证需要重新生成设备注册文件，参考 :ref:`upgrade to pyarmor 9`
 
