@@ -69,6 +69,14 @@ Pyarmor_ 发布在 PyPI_ 上面，最方便的方式就是使用命令 :command:
 
        $ pip install pyarmor.cli
 
+.. note::
+
+   如果需要安装老版本的 Pyarmor，请在命令行指定相应的版本。例如::
+
+       $ pip install pyarmor==8.5.12
+
+   更多指定版本的方式请参考 `pip` 的文档
+
 安装的命令
 ----------
 
