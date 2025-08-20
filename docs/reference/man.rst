@@ -362,6 +362,8 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
 不管哪一种情况，存放到运行密钥中都是 Bytes 类型。
 
+在加密脚本中读取绑定的数据，需要使用内置函数 :func:`__pyarmor__` ，可以参考 :doc:`../tutorial/customization` 中示例 `使用脚本补丁绑定脚本到 Docker`
+
 .. option:: --period N
 
 周期性的检查运行设置文件，单位为 小时。默认情况下是导入加密模块的时候会检查运行
