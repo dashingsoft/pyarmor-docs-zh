@@ -555,6 +555,8 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
             启用自动检查函数功能，确保加密函数没有被替换
 
+            这个选项隐含启用 :option:`--private`
+
 如果指定这个选项，Pyarmor 会在加密之前生成需要被加密的模块名称列表，在加密脚本的过程中，如果发现调用的脚本属于加密模块，那么会修改调用语句为下列等价形式:
 
 .. code-block:: python
@@ -575,6 +577,8 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
 
             启用自动检查模块功能，确保加密的模块没有被替换
 
+            这个选项隐含启用 :option:`--private`
+
 如果指定这个选项，Pyarmor 会在加密之前生成需要被加密的模块名称列表，在加密脚本的过程中，如果发现脚本使用 `import` 语句导入的模块是加密模块，那么会修改导入语句为下列等价形式:
 
 .. code-block:: python
@@ -585,8 +589,6 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
    __assert_armorred__(xyz)
 
 使用特殊方式导入的加密模块， :option:`--assert-import` 可能无法自动保护，这时候可以人工修改脚本，检查模块是否加密。
-
-.. seealso:: :func:`__assert_armorred__`
 
 .. seealso:: :func:`__assert_armorred__`
 
