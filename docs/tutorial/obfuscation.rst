@@ -164,6 +164,42 @@ Pyarmor 使用 :ref:`pyarmor gen` 加密不同的脚本，它提供了丰富的�
     ... import joker OK
     ... import joker.queens
 
+.. _using readonly module:
+
+使用只读模式保护包
+------------------
+
+.. versionadded:: 8.1.9
+
+对于包的保护也可以使用只读模式，这种模式允许外部模块导入和使用加密包中模块，但是不允许外部模块修改加密模块的属性和方法，是一种相对简单的保护模式。
+
+使用下面的配置命令启用只读模式::
+
+    $ pyarmor cfg readonly_module=1
+
+然后在加密整个包::
+
+    $ pyarmor gen --enable-jit --mix-str joker/
+
+简单测试一下::
+
+    $ cd dist
+    $ python
+    >>> import joker
+    >>> dir(joker)
+    >>> joker.aaa = 1
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    RuntimeError: protection exception (16782406)
+
+如果是仅仅需要输出模块 `joker.card` 以及 `joker.__init__` ，包中的其中模块依旧需要其它保护，那么可以启用只读模式，把需要输出的模块增加到配置项 `exclude_restrict_modules` 中，然后在进行加密。例如::
+
+    $ pyarmor cfg readonly_module=1
+    $ pyarmor cfg exclude_restrict_modules="joker.card joker.__init__"
+    $ pyarmor gen --enable-jit --mix-str --assert-call --assert-import --restrict joker/
+
+因为使用 `--private/restrict` 或者 `--assert-call/import` 加密的模块，默认情况下是不允许外部模块导入的，所以必须把输出模块增加到配置项 `exclude_restrict_modules` 中。
+
 拷贝数据文件
 ============
 
