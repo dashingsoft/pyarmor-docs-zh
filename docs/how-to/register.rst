@@ -403,7 +403,15 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 总之， `pyarmor-auth` 侦听的 IPv4 地址必须和 Docker 容器的 IPv4 地址在同一个网段，只要能达到这个目的，怎么进行配置都可以。
 
-如果 Windows 没有任何 IPv4 地址和 Docker 容器在同一个网段，那么另外一种解决方案就是把 WSL (Windows Subsystem Linux）作为离线设备进行注册，然后运行 `pyarmor-auth` 在 WSL 里面。在这种情况下，也需要对 WSL 进行额外的配置以确保其设备标识符保持不变，配置方式请参考 WSL 的文档。
+如果 Windows 没有任何 IPv4 地址和 Docker 容器在同一个网段，那么另外一种解决方案就是把 WSL (Windows Subsystem Linux）作为离线设备进行注册，然后运行 `pyarmor-auth` 在 WSL 里面。在这种情况下，也需要对 WSL 进行额外的配置以确保其设备标识符保持不变，配置方式请参考 WSL 的文档。例如::
+
+    # 创建一个指定的 Docker Bridge Network
+    docker network create --subnet=172.17.0.0/16 pyarmor-net
+
+    # 运行 Docker 容器在该网络并且设定 host.docker.internal
+    docker run --network pyarmor-net --add-host host.docker.internal=172.17.0.1 ...
+
+这样可以显示的设定 Docker 主机和容器在同一个网络。
 
 支持多设备的离线注册文件
 ------------------------
