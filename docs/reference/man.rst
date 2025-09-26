@@ -351,6 +351,17 @@ Pyarmor 8.4.6 之前的版本可以通过命令 `pyarmor-7 hdinfo` 查询硬件�
     # 适用于 Linux，绑定到硬盘设备名称 "/dev/vda2"
     pyarmor gen -b "/dev/vda2:KDX3298FS6P5AX380" foo.py
 
+也可以在硬件信息前面增加前缀，例如::
+
+    $ pyarmor gen -b "*HARDDISK:0000_1111_2222_3333 *IFIPV4:11:22:33:44:55:66"
+
+这样可以解决一些绑定到设备但是运行出错的问题，下面是所有支持的硬件类型前缀
+
+- ``*MID:``
+- ``*IFMAC:``
+- ``*IFIPV4:``
+- ``*DOMAIN:``
+- ``*HARDDISK:``
 
 .. option:: --bind-data DATA
 
