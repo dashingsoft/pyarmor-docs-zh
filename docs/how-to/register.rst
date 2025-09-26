@@ -413,6 +413,8 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 这样可以显示的设定 Docker 主机和容器在同一个网络。
 
+另外一种方案是运行 Docker 容器的时候使用选项 `--network=host` 直接使用 Docker Host 的网络，这样也可以保证两者在同一个网络。
+
 支持多设备的离线注册文件
 ------------------------
 
