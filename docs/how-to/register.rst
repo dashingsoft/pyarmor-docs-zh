@@ -484,6 +484,10 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
 - **Pyarmor 9.2**
 
+  Pyarmor 9.0 之前的版本升级先参考上面 **Pyarmor 9.0** 的升级说明
+
+  从 Pyarmor 9.0 之后的版本升级到 9.2， :term:`管道版许可证` 和 :term:`集团版许可证` 有影响，其它没有影响
+
   - :term:`管道版许可证`
 
     需要申请新的管道注册文件使用新的版本，老的管道注册文件依旧可以在老版本中使用
