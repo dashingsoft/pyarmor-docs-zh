@@ -482,6 +482,32 @@ __ https://github.com/dashingsoft/pyarmor/issues/1542
 
   - 集团版许可证需要重新生成设备注册文件，参考 :ref:`upgrade to pyarmor 9`
 
+- **Pyarmor 9.2**
+
+  - :term:`管道版许可证`
+
+    需要申请新的管道注册文件使用新的版本，老的管道注册文件依旧可以在老版本中使用
+
+    例如，你已经有一个老的管道注册文件 `pyarmor-ci-8000.zip` ，那么依旧在老版本中使用
+
+    升级到 Pyarmor 9.2+ 之后，申请一个新的 `pyarmor-ci-8000.zip`::
+
+        $ pyarmor reg -C pyarmor-regfile-8000.zip
+
+    然后在 Pyarmor 9.2+ 中使用这个新的管道注册文件，新的文件无法在老版本中使用
+
+  - :term:`集团版许可证`
+
+    需要更新设备注册文件以使用新的版本，老的设备注册文件依旧可以在老版本中使用
+
+    例如，你已经有一个老的设备注册文件 `pyarmor-device-regfile-6000.1.zip` ，那么依旧在老版本中使用
+
+    升级到 Pyarmor 9.2+ 之后，申请一个新的::
+
+        $ pyarmor reg -g 1 /path/to/pyarmor-regfile-6000.zip
+
+    然后在 Pyarmor 9.2+ 中使用这个新的设备注册文件，新的文件无法在老版本中使用
+
 .. _upgrading old license:
 
 升级老版本许可证
