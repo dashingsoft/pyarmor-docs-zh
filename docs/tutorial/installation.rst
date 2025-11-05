@@ -184,7 +184,7 @@ Termux 平台的额外补丁
     from pyarmor.cli.__main__ import main_entry
 
     args = ['gen', '-O', 'dist', '--platform', 'linux.x86_64,windows.x86_64', 'foo.py']
-    main(args)
+    main_entry(args)
 
 然后运行这个脚本::
 
