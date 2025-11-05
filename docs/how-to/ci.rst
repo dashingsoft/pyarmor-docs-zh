@@ -92,40 +92,42 @@
 
 .. versionadded:: 9.2.0
 
-如果一次构建使用了多个 `pyarmor gen` 命令，那么尝试使用下面的方式批量执行多个 `pyarmor gen`
+如果一次构建使用了多个 `pyarmor gen` 命令，可以合并多个命令到一个，例如::
 
-首先，创建一个脚本 `batch.py` ，例如
+    # 原来使用三个 pyarmor gen
+    pyarmor gen -R /path/to/package1
+    pyarmor gen -R /path/to/package2
+    pyarmor gen -R /path/to/package3
+
+    # 可以合并成为一个
+    pyarmor gen -R /path/to/package1 /path/to/package2 /path/to/package2
+
+或者使用一个 Python 脚本，在同一个进程当中执行所有的 `pyarmor gen`
+
+例如，创建一个脚本 `batch.py`:
 
 .. code-block:: python
 
-    import shlex
     import os
+    import shlex
 
     from pyarmor.cli.__main__ import main_entry as pyarmor_run
 
-    # Do not run `pyarmor reg pyarmor-ci-xxxx.zip` here, run it before this script
+    # 不要在脚本中运行 `pyarmor reg pyarmor-ci-xxxx.zip`
 
-    build_commands = """
-    pyarmor gen main.py
-    cd ../package1
-    pyarmor gen -R --enable-bcc src/
-    cd ../package2
-    pyarmor gen -R --enable-jit --private src/
-    """
+    # 使用下面的方式等价运行命令 pyarmor gen -R /path/to/package1
+    pyarmor_run(['gen', '-R', '/path/to/package1'])
 
-    for cmd in build_commands.splitlines():
-        if cmd.startswith('#'):
-            continue
+    # 或者这种形式，更接近原来的命令
+    cmdlist = shlex.split("pyarmor gen -R /path/to/package2")
+    pyarmor_run(cmdlist[1:])
 
-        if cmd.startswith('cd '):
-            path = cmd[3:].strip()
-            print('Change current path:', path)
-            os.chdir(path)
+    # 切换当前路径
+    os.chdir('/path/to/other')
 
-        elif cmd.startswith('pyarmor '):
-            print('Execute: ', cmd)
-            args = shlex.split(cmd[8:].strip())
-            pyarmor_run(args)
+    # 执行其它命令
+    cmdlist = shlex.split("pyarmor gen key -e 30")
+    pyarmor_run(cmdlist[1:])
 
 然后在工作流中使用下面的方法调用::
 
