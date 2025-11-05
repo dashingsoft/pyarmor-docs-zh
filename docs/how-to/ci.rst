@@ -92,7 +92,47 @@
 
 .. versionadded:: 9.2.0
 
-对于每天都进行构建的高频使用，需要使用专门的许可证服务器进行验证。
+如果一次构建使用了多个 `pyarmor gen` 命令，那么尝试使用下面的方式批量执行多个 `pyarmor gen`
+
+首先，创建一个脚本 `batch.py` ，例如
+
+.. code-block:: python
+
+    import shlex
+    import os
+
+    from pyarmor.cli.__main__ import main_entry as pyarmor_run
+
+    # Do not run `pyarmor reg pyarmor-ci-xxxx.zip` here, run it before this script
+
+    build_commands = """
+    pyarmor gen main.py
+    cd ../package1
+    pyarmor gen -R --enable-bcc src/
+    cd ../package2
+    pyarmor gen -R --enable-jit --private src/
+    """
+
+    for cmd in build_commands.splitlines():
+        if cmd.startswith('#'):
+            continue
+
+        if cmd.startswith('cd '):
+            path = cmd[3:].strip()
+            print('Change current path:', path)
+            os.chdir(path)
+
+        elif cmd.startswith('pyarmor '):
+            print('Execute: ', cmd)
+            args = shlex.split(cmd[8:].strip())
+            pyarmor_run(args)
+
+然后在工作流中使用下面的方法调用::
+
+    $ pyarmor reg pyarmor-ci-8000.zip
+    $ python3 batch.py
+
+如果上述方案还是无法解决，那么需要使用专门的许可证服务器进行验证。
 
 Pyarmor 开发组需要核实项目的真实性，以及使用的合理性，然后会重置许可证的验证方式，用户需要重新申请管线注册文件。
 
