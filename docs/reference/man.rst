@@ -1023,7 +1023,7 @@ pyarmor init
 
 .. versionadded:: 9.1
 
-请参考 |V9man|
+请参考 `Pyarmor V9 命令手册`_
 
 .. _pyarmor env:
 
@@ -1032,7 +1032,7 @@ pyarmor env
 
 .. versionadded:: 9.1
 
-请参考 |V9man|
+请参考 `Pyarmor V9 命令手册`_
 
 .. _pyarmor build:
 
@@ -1041,7 +1041,7 @@ pyarmor build
 
 .. versionadded:: 9.1
 
-请参考 |V9man|
+请参考 `Pyarmor V9 命令手册`_
 
 环境变量
 ========

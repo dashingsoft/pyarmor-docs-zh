@@ -9,9 +9,7 @@
 
 .. important::
 
-   Pyarmor 9.1.0 中新增功能的文档也同时发布在新的 Pyarmor 学习系统中
-
-   |V9doc|
+   Pyarmor 9.1.0 中新增功能的文档也同时发布在新的 `Pyarmor V9 文档`_
 
    包括三个新命令: `pyarmor init`, `pyarmor env`, `pyarmor build`
 
