@@ -16,7 +16,7 @@ Pyarmor 有完整的文档系统，所有的功能和选项都已经在文档中
 
 .. important::
 
-    在 Pyarmor 开发组处理的报告中，有 80% 属于使用错误的问题，根据用户这些常见的错误问题，Pyarmor 开发组整理出了一份文档 :doc:`reference/solutions` 。请首先通过该文档的检查表或者 https://eke.dashingsoft.com/pyarmor/ask/ 确认不是使用错误，对于使用错误的问题，Pyarmor 开发组会标记为 `invalid` 或者 `documented` 并直接关闭该问题。
+    在 Pyarmor 开发组处理的报告中，有 80% 属于使用错误的问题，根据用户这些常见的错误问题，Pyarmor 开发组整理出了一份文档 :doc:`reference/solutions` 。请首先通过该文档的检查表或者 https://pyarmor.eke.org.cn/ 确认不是使用错误，对于使用错误的问题，Pyarmor 开发组会标记为 `invalid` 或者 `documented` 并直接关闭该问题。
 
 .. _asking questions:
 

@@ -1023,7 +1023,7 @@ pyarmor init
 
 .. versionadded:: 9.1
 
-请参考 https://eke.dashingsoft.com/pyarmor/docs/zh/user/man.html
+请参考 |V9man|
 
 .. _pyarmor env:
 
@@ -1032,7 +1032,7 @@ pyarmor env
 
 .. versionadded:: 9.1
 
-请参考 https://eke.dashingsoft.com/pyarmor/docs/zh/user/man.html
+请参考 |V9man|
 
 .. _pyarmor build:
 
@@ -1041,7 +1041,7 @@ pyarmor build
 
 .. versionadded:: 9.1
 
-请参考 https://eke.dashingsoft.com/pyarmor/docs/zh/user/man.html
+请参考 |V9man|
 
 环境变量
 ========
