@@ -157,9 +157,39 @@
    - 操作系统类型
    - 对于类似 Linux 系统，提供 `uname -a` 的输出
 
-**使用集团版许可证运行多个 Docker 容器**
+**使用集团版许可证运行多个本地 Docker 容器**
 
-确保 Docker 主机 和 Docker 容器在同一个网络中，使用 `ifconfig` 命令检查网路配置。
+1. 确保 Docker 主机 和 Docker 容器在同一个网络中，使用 `ifconfig` 命令检查网路配置。
+
+   在 Docker 容器，检查注册命令的控制台输出。例如::
+
+     $ pyarmor reg ./pyarmor-device-regfile-xxxx.1.zip
+
+     INFO     Python 3.12.12
+     INFO     Pyarmor 9.1.8 (trial), 000000, non-profits
+     INFO     Platform linux.x86_64
+     INFO     register "./pyarmor-device-regfile-xxxx.1.zip"
+     INFO     machine id in group license: m5532894dc5ccf82a061382a3ffbb0af00af
+     INFO     no machine id matchs this group license
+     INFO     take this machine as docker container, and connect to docker host
+     for authentication...
+     INFO     socket addr: ('192.168.139.57', 39044)
+     INFO     remote addr: ('192.168.139.3', 29092)
+     ...
+
+   最重要的是 `socket addr` 和 `remote addr` ，请确保它们在同一个网络，并且 netmask 是相同的
+
+2. 检查客户端到认证服务器的网络路由，hops 不能超过 2
+
+   在 Docker 容器，使用 `traceroute` 或者类似命令查看。继续上面的例子::
+
+     $ traceroute 192.168.139.3
+       traceroute to 192.168.139.3 (192.168.139.3), 30 hops max, 60 byte packets
+       1  192.168.139.3 (192.168.139.3)  0.618 ms  0.259 ms  0.185 ms
+
+   至多只能有 2 hops，否则只能认证服务器只能收到空数据包
+
+3. 参阅 Docker 文档，修改网络配置，确保满足上面两个条件，否则无法使用
 
 .. _fix-obfuscate-issue:
 
