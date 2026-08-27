@@ -195,6 +195,14 @@
 
 3. 参阅 Docker 文档，修改网络配置，确保满足上面两个条件，否则无法使用
 
+   如果使用的 Windows Host 和 Linux Container ，参考这里的解决方案
+
+   https://github.com/dashingsoft/pyarmor/issues/2229
+
+4. 如果 Docker 容器中有 `/dev/disk` 目录的，删除或者重命名为其它目录::
+
+     $ sudo mv /dev/disk /dev/nodisk
+
 .. _fix-obfuscate-issue:
 
 加密失败
