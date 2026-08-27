@@ -183,11 +183,15 @@
 
    在 Docker 容器，使用 `traceroute` 或者类似命令查看。继续上面的例子::
 
-     $ traceroute 192.168.139.3
+     $ traceroute host.docker.internal
        traceroute to 192.168.139.3 (192.168.139.3), 30 hops max, 60 byte packets
        1  192.168.139.3 (192.168.139.3)  0.618 ms  0.259 ms  0.185 ms
 
    至多只能有 2 hops，否则只能认证服务器只能收到空数据包
+
+   如果 `host.docker.internal` 不是 `192.168.139.3` ，可以使用环境变量设置::
+
+     $ export PYARMOR_DOCKER_HOST=192.168.139.3
 
 3. 参阅 Docker 文档，修改网络配置，确保满足上面两个条件，否则无法使用
 
