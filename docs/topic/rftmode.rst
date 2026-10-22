@@ -189,7 +189,7 @@ Pyarmor 使用内置的自动规则和人工配置的规则来分析脚本，并
 
 有时候可能需要重命名所有的类和方法，可以使用下面的选项让 RFT 模式忽略 ``__all__`` 中定义的名称::
 
-    $ pyarmor cfg rft_export__all__ 0
+    $ pyarmor cfg rft_auto_export 0
 
 处理特殊的导入语句
 ==================
