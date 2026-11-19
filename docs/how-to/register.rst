@@ -49,7 +49,7 @@
 
     $ pyarmor reg -p "TBD" pyarmor-regcode-xxxx.txt
 
-绑定的产品名称为 ``TBD`` 的许可证，必须在六个月之内，使用下面的命令设置为正确的产品名称::
+绑定的产品名称为 ``TBD`` 的许可证，在六个月之内可以，使用下面的命令设置为正确的产品名称::
 
     $ pyarmor reg -p "XXX" pyarmor-regcode-xxxx.txt
 
@@ -287,6 +287,39 @@
 
 运行不受限制的 Docker 容器
 --------------------------
+
+.. versionchanged:: 9.3
+
+Pyarmor 9.3.1+ 对该功能进行了优化
+
+需要满足的条件
+
+- Docker 主机和容器必须在同一台机器
+- Docker 容器可以通过 `host.docker.internal` 访问主机，例如::
+
+  root@86b180b28a50:/# ping host.docker.internal
+
+基本使用步骤简化为
+
+1. 在 Docker Host 上面安装 Pyarmor 9.3.1+，并使用设备注册文件注册 Docker Host
+2. 在 Docker Host 上直接运行 `pyarmor-auth` ，默认不需要任何选项::
+
+   $ pyarmor-auth
+
+   # 出现问题，调试的时候使用选项 -d
+   $ pyarmor-auth -d
+
+   # 后台运行使用选项 -b
+   $ pyarmor-auth -b
+
+3. 在 Docker Container 上安装 Pyarmor 9.3.1+，并直接使用下面的命令进行注册::
+   $ docker run -it python bash
+
+   root@86b180b28a50:/# pip3 install pyarmor.cli
+   root@86b180b28a50:/# pyarmor reg docker
+   root@86b180b28a50:/# pyarmor gen foo.py
+
+下面的内容是 9.3 之前的版本的使用方式
 
 .. versionadded:: 8.3
 
