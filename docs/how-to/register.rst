@@ -241,6 +241,20 @@
 
 这条命令生成的离线注册文件只可以在第一台设备上使用，因为离线设备注册文件 ``pyarmor-device-regfile-xxxx.1.zip`` 包含设备标识符的信息。
 
+从 v9.3.1 开始，支持使用 `-m` 参数指定设备文件名称，请求许可证服务器自动分配设备编号
+
+例如::
+
+    pyarmor reg -m pyarmor-group-device.1 pyarmor-regfile-xxxx.zip
+
+服务器会自动为该设备分配下一个可用的编号 2，返回的设备文件名称就是 `pyarmor-device-regfile-xxxx.2.zip`
+
+如果当前设备已经使用注册为集团版许可证，那么，可以直接使用下面的命令发起请求::
+
+    pyarmor reg -m pyarmor-group-device.1
+
+服务器返回的设备文件名称应该是下一个编号 `pyarmor-device-regfile-xxxx.3.zip`
+
 离线设备注册
 ------------
 

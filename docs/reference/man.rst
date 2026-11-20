@@ -929,6 +929,8 @@ pyarmor reg
                       指定许可证绑定的产品名称
 -u, --upgrade         升级老版本的 Pyarmor 许可证
 -g ID, --device ID    指定组内设备编号，仅用于集团版许可证注册
+-m FILENAME, --machine FILENAME
+                      请求设备注册文件，仅用于集团版许可证注册
 
 .. describe:: 参数
 
@@ -967,7 +969,7 @@ pyarmor reg
 
 集团版许可证也需要在有网络的机器上进行初始登记，并生成相应的 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
 
-一个集团版许可证最多使用 100 个离线设备，每一个设备都有一个编号，从 1 到 100。
+一个集团版许可证最多使用 200 个离线设备，每一个设备都有一个编号，从 1 到 200。
 
 为了在离线设备上注册 Pyarmor，需要为每一台设备分别生成相应的离线注册文件。
 
@@ -984,9 +986,23 @@ pyarmor reg
 
 拷贝这个离线注册文件到第一台设备，运行下面的命令进行离线注册::
 
-    $ pyarmor reg pyarmor-device-regfile-xxxx.1.zip
+    pyarmor reg pyarmor-device-regfile-xxxx.1.zip
 
 对于第二台，第三台等设备，也需要进行相应的操作，设备的序号必须依次增加。
+
+从 v9.3.1 开始，可以直接 `-m` 参数指定设备文件名称来申请设备注册文件，许可证服务器会自动分配设备编号
+
+例如::
+
+    pyarmor reg -m pyarmor-group-device.1 pyarmor-regfile-xxxx.zip
+
+服务器会自动为该设备分配下一个可用的编号 2，返回的设备文件名称就是 `pyarmor-device-regfile-xxxx.2.zip`
+
+如果当前设备已经使用注册为集团版许可证，可以直接使用下面的命令申请::
+
+    pyarmor reg -m pyarmor-group-device.1
+
+这次返回的设备文件名称就是 `pyarmor-device-regfile-xxxx.3.zip`
 
 .. option:: -p NAME, --product NAME
 
@@ -1014,7 +1030,23 @@ pyarmor reg
 
             指定离线设备的组内编号，仅适用于集团版许可证
 
-            有效值为 1 到 100
+            有效值为 1 到 200
+
+.. versionadded:: v9.3.1
+
+.. option:: -m FILENAME, --machine FILENAME
+
+            用于向服务器请求设备注册文件
+
+            该参数可以是设备文件的名称，也可以是设备机器码
+
+            例如，使用设备文件 `pyarmor-group-device.txt` 请求注册文件::
+
+                pyarmor reg -m pyarmor-group-device.txt
+
+            或者直接使用机器码请求注册文件::
+
+                pyarmor reg -m mc92c9f22c732b482fb485aad31d789f1
 
 .. _pyarmor init:
 
