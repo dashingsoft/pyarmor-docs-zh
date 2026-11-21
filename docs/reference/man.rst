@@ -928,81 +928,14 @@ pyarmor reg
 -p NAME, --product NAME
                       指定许可证绑定的产品名称
 -u, --upgrade         升级老版本的 Pyarmor 许可证
+-C, --CI              请求管线注册文件，仅用于管线版或者基础版许可证
 -g ID, --device ID    指定组内设备编号，仅用于集团版许可证注册
 -m FILENAME, --machine FILENAME
                       请求设备注册文件，仅用于集团版许可证注册
 
-.. describe:: 参数
+.. version-added:: v9.3.1
 
-参数 ``FILENAME`` 必须是下面任意一种文件
-
-* ``pyarmor-regcode-xxxx.txt`` 激活文件，一般在购买许可证之后会发送到注册邮箱
-* ``pyarmor-regfile-xxxx.zip`` 注册文件，初始登记之后自动生成
-
-.. describe:: 描述
-
-检查当前设备的注册信息::
-
-    $ pyarmor -v
-
-**初始登记**
-
-初始登记使用下面的命令，产品名称必须输入，使用实际产品名称替换 ``NAME`` ，用于非商业化产品的使用名称 ``non-profits``::
-
-    $ pyarmor reg -p NAME pyarmor-regcode-xxxx.txt
-
-初始登记完成之后会生成相应的 :term:`注册文件` ``pyarmor-regfile-xxxx.zip`` ，在其他设备以及后续的注册均使用这个文件，并且不需要输入产品名称::
-
-    $ pyarmor reg pyarmor-regfile-xxxx.zip
-
-**升级许可证**
-
-升级使用下面的命令，其中产品名称必须和原来的许可证绑定名称一致，如果不一致的话会被忽略::
-
-    $ pyarmor reg -p NAME pyarmor-regcode-xxxx.txt
-
-升级完成之后会生成相应的 :term:`注册文件` ``pyarmor-regfile-xxxx.zip`` ，在其他设备以及后续的注册均使用这个文件，并且不需要输入产品名称::
-
-    $ pyarmor reg pyarmor-regfile-xxxx.zip
-
-**集团版许可证**
-
-集团版许可证也需要在有网络的机器上进行初始登记，并生成相应的 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
-
-一个集团版许可证最多使用 200 个离线设备，每一个设备都有一个编号，从 1 到 200。
-
-为了在离线设备上注册 Pyarmor，需要为每一台设备分别生成相应的离线注册文件。
-
-例如，为第一台设备生成离线注册文件，首先在第一台设备运行下面的命令，生成一个组内的设备文件 ``pyarmor-group-device.1``::
-
-    $ pyarmor reg -g 1
-
-然后把这个文件拷贝到进行初始登记的机器上面，并存放在指定目录 ``.pyarmor/group/`` 下面，再使用下面的命令生成离线注册文件 ``pyarmor-device-regfile-xxxx.1.zip``::
-
-    $ mkdir -p .pyarmor/group
-    $ cp pyarmor-group-device.1 .pyarmor/group/
-
-    $ pyarmor reg -g 1 pyarmor-regfile-xxxx.zip
-
-拷贝这个离线注册文件到第一台设备，运行下面的命令进行离线注册::
-
-    pyarmor reg pyarmor-device-regfile-xxxx.1.zip
-
-对于第二台，第三台等设备，也需要进行相应的操作，设备的序号必须依次增加。
-
-从 v9.3.1 开始，可以直接 `-m` 参数指定设备文件名称来申请设备注册文件，许可证服务器会自动分配设备编号
-
-例如::
-
-    pyarmor reg -m pyarmor-group-device.1 pyarmor-regfile-xxxx.zip
-
-服务器会自动为该设备分配下一个可用的编号 2，返回的设备文件名称就是 `pyarmor-device-regfile-xxxx.2.zip`
-
-如果当前设备已经使用注册为集团版许可证，可以直接使用下面的命令申请::
-
-    pyarmor reg -m pyarmor-group-device.1
-
-这次返回的设备文件名称就是 `pyarmor-device-regfile-xxxx.3.zip`
+    :option:`-m`
 
 .. option:: -p NAME, --product NAME
 
@@ -1012,27 +945,31 @@ pyarmor reg
 
             非商业化产品中使用请设置名称为 ``non-profits``
 
-第一次注册或者升级的时候指定许可证绑定的产品名称
+            第一次注册或者升级的时候指定许可证绑定的产品名称
 
-绑定的产品名称一旦设定之后就无法更改，除了一个特殊名称 ``TBD``
+            绑定的产品名称一旦设定之后就无法更改，除了一个特殊名称 ``TBD``
 
-如果产品名称设置为 ``TBD`` ，那么在六个月之内可以在修改一次。这个主要用于产品还在开发阶段，尚未确定名称的时候使用，在产品正式销售之前需要修改为正确的产品名称。如果六个月之内还没有进行修改，那么产品名称会被自动设定为 ``non-profits`` ，并且不能在被修改。
+            如果产品名称设置为 ``TBD`` ，那么在六个月之内可以在修改一次。这个主要用于产品还在开发阶段，尚未确定名称的时候使用，在产品正式销售之前需要修改为正确的产品名称。如果六个月之内还没有进行修改，那么产品名称会被自动设定为 ``non-profits`` ，并且不能在被修改。
 
-只有基础版和专家版许可证的产品名称可以被设定为 ``TBD`` ，升级许可证，以及集团版许可证的必须指定实际使用的产品名称。
+            只有基础版和专家版许可证的产品名称可以被设定为 ``TBD`` ，升级许可证，以及集团版许可证的必须指定实际使用的产品名称。
 
 .. option:: -u, --upgrade
 
             升级老版本的许可证为 Pyarmor 8 的许可证
 
-不是所有的老版本的许可证都可以升级到新版本，请参考 :doc:`../licenses` 里面的升级说明
+            不是所有的老版本的许可证都可以升级到新版本
+
+            请参考 `升级 Pyarmor 之后的许可证兼容性 <how-to/register.html#pyarmor>`_
+
+.. option:: -C, --CI
+
+            用于请求管线注册文件，仅可用于基础版或者管线版许可证
 
 .. option:: -g ID, --group ID
 
             指定离线设备的组内编号，仅适用于集团版许可证
 
             有效值为 1 到 200
-
-.. versionadded:: v9.3.1
 
 .. option:: -m FILENAME, --machine FILENAME
 
@@ -1047,6 +984,123 @@ pyarmor reg
             或者直接使用机器码请求注册文件::
 
                 pyarmor reg -m mc92c9f22c732b482fb485aad31d789f1
+
+.. describe:: 参数
+
+参数 ``FILENAME`` 必须是下面任意一种文件
+
+* ``pyarmor-regcode-xxxx.txt`` 激活文件，一般在购买许可证之后会发送到注册邮箱
+* ``pyarmor-regfile-xxxx.zip`` 注册文件，初始登记之后自动生成
+
+.. describe:: 描述
+
+`pyarmor reg` 命令主要用于以下各种场景
+
+- 检查当前设备的注册信息::
+
+     pyarmor reg
+
+- 所有许可证类型的激活，向服务器请求许可证的 :term:`注册文件`
+
+  购买许可证之后，根据收到的邮件内容生成激活文件 `pyarmor-regcode-xxxx.txt` （文本文件）
+
+  然后向服务器请求许可证的 :term:`注册文件`: `pyarmor-regfile-xxxx.zip` （压缩文件）
+
+  例如，假设绑定的产品名称是 `ekapp` ，那么::
+
+      pyarmor reg -p ekapp pyarmor-regcode-xxxx.txt
+
+  激活成功之后，会生成 :term:`注册文件`  `pyarmor-regfile-xxxx.zip` ，用于在构建设备注册 Pyarmor
+
+  激活文件还可以被用于之后 :term:`注册文件` 的更新，例如，升级 Pyarmor 到 9.2 之后，需要更新注册文件::
+
+      pyarmor reg -p ekapp pyarmor-regcode-xxxx.txt
+
+  激活文件使用次数至多为 10 次，超过使用次数之后将无法继续使用，所以如果没有必要请勿使用激活文件
+
+- 在稳定型构建设备注册 Pyarmor 基础版和专家版许可证
+
+  首先需要生成 :term:`注册文件` ，然后在稳定型构建设备上面运行下面的命令注册::
+
+      pyarmor reg pyarmor-regfile-xxxx.zip
+
+  在一台构建设备上面运行一次命令即可，该命令至多可以使用 100 次
+
+  需要注意的是，一个物理机器如果运行多个系统，相当于多个构建设备
+
+- 为管线版或者基础版许可证请求管线注册文件
+
+  :term:`注册文件` 不能直接在管线中使用，而是被用来申请管线注册文件。例如::
+
+      pyarmor reg -C pyarmor-regfile-xxxx.zip
+
+  服务器会生成相应的管线注册文件 `pyarmor-ci-xxxx.zip`
+
+  管线注册文件可用于在管线中注册 Pyarmor，有效期至多为一年
+
+  只有基础版和管线版许可证支持该选项，并且该命令至多只能运行 100 次
+
+  只有当管线注册文件过期之后，或者升级 Pyarmor 到不兼容的版本的时候，才需要重新申请管线注册文件
+
+- 在管线设备 (Runner) 中注册 Pyarmor
+
+  使用有效的管线注册文件 `pyarmor-ci-xxxx.zip` ，在管线中增加等价于下面的命令::
+
+      pyarmor reg pyarmor-ci-xxxx.zip
+
+- 升级 Pyarmor 到不兼容的版本之后，需要更新 :term:`注册文件`
+
+  更新 :term:`注册文件` 相当于重新激活一样，需要使用激活文件，重新申请注册文件，例如::
+
+      pyarmor reg -p ekapp pyarmor-regcode-xxxx.txt
+
+**下面的场景仅用于集团版许可证**
+
+- 生成设备信息文件 `pyarmor-group-device.x`::
+
+      pyarmor reg -g 1
+
+  该命令生成一个文件文件 `pyarmor-group-device.1` ，用来申请设备注册文件
+
+- 请求设备注册文件 `pyarmor-device-regfile-xxxx.zip`
+
+  请求设备注册文件需要已经生成的设备信息文件和集团版许可证注册文件，然后使用下面的命令申请::
+
+      pyarmor reg -m pyarmor-group-device.1 pyarmor-regfile-xxxx.zip
+
+  服务器会自动为该设备分配编号 1，并生成设备注册文件 `pyarmor-device-regfile-xxxx.1.zip`
+
+  也支持直接使用离线设备的机器码申请设备注册文件。例如::
+
+      pyarmor reg -m mc92c9f22c732b482fb485aad31d789f1 pyarmor-regfile-xxxx.zip
+
+  服务器会自动为该设备分配下一个可用的编号 2，返回的设备文件 `pyarmor-device-regfile-xxxx.2.zip`
+
+  如果当前设备已经使用注册为集团版许可证，那么，可以直接使用下面的命令发起请求::
+
+      pyarmor reg -m pyarmor-group-device.1
+
+  服务器返回的设备文件名称应该是下一个编号 `pyarmor-device-regfile-xxxx.3.zip`
+
+  如果需要更新设备注册文件，使用选项 `-g` 指定设备编号，这样就不会分配下一个设备编号。例如::
+
+      pyarmor reg -m pyarmor-group-device.1 -g 1
+
+  服务器依旧使用设备编号 1，并生成新的设备注册文件 `pyarmor-device-regfile-xxxx.1.zip`
+
+- 在离线设备上面注册 Pyarmor
+
+  拷贝离线注册文件到对应的设备，运行下面的命令进行离线注册::
+
+      pyarmor reg pyarmor-device-regfile-xxxx.1.zip
+
+- 在本地 Docker 容器中注册 Pyarmor
+
+  Docker 主机必须作为离线设备注册，并且已经成功运行 `pyarmor-auth`
+
+  那么，在 Docker 容器中，可以直接使用下面的命令进行注册::
+
+      pyarmor reg docker
 
 .. _pyarmor init:
 
