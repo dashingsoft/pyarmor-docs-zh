@@ -161,7 +161,7 @@
 使用集团版许可证
 ================
 
-.. versionadded:: 8.2
+.. version-added:: 8.2
 
 每一个集团版许可证称为一个组，一个组最多可以有 100 个离线设备，每一个设备有一个编号，依次从 1 到 100。
 
@@ -230,7 +230,33 @@
 
 - 安装 Pyarmor 8.2+ 并且可以访问互联网的设备
 - 完成初始登记，并且已经生成 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
-- 离线设备的组设备文件
+- 离线设备的组设备文件或者离线设备的机器码
+
+从 v9.3.1 开始，直接 `-m` 参数来请求设备注册文件，许可证服务器自动分配设备编号。例如::
+
+    pyarmor reg -m pyarmor-group-device.1 pyarmor-regfile-xxxx.zip
+
+服务器会自动为该设备分配编号 1，并生成设备注册文件 `pyarmor-device-regfile-xxxx.1.zip`
+
+也支持直接使用离线设备的机器码申请设备注册文件。例如::
+
+    pyarmor reg -m mc92c9f22c732b482fb485aad31d789f1 pyarmor-regfile-xxxx.zip
+
+服务器会自动为该设备分配下一个可用的编号 2，返回的设备文件 `pyarmor-device-regfile-xxxx.2.zip`
+
+如果当前设备已经使用注册为集团版许可证，那么，可以直接使用下面的命令发起请求::
+
+    pyarmor reg -m pyarmor-group-device.1
+
+服务器返回的设备文件名称应该是下一个编号 `pyarmor-device-regfile-xxxx.3.zip`
+
+如果需要更新或者修改设备注册文件，使用选项 `-g` 指定设备编号，这样就不会分配下一个设备编号。例如::
+
+    pyarmor reg -m pyarmor-group-device.1 -g 1
+
+服务器依旧使用设备编号 1，并生成新的设备注册文件 `pyarmor-device-regfile-xxxx.1.zip`
+
+对于使用 Pyarmor 9.3.1 之前的版本，使用下面老的方式
 
 把离线设备的组设备文件拷贝到进行初始登记的机器上（或者任何有互联网连接的设备），并存放在当前目录下面的子目录 ``.pyarmor/group/`` ，然后使用下面的命令生成离线注册文件 ``pyarmor-device-regfile-xxxx.1.zip``::
 
@@ -240,20 +266,6 @@
     $ pyarmor reg -g 1 /path/to/pyarmor-regfile-xxxx.zip
 
 这条命令生成的离线注册文件只可以在第一台设备上使用，因为离线设备注册文件 ``pyarmor-device-regfile-xxxx.1.zip`` 包含设备标识符的信息。
-
-从 v9.3.1 开始，支持使用 `-m` 参数指定设备文件名称，请求许可证服务器自动分配设备编号
-
-例如::
-
-    pyarmor reg -m pyarmor-group-device.1 pyarmor-regfile-xxxx.zip
-
-服务器会自动为该设备分配下一个可用的编号 2，返回的设备文件名称就是 `pyarmor-device-regfile-xxxx.2.zip`
-
-如果当前设备已经使用注册为集团版许可证，那么，可以直接使用下面的命令发起请求::
-
-    pyarmor reg -m pyarmor-group-device.1
-
-服务器返回的设备文件名称应该是下一个编号 `pyarmor-device-regfile-xxxx.3.zip`
 
 离线设备注册
 ------------
@@ -302,7 +314,7 @@
 运行不受限制的 Docker 容器
 --------------------------
 
-.. versionchanged:: 9.3
+.. version-added:: 8.3
 
 Pyarmor 9.3.1+ 对该功能进行了优化
 
@@ -326,6 +338,9 @@ Pyarmor 9.3.1+ 对该功能进行了优化
      # 后台运行使用选项 -b
      $ pyarmor-auth -b
 
+     # 结束后台运行
+     $ pyarmor-auth stop
+
 3. 在 Docker Container 上安装 Pyarmor 9.3.1+，并直接使用下面的命令进行注册::
 
      $ docker run -it python bash
@@ -335,8 +350,6 @@ Pyarmor 9.3.1+ 对该功能进行了优化
      root@86b180b28a50:/# pyarmor gen foo.py
 
 下面的内容是 9.3 之前的版本的使用方式
-
-.. versionadded:: 8.3
 
 集团版许可证支持运行不受限制的 Docker 容器，每一个 Docker 容器都使用当前离线设备的注册文件。这些容器需要使用默认的 Bridge 网络接口，并且没有进行高度定制而导致 Pyarmor 无法识别。
 
