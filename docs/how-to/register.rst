@@ -161,7 +161,7 @@
 使用集团版许可证
 ================
 
-.. version-added:: 8.2
+.. versionadded:: 8.2
 
 每一个集团版许可证称为一个组，一个组最多可以有 100 个离线设备，每一个设备有一个编号，依次从 1 到 100。
 
@@ -232,7 +232,7 @@
 - 完成初始登记，并且已经生成 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
 - 离线设备的组设备文件或者离线设备的机器码
 
-从 v9.3.1 开始，直接使用选项 `-m` 参数来请求设备注册文件，许可证服务器自动分配设备编号。例如::
+从 v9.3.1 开始，直接使用选项 :option:`-m` 参数来请求设备注册文件。例如::
 
     pyarmor reg -m pyarmor-group-device.1 pyarmor-regfile-xxxx.zip
 
@@ -244,7 +244,7 @@
 
 服务器会自动为该设备分配下一个可用的编号 2，返回的设备文件 `pyarmor-device-regfile-xxxx.2.zip`
 
-如果当前设备已经使用注册为集团版许可证，那么，可以直接使用下面的命令发起请求::
+如果当前设备已经使用注册为集团版许可证，可以直接使用简化命令::
 
     pyarmor reg -m pyarmor-group-device.1
 
@@ -314,16 +314,14 @@
 运行不受限制的 Docker 容器
 --------------------------
 
-.. version-added:: 8.3
+.. versionadded:: 8.3
 
 Pyarmor 9.3.1+ 对该功能进行了优化
 
 需要满足的条件
 
 - Docker 主机和容器必须在同一台机器
-- Docker 容器可以通过 `host.docker.internal` 访问主机，例如::
-
-     root@86b180b28a50:/# ping host.docker.internal
+- Docker 容器可以通过 `host.docker.internal` 访问主机
 
 基本使用步骤简化为
 

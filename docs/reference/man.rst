@@ -933,9 +933,18 @@ pyarmor reg
 -m FILENAME, --machine FILENAME
                       请求设备注册文件，仅用于集团版许可证注册
 
-.. version-added:: v9.3.1
+.. versionadded:: v9.3.1
+                  :option:`-m`
 
-    :option:`-m`
+.. describe:: 参数
+
+参数 ``FILENAME`` 必须是下面任意一种文件
+
+* ``pyarmor-regcode-xxxx.txt`` 激活文件，一般在购买许可证之后会发送到注册邮箱
+* ``pyarmor-regfile-xxxx.zip`` 注册文件，初始登记之后自动生成
+
+.. describe:: 描述
+
 
 .. option:: -p NAME, --product NAME
 
@@ -959,7 +968,7 @@ pyarmor reg
 
             不是所有的老版本的许可证都可以升级到新版本
 
-            请参考 `升级 Pyarmor 之后的许可证兼容性 <how-to/register.html#pyarmor>`_
+            请参考 `升级 Pyarmor 之后的许可证兼容性 <../how-to/register.html#pyarmor>`_
 
 .. option:: -C, --CI
 
@@ -985,22 +994,13 @@ pyarmor reg
 
                 pyarmor reg -m mc92c9f22c732b482fb485aad31d789f1
 
-.. describe:: 参数
-
-参数 ``FILENAME`` 必须是下面任意一种文件
-
-* ``pyarmor-regcode-xxxx.txt`` 激活文件，一般在购买许可证之后会发送到注册邮箱
-* ``pyarmor-regfile-xxxx.zip`` 注册文件，初始登记之后自动生成
-
-.. describe:: 描述
-
-`pyarmor reg` 命令主要用于以下各种场景
+.. describe:: 示例
 
 - 检查当前设备的注册信息::
 
      pyarmor reg
 
-- 所有许可证类型的激活，向服务器请求许可证的 :term:`注册文件`
+- 所有许可证的激活，向服务器请求许可证的 :term:`注册文件`
 
   购买许可证之后，根据收到的邮件内容生成激活文件 `pyarmor-regcode-xxxx.txt` （文本文件）
 
@@ -1060,7 +1060,7 @@ pyarmor reg
 
       pyarmor reg -g 1
 
-  该命令生成一个文件文件 `pyarmor-group-device.1` ，用来申请设备注册文件
+  该命令生成一个文本文件 `pyarmor-group-device.1` ，用来申请设备注册文件
 
 - 请求设备注册文件 `pyarmor-device-regfile-xxxx.zip`
 
