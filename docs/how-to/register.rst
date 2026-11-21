@@ -232,7 +232,7 @@
 - 完成初始登记，并且已经生成 :term:`注册文件` ``pyarmor-regfile-xxxx.zip``
 - 离线设备的组设备文件或者离线设备的机器码
 
-从 v9.3.1 开始，直接 `-m` 参数来请求设备注册文件，许可证服务器自动分配设备编号。例如::
+从 v9.3.1 开始，直接使用选项 `-m` 参数来请求设备注册文件，许可证服务器自动分配设备编号。例如::
 
     pyarmor reg -m pyarmor-group-device.1 pyarmor-regfile-xxxx.zip
 
@@ -250,7 +250,7 @@
 
 服务器返回的设备文件名称应该是下一个编号 `pyarmor-device-regfile-xxxx.3.zip`
 
-如果需要更新或者修改设备注册文件，使用选项 `-g` 指定设备编号，这样就不会分配下一个设备编号。例如::
+如果需要更新设备注册文件，使用选项 `-g` 指定设备编号，这样就不会分配下一个设备编号。例如::
 
     pyarmor reg -m pyarmor-group-device.1 -g 1
 
