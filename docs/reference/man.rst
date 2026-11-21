@@ -1076,7 +1076,7 @@ pyarmor reg
 
   服务器会自动为该设备分配下一个可用的编号 2，返回的设备文件 `pyarmor-device-regfile-xxxx.2.zip`
 
-  如果当前设备已经使用注册为集团版许可证，那么，可以直接使用下面的命令发起请求::
+  如果当前设备已经使用注册为集团版许可证，可以直接使用简化命令::
 
       pyarmor reg -m pyarmor-group-device.1
 
